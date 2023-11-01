@@ -1,0 +1,19 @@
+version: '2.13.0'
+
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    image: backend_image
+    ports:
+      - "3001:3001"
+    volumes:
+      - "$HOME/Desktop/ft_transcendence/backend:/app"
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    image: frontend_image
+    ports:
+      - "3000:3000"
+    volumes:
+      - "$HOME/Desktop/ft_transcendence/frontend:/app"
