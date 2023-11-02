@@ -10,7 +10,15 @@ services:
     volumes:
       - "./backend:/app"
       - "/app/node_modules"
-
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432
+    volumes:
+      - "./backend/trsc_db:/var/lib/postgresql/data"
   frontend:
     build: ./frontend
     container_name: frontend
