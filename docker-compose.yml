@@ -1,10 +1,10 @@
 version: '2.13.0'
 
 services:
-  backend:
+  server:
     build: ./backend
-    container_name: backend
-    image: backend_image
+    container_name: server
+    image: server_image
     ports:
       - "3001:3001"
     volumes:

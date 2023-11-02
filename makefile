@@ -2,8 +2,8 @@
 all:
 	docker-compose up
 
-back:
-	docker-compose up backend
+server:
+	docker-compose up server
 
 front:
 	docker-compose up frontend
@@ -14,17 +14,20 @@ db:
 down: rc
 
 rdb:
-	docker rm database
+	docker rm database #fortest
 
 rc:
-	docker rm backend frontend
+	docker rm server frontend database
 
 rfi:
 	docker rmi frontend_image
 
 rbi:
-	docker rmi backend_image
+	docker rmi server_image
 
-ri: rfi rbi
+rdi:
+	docker rmi database_image
+
+ri: rfi rbi rdi
 
 clear: rc ri
