@@ -20,3 +20,5 @@ rbi:
 	docker rmi backend_image
 
 ri: rfi rbi
+
+clear: rc ri

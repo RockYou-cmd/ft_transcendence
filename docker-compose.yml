@@ -8,7 +8,9 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - "$HOME/Desktop/ft_transcendence/backend:/app"
+      - "./backend:/app"
+      - "/app/node_modules"
+
   frontend:
     build: ./frontend
     container_name: frontend
@@ -16,4 +18,5 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - "$HOME/Desktop/ft_transcendence/frontend:/app"
+      - "./frontend:/app"
+      - "/app/node_modules"
