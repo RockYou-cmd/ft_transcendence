@@ -26,7 +26,7 @@ rbi:
 	docker rmi server_image
 
 rdi:
-	docker rmi database_image
+	docker rmi postgres
 
 ri: rfi rbi rdi
 
