@@ -1,0 +1,45 @@
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+
+.create{
+	/* margin:30% 20%; */
+	margin-top: 450px;
+	background: rgb(255, 255, 255, 0.1);
+	width: 827px;
+	height: 556px;
+	padding:40px 80px;
+	border-radius: 5px;
+	padding: 30px 60px;
+	border: 1px solid #0C88E4;
+	backdrop-filter: blur(10px);
+	box-shadow: 1px 1px 5px 1px white;
+	
+}
+
+.create h1{
+	display: block;
+	text-align: center;
+	font-size: 25px;
+	font-weight: 900;
+	letter-spacing: 1px;
+	padding: 20px 0px;
+	margin: 10px 34%;
+	border-bottom: 2px solid white;
+}
+
+.label{
+	text-align: left;
+	
+}
+
+.create input{
+	/* display: flex; */
+	display: inline;
+	margin:20px 0px;
+	padding: 10px 20px;
+}
