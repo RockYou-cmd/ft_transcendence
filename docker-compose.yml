@@ -8,7 +8,17 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - "$HOME/Desktop/ft_transcendence/backend:/app"
+      - "./backend:/app"
+      - "/app/node_modules"
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432
+    volumes:
+      - "./backend/trsc_db:/var/lib/postgresql/data"
   frontend:
     build: ./frontend
     container_name: frontend
@@ -16,4 +26,5 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - "$HOME/Desktop/ft_transcendence/frontend:/app"
+      - "./frontend:/app"
+      - "/app/node_modules"
