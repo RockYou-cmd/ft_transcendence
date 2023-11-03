@@ -1,15 +1,14 @@
 version: '2.13.0'
 
 services:
-  backend:
+  server:
     build: ./backend
-    container_name: backend
-    image: backend_image
+    container_name: server
+    image: server_image
     ports:
       - "3001:3001"
     volumes:
       - "./backend:/app"
-      - "/app/node_modules"
   database:
     image: postgres
     container_name: database
@@ -27,4 +26,3 @@ services:
       - "3000:3000"
     volumes:
       - "./frontend:/app"
-      - "/app/node_modules"

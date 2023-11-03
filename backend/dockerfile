@@ -1,11 +1,11 @@
 FROM node
 
+RUN apt update && apt upgrade
+
 WORKDIR /app
 
 COPY package*.json .
 
-RUN npm install
-
 COPY . .
 
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "sh", "npm_install.sh"]

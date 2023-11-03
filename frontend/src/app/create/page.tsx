@@ -29,6 +29,7 @@ export default function Create(){
 			<form className="create">
 				<h1>Create Account</h1>
 
+			<div className="col1">
 				<label htmlFor="firstname" className="label">
 					<span>First Name </span>
 					<input ref={first_nameRef} type="text" id="firstname" name="firstname" placeholder="Your name.."></input>			
@@ -44,6 +45,8 @@ export default function Create(){
 					<input ref={emailRef} type="email" id="email" name="email" placeholder="Your email.."></input>
 				</label>
 
+			</div>
+			<div className="col2">
 				<label htmlFor="username" className="label">
 					<span>Username </span>
 					<input ref={user_nameRef} type="text" id="username" name="username" placeholder="Your username.."></input>
@@ -58,13 +61,14 @@ export default function Create(){
 					<span>Repeat Password </span>
 					<input ref={repeat_passwordRef} type="password" id="repeat_password" name="repeat_password" placeholder="Repeat your password.."></input>
 				</label>
+			</div>
 			
 
 					
 				
 				<button type="submit">Create</button>
 
-				<p>you already have account ? <Link href="/login">Sing IN</Link> </p>
+				<p>you already have account ? <Link href="/login"><span>Sing IN</span></Link> </p>
 
 			</form>
 		</>
