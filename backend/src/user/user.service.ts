@@ -15,11 +15,8 @@ export class userService {
 		return user;
 	}
 
-	async createUser(username) {
-		const user = await prisma.users.create({
-			data: {
-				username:username
-			}
-		})
+	async getUsers() {
+		return prisma.users.findMany();
 	}
+
 }

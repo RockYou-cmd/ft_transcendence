@@ -11,10 +11,9 @@ export class userController{
 		console.log(name);
 		return this.UserService.getUser(name);
 	}
-	
-	@Post()
-	createUser(@Body() body) {
-		console.log(body);
-		return this.UserService.createUser(body.username);
+
+	@Get("all")
+	getUsers() {
+		return this.UserService.getUsers();
 	}
 }
