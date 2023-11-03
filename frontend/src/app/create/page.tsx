@@ -3,6 +3,7 @@
 import './create.css'
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string} = {
 	firstname: '',
@@ -11,6 +12,8 @@ var info: { firstname: string, lastname: string, email: string, password: string
 	password: '',
 	username: '',
 };
+
+var rep_password: string = '';
 
 
 
@@ -22,44 +25,105 @@ export default function Create(){
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const user_nameRef = useRef<HTMLInputElement>(null);
 	const repeat_passwordRef = useRef<HTMLInputElement>(null);
+	const [wait, checkwait] = useState(false);
+	const route = useRouter();
+	const [refresh, checkRefresh] = useState(false);
+	const [Fname, checkFname] = useState('');
+	const [Lname, checkLname] = useState('');
+	const [Email, checkEmail] = useState('');
+	const [Pword, checkPassword] = useState('');
+	const [Uname, checkUsername] = useState('');
+	const [Rpassword, checkRpassword] = useState('');
+	
+	
+	async function sumbitHandler(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		info.firstname = first_nameRef.current?.value || '';
+		info.lastname = last_nameRef.current?.value || '';
+		info.email = emailRef.current?.value || '';
+		info.password = passwordRef.current?.value || '';
+		info.username = user_nameRef.current?.value || '';
+		rep_password = repeat_passwordRef.current?.value || '';
+		
 
 
+		if (info.email && info.password && info.firstname && info.lastname && info.username && rep_password){
+
+			if (rep_password != info.password) {
+				alert('passwords are not equal');
+			}
+
+			else {
+				const data: {username:string , password:string, email:string} = {username: info.username, password: info.password, email: info.email};
+								
+				const res = await fetch('http://server:3001/auth/signU/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+				});
+				console.log(res);
+				if (res.status == 201) {
+					alert('user created');
+					route.refresh();
+					// route.push('/login');
+				}	
+				else {
+					alert('user already exists');
+				}
+			}
+
+		}
+		else{
+			alert('Please fill all fields');
+		}
+	}   
+	
+	
+	useEffect(() => {
+		checkwait(true);
+	}, []);
+
+	if (!wait) {
+		return <div>loading...</div>
+	}
 	return (
 		<>
-			<form className="create">
+			<form className="create" onSubmit={sumbitHandler}>
 				<h1>Create Account</h1>
 
 			<div className="col1">
 				<label htmlFor="firstname" className="label">
 					<span>First Name </span>
-					<input ref={first_nameRef} type="text" id="firstname" name="firstname" placeholder="Your name.."></input>			
+					<input ref={first_nameRef} type="text" value={Fname} onChange={(e) => checkFname(e.target.value)} placeholder="Your name.."></input>			
 				</label>
 				
 				<label htmlFor="lastname" className="label">
 					<span>Last Name </span>
-					<input ref={last_nameRef} type="text" id="lastname" name="lastname" placeholder="Your last name.."></input>
+					<input ref={last_nameRef} type="text" value={Lname} onChange={(e) => checkLname(e.target.value)} placeholder="Your last name.."></input>
 				</label>
 
 				<label htmlFor="email" className="label">
 					<span>Email </span>
-					<input ref={emailRef} type="email" id="email" name="email" placeholder="Your email.."></input>
+					<input ref={emailRef} type="email" value={Email} onChange={(e) => checkEmail(e.target.value)} placeholder="Your email.."></input>
 				</label>
 
 			</div>
 			<div className="col2">
 				<label htmlFor="username" className="label">
 					<span>Username </span>
-					<input ref={user_nameRef} type="text" id="username" name="username" placeholder="Your username.."></input>
+					<input ref={user_nameRef} type="text" value={Uname} onChange={(e) => checkUsername(e.target.value)} placeholder="Your username.."></input>
 				</label>
 
 				<label htmlFor="password" className="label">
 					<span>Password </span>
-					<input ref={passwordRef} type="password" id="password" name="password" placeholder="Your password.."></input>
+					<input ref={passwordRef} type="password" value={Pword} onChange={(e) => checkPassword(e.target.value)} placeholder="Your password.."></input>
 				</label>
 
 				<label htmlFor="repeat_password" className="label">
 					<span>Repeat Password </span>
-					<input ref={repeat_passwordRef} type="password" id="repeat_password" name="repeat_password" placeholder="Repeat your password.."></input>
+					<input ref={repeat_passwordRef} type="password" value={Rpassword} onChange={(e) => checkRpassword(e.target.value)} placeholder="Repeat your password.."></input>
 				</label>
 			</div>
 			

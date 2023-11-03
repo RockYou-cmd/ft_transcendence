@@ -3,6 +3,8 @@ import './login.css'
 import { use, useEffect, useRef, useState } from 'react';
 import UserNotFound from '../[form]/not-found';
 import { notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
 
 export interface FormProps {
 	login: string;
@@ -29,9 +31,16 @@ var data: { email: string, password: string } = {
 // 	});
 // };
 
-const ApiRequest = async (Username: string) => {
-	const res = await fetch('http://localhost:4000/users/' + Username);
-	return res.json();
+const ApiRequest = async (data: object) => {
+
+	await fetch('http://server:3001/', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+	
 };
 
 
@@ -42,28 +51,42 @@ export default function Form() {
 	const [check, checkUpdate] = useState(false);
 	const emailRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
+	const route = useRouter();
 
 
 
-
-	const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+	async function handleClick(event: React.MouseEvent<HTMLButtonElement>){
 		event.preventDefault();
 		if (emailRef.current?.value && passwordRef.current?.value) {
 			data.email = emailRef.current?.value;
 			data.password = passwordRef.current?.value;
-			const datas = await ApiRequest(data.email);
+			// const res = await ApiRequest(data);
 
-
-			if (datas.login == data.email && datas.password == data.password) {
-				window.location.href = `${data.email}`;
+			// const updateQuery = () => {
+				// route.push(`http://server:3001/?name=${data.email}&password=${data.password}`);
+			const res = await fetch(`http://server:3001/?name=${data.email}&password=${data.password}`);
+			if (res.status == 201) {
+				const user = await res.json();
+				if (user.name == data.email)
+					route.push(`${data.email}`);
+				else
+					route.refresh();
+				
 			}
-			else {
-				checkUpdate(true);
-			}
+			// 	console.log(route);
+			// console.log(data);
+			route.refresh();
+			// };
 			// data.email += datas;
 			// data.password += datas.password;
 		}
+		
+		else {
+			alert('Please fill all fields');
+		}
 	};
+
+
 	useEffect(() => {
 		checkwait(true);
 	}, []);
