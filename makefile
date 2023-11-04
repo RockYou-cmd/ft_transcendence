@@ -17,7 +17,7 @@ down:
 rdb:
 	docker rm database #fortest
 
-rc: down
+rc:
 	docker rm server frontend database
 
 rfi:
