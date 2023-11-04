@@ -41,6 +41,7 @@ pg_folders:
 	@if [ ! -d backend/trsc_db/pg_logical ]; then mkdir -p backend/trsc_db/pg_logical; fi
 	@if [ ! -d backend/trsc_db/pg_snapshots ]; then mkdir -p backend/trsc_db/pg_snapshots; fi
 	@if [ ! -d backend/trsc_db/pg_tblspc ]; then mkdir -p backend/trsc_db/pg_tblspc; fi
+	@if [ ! -d backend/trsc_db/pg_commit_ts ]; then mkdir -p backend/trsc_db/pg_commit_ts; fi
 	@if [ ! -d backend/trsc_db/pg_twophase ]; then mkdir -p backend/trsc_db/pg_twophase; fi
 	@if [ ! -d backend/trsc_db/pg_logical/snapshots ]; then mkdir -p backend/trsc_db/pg_logical/snapshots; fi
 	@if [ ! -d backend/trsc_db/pg_logical/mappings ]; then mkdir -p backend/trsc_db/pg_logical/mappings; fi

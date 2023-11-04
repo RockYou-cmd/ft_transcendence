@@ -14,7 +14,7 @@ model users{
 
   id String @id() @default(uuid()) @unique
 
-  username String?
+  username String @unique
 
   email String @unique
 

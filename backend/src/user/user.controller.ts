@@ -6,10 +6,9 @@ import { userService } from "./user.service";
 export class userController{
 	constructor(private UserService: userService) {}
 
-	@Get()
-	getUser(@Query("name") name){
-		console.log(name);
-		return this.UserService.getUser(name);
+	@Get("one")
+	getUser(@Query() log){
+		return this.UserService.getUser(log);
 	}
 
 	@Get("all")

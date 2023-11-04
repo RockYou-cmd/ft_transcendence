@@ -22,8 +22,24 @@ export class AuthService {
 		}
 		catch(err)
 		{
+			console.log("error occured");
+			console.log(err);
 			return err;
 		}
 		return "user created sucessfully";
+	}
+	async signIn(user) {
+		var res;
+		try {
+			res = await prisma.users.findUnique({
+				where: {
+					email:"akae"
+				}
+			})
+		}
+		catch(err) {
+			return err;
+		}
+		return res;
 	}
 }
