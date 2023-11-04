@@ -29,17 +29,29 @@ export class AuthService {
 		return "user created sucessfully";
 	}
 	async signIn(user) {
-		var res;
-		try {
-			res = await prisma.users.findUnique({
-				where: {
-					email:"akae"
+		var ret;
+		try{
+			ret = await prisma.users.findUnique({
+				where : {
+					username:user.username,
 				}
 			})
+			if (!ret)
+				return {
+					status:300,
+					message:"User not found"
+				}
+			else if (!await argon.verify(ret.password, user.password))
+				return {
+					status:300,
+					message: "Password incorrect"
+				}
+			
 		}
 		catch(err) {
+			console.log("err");
 			return err;
 		}
-		return res;
+		return ret;
 	}
 }
