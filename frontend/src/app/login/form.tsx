@@ -1,47 +1,23 @@
 
 import './login.css'
 import { use, useEffect, useRef, useState } from 'react';
-import UserNotFound from '../[form]/not-found';
 import { notFound } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import  Post  from '../Components/post';
+import GetData from '../Components/get_data';
+import { Userdb } from '../Props/Userdb';
+import PrintData from '../Components/print_data';
+import Link from 'next/link';
 
+var User: Userdb = {username: '', email: '', password: ''};
 
-export interface FormProps {
-	login: string;
-	password: string;
-	firstname: string;
-	familyname: string;
-}
-
-
-var data: { email: string, password: string } = {
-	email: '',
+var ab : any;
+var data: { username: string, password: string } = {
+	username: '',
 	password: '',
 };
 
-//post request
-
-// const ApiRequest = async () => {
-// 	await fetch('http://localhost:3000/API/db.json', {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 		},
-// 		body: JSON.stringify(data),
-// 	});
-// };
-
-const ApiRequest = async (data: object) => {
-
-	await fetch('http://server:3001/', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-	});
-	
-};
+var info :{userId : string ,  title :string} = { userId : '', title : ''};
 
 
 export default function Form() {
@@ -52,38 +28,42 @@ export default function Form() {
 	const emailRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const route = useRouter();
-
-
-
+	const [done , getDone] = useState(false);
+	
+	
 	async function handleClick(event: React.MouseEvent<HTMLButtonElement>){
 		event.preventDefault();
 		if (emailRef.current?.value && passwordRef.current?.value) {
-			data.email = emailRef.current?.value;
+			data.username = emailRef.current?.value;
 			data.password = passwordRef.current?.value;
-			// const res = await ApiRequest(data);
 
-			// const updateQuery = () => {
-				// route.push(`http://server:3001/?name=${data.email}&password=${data.password}`);
-			const res = await fetch(`http://server:3001/?name=${data.email}&password=${data.password}`);
+			const res = await Post(data, "http://localhost:3001/auth/signIn");
+			// const res = await GetData("https://jsonplaceholder.typicode.com/todos/1");
+
 			if (res.status == 201) {
-				const user = await res.json();
-				if (user.name == data.email)
-					route.push(`${data.email}`);
-				else
-					route.refresh();
-				
+				const responseData = await res.json();
+				// User = responseData;
+				console.log(responseData.status);
+				if (responseData.status == 300){
+					alert(responseData.message);
+				}
+				else{
+					// info.title = responseData.title;
+					// info.userId = responseData.userId;
+					User.username = responseData.username;
+					User.email = responseData.email;
+					User.password = responseData.password;
+
+					// ab = responseData;
+					getDone(true);
+				}
 			}
-			// 	console.log(route);
-			// console.log(data);
-			route.refresh();
-			// };
-			// data.email += datas;
-			// data.password += datas.password;
+			console.log(res);
 		}
 		
 		else {
 			alert('Please fill all fields');
-		}
+		};
 	};
 
 
@@ -94,14 +74,36 @@ export default function Form() {
 	if (!wait) {
 		return <div>loading...</div>
 	}
+	if (done){
+		return(<>
+			<Link href="/" >back to Home</Link>
+			<Link href="/login" >back to Login</Link>
+			<PrintData data={info} />
+			{/* <h1>{info.userId}</h1>
+			<h1>{info.title}</h1> */}
+			<h1>{User.email}</h1>
+			<h1>{User.password}</h1>
+			<h1>{User.username}</h1>
+			
+			</>
+		)		
+	}
+
 	return (
 		<>
-			<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
-			<input ref={passwordRef} type="password" className="password" name="password" placeholder="Type your password" />
+			<Link href="/" >back to Home</Link>
+			<div id="main">
+				<h2 className="title">Login</h2>
+				<div className="line"></div>
+				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
+				<input ref={passwordRef} type="password" className="password" name="password" placeholder="Type your password" />
 
-			<a href="" className="forgot">Forgot your password?</a>
-			<button id="btn" onClick={handleClick}>Login</button>
-			{check && notFound()}
+				<a href="" className="forgot">Forgot your password?</a>
+				<button id="btn" onClick={handleClick}>Login</button>
+				<button id="Intra">Login with Intranet</button>
+
+				<Link href="/create" className="createbtn">Create an account</Link>
+			</div>
 			{/* {check&& (
 				<p className='check' >email {data?.email} | password {data?.password} </p>
 			)} */}

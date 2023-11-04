@@ -14,7 +14,8 @@ export default function Login() {
 
 	return (
 		<>
-			<Link href="/" >back to Home</Link>
+			<Form />
+			{/* <Link href="/" >back to Home</Link>
 			<div id="main">
 				<h2 className="title">Login</h2>
 				<div className="line"></div>
@@ -24,7 +25,7 @@ export default function Login() {
 				<button id="Intra">Login with Intranet</button>
 
 				<Link href="/create" className="createbtn">Create an account</Link>
-			</div>
+			</div> */}
 		</>
 	)
 }

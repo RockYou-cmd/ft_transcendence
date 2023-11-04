@@ -4,6 +4,7 @@ import './create.css'
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Post from '../Components/post';
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string} = {
 	firstname: '',
@@ -56,18 +57,12 @@ export default function Create(){
 			else {
 				const data: {username:string , password:string, email:string} = {username: info.username, password: info.password, email: info.email};
 								
-				const res = await fetch('http://server:3001/auth/signU/', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(data),
-				});
+				const res = await Post(data, 'http://localhost:3001/auth/signUp');
 				console.log(res);
 				if (res.status == 201) {
 					alert('user created');
 					route.refresh();
-					// route.push('/login');
+					route.push('/login');
 				}	
 				else {
 					alert('user already exists');
