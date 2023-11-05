@@ -9,7 +9,7 @@ import { Userdb } from '../Props/Userdb';
 import PrintData from '../Components/print_data';
 import Link from 'next/link';
 
-var User: Userdb = {username: '', email: '', password: ''};
+var User: Userdb = {username: '', email: '', password: '', firstName: '', lastName: ''};
 
 var ab : any;
 var data: { username: string, password: string } = {
@@ -20,7 +20,7 @@ var data: { username: string, password: string } = {
 var info :{userId : string ,  title :string} = { userId : '', title : ''};
 
 
-export default function Form() {
+export default function Form(LogIn : any) {
 	// const[inputValue, setInput] = useState('');
 	// var check = false;
 	const [wait, checkwait] = useState(false);
@@ -56,6 +56,7 @@ export default function Form() {
 
 					// ab = responseData;
 					getDone(true);
+					LogIn.logInHook.setState(true);
 				}
 			}
 			console.log(res);
@@ -78,9 +79,8 @@ export default function Form() {
 		return(<>
 			<Link href="/" >back to Home</Link>
 			<Link href="/login" >back to Login</Link>
-			<PrintData data={info} />
-			{/* <h1>{info.userId}</h1>
-			<h1>{info.title}</h1> */}
+			{/* <PrintData data={info} /> */}
+
 			<h1>{User.email}</h1>
 			<h1>{User.password}</h1>
 			<h1>{User.username}</h1>
@@ -104,10 +104,6 @@ export default function Form() {
 
 				<Link href="/create" className="createbtn">Create an account</Link>
 			</div>
-			{/* {check&& (
-				<p className='check' >email {data?.email} | password {data?.password} </p>
-			)} */}
-
 		</>
 	);
 }

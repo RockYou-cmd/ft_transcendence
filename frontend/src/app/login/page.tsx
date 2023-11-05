@@ -5,16 +5,19 @@ import Form from './form';
 import Link from 'next/link';
 
 
-export default function Login() {
-	// const [email, setEmail] = useState("");
-	// const [password, setPassword] = useState("");
 
-	// const emailRef = useRef!;
-	// const passwordRef = useRef!;
+export default function Login() {
+	
+	const [LogIn, setLogIn] = useState(false);
+
+	const hooks = {
+		logInHook: {state: LogIn, setState: setLogIn},
+	}
 
 	return (
 		<>
-			<Form />
+			{ hooks.logInHook.state == false ? <Form logIn={hooks}/> : <h1>Not Logged In</h1>}
+			
 			{/* <Link href="/" >back to Home</Link>
 			<div id="main">
 				<h2 className="title">Login</h2>
