@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as argon from "argon2"
 
 
@@ -19,14 +20,14 @@ export class AuthService {
 					password: hash
 				}
 			})
+			delete res.password;
+			return res;
 		}
 		catch(err)
 		{
-			console.log("error occured");
-			console.log(err);
-			return err;
+			if (err instanceof PrismaClientKnownRequestError && err.code == "P2002")
+				throw new ForbiddenException(err.meta.target[0]+ " already exist");
 		}
-		return "user created sucessfully";
 	}
 	async signIn(user) {
 		var ret;
@@ -46,12 +47,10 @@ export class AuthService {
 					status:300,
 					message: "Password incorrect"
 				}
-			
+			return ret;
 		}
 		catch(err) {
-			console.log("err");
-			return err;
+			throw(err);
 		}
-		return ret;
 	}
 }

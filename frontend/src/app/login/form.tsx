@@ -1,6 +1,6 @@
 
 import './login.css'
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { notFound } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import  Post  from '../Components/post';
@@ -8,6 +8,7 @@ import GetData from '../Components/get_data';
 import { Userdb } from '../Props/Userdb';
 import PrintData from '../Components/print_data';
 import Link from 'next/link';
+import React from 'react';
 
 var User: Userdb = {username: '', email: '', password: '', firstName: '', lastName: ''};
 
@@ -18,6 +19,10 @@ var data: { username: string, password: string } = {
 };
 
 var info :{userId : string ,  title :string} = { userId : '', title : ''};
+
+// interface Props {
+// 	updateData: (newData: {username: string, password: string, email: string}) => void;
+// }
 
 
 export default function Form(LogIn : any) {
@@ -38,7 +43,6 @@ export default function Form(LogIn : any) {
 			data.password = passwordRef.current?.value;
 
 			const res = await Post(data, "http://localhost:3001/auth/signIn");
-			// const res = await GetData("https://jsonplaceholder.typicode.com/todos/1");
 
 			if (res.status == 201) {
 				const responseData = await res.json();
@@ -48,15 +52,21 @@ export default function Form(LogIn : any) {
 					alert(responseData.message);
 				}
 				else{
-					// info.title = responseData.title;
-					// info.userId = responseData.userId;
 					User.username = responseData.username;
 					User.email = responseData.email;
 					User.password = responseData.password;
 
 					// ab = responseData;
 					getDone(true);
-					LogIn.logInHook.setState(true);
+					LogIn.logInHook?.setState(true);
+					// ibra(User.username, User.email, User.password);
+					// ibra.updateData?.setState('ibra', 'hello', '123');
+					
+					// ibra.email = User.email;
+					// ibra.username = User.username;
+					// ibra.password = User.password;
+					// ibra.email = User.email;
+					// ibra.username = User.username;
 				}
 			}
 			console.log(res);
@@ -73,24 +83,32 @@ export default function Form(LogIn : any) {
 	}, []);
 
 	if (!wait) {
-		return <div>loading...</div>
+		return{ render: (<div>loading...</div>)}
 	}
-	if (done){
-		return(<>
-			<Link href="/" >back to Home</Link>
-			<Link href="/login" >back to Login</Link>
-			{/* <PrintData data={info} /> */}
+	// if (done){
+	// 	return{
+	// 		User,
+	// 		render: (
+	// 		<>
+	// 			<Link href="/" >back to Home</Link>
+	// 			<Link href="/login" >back to Login</Link>
+	// 			{/* <PrintData data={info} /> */}
 
-			<h1>{User.email}</h1>
-			<h1>{User.password}</h1>
-			<h1>{User.username}</h1>
-			
-			</>
-		)		
-	}
+	// 			{/* <h1>{User.email}</h1>
+	// 			<h1>{User.password}</h1>
+	// 			<h1>{User.username}</h1> */}
+	// 			<h1> ---------------------</h1>
+	// 			{/* <h1>{ibra.email}</h1>
+	// 			<h1>{ibra.password}</h1>
+	// 			<h1>{ibra.username}</h1> */}
+	// 		</>
+	// 		),
+	// 	}		
+	// }
 
-	return (
-		<>
+	return{
+		User,
+		render: (<>
 			<Link href="/" >back to Home</Link>
 			<div id="main">
 				<h2 className="title">Login</h2>
@@ -105,5 +123,6 @@ export default function Form(LogIn : any) {
 				<Link href="/create" className="createbtn">Create an account</Link>
 			</div>
 		</>
-	);
+	),
+	}
 }

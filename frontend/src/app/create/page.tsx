@@ -60,14 +60,14 @@ export default function Create(){
 				const res = await Post(data, 'http://localhost:3001/auth/signUp');
 				console.log(res);
 				const msg = await res.json();
-				if (res.status == 400) {
-					alert(msg.message);
-				}
-				else if (res.status == 201) {
+				
+				if (res.status == 201) {
 					alert('user created');
 					route.refresh();
 					route.push('/login');
-				}	
+				}
+				else
+					alert(msg.message);
 			}
 
 		}
