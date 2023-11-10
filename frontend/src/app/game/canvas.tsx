@@ -1,61 +1,96 @@
 "use client"
-import {useRef, useEffect, useState} from 'react';
+import '../assest/game.css'
+import {useRef, useEffect, useState, use} from 'react';
+import React from 'react';
+import { MouseEvent } from 'react';
+import router from 'next/navigation';
+
+export interface Player {
+	x: number;
+	y: number;
+	score: number;
+	username: string;
+	level: number;
+}
 
 
-export default function Canvas(){
+
+var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
+
+export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 	
 	const game = useRef<HTMLCanvasElement>(null);
+	// const [pause, setPause] = useState(false);
+	var pause = useRef(false);
+	const [startGame, setStart] = useState(true);
+	var myScore = useRef(0);
+	var oppScore = useRef(0);
+	var pos = useRef({
+		x: 0,
+		y: 0,
+		score: 0,
+	});
+
+	let xValue = useRef<HTMLInputElement>(null);
+	let yValue = useRef<HTMLInputElement>(null);
+	let score = useRef<HTMLInputElement>(null);
+	
+	const [Xv, setX] = useState('');
+	const [Yv, setY] = useState('');
+	const [Sc, setSc] = useState('');
+
+
 	useEffect(() => {
 		if (game.current === null){
 			return;
 		}
+		
 		const FPS = 60;
 		const BALL_SPEED = 1.2;
-		const COM_LVL = 0.09;
-		var ball_acc = 0.2;
+		const COM_LVL = 0.12;
+		var ball_acc = 0.12;
 		
 		const context = game.current?.getContext('2d');
 		const gameWidth = game.current?.width || 0;
 		const gameHeight = game.current?.height || 0;
-
+	
 		
-		
-		const net={
+		var net={
 			x : gameWidth / 2 - 1,
 			y : 0,
 			width : 2,
 			height : 10,
 			color: "WHITE"
 		}
-
-		const player1 = {
-			x: 10,
+	
+		var player1 = {
+			x: 20,
 			y: gameHeight / 2 - 120 / 2,
 			width: 12,
-			height: 130,
+			height: 140,
 			score: 0,
-			color: "WHITE"
+			color: "rgba(217, 217, 217)"
 		}
-
-		const player2 = {
-			x: gameWidth - 22,
+	
+		var player2 = {
+			x: gameWidth - 32,
 			y: gameHeight / 2 - 120 / 2,
 			width: 12,
-			height: 130,
+			height: 140,
 			score: 0,
-			color: "WHITE"
+			color: "rgba(217, 217, 217)",
 		}
-
-		const ball = {
+	
+		var ball = {
 			x: gameWidth / 2,
 			y: gameHeight / 2,
 			radius: 16,
 			speed: BALL_SPEED,
 			velocityX: 5,
 			velocityY: 5,
-			color: "WHITE"
-		
+			color: "WHITE",
 		}
+
 
 		function drawRect(x: number, y: number, w: number, h: number, color: string){
 			if (context) {
@@ -89,10 +124,18 @@ export default function Canvas(){
 		}
 		
 		function render(){
+			
 			// clear the map
-			drawRect(0, 0, gameWidth, gameHeight, 'black');
-			// game.current?.getContext('2d')?.clearRect(0, 0, gameWidth, gameHeight);
+			// drawRect(0, 0, gameWidth, gameHeight, 'black');
+			
+			context?.clearRect(0, 0, gameWidth, gameHeight);
 			// draw the net
+			
+			drawRect(0, 0, gameWidth, 6, "white");
+			drawRect(0, 0, 6, gameHeight, "white");
+			drawRect(0, gameHeight - 6 , gameWidth, 6, "white");
+			drawRect(gameWidth - 6, 0, 6,gameHeight, "white");
+			
 			drawNet();
 			// draw the score
 			drawText(player1.score as any, gameWidth / 4, gameHeight / 5, "WHITE");
@@ -122,14 +165,34 @@ export default function Canvas(){
 			return a + (b - a) * n;
 		}
 
-		function resetBall(){
+		function getStart(color: string){
+			var n = 3;
+			if (context) {
+				context.fillStyle = color;
+				context.font = "500 150px sans-serif";
+				context.fillText(n.toString(), gameWidth / 2 - 100, gameHeight / 2 - 100);
+			}
+			n--;
+			if (n == 0)
+				n = 3;
+			
+		}
+
+		function reset(){
 			ball.x = gameWidth / 2;
 			ball.y = gameHeight / 2;
 			ball.speed = BALL_SPEED;
 			ball.velocityX = -ball.velocityX;
+			player1.y = gameHeight / 2;
+			player2.y = gameHeight / 2;
+			
 		}
 		
-		function update(){
+		function updateCOM(){
+	
+			if (pause.current == true || startGame == true){
+				return;
+			}
 			ball.x += ball.velocityX * ball.speed;
 			ball.y += ball.velocityY * ball.speed;
 			
@@ -141,7 +204,7 @@ export default function Canvas(){
 			var touch_player = (ball.x < gameWidth / 2) ? player1 : player2;
 			if (collision(ball, touch_player)){
 				ball.velocityX = -ball.velocityX;
-				// ball.speed += ball_acc;
+				ball.speed += ball_acc;
 			}
 			
 			// Computer
@@ -149,34 +212,80 @@ export default function Canvas(){
 			var cur_pos = player2.y;
 			player2.y = ler(cur_pos, pos_player2, COM_LVL);
 			
-			if (ball.x + ball.radius < 0){
+			if (ball.x + ball.radius <= 0){
 				player2.score++;
-				resetBall();
-			} else if (ball.x - ball.radius > gameWidth){
+				reset();
+			} else if ((ball.x - ball.radius) >= gameWidth){
 				player1.score++;
-				resetBall();
+				reset();
 			}
+		}
+
+		function updateOPP(OPP : Player){
+
 		}
 
 		function gameLoop(){
 			render();
-			update();
+			if (COM)
+				updateCOM();
+			else
+				updateOPP(OPP!);
+			myScore.current = player1.score;
+			oppScore.current = player2.score;
 		}
 		
+		document.body.addEventListener("keydown", function(key){
+			if (key.code == "ArrowUp" && !pause.current && !startGame){
+				if (player1.y > 0)
+					player1.y -= 20;
+			}
+			else if(key.code == "ArrowDown" && !pause.current && !startGame){
+				if (player1.y < gameHeight - player1.height)
+					player1.y += 20;
+			}
+		});
+
 		const start = setInterval(gameLoop, 1000 / FPS);
 		
 		return () => clearInterval(start);
+}, [startGame]);
+	
+	const [btn, setBtn] = useState("Pause");
+	const [restart, setRestart] = useState("Start");
+	const PauseResume = (e : MouseEvent) => {
+		e.preventDefault();
+		pause.current = !pause.current;
+		if (pause.current)
+			setBtn("Resume");
+		else
+			setBtn("Pause");
+	}
 
-}, []);
+	const Restart = (e : MouseEvent) => {
+		e.preventDefault();
+		setStart(!startGame);
+		if (startGame)
+			setRestart("Restart");
+		else
+			setRestart("Start");
+		pause.current = false;
+		setBtn("Pause");
+	}
+
+
 
 	return (
 		<>
 			<div id="container" className='flex justify-center w- m-auto mt-12'>
-				<canvas id="canvas" ref={game} width="1500" height="900">
-			
-				</canvas>
+				{/* <p className="score"> {myScore.current} | {oppScore.current} </p> */}
+				<canvas id="canvas" ref={game} width="1500" height="900" />
 			</div>
+			{ COM ? (<>
+			<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
+			<button className='bg-black text-white p-2 rounded m-5' onClick={Restart}>{restart}</button> </>)
+		: null	
+		}
 		</>
 	)
-
 }

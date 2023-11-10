@@ -1,0 +1,12 @@
+
+body{
+	min-width: 1500px;
+	background-color: antiquewhite;
+}
+
+#container{
+	margin-top:200px;
+	background-color: black;
+	width: fit-content;
+	padding:60px;
+}

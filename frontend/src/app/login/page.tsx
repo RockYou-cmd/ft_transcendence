@@ -1,10 +1,10 @@
 "use client"
-import './login.css'
+import '../assest/login.css';
 import { useRef, useEffect, useState } from 'react';
 import Form from './form';
 import Link from 'next/link';
 import { Userdb } from '../Props/Userdb';
-import Profile from './profile';
+import Profile from '../user/profile';
 
 
 var info : Userdb = {username: '', email: '', password: '', firstName: '', lastName: ''};
@@ -31,8 +31,6 @@ export default function Login() {
 	info.email = User?.email || '';
 	info.password = User?.password || '';
 
-	console.log(" login " ,  hooks.logInHook.state);
-	console.log("logOut" , hooks.logOutHook.state);
 	return (
 		<>
 		

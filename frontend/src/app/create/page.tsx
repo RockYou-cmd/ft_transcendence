@@ -1,6 +1,6 @@
 "use client";
 
-import './create.css'
+import '../assest/create.css';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

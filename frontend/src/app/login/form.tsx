@@ -1,12 +1,11 @@
 
-import './login.css'
+import '../assest/login.css'
 import { useEffect, useRef, useState } from 'react';
 import { notFound } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import  Post  from '../Components/post';
 import GetData from '../Components/get_data';
 import { Userdb } from '../Props/Userdb';
-import PrintData from '../Components/print_data';
 import Link from 'next/link';
 import React from 'react';
 
@@ -59,14 +58,7 @@ export default function Form(LogIn : any) {
 					// ab = responseData;
 					getDone(true);
 					LogIn.logInHook?.setState(true);
-					// ibra(User.username, User.email, User.password);
-					// ibra.updateData?.setState('ibra', 'hello', '123');
-					
-					// ibra.email = User.email;
-					// ibra.username = User.username;
-					// ibra.password = User.password;
-					// ibra.email = User.email;
-					// ibra.username = User.username;
+				
 				}
 			}
 			console.log(res);

@@ -1,8 +1,8 @@
 // "use client"
 import React from 'react';
 import Image from 'next/image';
-import Login from './login/page';
-import './login/login.css'
+
+import './assest/login.css';
 import Link from 'next/link';
 
 
