@@ -1,3 +1,4 @@
+import './assest/loading.css';
 
 
 export default function Loading() {

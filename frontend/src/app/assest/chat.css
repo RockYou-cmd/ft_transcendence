@@ -1,0 +1,106 @@
+
+body{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	
+	align-items: center;
+	/* flex-direction: column; */
+	background-color: rgba(34, 40, 49, 1);
+}
+
+.sec1{
+	background-color: seashell;
+	/* width: 460px; */
+	height: 1200px;
+	width: 34%;
+}
+
+.sec1 .searchBar{
+	/* display: block; */
+	width:auto;
+	
+}
+
+.sec1 .searchBar input{
+	background-color: rgba(13, 13, 13, 1);
+	height: 54px;
+	margin:15px 20px;
+	border-radius: 20px;
+	width:92%;
+	text-align: left;
+	padding: 0px 50px;
+	/* padding: 0px 85%; */
+}
+
+.sec1 .Groups{
+	background-color: brown;
+	width:auto;
+	height: 370px;
+	margin:20px;
+	border-radius: 20px;
+	border: 1px solid black;
+}
+
+.sec1 .groupField{
+	display : flex;
+	padding:10px 15px 6px;
+	margin-top: 10px;
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 30px;
+}
+
+.sec1 .Groups .g_img{
+	width:70px;
+	height: 70px;
+	border-radius: 50%;
+}
+
+.sec1 .content{
+	display: flex;
+	margin: 22px 10px;
+	position: relative;
+}
+
+.sec1 .content h4{
+	font-size: 18;
+	font-weight: 600;
+	position: absolute;
+	left:90px;
+	margin-top: 6px;	
+}
+
+.sec1 .content span{
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 18px;
+	color:rgba(255, 255, 255, 0.5);
+	position: absolute;
+	right:5px;
+	top:4px;
+}
+
+.sec1 .content p{
+	position: absolute;
+	top:36px;
+	left:90px;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.sec1 .line{
+	width: 96%;
+	height: 1px;
+	background-color: rgba(255, 255, 255, 0.25);
+	margin: 20px 10px;
+	position: absolute;
+	top: 60px;
+}
+
+.Chat{
+	background-color: rgb(49, 113, 169);
+	/* width: 1000px; */
+	height: 1200px;
+	width: 64%;
+}
+

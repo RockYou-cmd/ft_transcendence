@@ -1,7 +1,7 @@
 
 import { Userdb }from '../Props/Userdb';
 import React from 'react';
-
+import Logout from '../Components/Logout';
 
 export default function Profile({User, logOut}: {User: Userdb, logOut: any}){
 	
@@ -17,7 +17,8 @@ export default function Profile({User, logOut}: {User: Userdb, logOut: any}){
 			<h1>{User.email}</h1>
 			<h1>{User.password}</h1>
 
-			<button onClick={handlClick}>Log Out</button>
+			{/* <Logout/> */}
+			<button id="logout" onClick={handlClick}>Log Out</button>
 		</>
 	)
 
