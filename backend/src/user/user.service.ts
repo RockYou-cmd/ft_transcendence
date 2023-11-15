@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import * as argon from "argon2"
 
@@ -8,30 +8,21 @@ const prisma = new PrismaClient();
 
 export class userService {
 	async getUser(user) {
-		var ret;
 		try{
-			ret = await prisma.users.findUnique({
+			const ret = await prisma.users.findUnique({
 				where : {
 					username:user.username,
 				}
 			})
 			if (!ret)
-				return {
-					status:300,
-					message:"User not found"
-				}
-			else if (!await argon.verify(ret.password, user.password))
-				return {
-					status:300,
-					message: "Password incorrect"
-				}
+				throw new NotFoundException("User Not Found");
+			return ret;
 			
 		}
 		catch(err) {
-			console.log("err");
+			console.log("getUser !Error!");
 			return err;
 		}
-		return ret;
 	}
 	
 	async getUsers() {
