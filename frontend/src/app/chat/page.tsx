@@ -1,6 +1,7 @@
 import React from "react";
 import '../assest/chat.css';
 import Image from 'next/image';
+import Navbar from "../Components/navbar";
 import bboulhan from '../../../public/bboulhan.jpg';
 import ael_korc from '../../../public/ael-korc.jpg';
 import yel_qabl from '../../../public/yel-qabl.jpg';
@@ -31,6 +32,7 @@ export default function Chat(){
 
 	return (
 		<>
+			<Navbar />
 			<section className="sec1">
 				<div className="searchBar">
 					

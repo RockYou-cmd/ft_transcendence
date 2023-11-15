@@ -2,17 +2,21 @@
 import React from 'react';
 import { MouseEvent } from 'react';
 // import { cookies } from 'next/headers';
-import { useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+
 
 export default function Logout() {
 	const router = useRouter();
 
-	function logout(e : MouseEvent<HTMLButtonElement>) {
+	function logout(e: MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
-		router.push("/login");
+		Cookies.remove('access_token');
+		router.push("/");
+		router.refresh();
 	}
 
-	return(
+	return (
 		<>
 			<button id="logout" onClick={logout}>Logout</button>
 		</>

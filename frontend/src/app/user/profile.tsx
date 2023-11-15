@@ -1,24 +1,70 @@
+"use client"
 
-import { Userdb }from '../Props/Userdb';
 import React from 'react';
 import Logout from '../Components/Logout';
-
-export default function Profile({User, logOut}: {User: Userdb, logOut: any}){
+import { useEffect, useState } from 'react';
+import Navbar from '../Components/navbar';
+import  CheckLogin from '../Components/CheckLogin';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import {GetData} from '../Components/CheckLogin';
+import LoG from '../Components/Log';
+export default  function Profile(){
 	
-	const handlClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-		logOut.logOutHook?.setState(true);
+
+	const [log, setLog] = useState(false);
+	const [data, setData] = useState({} as any);
+	const hooks = {
+		logInHook: { state: log, setState: setLog },
+		dataHook: { state: data, setState: setData },
 	}
 
+	const [wait, checkwait] = useState(false);
+
+	const render = CheckLogin(hooks.logInHook);
+	useEffect(() => {
+		checkwait(true);
+		async function fetchData() {
+			const data = await GetData("Profile", Cookies.get("user") || "") as any;
+			setData(data);
+		}
+		fetchData();
+	}, []);
+
+	if (!wait) {
+		return (<div>loading...</div>)
+	}
+	// const [log, setLog] = useState(false);
+	// const [render, setRender] = useState(<div>loading...</div>);
+	// const [data, setData] = useState({} as any);
+	// useEffect(() => {
+	// 	async function fetchData() {
+	// 		const {data, render} = await LoG("Profile");
+			
+	// 		setData(data);
+	// 		setRender(render);
+	// 	}
+	// 	fetchData();
+	// }, []);
 
 	return(
 		<>
-			<h1>{User.username}</h1>
-			<h1>{User.email}</h1>
-			<h1>{User.password}</h1>
+		{log == false && Cookies.get("access_token") == undefined ? render : 
+			// null}
+	 		
+			(<>
+			<Navbar />
 
-			{/* <Logout/> */}
-			<button id="logout" onClick={handlClick}>Log Out</button>
+			<h1 className='text-black'>{data?.username}</h1>
+			<h1>{data?.email}</h1>
+			<h1>{data?.password}</h1>
+			<h1>{data?.id}</h1>
+			<Logout/>
+			</>)
+			}
+		
+			
+	
 		</>
 	)
 

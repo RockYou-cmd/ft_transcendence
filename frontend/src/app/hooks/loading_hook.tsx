@@ -9,7 +9,7 @@ export default function Loading_hook(){
 		checkwait(true);
 	},[]);
 
-	if (wait){
+	if (!wait){
 		return (
 			<>
 				<h1>loading ...</h1>
@@ -18,3 +18,5 @@ export default function Loading_hook(){
 	}
 	return (<></>);
 }
+
+

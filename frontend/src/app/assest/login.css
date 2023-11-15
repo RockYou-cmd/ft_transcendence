@@ -1,17 +1,17 @@
 body{
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	flex-direction: column;
-
+/* 	
 	background: url(../../../public/4268225\ 1.png);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-	background-position: center;
+	background-position: center; */
+	background-color: #cabfbf;
 	color:#FFFFFF;
 	font-family: 'Poppins';
-
+	
 }
 
 .Ping{
@@ -25,13 +25,15 @@ body{
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	justify-content: center;
 	background: rgb(255, 255, 255, 0.1);
+	/* background: rgb(101, 97, 97); */
 	backdrop-filter: blur(10px);
 	width: 465px;
 	height: 556px;
 
 	/* position: relative; */
-	margin:320px;
+	margin:320px auto;
 	
 	border-radius: 5px;
 	border: 1px solid #0C88E4;

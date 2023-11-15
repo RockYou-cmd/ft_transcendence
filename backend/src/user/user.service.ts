@@ -20,15 +20,9 @@ export class userService {
 					status:300,
 					message:"User not found"
 				}
-			else if (!await argon.verify(ret.password, user.password))
-				return {
-					status:300,
-					message: "Password incorrect"
-				}
 			
 		}
 		catch(err) {
-			console.log("err");
 			return err;
 		}
 		return ret;
