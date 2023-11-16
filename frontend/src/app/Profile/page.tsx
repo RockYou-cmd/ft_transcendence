@@ -1,72 +1,61 @@
 "use client"
-import '../assest/login.css';
-import { useRef, useEffect, useState } from 'react';
-import Form from './form';
-import Link from 'next/link';
-import { Userdb } from '../Props/Userdb';
-import Profile from '../user/profile';
-import Cookies from 'js-cookie'
-import {APIs} from '../Props/APIs';
-import  CheckLogin  from '../Components/CheckLogin';
 
-
-var info: Userdb = { username: '', email: '', password: '', firstName: '', lastName: '' };
+import React, { use } from 'react';
+import Logout from '../Components/Logout';
+import { useEffect, useState } from 'react';
+import Navbar from '../Components/navbar';
+import Cookies from 'js-cookie';
+import LoG from '../Components/Log';
 
 
 
-export default function Login() {
 
-	// const [waitt, checkwait] = useState(false);
 
-	// const [LogIn, setLogIn] = useState(false);
-	// const [LogOut, setLogOut] = useState(false);
 
-	// const hooks = {
-	// 	logInHook: { state: LogIn, setState: setLogIn },
-	// 	logOutHook: { state: LogOut, setState: setLogOut },
-	// 	resetHooks: () => { LogIn && setLogIn(false); LogOut && setLogOut(false); }
-	// }
-
+export default  function Profile(){
 	
-	
+	const [log, setLog] = useState(false);
+	const [data, setData] = useState({} as any);
+	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
+	const [wait, checkwait] = useState(false);
+	const hooks = {
+		logInHook: { state: log, setState: setLog },
+		dataHook: { state: data, setState: setData },
+		cookieHook: { state: cookie, setState: setCookie },	
+		waitHook: { state: wait, setState: checkwait },
+	}
 
-	// const cookie = Cookies.get("access_token");
-	
-	// console.log("cookie", cookie);
-	// let data;
-	// if (cookie == undefined)
-	// const {data, render} = Form();
 
-	// info.username = User?.username || '';
-	// info.email = User?.email || '';
-	// info.password = User?.password || '';
-	// console.log("heyy " ,Cookies.get('access_token'));
+	let render = LoG({page: "Profile", LogIn: hooks}) as any;
 
-	// useEffect(() => {setLogIn(true);},[Cookies.get('access_token')]);
+	useEffect(() => {
+		hooks.waitHook.setState(true);
+	},[hooks.logInHook.state]);
 
-	// useEffect(() => {
-	// 	checkwait(true);
-	// }, []);
-	// if (!waitt){
-	// 	return(<div>loading...</div>);
-	// }
-	// || Cookies.get("acces_token") == undefined
 
-	// console.log("hook ",hooks.logInHook.state);
-	return (
+	if (!hooks.waitHook.state) {
+		return (<div>loading...</div>)
+	}
+
+	return(
 		<>
-			<Profile/>
-		    {/* <Form/> */}
-			{/* {hooks.logInHook.state == false && Cookies.get("access_token") == undefined ? render : <Profile/>} */}
-		{/* {render} */}
-			{/* {Cookies.get("access_token") == undefined ? render :
-				<Profile />} */}
+		{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render : 
+			
+	 		
+			(<>
+			<Navbar />
 
-			{/* {render} */}
-			{/* <h1>{info.username} && {info.email} && {info.password}</h1>
-			<h1>{User?.email} && {User?.username} && {User?.password}</h1> */}
-			{/* <h1>{data.username} && {data.email} && {data.password} </h1> */}
-
+			<h1 className='text-black'>{data?.username}</h1>
+			<h1>{data?.email}</h1>
+			<h1>{data?.password}</h1>
+			<h1>{data?.id}</h1>
+			<Logout/>
+			</>)
+			}
+		
+			
+	
 		</>
 	)
+
 }

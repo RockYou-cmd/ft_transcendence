@@ -1,7 +1,6 @@
 "use client"
 import React from 'react';
 import { MouseEvent } from 'react';
-// import { cookies } from 'next/headers';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 

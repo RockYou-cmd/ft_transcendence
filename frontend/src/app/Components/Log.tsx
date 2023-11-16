@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { GetData } from "./CheckLogin";
 import Cookies from "js-cookie";
 import CheckLogin from "./CheckLogin";
 
 
-export default function LoG(page: string) {
+export default function LoG({page , LogIn} : {page : string, LogIn : any})  {
 
-	const [log, setLog] = useState(false);
-	const [data, setData] = useState({} as any);
-	const hooks = {
-		logInHook: { state: log, setState: setLog },
-		dataHook: { state: data, setState: setData },
-	}
 
-	// const [wait, checkwait] = useState(false);
-
-	const render = CheckLogin(hooks.logInHook);
+	const render = CheckLogin(LogIn) as any;
 	useEffect(() => {
-		// checkwait(true);
+		LogIn.waitHook.setState(true);
 		async function fetchData() {
-			const data = await GetData(page, Cookies.get("user") || "") as any;
-			setData(data);
+			const data = await GetData(page) as any;
+			if (data == undefined){
+				Cookies.remove("access_token");
+				LogIn.logInHook.setState(false);
+			}
+			else{
+				LogIn.dataHook.setState(data);
+			}
 		}
 		fetchData();
-	}, []);
+		LogIn.cookieHook.setState(Cookies.get("access_token") || "");
+	}, [LogIn.logInHook.state]);
 
-	// if (!wait) {
-	// 	return (<div>loading...</div>)
-	// }
 
-	return{ data,
-		render:(
+	return (
 		<>
-			{log == false && Cookies.get("access_token") == undefined ? render :
-				null}
-			{/* {console.log("USER ", User)} */}
+			{LogIn.logInHook.state == false && LogIn.cookieHook.state == "" ? render : null}
 		</>
 	)
-	}
+	
+	
 }

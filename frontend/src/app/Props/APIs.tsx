@@ -12,9 +12,9 @@ export interface Api{
 export const APIs : Api = { 
 	SignIn : "http://localhost:3001/auth/signIn",
 	SignUp : "http://localhost:3001/auth/signUp",
-	Profile : "http://localhost:3001/user/one/?username=",
+	Profile : "http://localhost:3001/user/",
 	Chat : "",
 	Game : "",
-	Navbar: "http://localhost:3001/user/one/?username=",
+	Navbar: "http://localhost:3001/user/",
 	accessToken: "http://localhost:3001/auth/token",
 };

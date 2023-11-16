@@ -16,28 +16,34 @@ export async function Post(data : object, path : string){
 
 export async function Get(path : string){
 try{
-	const res = await fetch(path, {
+	const header = {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
-			'Autorization': 'Bearer ' + Cookies.get('access_token'),
+			'authorization': 'Bearer ' + Cookies.get('access_token'),
 		},
-	});
-	
+	}
+
+	let res = await fetch(path, header);
 	// const res = await axios.get(path, {
 	// 	headers: {
 	// 		'Content-Type': 'application/json',
 	// 		'Autorization': 'Bearer ' + Cookies.get('access_token'),
 	// 	},
 	// 	});
+	// const data = JSON.stringify(res);
 		
 		
-		// const data = JSON.stringify(res);
-		// console.log("data", data);
-		// console.log("res", res);
-		// console.log("res2", res2);
-		const data = await res.json();
+	if (res.status == 401)
+		return undefined;
+	else if (res.status != 200)
+		res = await fetch(path, header);
+	console.log("res status", res.status);
+	const data = await res.json();
+
 	return data;
-	// return data;
-}catch(err){}
+
+}catch(err){
+	alert(err);
+}
 }

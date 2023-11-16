@@ -1,4 +1,5 @@
 
+
 export interface Userdb {
 	firstName: string;
 	lastName: string;
@@ -6,4 +7,3 @@ export interface Userdb {
 	password: string;
 	username: string;
 }
-

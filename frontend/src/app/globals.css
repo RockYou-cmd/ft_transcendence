@@ -9,7 +9,10 @@ body{
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center center; */
-
+	-webkit-font-smoothing: antialiased;
+ 	-moz-osx-font-smoothing: grayscale;
+  	font-smooth: always;
+	background-color: #cabfbf;
 	color:#FFFFFF;
 	font-family: 'Poppins';
 

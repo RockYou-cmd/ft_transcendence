@@ -33,21 +33,20 @@ export default function Form() {
 			data.password = passwordRef.current?.value;
 			try{
 				const res = await Post(data, APIs.SignIn);
+				console.log("res status", res.status);
+				const responseData = await res.json();
 				if (res.status == 201) {
-					const responseData = await res.json();
-					console.log(responseData.status);
-					if (responseData.status == 300) {
-						alert(responseData.message);
-					}
-					else {
-						// LogIn.logInHook?.setState(true);
-						setLog( true);
-						Cookies.set('access_token', responseData.username);
-						Cookies.set('user', responseData.username);
-						console.log("logged in");
-					}
-				}
 			
+						// LogIn.logInHook?.setState(true);
+					setLog( true);
+					Cookies.set('access_token', responseData.access_token);
+					Cookies.set('user', responseData.username);
+					// }
+				}
+				else{
+					
+					alert(responseData.message);
+				}
 			
 			}
 			catch(err){
