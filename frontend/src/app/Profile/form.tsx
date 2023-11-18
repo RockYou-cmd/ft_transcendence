@@ -10,7 +10,6 @@ import Cookies from 'js-cookie';
 
 
 
-
 var data: { username: string, password: string } = {
 	username: '',
 	password: '',
@@ -40,7 +39,6 @@ export default function Form() {
 						// LogIn.logInHook?.setState(true);
 					setLog( true);
 					Cookies.set('access_token', responseData.access_token);
-					Cookies.set('user', responseData.username);
 					// }
 				}
 				else{
@@ -65,7 +63,7 @@ export default function Form() {
 	}, []);
 
 	if (!wait) {
-		return {render :  (<div>loading...</div>)}
+		return {render :  (<><div>loading...</div><div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></>)}
 	}
 
 	return{
@@ -75,13 +73,15 @@ export default function Form() {
 			{/* <Link href="/" >back to Home</Link> */}
 			<div id="main">
 				<h2 className="title">Login</h2>
-				<div className="line"></div>
+				<div className="Fline"></div>
 				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
 				<input ref={passwordRef} type="password" className="password" name="password" placeholder="Type your password" />
 
 				<a href="" className="forgot">Forgot your password?</a>
-				<button id="btn" onClick={handleClick}>Login</button>
-				<button id="Intra">Login with Intranet</button>
+				<button className="btn" onClick={handleClick}>Login</button>
+				<button className="Intra">Login with Intranet</button>
+				<Link href="" className="Intra Google">Login with Google</Link>
+
 
 				<Link href="/create" className="createbtn">Create an account</Link>
 			</div>

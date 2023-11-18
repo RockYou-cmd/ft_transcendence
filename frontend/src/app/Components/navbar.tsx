@@ -5,7 +5,7 @@ import Link from "next/link";
 import Logout from "./Logout";
 import { GetData } from "./CheckLogin";
 import { useEffect , useState } from "react";
-
+import '../assest/navbar.css';
 
 
 export default function Navbar() {
@@ -27,9 +27,9 @@ export default function Navbar() {
 					<Image id="avatar" src={avatar} alt="bboulhan" priority={true} width={60} height={60}></Image>
 				</div>
 				<nav className="nav">
-					<li><Link href="./Profile" > Profile</Link></li>
-					<li><Link href="./chat" > Chat</Link></li>
-					<li><Link href="./game" > game</Link></li>
+					<Link href="./Profile" ><li> Profile</li></Link>
+					<Link href="./chat" ><li> Chat</li></Link>
+					<Link href="./game" ><li> Game</li></Link>
 					<li>{data?.username}</li>
 				</nav>
 				

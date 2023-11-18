@@ -45,7 +45,7 @@ export default  function Profile(){
 			(<>
 			<Navbar />
 
-			<h1 className='text-black'>{data?.username}</h1>
+			<h1>{data?.username}</h1>
 			<h1>{data?.email}</h1>
 			<h1>{data?.password}</h1>
 			<h1>{data?.id}</h1>

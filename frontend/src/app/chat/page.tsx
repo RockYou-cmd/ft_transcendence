@@ -2,15 +2,19 @@
 import React from "react";
 import '../assest/chat.css';
 import Image from 'next/image';
-import Navbar from "../Components/navbar";
+import Groups from './Groups';
 import bboulhan from '../../../public/bboulhan.jpg';
 import ael_korc from '../../../public/ael-korc.jpg';
 import yel_qabl from '../../../public/yel-qabl.jpg';
-import { useState ,useEffect } from "react";
+import Friends from "./Friends";
+import Cnvs from "./Chat";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import LoG from "../Components/Log";
+import Navbar from "../Components/navbar";
 
-interface Friends{
+
+export interface Friends{
 	title: string;
 	image: any;
 	lastMsg: string;
@@ -20,7 +24,7 @@ interface Friends{
 
 
 
-interface Groups{
+export interface Group{
 	title: string;
 	image: any;
 	lastMsg: string;
@@ -40,61 +44,58 @@ export default function Chat(){
 		waitHook: { state: wait, setState: checkwait },
 	}
 
-	var channels : Groups[] = [];
+	
+	let channels : Group[] = [];
 	channels.push({title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00"});
 	channels.push({title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35"});
 	channels.push({title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50"});
+	channels.push({title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35"});
+	channels.push({title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00"});
+	channels.push({title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50"});
+
+	let friends : Friends[] = [];
+	friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
+	friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
+	friends.push({title: "Friend 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: true});
+	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
+	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
+	friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
+	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
+	friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
+	friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
+	
+	
+	
 	
 	let render = LoG({page: "Profile", LogIn: hooks}) as any;
-	
+
 	useEffect(() => {
 		hooks.waitHook.setState(true);
-	},[]);
+	},[hooks.logInHook.state]);
 
 
 	if (!hooks.waitHook.state) {
-		return (<div>loading...</div>)
+		return (<><div>loading...</div></>)
 	}
-
-
-
 	return (
 		<>
-			{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render :
-			
-			(<><Navbar />
+		{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render : 
+		(<>
+		<Navbar/>
+		<div className="ChatPage">
 			<section className="sec1">
 				<div className="searchBar">
 					
 					<input type="text" placeholder="Search" />
 				</div>
 				
-				<div className="Groups">
-					<span className="groupField">Groups</span>
-				{channels.map((chn) => (<>
-			        <div className="content">
-						<Image className="g_img" src={chn.image} alt="img" width={70} height={70}/>
-						<h4>{chn.title}</h4>
-						<p>{chn.lastMsg}</p>
-						<span>{chn.lastMsgTime}</span>
-						<line className="line"></line>
-					</div>
-					</>
-				))}
-
-					
-				</div>
-			{/* </section> */}
-
-			{/* <section className="sec2"> */}
-				<div className="Friends">
-
-				</div>
+			<Groups channels={channels}/>
+			<Friends channel={friends}/>
+				
 			</section>
-
-			<aside className="Chat">
+			<Cnvs/>
 			
-			</aside></>)}
+		</div></>)}
 		</>
 	);
 }

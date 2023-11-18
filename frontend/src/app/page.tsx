@@ -44,7 +44,7 @@ export default function Home() {
 
 				<h1 className='Ping'>Ping Pong</h1>
 				{/* <p>welcome <Link href="/Profile"> sign in</Link> </p> */}
-				{Cookies.get("access_token") == undefined && !sign ? <button className="button" onClick={handler}>Sing In</button> : null}
+				{Cookies.get("access_token") == undefined && !sign ? <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={handler}>Sing In</button> : null}
 				{sign ? render : null}
 			
 				{/* <Login /> */}

@@ -12,57 +12,14 @@ body{
 	-webkit-font-smoothing: antialiased;
  	-moz-osx-font-smoothing: grayscale;
   	font-smooth: always;
-	background-color: #cabfbf;
 	color:#FFFFFF;
 	font-family: 'Poppins';
-
-}
-
-.header{
-	display: flex;
-	background-color: rgba(1, 22, 39, 1);
-	justify-content: space-between;
-	width: 100%;
-	height: 100px;
-}
-
-.header #avatar{
-	border-radius: 50%;
-	margin: 18px;
-}
-
-.header .nav{
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
 	background-color: rgba(34, 40, 49, 1);
-	border: 1px solid rgba(34, 40, 49, 1);
-	border-radius: 30px;
-	height: 46px;
-	margin: 28px;
-	padding:10px;
-	list-style: none;
+
 }
 
-.header .nav li{
-	padding:6px 30px;
-	border-radius: 30px;
-}
-
-.header .nav li:hover{
-	background-color: rgba(32, 164, 243, 1);
-	cursor: pointer;
-}
-
-#logout{
-	background-color: rgba(34, 40, 49, 1);
-	border-radius: 30px;
-	padding: 0px 20px;
-	margin: 30px;
-}
-
-#logout:hover{
-	background-color: rgba(32, 164, 243, 1);
+input:focus, textarea:focus, select:focus{
+	outline: none;
 }
 
 
