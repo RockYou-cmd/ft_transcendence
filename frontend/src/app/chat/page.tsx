@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import LoG from "../Components/Log";
 import Navbar from "../Components/navbar";
+import Options from "./Components/Options";
 
 
 export interface Friends{
@@ -37,6 +38,8 @@ export default function Chat(){
 	const [data, setData] = useState({} as any);
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
+	const [option, setOption] = useState(false);
+
 	const hooks = {
 		logInHook: { state: log, setState: setLog },
 		dataHook: { state: data, setState: setData },
@@ -72,7 +75,7 @@ export default function Chat(){
 	useEffect(() => {
 		hooks.waitHook.setState(true);
 	},[hooks.logInHook.state]);
-
+ 
 
 	if (!hooks.waitHook.state) {
 		return (<><div>loading...</div></>)
@@ -85,8 +88,13 @@ export default function Chat(){
 		<div className="ChatPage">
 			<section className="sec1">
 				<div className="searchBar">
-					
 					<input type="text" placeholder="Search" />
+					<button onClick={() => {setOption(!option);}} className="Options">
+						<div className="straight"></div>
+						<div className="straight"></div>
+						<div className="straight"></div>
+					</button>
+					{option ?  <Options/> : null}
 				</div>
 				
 			<Groups channels={channels}/>

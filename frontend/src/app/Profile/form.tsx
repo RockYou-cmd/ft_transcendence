@@ -35,11 +35,8 @@ export default function Form() {
 				console.log("res status", res.status);
 				const responseData = await res.json();
 				if (res.status == 201) {
-			
-						// LogIn.logInHook?.setState(true);
 					setLog( true);
 					Cookies.set('access_token', responseData.access_token);
-					// }
 				}
 				else{
 					
