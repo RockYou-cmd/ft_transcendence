@@ -77,10 +77,10 @@ export default function Form() {
 				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
 				<input ref={passwordRef} type="password" className="password" name="password" placeholder="Type your password" />
 
-				<a href="" className="forgot">Forgot your password?</a>
+				<Link href="" className="forgot">Forgot your password?</Link>
 				<button className="btn" onClick={handleClick}>Login</button>
-				<button className="Intra">Login with Intranet</button>
-				<Link href="" className="Intra Google">Login with Google</Link>
+				<Link href={APIs.intraAuth} className="Intra">Login with Intranet</Link>
+				<Link href={APIs.googleAuth} className="Intra Google">Login with Google</Link>
 
 
 				<Link href="/create" className="createbtn">Create an account</Link>
