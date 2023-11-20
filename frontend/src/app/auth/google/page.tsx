@@ -2,15 +2,15 @@
 import React, { useState, useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { APIs } from "../../Props/APIs";
-import { Post } from "../../Components/post";
+import { Get, Post } from "../../Components/post";
 import Cookies from "js-cookie";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
 
-	const [value, setValue] = useState(null) as any;
-	const [code, setCode] = useState(false);
+	const [code, setValue] = useState(null) as any;
+	const [value, setCode] = useState(false);
 
 	const search = useSearchParams();
 	const router = useRouter();
@@ -22,8 +22,11 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 
 	useEffect(() => {
 		async function fetchToken() {
-			const res = await Post(value, APIs.googleToken);
+			console.log("heeereeee")
+			const res = await Post({code,}, APIs.googleToken);
 			const data = await res.json();
+			console.log(res);
+			console.log(data);
 			if (res.status == 201) {
 				Cookies.set('access_token', data.access_token);
 				router.push("/Profile");
@@ -33,9 +36,9 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 			}
 			console.log("res status", res.status);
 		}
-		if (value && code)
+		// if (value && code)
 			fetchToken();
-	}, [code]);
+	}, [value]);
 
 	return (
 		<>

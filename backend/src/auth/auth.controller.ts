@@ -1,24 +1,42 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { authDto } from './auth.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard/auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { get } from 'http';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private authService: AuthService) {}
+
 	@Post("signUp")
-	async signUp(@Body() dto : authDto) {
-		console.log(dto);
+	signUp(@Body() dto : authDto) {
 		return this.authService.signUp(dto);
 	}
+
 	@Post("signIn")
-	// @UseGuards(AuthGuard)
-	async singIn(@Body() ndto) {
+	singIn(@Body() ndto) {
 		return this.authService.signIn(ndto);
 	}
-	@Get()
-	@UseGuards(AuthGuard)
-	test() {
-		return "authorized";
+
+	@UseGuards(AuthGuard("google"))
+	@Get("google")
+	google() {}
+	
+	@Post("google/callback")
+	@UseGuards(AuthGuard("google"))
+	googleCallback(@Req() req) {
+		return this.authService.OAuthValidation(req.user);
+	}
+
+	@UseGuards(AuthGuard("42"))
+	@Get("intra")
+	async intra() {
+		return "intra";
+	}
+
+	@Post("intra/callback")
+	@UseGuards(AuthGuard("42"))
+	intraCallback(@Req() req) {
+		return this.authService.OAuthValidation(req.user);
 	}
 }

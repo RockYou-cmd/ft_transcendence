@@ -7,7 +7,7 @@ export async function Post(data : object, path : string){
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'Autorization': 'Bearer ' + Cookies.get('access_token'),
+			// 'Autorization': 'Bearer ' + Cookies.get('access_token'),
 		},
 		body: JSON.stringify(data),
 	});

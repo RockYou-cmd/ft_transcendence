@@ -18,6 +18,8 @@ model users{
 
   email String @unique
 
-  password String
+  password String?
+
+  photo String?
 }
 

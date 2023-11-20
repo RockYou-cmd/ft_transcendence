@@ -9,7 +9,7 @@ export class userController{
 
 	@Get()
 	@UseGuards(AuthGuard)
-	getUser(@Query() log, @Request() request){
+	getUser(@Request() request){
 		return this.UserService.getUser(request.user);
 	}
 

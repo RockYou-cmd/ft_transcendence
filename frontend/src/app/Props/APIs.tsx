@@ -21,9 +21,9 @@ export const APIs : Api = {
 	Game : "",
 	Navbar: "http://localhost:3001/user/",
 	accessToken: "http://localhost:3001/auth/token",
-	googleAuth: "http://localhost:3001/Auth/google",
+	googleAuth: "http://localhost:3001/auth/google",
 	intraAuth: "http://localhost:3001/auth/intra",
-	googleToken: "http://localhost:3001/Auth/google/callback",
-	intraToken: "http://localhost:3001/Auth/intra/callback",
+	googleToken: "http://localhost:3001/auth/google/callback",
+	intraToken: "http://localhost:3001/auth/intra/callback",
 
 };
