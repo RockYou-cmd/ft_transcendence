@@ -9,7 +9,6 @@ export default function LoG({page , LogIn} : {page : string, LogIn : any})  {
 
 	const render = CheckLogin(LogIn) as any;
 	useEffect(() => {
-		LogIn.waitHook.setState(true);
 		async function fetchData() {
 			const data = await GetData(page) as any;
 			if (data == undefined){
@@ -18,6 +17,7 @@ export default function LoG({page , LogIn} : {page : string, LogIn : any})  {
 			}
 			else{
 				LogIn.dataHook.setState(data);
+				// LogIn.datas.current = data;
 			}
 		}
 		fetchData();

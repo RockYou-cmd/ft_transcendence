@@ -1,5 +1,4 @@
 "use client"
-import React from "react";
 import '../assest/chat.css';
 import Image from 'next/image';
 import Groups from './Groups';
@@ -8,7 +7,7 @@ import ael_korc from '../../../public/ael-korc.jpg';
 import yel_qabl from '../../../public/yel-qabl.jpg';
 import Friends from "./Friends";
 import Cnvs from "./Chat";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useRef} from "react";
 import Cookies from "js-cookie";
 import LoG from "../Components/Log";
 import Navbar from "../Components/navbar";
@@ -39,6 +38,7 @@ export default function Chat(){
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
 	const [option, setOption] = useState(false);
+	const visible = useRef(null);
 
 	const hooks = {
 		logInHook: { state: log, setState: setLog },
@@ -66,16 +66,26 @@ export default function Chat(){
 	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
 	friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
 	friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
-	
-	
-	
-	
+
+	// const outSide = (e: MouseEvent) => {
+	// 	if (visible.current && !(visible.current as any).contains(e.target as Node)) {
+	// 		setOption(false);
+	// 		alert("out");
+	// 	}
+	// };
+
 	let render = LoG({page: "Profile", LogIn: hooks}) as any;
 
 	useEffect(() => {
 		hooks.waitHook.setState(true);
-	},[hooks.logInHook.state]);
+	}, []);
  
+	// useEffect(() => {
+	// 	document.addEventListener("mousedown", outSide);
+	// 	return () => {
+	// 		document.removeEventListener("mousedown", outSide);
+	// 	};
+	// }, [visible]);
 
 	if (!hooks.waitHook.state) {
 		return (<><div>loading...</div></>)
@@ -84,18 +94,21 @@ export default function Chat(){
 		<>
 		{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render : 
 		(<>
+		<div ref={visible}>
 		<Navbar/>
 		<div className="ChatPage">
 			<section className="sec1">
 				<div className="searchBar">
 					<input type="text" placeholder="Search" />
 					<button onClick={() => {setOption(!option);}} className="Options">
+					{/* <button className="Options"> */}
 						<div className="straight"></div>
 						<div className="straight"></div>
 						<div className="straight"></div>
 					</button>
-					{option ?  <Options/> : null}
+					{option && <Options/>}
 				</div>
+				{/* <Options/> */}
 				
 			<Groups channels={channels}/>
 			<Friends channel={friends}/>
@@ -103,6 +116,7 @@ export default function Chat(){
 			</section>
 			<Cnvs/>
 			
+		</div>
 		</div></>)}
 		</>
 	);

@@ -64,7 +64,7 @@ export default function Create() {
 				if (res.status == 201) {
 					alert('user created');
 					route.refresh();
-					route.push('/Profile');
+					route.push('/profile');
 				}
 				else
 					alert(msg.message);
