@@ -1,4 +1,4 @@
-version: '2.13.0'
+version: '2'
 
 services:
   server:
@@ -9,6 +9,7 @@ services:
       - "3001:3001"
     volumes:
       - "./backend:/app"
+      - "/app/node_modules"
   database:
     image: postgres
     container_name: database
@@ -26,3 +27,4 @@ services:
       - "3000:3000"
     volumes:
       - "./frontend:/app"
+      - "/app/node_modules"

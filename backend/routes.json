@@ -1,0 +1,11 @@
+{
+	"signUp" : {
+		"path" : "/signUp",
+		"body" : {
+			"username" : "",
+			"email" : "",
+			"password" : ""
+		}
+	}
+
+}

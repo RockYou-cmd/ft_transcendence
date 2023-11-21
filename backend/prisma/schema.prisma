@@ -12,7 +12,20 @@ datasource db {
 
 model users{
 
-  id String @id() @default(uuid())
+  id String @id() @default(uuid()) @unique
 
-  username String
+  username String @unique
+
+  email String @unique
+
+  password String?
+
+  photo String?
+
+  is2faEnabled Boolean? @default(false)
+
+  twoFactorAuthenticationSecret String?
+
+  temp2fa String?
 }
+

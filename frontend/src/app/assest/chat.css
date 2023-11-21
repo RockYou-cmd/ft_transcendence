@@ -1,0 +1,359 @@
+
+.ChatPage{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	
+}
+
+.sec1{
+	margin-top:12px;
+	width: 33%;
+	position: relative;
+}
+
+.sec1 .searchBar{
+	width:auto;
+	display: flex;
+	flex-direction: row;
+}
+
+.sec1 .searchBar input{
+	background-color: rgba(13, 13, 13, 1);
+	height: 54px;
+	margin:15px 20px;
+	border-radius: 20px;
+	width:73%;
+	text-align: left;
+	padding: 0px 40px;
+	border: 1px solid 
+	rgba(255, 255, 255, 0.2);
+	/* padding: 0px 85%; */
+}
+
+.sec1 .Options{
+	background-color:rgba(62, 70, 81, 1);
+	/* display: flex;
+	flex-direction:column; */
+	display: block;
+	width: 43px;
+	height: 31px;
+	margin: 28px 0px 24px;
+	border-radius: 8px;
+	padding: 5px 4px;
+}
+
+.Options .straight{
+	border: 2px solid #ffffff;
+	width:30px;
+	border-radius: 20px;
+	margin:1.5px 2.5px;
+}
+
+
+
+.sec1 .Groups{
+	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	width:auto;
+	margin:20px;
+	border-radius: 20px;
+	border: 1px solid black;
+	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.8);
+}
+.sec1 .Groups .content_g{
+	overflow-y: scroll;
+	height: 26vh;
+}
+
+.sec1 .Groups .content_g::-webkit-scrollbar{display: none;}
+
+.sec1 .groupField{
+	display : flex;
+	padding:10px 15px 6px;
+	margin: 10px 0px;
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 30px;
+}
+
+.g_img{
+	width:70px;
+	height: 70px;
+	border-radius: 50%;
+}
+
+.sec1 .content{
+	display: flex;
+	margin: 22px 10px;
+	position: relative;
+}
+
+.sec1 .content h4{
+	font-size: 18;
+	font-weight: 600;
+	position: absolute;
+	left:90px;
+	margin-top: 6px;	
+}
+
+.sec1 .content span{
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 18px;
+	color:rgba(255, 255, 255, 0.5);
+	position: absolute;
+	right:5px;
+	top:9px;
+}
+
+.sec1 .content p{
+	position: absolute;
+	top:36px;
+	left:90px;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.sec1 .line{
+	width: 96%;
+	height: 1px;
+	background-color: rgba(255, 255, 255, 0.25);
+	margin: 20px 10px;
+	position: absolute;
+	top: 60px;
+}
+
+.Friends{
+	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	width:auto;
+	margin:30px 20px 20px;
+	border-radius: 20px;
+	border: 1px solid black;
+	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.8);
+}
+
+.Friends .content_f{
+	overflow-y: scroll;
+	height: 42.7vh;
+}
+
+.content_f::-webkit-scrollbar{display: none;}
+
+.status{
+	display: flex;
+	background-color: rgba(0, 255, 117, 1);
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	position: absolute;
+	top:51px;
+	left:51px;
+	border: 2px solid #ffffff;
+}
+
+
+.Chat{
+	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+
+	margin:25px 18px 10px 6px;
+	border: 1px solid black;
+	border-radius: 20px;
+	height: 86.5vh;
+	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.8);
+	/* height: 100%; */
+	width: 64%;
+	padding:2vh;
+	
+}
+
+.Chat .User{
+	display: flex;
+	position: relative;
+	margin-bottom: 50px;
+}
+
+.Chat .User h1{
+	font-size: 24px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	margin-left: 30px;
+	margin-top: 4px;
+	color : rgba(255, 255, 255, 1);
+}
+
+.Chat .User span{
+	font-size: 14px;
+	font-weight: 400;
+	color : rgba(255, 255, 255, 0.85);
+	position: absolute;
+	top: 38px;
+	left: 100px;
+}
+
+.User button{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding:22px;
+	margin-left:auto;
+}
+
+.User .point{
+	width: 5px;
+	height: 5px;
+	border-radius: 20px;
+	background: #1A66FF;
+
+}
+
+.line{
+	width: 100%;
+	height: 1px;
+	background-color: rgba(255, 255, 255, 0.25);
+	margin: 35px 0px;
+	position: absolute;
+	top: 70px;
+}
+
+.Chat .line{
+	background-color: rgba(255, 255, 255, 0.25);
+}
+
+.Chat .Msg{
+	display: flex;
+	flex-direction: column;
+	margin: 60px 0px 30px;
+	height: 65vh;
+	overflow-y:auto;
+	
+}
+
+.Msg::-webkit-scrollbar{display: none;}
+
+.Chat .my_msg{
+	display: block;
+	margin: 20px 5px;
+	position: relative;
+	/* padding: 10px; */
+
+}
+
+.Chat .my_msg p{
+	display: block;
+	width: fit-content;
+	padding: 12px 40px;
+	margin-left:auto;
+	margin-right: 12px;
+	background: #1A66FF;
+	border-radius: 9px;
+}
+
+.Chat .my_msg span{
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 18px;
+	color: rgba(255, 255, 255, 0.5);
+	position: absolute;
+	right:12px;
+	top:52px;
+	
+}
+
+.Chat .my_msg .triangle{
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-left: 20px solid #1A66FF;
+	position: absolute;
+	right: 0px;
+	top: 28px;
+}
+
+.Chat .usr_msg .triangle{
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-right: 20px solid #757D86;
+	position: absolute;
+	left: 0px;
+	top: 28px;
+}
+
+.Chat .usr_msg{
+	display: block;
+	margin: 20px 5px;
+	position: relative;
+}
+
+.Chat .usr_msg p{
+	/* display: block; */
+	width: fit-content;
+	padding: 12px 40px;
+	background: #757D86;
+	border-radius: 9px;
+	margin-left: 12px;	
+}
+
+.Chat .usr_msg span{
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 18px;
+	color: rgba(255, 255, 255, 0.5);
+	margin:0px 12px;
+}
+
+.Chat .Send{
+	display: flex;
+	flex-direction: row;
+	margin-top:50px;
+	position: relative;
+	padding: 1.5vh 0px;
+}
+
+.Send .line{
+	top:-30px;
+	background-color: rgba(255, 255, 255, 0.25);
+}
+
+
+.Send button{
+	background-color: #1A66FF;
+	border-radius: 10px;
+	width: 55px;
+	height: 55px;
+}
+
+.Send button div{
+	width: 0;
+	height: 0;
+	border-top: 16px solid transparent;
+	border-left: 26px solid #ffffff;
+	border-bottom: 16px solid transparent;
+	margin: 2px 0px 0px 17px;
+}
+
+.Send input{
+	background-color: rgba(13, 13, 13, 1);
+	border-radius: 10px;
+	width: 92%;
+	margin-right: 10px;
+	padding: 10px 30px;
+	/* padding: 0px 85%; */
+}
+
+input:focus{
+	outline: none;
+}
+
+
+#optionsBar{
+	display: block;
+	width: 280px;
+	height: 180px;
+	border: 1px solid #1A1A1A;
+	border-radius: 16px;
+	position: absolute;
+	left:80px;
+	top:40px;
+	/* background-color: #1A1A1A; */
+	background-color: #1A66FF;
+}
