@@ -22,19 +22,15 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 
 	useEffect(() => {
 		async function fetchToken() {
-			console.log("heeereeee")
 			const res = await Post({code,}, APIs.intraToken);
 			const data = await res.json();
-			console.log(res);
-			console.log(data);
 			if (res.status == 201) {
 				Cookies.set('access_token', data.access_token);
-				router.push("/Profile");
+				router.push("/profile");
 			}
 			else {
 				alert(data.message);
 			}
-			console.log("res status", res.status);
 		}
 		if (value && code)
 			fetchToken();

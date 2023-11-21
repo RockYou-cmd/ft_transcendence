@@ -1,15 +1,14 @@
-import { Userinfo } from '../Components/get_data';
+"use client"
 import Link from 'next/link';
+import Navbar from '../Components/navbar';
 
-export default function User(data: Userinfo) {
+export default function User() {
 
-
+	console.log("hey 3");
 	return (
 		<>
-			<Link href="/Profile">log out</Link>
-			<h2>{data.username}</h2>
-			<h2>{data.email}</h2>
-			<h2>{data.password}</h2>
+			<Navbar />
+			
 		</>
 	)
 }

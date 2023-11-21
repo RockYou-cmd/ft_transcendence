@@ -32,7 +32,6 @@ export default function Form() {
 			data.password = passwordRef.current?.value;
 			try{
 				const res = await Post(data, APIs.SignIn);
-				console.log("res status", res.status);
 				const responseData = await res.json();
 				if (res.status == 201) {
 					setLog( true);
