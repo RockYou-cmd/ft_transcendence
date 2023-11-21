@@ -29,4 +29,18 @@ export class userService {
 		return prisma.users.findMany();
 	}
 
+	async updateUser(user, field, value) {
+		const data = {[field]: value};
+		try {
+			const ret = await prisma.users.update({
+				where: {
+					username: user.username,
+				},
+				data
+			})
+		} catch(err) {
+			throw err;
+		}
+	}
+
 }

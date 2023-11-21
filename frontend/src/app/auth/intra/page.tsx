@@ -36,7 +36,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 			}
 			console.log("res status", res.status);
 		}
-		// if (value && code)
+		if (value && code)
 			fetchToken();
 	}, [value]);
 

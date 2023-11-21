@@ -21,5 +21,11 @@ model users{
   password String?
 
   photo String?
+
+  is2faEnabled Boolean? @default(false)
+
+  twoFactorAuthenticationSecret String?
+
+  temp2fa String?
 }
 
