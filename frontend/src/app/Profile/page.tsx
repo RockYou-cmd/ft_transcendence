@@ -33,14 +33,13 @@ export default  function Profile(){
 	if (!hooks.waitHook.state) {
 		return (<div>loading...</div>)
 	}
-
 	return(
 		<>
 		{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render : 
 			
 	 		
 			(<>
-			<Navbar />
+			{/* <Navbar /> */}
 
 			<h1>{data?.username}</h1>
 			<h1>{data?.email}</h1>

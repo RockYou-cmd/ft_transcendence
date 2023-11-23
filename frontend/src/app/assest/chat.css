@@ -1,10 +1,17 @@
 
+.Cover{
+	position: relative;
+}
+
 .ChatPage{
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+	position: relative;
 	
 }
+
+/*************************** Sec 1 ****************************/
 
 .sec1{
 	margin-top:12px;
@@ -16,6 +23,7 @@
 	width:auto;
 	display: flex;
 	flex-direction: row;
+	position: relative;
 }
 
 .sec1 .searchBar input{
@@ -23,22 +31,19 @@
 	height: 54px;
 	margin:15px 20px;
 	border-radius: 20px;
-	width:73%;
+	width:76%;
 	text-align: left;
 	padding: 0px 40px;
 	border: 1px solid 
 	rgba(255, 255, 255, 0.2);
-	/* padding: 0px 85%; */
 }
 
 .sec1 .Options{
 	background-color:rgba(62, 70, 81, 1);
-	/* display: flex;
-	flex-direction:column; */
 	display: block;
 	width: 43px;
 	height: 31px;
-	margin: 28px 0px 24px;
+	margin: 28px 6% 24px 3%;
 	border-radius: 8px;
 	padding: 5px 4px;
 }
@@ -50,10 +55,11 @@
 	margin:1.5px 2.5px;
 }
 
-
+/********************************* Groups *********************************/
 
 .sec1 .Groups{
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+
+	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
 	width:auto;
 	margin:20px;
 	border-radius: 20px;
@@ -122,6 +128,8 @@
 	top: 60px;
 }
 
+/***************************************** Friends ************************************/
+
 .Friends{
 	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
 	width:auto;
@@ -150,6 +158,8 @@
 	border: 2px solid #ffffff;
 }
 
+
+/***************************************** Sec2 Chat ************************************/
 
 .Chat{
 	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
@@ -211,12 +221,15 @@
 	background-color: rgba(255, 255, 255, 0.25);
 	margin: 35px 0px;
 	position: absolute;
-	top: 70px;
+	top: 62px;
 }
 
 .Chat .line{
 	background-color: rgba(255, 255, 255, 0.25);
 }
+
+/***************************************** Chat Messages ************************************/ 
+
 
 .Chat .Msg{
 	display: flex;
@@ -344,16 +357,53 @@ input:focus{
 	outline: none;
 }
 
+/*********************************************** Options Bar ********************************************/
+
 
 #optionsBar{
-	display: block;
-	width: 280px;
-	height: 180px;
+	display: flex;
+	flex-direction: column;
+	width: 260px;
+	height: 171px;
 	border: 1px solid #1A1A1A;
 	border-radius: 16px;
 	position: absolute;
-	left:80px;
-	top:40px;
-	/* background-color: #1A1A1A; */
-	background-color: #1A66FF;
+	/* margin-left:92px;
+	margin-top:69px; */
+	right:20px;
+	top:69px;
+	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	z-index: 1;
 }
+
+#optionsBar button{
+	padding: 16px 20px;
+	cursor: pointer;
+	font: 600 20px 'Poppins', sans-serif;
+	letter-spacing: 0.3px;
+}
+
+#optionsBar button:first-child{
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+}
+
+#optionsBar button:last-child{
+	border-bottom-left-radius: 16px;
+	border-bottom-right-radius: 16px;
+}
+
+#optionsBar .middle{
+	border-top: 1px ;
+	border-radius: 0px;
+	border-top: 1px solid rgba(255, 255, 255, 0.25);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+#optionsBar button:hover{
+	background-color: rgba(32, 164, 243, 1);
+	/* background-color: #1A66FF; */
+}
+
+
+

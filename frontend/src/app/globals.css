@@ -22,8 +22,9 @@ input:focus, textarea:focus, select:focus{
 	outline: none;
 }
 
-
-  
+#header{
+	background-color: "red";
+}
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
