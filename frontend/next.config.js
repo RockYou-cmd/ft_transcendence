@@ -7,7 +7,7 @@ const nextConfig = {
 		}],
 	},
 	experimental: {
-	swcTraceProfiling: true,
+		swcTraceProfiling: true,
 	},
 }
 

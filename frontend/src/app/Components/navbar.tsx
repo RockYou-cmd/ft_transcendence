@@ -7,49 +7,45 @@ import { GetData } from "./CheckLogin";
 import { useEffect, useRef, useState } from "react";
 import '../assest/navbar.css';
 import Cookies from "js-cookie";
+import { useLogContext } from "./LogContext";
 
 
 export default function Navbar() {
 
 	let photo = avatar;
-	const [location, setLocation] = useState("");
+	const { online, setOnline } = useLogContext();
 
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
+
+	async function fetchData() {
+		const data = await GetData("Navbar") as any;
+		setData(data);	
+	}
+
 	useEffect(() => {
-		setLocation(window.location.pathname);
-		async function fetchData() {
-			const data = await GetData("Navbar") as any;
-			setData(data);	
+		if (online == "ON"){
+			checkwait(true);
+			fetchData();
 		}
-
-		fetchData();
-	}, []);
-
-	useEffect(() => {
-		checkwait(true);
-		setLocation(window.location.pathname);
-	}, []);
+	}, [online]);
 
 
 	if (data?.photo != null) {
 		photo = data.photo;
 	}
-	
-	if (!wait)
-		return (<></>);
 
-	if (location == "/" || Cookies.get("access_token") == undefined)
+	if (!wait || online == "OFF")
 		return (<></>);
 	return (
 		<>
 			<header id="header">
 				<div>
 					
-					<Link href="/profile"><Image id="avatar" src={photo} alt="username" priority={true} width={60} height={60}></Image></Link>
+					<Link href="/"><Image id="avatar" src={photo} alt="username" priority={true} width={60} height={60}></Image></Link>
 				</div>
 				<nav className="nav">
-					<Link href="./profile" ><li> Profile</li></Link>
+					<Link href="/" ><li> Profile</li></Link>
 					<Link href="./chat" ><li> Chat</li></Link>
 					<Link href="./game" ><li> Game</li></Link>
 				</nav>

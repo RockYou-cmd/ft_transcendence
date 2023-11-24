@@ -9,39 +9,56 @@ import { MouseEvent } from 'react';
 import CheckLogin from './Components/CheckLogin';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-// import Loading_hook from './hooks/loading_hook';
+import Profile from './profile/profile';
+import Home from './profile/home';
+import LoG from './Components/Log';
+import { useLogContext } from './Components/LogContext';
+import { on } from 'events';
 
-export default function Home() {
 
-	// var {log, render} = Form();
+export default function App() {
+
+	const { online, setOnline } = useLogContext();
+	const [SignIn, setSignIn] = useState(false);
+	const [log, setLog] = useState(false);
+	const [data, setData] = useState({} as any);
+	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
-	const router = useRouter();
-
-	
-	function handleClick(event: MouseEvent<HTMLButtonElement>) {
-		event.preventDefault();
-		router.push("/profile");
+	const hooks = {
+		logInHook: { state: log, setState: setLog },
+		dataHook: { state: data, setState: setData },
+		cookieHook: { state: cookie, setState: setCookie },	
+		waitHook: { state: wait, setState: checkwait },
 	}
 	
-	
+	// const {SignIn, homeRender} = Home();
+	let render = LoG({page: "Profile", LogIn: hooks}) as any;
 
-	
 	useEffect(() => {
-		checkwait(true);
-	}, []);
+		hooks.waitHook.setState(true);
+	},[]);
 
+	useEffect(() => {
+		if(online != "ON"){
+			hooks.logInHook.setState(false);
+		}
+	}, [online]);
 
-
-	if (!wait)
-		return (<div>loading...</div>);
-
+	if (!hooks.waitHook.state) {
+		return (<div>loading...</div>)
+	}
 	return (
 		<>
-			
-			<h1 className='Ping'>Ping Pong</h1>
-			{Cookies.get("access_token") == undefined && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={handleClick}>Sing In</button>}
-
+		    <div>
+				{!hooks.logInHook.state  && Cookies.get("access_token") == undefined ? (!SignIn && (online=="ELSE" || online=="OFF") ? <Home setSignIn={setSignIn}/> : render) : <Profile />}
+				{/* {!logIn  && Cookies.get("access_token") == undefined? (<>
+				<h1 className='Ping'>Ping Pong</h1>
+				<button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={()=>setLog(true)}>Sing In</button>
+				</>) : render}
+				
+				{logIn && <Profile />} */}
+			</div>
+			{SignIn && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={()=>setSignIn(false)}>back</button>}
 		</>
 	)
 }

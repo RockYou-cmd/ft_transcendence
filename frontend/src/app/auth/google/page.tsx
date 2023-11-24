@@ -6,9 +6,11 @@ import { Get, Post } from "../../Components/post";
 import Cookies from "js-cookie";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
+import { useLogContext } from "../../Components/LogContext";
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
 
+	const { online, setOnline } = useLogContext();
 	const [code, setValue] = useState(null) as any;
 	const [value, setCode] = useState(false);
 
@@ -26,7 +28,8 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 			const data = await res.json();
 			if (res.status == 201) {
 				Cookies.set('access_token', data.access_token);
-				router.push("/profile");
+				setOnline("ON");
+				router.push("/");
 			}
 			else {
 				alert(data.message);

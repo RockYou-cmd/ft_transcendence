@@ -7,6 +7,7 @@ import Link from 'next/link';
 import React from 'react';
 import { APIs }from '../Props/APIs';
 import Cookies from 'js-cookie';
+import { useLogContext } from '../Components/LogContext';
 
 
 
@@ -17,11 +18,12 @@ var data: { username: string, password: string } = {
 
 export default function Form() {
 
+	const { online, setOnline } = useLogContext();
 
 	const [wait, checkwait] = useState(false);
 	const emailRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
-	// const route = useRouter();
+	const router = useRouter();
 	const [log, setLog] = useState(false);
 
 
@@ -36,6 +38,7 @@ export default function Form() {
 				if (res.status == 201) {
 					setLog( true);
 					Cookies.set('access_token', responseData.access_token);
+					setOnline("ON");
 				}
 				else{
 					
@@ -44,6 +47,7 @@ export default function Form() {
 			
 			}
 			catch(err){
+				alert(err);
 				// return <Error error={err as Error} reset={LogIn.resetHooks} />
 			}
 			
@@ -53,6 +57,7 @@ export default function Form() {
 			alert('Please fill all fields');
 		};
 	};
+
 
 	useEffect(() => {
 		checkwait(true);
