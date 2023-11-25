@@ -1,12 +1,7 @@
 "use client"
 
 import avatar from "../../../public/avatar.jpeg";
-import React, { use, useRef } from 'react';
-import Logout from '../Components/Logout';
 import { useEffect, useState } from 'react';
-import Navbar from '../Components/navbar';
-import Cookies from 'js-cookie';
-import LoG from '../Components/Log';
 import Image from "next/image";
 import { FaCog } from "react-icons/fa";
 import { GetData } from '../Components/CheckLogin';
@@ -18,6 +13,7 @@ export default  function Profile(){
 	const { online, setOnline } = useLogContext();
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
+
 	async function fetchData() {
 		const data = await GetData("Profile") as any;
 		setData(data);	
@@ -27,7 +23,7 @@ export default  function Profile(){
 		checkwait(true);
 		if (online == "ON")
 			fetchData();
-	}, []);
+	}, [online]);
 
 	if (!wait) {
 		return (<div>loading...</div>)
@@ -40,7 +36,7 @@ export default  function Profile(){
 		<>	
 			<div className="m-8 flex flex-row gap-8 h-[85vh] ">
 					<div className=" flex flex-col rounded-lg  items-center bg-teal-500 h-full min-w-[400px]  bg-gradient-to-r from-blue-700 to-blue-900" >profile info
-						<Image src={avatar} alt="user" priority={true} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
+						<Image src={avatar} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
 						<h1 className= 'text-3xl pt-3 ' > {data?.username} </h1>
 						<button className='ml-auto  w-[100px] h-[40px] flex justify-center p-3  bg-yellow-500 rounded-lg hover:bg-yellow-600 items-center gap-2 font-semibold'><span className='text-2xl'><FaCog  /></span> EDIT</button>
 						<div className='w-auto h-auto mt-[50px] m-2 p-3 bg-teal-200/30 rounded-lg hover:bg-white/30 '> this thebio place bla bbab alblab abla blablb lab lab lab lab lab </div>

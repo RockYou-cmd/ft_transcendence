@@ -7,3 +7,9 @@ export interface Userdb {
 	password: string;
 	username: string;
 }
+
+export interface ChatOptions{
+	Option: string[];
+	desc: string[];
+}
+

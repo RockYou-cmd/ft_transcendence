@@ -169,7 +169,6 @@
 	border-radius: 20px;
 	height: 86.5vh;
 	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.8);
-	/* height: 100%; */
 	width: 64%;
 	padding:2vh;
 	
@@ -237,7 +236,6 @@
 	margin: 60px 0px 30px;
 	height: 65vh;
 	overflow-y:auto;
-	
 }
 
 .Msg::-webkit-scrollbar{display: none;}
@@ -364,16 +362,15 @@ input:focus{
 	display: flex;
 	flex-direction: column;
 	width: 260px;
-	height: 171px;
+	height: fit-content;
 	border: 1px solid #1A1A1A;
 	border-radius: 16px;
 	position: absolute;
-	/* margin-left:92px;
-	margin-top:69px; */
 	right:20px;
 	top:69px;
 	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
 	z-index: 1;
+	box-shadow: 0px 0px 3px 0px #ffff;
 }
 
 #optionsBar button{
@@ -405,5 +402,16 @@ input:focus{
 	/* background-color: #1A66FF; */
 }
 
+.Chat .User #optionsBar{
+	position: absolute;
+	top:20px;
+	right:40px;
+}
+
+.Chat .User #optionsBar button{
+	margin: initial;
+	align-items: center;
+	padding:16px 20px;
+}
 
 

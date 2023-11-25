@@ -13,6 +13,7 @@ import LoG from "../Components/Log";
 import Navbar from "../Components/navbar";
 import Options from "./Components/Options";
 import CreateGroup from './Components/Create_group';
+import { ChatOptions } from '../Props/Interfaces';
 
 
 export interface Friends{
@@ -51,6 +52,9 @@ friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: 
 friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
 friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
 
+let chatOptions : ChatOptions = {Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create group", "Explore groups", "Start new chat"]};
+
+
 export default function Chat(){
 
 	const [log, setLog] = useState(false);
@@ -59,6 +63,7 @@ export default function Chat(){
 	const [wait, checkwait] = useState(false);
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
+	//  hooks for options
 	const [createG, setCreateG] = useState(false);
 	const [explore, setExplore] = useState(false);
 	const [newChat, setNewChat] = useState(false);
@@ -120,7 +125,7 @@ export default function Chat(){
 							<div className="straight"></div>
 							<div className="straight"></div>
 						</button>
-						{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler}/>}
+						{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={chatOptions}/>}
 					</div>
 					{/* <Options/> */}
 					

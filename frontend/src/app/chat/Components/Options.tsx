@@ -3,8 +3,8 @@ import "../../assest/chat.css";
 import { useEffect , useRef , useState } from "react";
 
 
-export default function Options({ visible , option, btnRef, setOptions} : { visible: any, option: boolean,
-	btnRef: any, setOptions: any}){
+export default function Options({ visible , option, btnRef, setOptions, content} : { visible: any, option: boolean,
+	btnRef: any, setOptions: any, content: {Option: string[], desc : string[]}}){
 
 	const optionsBar = useRef(null) as any;
 
@@ -28,9 +28,13 @@ export default function Options({ visible , option, btnRef, setOptions} : { visi
 	return (
 		<>
 			<div ref={optionsBar} id="optionsBar">
-				<button onClick={()=> {setOptions("CreateG");}}>Create new group</button>
+				{content.Option.map((option: string, index: number) => (
+					<button key={index} className={index % 2 == 1 ? "middle" : ""}  onClick={()=> {setOptions(content.Option[index])}}>{content.desc[index]}</button>
+				))
+				}
+				{/* <button onClick={()=> {setOptions(content.Option[1])}}>{content.desc[1]}</button>
 				<button  className="middle">Explore groups</button>
-				<button>Start new chat</button>
+				<button>Start new chat</button> */}
 			</div>
 
 

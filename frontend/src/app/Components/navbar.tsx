@@ -24,8 +24,8 @@ export default function Navbar() {
 	}
 
 	useEffect(() => {
+		checkwait(true);
 		if (online == "ON"){
-			checkwait(true);
 			fetchData();
 		}
 	}, [online]);

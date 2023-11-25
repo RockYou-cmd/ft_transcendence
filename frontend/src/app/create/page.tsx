@@ -28,7 +28,6 @@ export default function Create() {
 	const repeat_passwordRef = useRef<HTMLInputElement>(null);
 	const [wait, checkwait] = useState(false);
 	const route = useRouter();
-	const [refresh, checkRefresh] = useState(false);
 	const [Fname, checkFname] = useState('');
 	const [Lname, checkLname] = useState('');
 	const [Email, checkEmail] = useState('');
