@@ -13,8 +13,8 @@ export default function Channel({channel} : {channel: Friends[]}){
 		<div className="Friends">
 			<span className="groupField">Friends</span>
 			<div className='content_f'>
-					{channel.map((chn) => (<>
-			        <div className="content" key={chn.title}>
+					{channel.map((chn : any) => (<>
+			        <div className="content" key={chn}>
 						<Image className="g_img" src={chn.image} priority={true} alt="img" width={70} height={70}/>
 						<h4>{chn.title}</h4>
 						<p>{chn.lastMsg}</p>

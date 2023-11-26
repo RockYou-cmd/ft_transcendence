@@ -1,10 +1,19 @@
-import React, { use } from 'react';
-import { useEffect, useState , useRef} from "react";
 import '../../assest/chatComponents.css';
-import '../../assest/chat.css';
+import { useEffect, useState , useRef} from "react";
+import Image from 'next/image';
+import bboulhan from '../../../../public/bboulhan.jpg';
+
+type Admins = {image: any, username: string};	
+const groupAmins : Admins[] = [];
+groupAmins.push({image: bboulhan, username: "alae"});
+groupAmins.push({image: bboulhan, username: "brahim"});
+groupAmins.push({image: bboulhan, username: "youssef"});
+groupAmins.push({image: bboulhan, username: "ael"});
+groupAmins.push({image: bboulhan, username: "youssef"});
+groupAmins.push({image: bboulhan, username: "ael"});
 
 
-export default function CreateGroup({createG} : {createG: any}){
+export default function GroupSettings({close} : {close: any}){
 
 	const [protectedChoice, setProtectedChoice] = useState(false);
 	const [prStyle, setPrStyle] = useState({});
@@ -32,19 +41,18 @@ export default function CreateGroup({createG} : {createG: any}){
 		e.preventDefault();
 	}
 
-
 	return(
-		<> 
-			<form className='CreateGroup' onSubmit={submitForm}>
-				<h1>CREATE NEW GROUP</h1>
-				<button onClick={() =>{ createG(false)}} className='closeBtn'><div></div></button>
-				<div className='line'></div>
-				<label>Group name</label>
+		<>
+			<form className="CreateGroup" >
+				<h1>Group settings</h1>
+				<button onClick={()=>close(false)} className="closeBtn"><div></div></button>
+				<div className="line"></div>
+				<label>Change group name</label>
 				<input ref={gName} type="text" placeholder="Enter group name" />
-				<label>Group description</label>
+				<label>Change group description</label>
 				<input ref={gDesc} type="text" placeholder="Enter group description" />
 
-				<label>Group privacy</label>
+				<label>Change group privacy</label>
 				<form className='G_privacy'>
 					<div>
 						<input ref={gPrivacy} type="radio" id="public" name="privacy" value="public"  onChange={e=> setProtectedChoice(true)}/>
@@ -60,11 +68,25 @@ export default function CreateGroup({createG} : {createG: any}){
 					</div>
 				</form>
 
-				<label style={prStyle}>Group password</label>
+				<label style={prStyle}>Change group password</label>
 				<input style={prStyle} ref={gPass} type="password" placeholder="Enter group password" />
-				<label>Group picture</label>
+				<label>Change group picture</label>
 				<input ref={gPic} type="file" />
-				<button type='submit'>CREATE GROUP</button>
+	
+				<label>Group members</label>
+				{/* <div className='showMembers'>
+					{groupAmins.map((admin : Admins, index : number)=>(
+						<>
+							<div key={index}>
+								<Image src={admin.image} priority={true} alt="img" width={45} height={45}/>
+								<h3>{admin.username}</h3>
+							</div>
+						</>
+					))}
+
+				</div> */}
+
+				<button>Save</button>
 			</form>
 		</>
 	)

@@ -41,7 +41,6 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 
 	return (
 		<>
-			<h1>Auth</h1>
 			<Loading />
 		</>
 	)

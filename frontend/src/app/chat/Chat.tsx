@@ -1,9 +1,13 @@
 import '../assest/chat.css';
 import Image from 'next/image';
 import bboulhan from '../../../public/bboulhan.jpg';
-import { useEffect, useState , useRef} from "react";
+import { useEffect, useState , useRef, use} from "react";
 import Options from './Components/Options';
 import { ChatOptions } from '../Props/Interfaces';
+import { friends } from './page';
+import Add from './Components/Add';
+import GroupSettings from './Components/Group_settings';
+import Confirm from './Components/Confirm';
 
 interface user{
 	username: string;
@@ -39,15 +43,30 @@ Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
 Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
 
 const chatSettings : ChatOptions = {Option: ["invite", "block", "view"], desc: ["invite for a game", "Block user", "View profile"]};
+const groupSettings : ChatOptions = {Option: ["leave", "addUser", "settings", "addAdmin"],
+	desc: ["Leave group", "Add member", "Group settings", "Add admin"]};
+
+// const adminSettings: ChatOptions = {Option: ["add", "remove", "view"],}
+
 
 export default function Cnvs() {
 	
 	const [option, setOption] = useState(false);
+	const admin = true;
+	const group = true;
+	const content : ChatOptions = (group ?(admin ? groupSettings : {Option: ["leave"], desc:["Leave group"]}) : chatSettings);
 	
+	function Explore(user: any){
+		console.log("user", user);
+	}
 	//hooks for chat settings
 	const [invite, setInvite] = useState(false);
 	const [block, setBlock] = useState(false);
 	const [view, setView] = useState(false);
+	const [leave, setLeave] = useState(false);
+	const [addUser, setAddUser] = useState(false);
+	const [settings, setSettings] = useState(false);
+	const [addAdmin, setAddAdmin] = useState(false);
 	
 	
 	const visible = useRef(null) as any;
@@ -59,7 +78,20 @@ export default function Cnvs() {
 			setBlock(true);
 		else if (setting == "view")
 			setView(true);
+		else if (setting == "leave")
+			setLeave(true);
+		else if (setting == "addUser")
+			setAddUser(true);
+		else if (setting == "settings")
+			setSettings(true);
+		else if (setting == "addAdmin")
+			setAddAdmin(true);
 	}
+
+	useEffect(() => {
+		if (invite || block || view || leave || addUser || settings || addAdmin)
+			setOption(false);
+	}, [invite, block, view, leave, addUser, settings, addAdmin]);
 
 	return(
 		<>
@@ -73,11 +105,11 @@ export default function Cnvs() {
 					<button ref={visible} onClick={() =>{setOption(!option)}} className="Options">
 						<div className='point'></div><div className='point'></div><div className='point'></div>
 					</button>
-					{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={chatSettings}/>}
+					{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content}/>}
 				</section>
 				<div className="Msg">
-					{Messages.map((msg, index) => (<>
-						<div className={msg.user.classname} key={index}>
+					{Messages.map((msg : any) => (<>
+						<div className={msg.user.classname} key={msg}>
 						<p >{msg.text}</p>
 						<span >{msg.time}</span>
 						<div className='triangle'></div>
@@ -89,7 +121,11 @@ export default function Cnvs() {
 					<input type="text" placeholder="Type a message" />
 					<button><div></div></button>
 				</div>
-			</div>	
+			</div>
+			{addUser && <Add Users={friends} Make={Explore} title={"Add member"} join={"INVITE"} exploreG={setAddUser}/>}
+			{addAdmin && <Add Users={friends} Make={Explore} title={"Add admin"} join={"MAKE ADMIN"} exploreG={setAddAdmin}/>}
+			{settings && <GroupSettings close={setSettings}/>}
+			{leave && <Confirm Make={Explore} title={"Leave this group"} close={setLeave} user={User}/>}
 		</>
 
 	)

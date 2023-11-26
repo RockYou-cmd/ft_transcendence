@@ -14,7 +14,9 @@ import Navbar from "../Components/navbar";
 import Options from "./Components/Options";
 import CreateGroup from './Components/Create_group';
 import { ChatOptions } from '../Props/Interfaces';
-
+import Add from './Components/Add';
+import SearchRes from '../Components/SearchRes';
+import SearchBar from '../Components/SearchBar';
 
 export interface Friends{
 	title: string;
@@ -41,7 +43,7 @@ channels.push({title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: 
 channels.push({title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00"});
 channels.push({title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50"});
 
-let friends : Friends[] = [];
+export let friends : Friends[] = [];
 friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
 friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
 friends.push({title: "Friend 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: true});
@@ -62,6 +64,8 @@ export default function Chat(){
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
 	const [option, setOption] = useState(false);
+	const [click, setClick] = useState(false);
+	const [searchRes, setSearchRes] = useState(false);
 	const visible = useRef(null);
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);
@@ -92,14 +96,20 @@ export default function Chat(){
 				"filter": "blur(6px)",
 				"pointer-events": "none",
 			})
+			setOption(false);
 		}
 		else
 			setStyle({});
 	} , [createG, explore, newChat]);
 	
-
+	function Explore(user: any){
+		console.log("user", user);
+	}
 
 	let render = LoG({page: "Profile", LogIn: hooks}) as any;
+
+	
+
 
 	useEffect(() => {
 		hooks.waitHook.setState(true);
@@ -118,7 +128,8 @@ export default function Chat(){
 			<div className={"ChatPage"} style={Style}>
 				<section className="sec1">
 					<div className="searchBar">
-						<input type="text" placeholder="Search" />
+						{/* <input ref={visible}  type="text" className='searchInput'  placeholder="Search" /> */}
+						<SearchBar placeRef={visible} close={setSearchRes}/>
 						<button ref={visible} onClick={() =>{setOption(!option)}} className="Options">
 						{/* <button className="Options"> */}
 							<div className="straight"></div>
@@ -136,6 +147,8 @@ export default function Chat(){
 				<Cnvs/>
 			</div>
 			{createG && <CreateGroup createG={setCreateG}/>}
+			{explore && <Add Users={channels} Make={Explore} title={"Explore Groups"} join={"JOIN"} exploreG={setExplore}/>}
+			
 		</div>
 		</>)}
 		</>
