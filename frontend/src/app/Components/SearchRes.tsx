@@ -1,14 +1,14 @@
 import '../assest/Components.css'
 import {APIs} from '../Props/APIs'
-import { useEffect, useState ,useRef } from 'react'
+import { useEffect, useState ,useRef, use } from 'react'
 import { Get, Post } from '../Components/post'
 import Image from 'next/image'
 import { MouseEvent } from 'react'
 
-type data = {image: any, username: string,friend: ("send" | "sent" | "friend")};
+// type data = {image: any, username: string,friend: ("send" | "sent" | "friend")};
 
-const users : data[] = [];
-users.push({image: "/bboulhan.jpg", username: "brahim", friend: "send"});
+// const users : data[] = [];
+// users.push({image: "/bboulhan.jpg", username: "brahim", friend: "send"});
 // users.push({image: "/ael-korc.jpg", username: "alae", friend: "sent"});
 // users.push({image: "/yel-qabl.jpg", username: "youssef", friend: "friend"});
 // users.push({image: "/bboulhan.jpg", username: "brahim", friend: "send"});
@@ -17,8 +17,9 @@ users.push({image: "/bboulhan.jpg", username: "brahim", friend: "send"});
 
 
 
-export default function SearchRes({Res} : {Res : any}){
+export default function SearchRes({Res} : {Res : string}){
 
+	console.log(Res, "res");
 	const [data, setData] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
 	useEffect(()=>{
@@ -26,8 +27,10 @@ export default function SearchRes({Res} : {Res : any}){
 			setData(await Get(APIs.Search + Res));
 		}
 		getData();
-	}, [refresh]);
+	}, []);
 	const fRef = useRef(null) as any;
+	console.log("data", data.users);
+
 
 
 	// useEffect(() => {
@@ -68,14 +71,14 @@ function Send(e : MouseEvent, user : string){
 	
 	
 	
-	// if (data == undefined)
-	// 	return (<></>);
+	if (data == undefined)
+		return (<></>);
 	return (
 		<>
 			<div id="SearchRes">
-				{data.users.map((user: data, index: number) => (
+				{data?.users?.map((user: any, index: number) => (
 					<div className='results' key={index}>
-						<Image className="g_img" src={user.image} priority={true} alt="img" width={45} height={45}/>
+						<Image className="g_img" src={user.photo} priority={true} alt="img" width={45} height={45}/>
 						<span>{user.username}</span>
 						<button ref={fRef} onClick={(e : MouseEvent)=> Send(e,user.username)}>{user.friend}</button>
 					</div>

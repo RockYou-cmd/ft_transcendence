@@ -53,7 +53,8 @@ export class userService {
 				}
 			}
 		});
-		return ret;
+		console.log(username, ret);
+		return {users:ret};
 	}
 	
 	async addFriend(friend, user) {

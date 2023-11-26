@@ -27,6 +27,6 @@ export const APIs : Api = {
 	intraAuth: "http://localhost:3001/auth/intra",
 	googleToken: "http://localhost:3001/auth/google/callback",
 	intraToken: "http://localhost:3001/auth/intra/callback",
-	Search : "http://localhost:3001/user/search",
-	SendFriendRequest : "http://localhost:3001/user/sendFriendRequest",
+	Search : "http://localhost:3001/user/search/?username=",
+	SendFriendRequest : "http://localhost:3001/user/add",
 };

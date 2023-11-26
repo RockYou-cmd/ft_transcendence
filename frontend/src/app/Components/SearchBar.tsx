@@ -7,14 +7,14 @@ import { KeyboardEvent } from 'react';
 export default function SearchBar({close, placeRef} : {close: any, placeRef: any}){
 
 	const visible = useRef(null) as any;
+	const [name, setname] = useState([] as any);
 	const users = useRef("") as any;
 	const [search, setSearch] = useState(false);
 
 	function Search(e: KeyboardEvent){
 		if (e.key == "Enter"){
 			setSearch(true);
-			console.log(users.current.value);
-
+			setname(users.current.value);
 		}
 	}
 
@@ -39,7 +39,7 @@ export default function SearchBar({close, placeRef} : {close: any, placeRef: any
 		<>
 			<div id="SearchComponent" ref={visible}>
 				<input ref={users} onKeyDown={Search} type="text" className='searchInput' placeholder="Search"/>
-			{search && <SearchRes Res={users.target.value}/>}
+			{search && <SearchRes Res={name}/>}
 			</div>
 		</>
 	)

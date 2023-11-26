@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 export async function Post(data : object, path : string){
 
+	console.log("data", data);
 	const res = await fetch(path , {
 		method: 'POST',
 		headers: {
@@ -34,10 +35,11 @@ export async function Get(path : string){
 	// const data = JSON.stringify(res);
 	
 	
+	console.log("res status", res.status);
 	if (res.status == 401)
 		return undefined;
-	else if (res.status != 200)
-		res = await fetch(path, header);
+	// else if (res.status != 200)
+	// 	res = await fetch(path, header);
 	const data = await res.json();
 	return data;
 
