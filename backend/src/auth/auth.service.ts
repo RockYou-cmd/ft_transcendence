@@ -40,7 +40,7 @@ export class AuthService {
 					username:user.username,
 				}
 			});
-			if (!ret)
+			if (!ret || !ret.password)
 				throw new NotFoundException();
 			if (!await argon.verify(ret.password, user.password))
 				return {

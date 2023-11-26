@@ -22,6 +22,8 @@ model users{
 
   photo String?
 
+  friends Json[]
+
   is2faEnabled Boolean? @default(false)
 
   twoFactorAuthenticationSecret String?

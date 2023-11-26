@@ -17,4 +17,16 @@ export class userController{
 	getUsers() {
 		return this.UserService.getUsers();
 	}
+
+	@Get("search")
+	@UseGuards(AuthGuard)
+	search(@Query() data) {
+		return this.UserService.search(data.username);
+	}
+
+	@Post("add")
+	@UseGuards(AuthGuard)
+	addFriend(@Body() friend, @Request() req) {
+		this.UserService.addFriend(friend, req.user);
+	}
 }
