@@ -21,7 +21,7 @@ export class userService {
 		}
 		catch(err) {
 			console.log("getUser !Error!");
-			return err;
+			throw err;
 		}
 	}
 	
@@ -43,4 +43,40 @@ export class userService {
 		}
 	}
 
+	
+	async search(username) {
+		const ret = await prisma.users.findMany({
+			where: {
+				username: {
+					startsWith: username,
+					mode: "insensitive"
+				}
+			}
+		});
+		return ret;
+	}
+	
+	async addFriend(friend, user) {
+		try{
+			console.log("friend name : ", friend);
+			const friendUser = await this.getUser(friend);
+			const ret = await prisma.users.update({
+				where: {
+					username: user.username,
+				},
+				data: {
+					friends: {
+						push: JSON.stringify(friendUser)
+					}
+				}
+			})
+			console.log(ret);
+			if (!ret)
+				throw Error("update Error");
+		}
+		catch(err) {
+			console.log(err);
+			return err;
+		}
+	}
 }
