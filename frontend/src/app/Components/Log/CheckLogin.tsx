@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { APIs } from "../../Props/APIs";
 import { Get } from "../Fetch/post";
-import Form from "../../datas/form";
+import Form from "../../profile/form";
 
 export async function GetData({ Api, user }: { Api: string, user: string }) {
 

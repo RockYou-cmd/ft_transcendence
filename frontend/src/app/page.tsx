@@ -6,8 +6,8 @@ import './assest/login.css';
 import { MouseEvent } from 'react';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import Profile from './datas/profile';
-import Home from './datas/home';
+import Profile from './profile/profile';
+import Home from './profile/home';
 import LoG from './Components/Log/Log';
 import { useLogContext } from './Components/Log/LogContext';
 

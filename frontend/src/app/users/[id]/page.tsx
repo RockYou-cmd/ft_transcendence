@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
-import Profile from "@/app/datas/profile";
+import Profile from "@/app/profile/profile";
 import Cookies from "js-cookie";
 
 import LoG from "@/app/Components/Log/Log";
