@@ -24,28 +24,31 @@
 	display: flex;
 	flex-direction: row;
 	position: relative;
+	margin-bottom: 6.5vh;
 }
 
-/* .searchInput{
+.searchInput{
 	background-color: rgba(13, 13, 13, 1);
 	height: 54px;
 	margin:15px 20px;
 	border-radius: 20px;
 	width:76%;
 	text-align: left;
-	padding: 0px 40px;
+	padding: 0px 15%;
 	border: 1px solid 
 	rgba(255, 255, 255, 0.2);
-} */
+}
 
 .sec1 .Options{
 	background-color:rgba(62, 70, 81, 1);
 	display: block;
 	width: 43px;
 	height: 31px;
-	margin: 28px 6% 24px 3%;
+	margin: 28px 6% 24px;
 	border-radius: 8px;
 	padding: 5px 4px;
+	position: absolute;
+	right: 0px;
 }
 
 .Options .straight{
@@ -68,8 +71,10 @@
 }
 .sec1 .Groups .content_g{
 	overflow-y: scroll;
-	height: 26vh;
+	height: 26.5vh;
 }
+
+.sec1 .Groups .content_g div:first-child{margin-top: 0px;}
 
 .sec1 .Groups .content_g::-webkit-scrollbar{display: none;}
 
@@ -82,16 +87,30 @@
 	line-height: 30px;
 }
 
+
 .g_img{
-	width:70px;
+	width: 70px;
 	height: 70px;
 	border-radius: 50%;
 }
 
+.sec1 .g_img{
+	width:65px;
+	height: 65px;
+	border-radius: 50%;
+}
+
+
 .sec1 .content{
 	display: flex;
-	margin: 22px 10px;
+	margin: 15px 10px;
+	padding:8px;
 	position: relative;
+	cursor: pointer;
+	border-radius: 10px;
+	&:hover{
+		background-color: rgba(255, 255, 255, 0.1);
+	}
 }
 
 .sec1 .content h4{
@@ -120,12 +139,12 @@
 }
 
 .sec1 .line{
-	width: 96%;
+	width: 91%;
 	height: 1px;
 	background-color: rgba(255, 255, 255, 0.25);
-	margin: 20px 10px;
+	margin: 10px 10px;
 	position: absolute;
-	top: 60px;
+	top: 77px;
 }
 
 /***************************************** Friends ************************************/
@@ -142,6 +161,7 @@
 .Friends .content_f{
 	overflow-y: scroll;
 	height: 42.7vh;
+	& div:first-child{margin-top: 0px;}
 }
 
 .content_f::-webkit-scrollbar{display: none;}
@@ -158,6 +178,11 @@
 	border: 2px solid #ffffff;
 }
 
+.Friends .status{
+	top:54px;
+	left:55px;
+}
+
 
 /***************************************** Sec2 Chat ************************************/
 
@@ -171,12 +196,6 @@
 	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.8);
 	width: 64%;
 	padding:2vh;
-	/* -webkit-filter: blur(0px);
-	-moz-filter: blur(0px);
-	-o-filter: blur(0px);
-	-ms-filter: blur(0px);
-	filter: blur(0px); */
-	
 }
 
 .Chat .User{

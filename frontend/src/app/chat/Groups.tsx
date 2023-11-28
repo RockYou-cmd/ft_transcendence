@@ -11,7 +11,7 @@ export default function Groups({ channels } : { channels: Group[] }){
 				<span className="groupField">Groups</span>
 				<div className="content_g">
 					{channels.map((chn : any) => (<>
-			        <div className="content" key={chn}>
+			        <div className="content" key={chn} onClick={()=>console.log("clicked")}>
 						<Image className="g_img" src={chn.image} priority={true} alt="img" width={70} height={70}/>
 						<h4>{chn.title}</h4>
 						<p>{chn.lastMsg}</p>

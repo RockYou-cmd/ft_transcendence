@@ -4,19 +4,19 @@ import Cookies from "js-cookie";
 import CheckLogin from "./CheckLogin";
 import { useLogContext } from "./LogContext";
 
-export default function LoG({page , LogIn} : {page : string, LogIn : any})  {
+export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 	const { online, setOnline } = useLogContext();
 	const render = CheckLogin(LogIn) as any;
 	useEffect(() => {
 		async function fetchData() {
-			const data = await GetData(page) as any;
-			if (data == undefined){
+			const data = await GetData({Api:page, user : ""}) as any;
+			if (data == undefined) {
 				Cookies.remove("access_token");
 				LogIn.logInHook.setState(false);
 				setOnline("OFF");
 			}
-			else{
+			else {
 				LogIn.dataHook.setState(data);
 				setOnline("ON");
 			}
@@ -31,6 +31,6 @@ export default function LoG({page , LogIn} : {page : string, LogIn : any})  {
 			{LogIn.logInHook.state == false && LogIn.cookieHook.state == "" ? render : null}
 		</>
 	)
-	
-	
+
+
 }

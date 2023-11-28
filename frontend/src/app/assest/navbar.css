@@ -34,7 +34,7 @@
 }
 
 #header .nav li{
-	padding:6px 30px;
+	padding:8px 30px;
 	border-radius: 30px;
 }
 
@@ -52,4 +52,12 @@
 
 #logout:hover{
 	background-color: #ff2638;
+}
+
+#header #SearchComponent{
+	margin:22px;
+	position: absolute;
+	width:22%;
+	left:7vh;
+	z-index: 10;
 }

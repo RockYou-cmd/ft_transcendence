@@ -1,15 +1,17 @@
 import Cookies from "js-cookie";
-import { APIs } from "../Props/APIs";
-import { Get } from "./post";
-import Form from "../profile/form";
+import { APIs } from "../../Props/APIs";
+import { Get } from "../Fetch/post";
+import Form from "../../profile/form";
 
-export async function GetData(Api: string) {
+export async function GetData({Api,  user}:{Api: string, user:string}) {
 
 	let data: any;
 
+	const name = (user != "" ? ("?username=" + user) : "");
+
 
 	if (Api == "Profile")
-		data = await Get(APIs.Profile);
+		data = await Get(APIs.Profile + name);
 	else if (Api == "Chat")
 		data = await Get(APIs.Chat);
 	else if (Api == "Game")

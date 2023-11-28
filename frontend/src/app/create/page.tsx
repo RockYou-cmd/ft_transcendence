@@ -4,7 +4,7 @@ import '../assest/create.css';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {Post} from '../Components/post';
+import { Post } from '../Components/Fetch/post';
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string } = {
 	firstname: '',
@@ -127,7 +127,7 @@ export default function Create() {
 
 				<button type="submit">Create</button>
 
-				<p>you already have account ? <Link href="/Profile"><span>Sing IN</span></Link> </p>
+				<p>you already have account ? <Link href="/"><span>Sing IN</span></Link> </p>
 
 			</form>
 		</>

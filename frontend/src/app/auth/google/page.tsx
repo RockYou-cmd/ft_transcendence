@@ -2,11 +2,11 @@
 import React, { useState, useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { APIs } from "../../Props/APIs";
-import { Get, Post } from "../../Components/post";
+import { Get, Post } from "../../Components/Fetch/post";
 import Cookies from "js-cookie";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
-import { useLogContext } from "../../Components/LogContext";
+import { useLogContext } from "../../Components/Log/LogContext";
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
 
@@ -24,7 +24,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 
 	useEffect(() => {
 		async function fetchToken() {
-			const res = await Post({code,}, APIs.googleToken);
+			const res = await Post({ code, }, APIs.googleToken);
 			const data = await res.json();
 			if (res.status == 201) {
 				Cookies.set('access_token', data.access_token);

@@ -3,7 +3,7 @@ import React from 'react';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-import { useLogContext } from '../Components/LogContext';
+import { useLogContext } from './LogContext';
 
 export default function Logout() {
 	const router = useRouter();

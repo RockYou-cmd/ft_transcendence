@@ -1,14 +1,15 @@
-body{
+/* body{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-}
+} */
 
 
 .create{
 	/* margin:30% 20%; */
-	margin-top: 450px;
+	margin:auto;
+	margin-top: 30vh;
 	background: rgb(255, 255, 255, 0.1);
 	width: 827px;
 	height: 556px;

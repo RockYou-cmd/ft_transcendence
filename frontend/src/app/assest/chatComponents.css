@@ -162,11 +162,6 @@ input[type=file]::file-selector-button:hover {
 
 
 .Add{
-	-webkit-filter: blur(0px);
-	-moz-filter: blur(0px);
-	-o-filter: blur(0px);
-	-ms-filter: blur(0px);
-	filter: blur(0px);
 	
 	display: flex;
 	flex-direction: column;
