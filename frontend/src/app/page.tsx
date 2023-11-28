@@ -6,8 +6,8 @@ import './assest/login.css';
 import { MouseEvent } from 'react';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import Profile from './profile/profile';
-import Home from './profile/home';
+import Profile from './datas/profile';
+import Home from './datas/home';
 import LoG from './Components/Log/Log';
 import { useLogContext } from './Components/Log/LogContext';
 
@@ -47,7 +47,7 @@ export default function App() {
 	return (
 		<>
 			<div>
-				{!hooks.logInHook.state && Cookies.get("access_token") == undefined ? (!SignIn && (online == "ELSE" || online == "OFF") ? <Home setSignIn={setSignIn} /> : render) : <Profile user={""}/>}
+				{!hooks.logInHook.state && Cookies.get("access_token") == undefined ? (!SignIn && (online == "ELSE" || online == "OFF") ? <Home setSignIn={setSignIn} /> : render) : <Profile user={""} />}
 				{/* {!logIn  && Cookies.get("access_token") == undefined? (<>
 				<h1 className='Ping'>Ping Pong</h1>
 				<button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={()=>setLog(true)}>Sing In</button>
