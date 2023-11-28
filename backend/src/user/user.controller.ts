@@ -7,10 +7,16 @@ import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 export class userController{
 	constructor(private UserService: userService) {}
 
+	@Get("profile")
+	@UseGuards(AuthGuard)
+	getProfile(@Request() request){
+		return this.UserService.getProfile(request.user);
+	}
+
 	@Get()
 	@UseGuards(AuthGuard)
-	getUser(@Request() request){
-		return this.UserService.getUser(request.user);
+	getUser(@Query() user){
+		return this.UserService.getUser(user);
 	}
 
 	@Get("all")

@@ -11,7 +11,7 @@ import '../../assest/Components.css';
 import { useLogContext } from '../Log/LogContext';
 import Cookies from 'js-cookie';
 import { SendFriendRequest } from '../Settings/ChatSettings';
-import Router from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function SearchBar({title }: { title: string }) {
 
@@ -19,6 +19,7 @@ export default function SearchBar({title }: { title: string }) {
 	const [data, setData] = useState({} as any);
 	const [Style, setStyle] = useState({} as any);
 	const [input, setInput] = useState("");
+	const router = useRouter();
 	const { online, setOnline } = useLogContext();
 
 
@@ -52,7 +53,10 @@ export default function SearchBar({title }: { title: string }) {
 		if (input != "") {
 			getData();
 			setStyle({
-				"height": "22vh",
+				"height": "21vh",
+				// "padding-bottom": "15px",
+				// "padding" : "0px 0px 20px",
+				// "width" : "70%",
 			})
 		}
 		else
@@ -68,14 +72,14 @@ export default function SearchBar({title }: { title: string }) {
 			<div id="SearchComponent" ref={visible} style={Style}>
 				<input className='searchInput' onChange={(e) => { setInput(e.target.value) }} type="text" placeholder="Search" />
 				{input != "" && <>
+					<div className='line'></div>
 					<div className='resBar'  >
-						<div className='line'></div>
 						{data?.users?.map((user: any, index: number) => (
-							<div className='results' key={index} onClick={()=>{}}>
+							<div className='results' key={index} onClick={()=>{setInput("");router.push("/users/" + user.username)}}>
 								{user.photo == null ? <Image className="g_img" src={avatar} priority={true} alt="img" width={45} height={45} /> :
 									<Image className="g_img" src={user?.photo} priority={true} alt="img" width={45} height={45} />}
 								<span>{user.username}</span>
-								<button onClick={(e : MouseEvent)=>{e.preventDefault;SendFriendRequest({user:  user.username, status :  user.status})}}>Friend request</button>
+								<button onClick={(e : MouseEvent)=>{e.preventDefault;e.stopPropagation();SendFriendRequest({user:  user.username, status :  user.status})}}>Friend request</button>
 							</div>
 						))}
 					</div>

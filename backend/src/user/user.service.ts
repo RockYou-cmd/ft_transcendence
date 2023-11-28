@@ -7,6 +7,23 @@ const prisma = new PrismaClient();
 @Injectable()
 
 export class userService {
+	async getProfile(user) {
+		try{
+			const ret = await prisma.users.findUnique({
+				where : {
+					username:user.username,
+				}
+			})
+			if (!ret)
+				throw new NotFoundException("User Not Found");
+			return ret;
+			
+		}
+		catch(err) {
+			console.log("getUser !Error!");
+			throw err;
+		}
+	}
 	async getUser(user) {
 		try{
 			const ret = await prisma.users.findUnique({

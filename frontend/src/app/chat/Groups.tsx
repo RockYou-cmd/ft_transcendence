@@ -20,7 +20,6 @@ export default function Groups({ channels } : { channels: Group[] }){
 					</div>
 					</>
 				))}
-
 				</div>
 			</div>
 		</>
