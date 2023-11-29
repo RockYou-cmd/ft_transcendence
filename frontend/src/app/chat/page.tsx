@@ -145,6 +145,7 @@ export default function Chat() {
 							</section>
 							<Cnvs />
 						</div>
+
 						{createG && <CreateGroup createG={setCreateG} />}
 						{explore && <Add Users={channels} Make={Explore} title={"Explore Groups"} join={"JOIN"} exploreG={setExplore} />}
 

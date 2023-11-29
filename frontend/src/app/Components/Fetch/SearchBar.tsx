@@ -10,7 +10,6 @@ import '../../assest/chat.css';
 import '../../assest/Components.css';
 import { useLogContext } from '../Log/LogContext';
 import Cookies from 'js-cookie';
-import { SendFriendRequest } from '../Settings/ChatSettings';
 import { useRouter } from 'next/navigation';
 
 export default function SearchBar({title }: { title: string }) {
@@ -79,7 +78,7 @@ export default function SearchBar({title }: { title: string }) {
 								{user.photo == null ? <Image className="g_img" src={avatar} priority={true} alt="img" width={45} height={45} /> :
 									<Image className="g_img" src={user?.photo} priority={true} alt="img" width={45} height={45} />}
 								<span>{user.username}</span>
-								<button onClick={(e : MouseEvent)=>{e.preventDefault;e.stopPropagation();SendFriendRequest({user:  user.username, status :  user.status})}}>Friend request</button>
+								<span>Rank</span>
 							</div>
 						))}
 					</div>

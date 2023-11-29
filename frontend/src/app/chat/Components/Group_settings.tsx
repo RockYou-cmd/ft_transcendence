@@ -3,15 +3,16 @@ import { useEffect, useState , useRef} from "react";
 import Image from 'next/image';
 import bboulhan from '../../../../public/bboulhan.jpg';
 
-type Admins = {image: any, username: string};	
+type Admins = {image: any, username: string , admin?: boolean};	
 const groupAmins : Admins[] = [];
 groupAmins.push({image: bboulhan, username: "alae"});
-groupAmins.push({image: bboulhan, username: "brahim"});
+groupAmins.push({image: bboulhan, username: "brahim", admin: true});
+groupAmins.push({image: bboulhan, username: "youssef"});
+groupAmins.push({image: bboulhan, username: "ael", admin: true});
 groupAmins.push({image: bboulhan, username: "youssef"});
 groupAmins.push({image: bboulhan, username: "ael"});
 groupAmins.push({image: bboulhan, username: "youssef"});
 groupAmins.push({image: bboulhan, username: "ael"});
-
 
 export default function GroupSettings({close} : {close: any}){
 
@@ -34,7 +35,6 @@ export default function GroupSettings({close} : {close: any}){
 		else{
 			setPrStyle({});
 		}
-		console.log(gPrivacy.current?.value, protectedChoice);
 	}, [protectedChoice]);
 
 	function submitForm(e : any){
@@ -74,19 +74,23 @@ export default function GroupSettings({close} : {close: any}){
 				<input ref={gPic} type="file" />
 	
 				<label>Group members</label>
-				{/* <div className='showMembers'>
+				<div className='showMembers'>
 					{groupAmins.map((admin : Admins, index : number)=>(
 						<>
-							<div key={index}>
-								<Image src={admin.image} priority={true} alt="img" width={45} height={45}/>
+							<div key={index} className={admin.admin ? "admin" : ""}>
+								<Image className='g_img' src={admin.image} priority={true} alt="img" width={45} height={45}/>
 								<h3>{admin.username}</h3>
 							</div>
 						</>
 					))}
-
-				</div> */}
-
-				<button>Save</button>
+				</div>				
+				<footer>
+					<button className='add'><div className='addSymbole'></div> add member</button>
+					<button className='add'><div className='addSymbole'></div> add admin</button>
+					<button className='rem'><div className='removeSymbole'></div> remove member</button>
+					<button className='rem'><div className='removeSymbole'></div> remove admin</button>
+				</footer>
+				<button className='submit'>Save</button>
 			</form>
 		</>
 	)
