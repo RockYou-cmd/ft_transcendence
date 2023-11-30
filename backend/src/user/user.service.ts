@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import * as argon from "argon2"
 
@@ -6,12 +6,15 @@ const prisma = new PrismaClient();
 
 @Injectable()
 
-export class userService {
+export class UserService {
 	async getProfile(user) {
 		try{
-			const ret = await prisma.users.findUnique({
+			const ret = await prisma.user.findUnique({
 				where : {
 					username:user.username,
+				},
+				include: {
+					friends:true
 				}
 			})
 			if (!ret)
@@ -20,15 +23,18 @@ export class userService {
 			
 		}
 		catch(err) {
-			console.log("getUser !Error!");
+			console.log("getProfile !Error!");
 			throw err;
 		}
 	}
 	async getUser(user) {
 		try{
-			const ret = await prisma.users.findUnique({
+			const ret = await prisma.user.findUnique({
 				where : {
 					username:user.username,
+				},
+				include: {
+					friends:true
 				}
 			})
 			if (!ret)
@@ -43,13 +49,17 @@ export class userService {
 	}
 	
 	async getUsers() {
-		return prisma.users.findMany();
+		return prisma.user.findMany({
+			include: {
+				friends:true
+			}
+		});
 	}
 
 	async updateUser(user, field, value) {
 		const data = {[field]: value};
 		try {
-			const ret = await prisma.users.update({
+			const ret = await prisma.user.update({
 				where: {
 					username: user.username,
 				},
@@ -62,7 +72,7 @@ export class userService {
 
 	
 	async search(username) {
-		const ret = await prisma.users.findMany({
+		const ret = await prisma.user.findMany({
 			where: {
 				username: {
 					startsWith: username,
@@ -73,28 +83,37 @@ export class userService {
 		console.log(username, ret);
 		return {users:ret};
 	}
-	
-	async addFriend(friend, user) {
-		try{
-			console.log("friend name : ", friend);
-			const friendUser = await this.getUser(friend);
-			const ret = await prisma.users.update({
+
+	async removeUserFromFriends(user, friend) {
+		try {
+			const friendUser = await prisma.user.findUnique({
 				where: {
-					username: user.username,
-				},
-				data: {
-					friends: {
-						push: JSON.stringify(friendUser)
+					username: friend.username
+				}
+			});
+			console.log(user.userId)
+			const deletedUserRl = await prisma.friend.delete({
+				where: {
+					friendId_userId: {
+						userId: user.userId,
+						friendId: friendUser.id
 					}
 				}
 			})
-			console.log(ret);
-			if (!ret)
-				throw Error("update Error");
+	
+			const deletedFriendRl = await prisma.friend.delete({
+				where: {
+					friendId_userId: {
+						userId: friendUser.id,
+						friendId: user.userId
+					}
+				}
+			})
 		}
-		catch(err) {
-			console.log(err);
-			return err;
+		catch (err) {
+			throw err;
 		}
+
 	}
+	
 }

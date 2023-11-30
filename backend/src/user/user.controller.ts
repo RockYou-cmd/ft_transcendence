@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, Query, Request, UseGuards } from "@nestjs/common";
-import { userService } from "./user.service";
+import { Body, Controller, Get, Post, Query, Req, Request, UseGuards } from "@nestjs/common";
+import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 
 @Controller("/user")
 
-export class userController{
-	constructor(private UserService: userService) {}
+export class UserController{
+	constructor(private UserService: UserService) {}
 
 	@Get("profile")
 	@UseGuards(AuthGuard)
@@ -30,9 +30,9 @@ export class userController{
 		return this.UserService.search(data.username);
 	}
 
-	@Post("add")
+	@Post("remove")
 	@UseGuards(AuthGuard)
-	addFriend(@Body() friend, @Request() req) {
-		this.UserService.addFriend(friend, req.user);
+	async removeUserFromFriends(@Req() req, @Body() friend) {
+		return this.UserService.removeUserFromFriends(req.user, friend);
 	}
 }

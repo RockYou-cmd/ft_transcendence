@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";
-import { userService } from 'src/user/user.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TwoFactorAuthenticationService {
-	constructor (private userService: userService) {};
+	constructor (private userService: UserService) {};
 
 	async generateTwoFactorAuthSecret(user) {
 		try {
