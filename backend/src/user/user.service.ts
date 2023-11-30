@@ -47,6 +47,7 @@ export class UserService {
 	
 	async getUser(account , user) {
 		try{
+			const userData = await this.getData(account);
 			const ret = await prisma.user.findUnique({
 				where : {
 					username: user.username,
@@ -54,7 +55,7 @@ export class UserService {
 				include: {
 					friends: {
 						where: {
-							friendId: account.id
+							friendId: userData.id
 						}
 					}
 				}
