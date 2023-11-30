@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from "react";
 import '../assest/navbar.css';
 import { useLogContext } from "./Log/LogContext";
 import SearchBar from "./Fetch/SearchBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export default function Navbar() {
 
@@ -42,6 +44,10 @@ export default function Navbar() {
 				<Link href="/"><Image id="avatar" src={photo} alt="username" priority={true} width={60} height={60}></Image></Link>
 				<SearchBar title={"profile"} />
 				<nav className="nav">
+
+					{/* <div>
+						<FontAwesomeIcon icon={["fas", "user"]} />
+					</div> */}
 					<Link href="/" ><li> Profile</li></Link>
 					<Link href="/chat" ><li> Chat</li></Link>
 					<Link href="/game" ><li> Game</li></Link>

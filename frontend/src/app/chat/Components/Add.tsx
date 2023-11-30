@@ -16,7 +16,7 @@ export default function Add({Users , Make, title, join, exploreG} : {Users: any,
 
 	return (
 		<>
-			<div className="Add">
+			<div className="Add" id="child">
 				<h1>{title}</h1>
 				<input type="text" className='searchInput' placeholder="Search"/>
 				<button onClick={()=>exploreG(false)} className='closeBtn'><div></div></button>

@@ -47,10 +47,11 @@ export class UserService {
 	
 	async getUser(account , user) {
 		try{
-			const userData = await this.getData(account);
+
+			const userData = await this.getData(user);
 			const ret = await prisma.user.findUnique({
 				where : {
-					username: user.username,
+					username: account.username,
 				},
 				include: {
 					friends: {
@@ -62,7 +63,7 @@ export class UserService {
 			})
 			if (!ret)
 				throw new NotFoundException("User Not Found");
-			return ret;
+			return {...userData, status:ret?.friends[0]?.status};
 			
 		}
 		catch(err) {

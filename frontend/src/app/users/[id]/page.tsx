@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Profile from "@/app/profile/profile";
 import Cookies from "js-cookie";
@@ -12,7 +12,8 @@ import { useLogContext } from "@/app/Components/Log/LogContext";
 import { FaCog } from "react-icons/fa";
 import { SendFriendRequest } from "@/app/Components/Settings/ChatSettings";
 import { MouseEvent } from "react";
-
+import NotFound from "./not-found";
+import { useRouter } from "next/navigation";
 
 export default function UserProfile({ param }: { param: { id: string } }) {
 	
@@ -22,30 +23,50 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	const [wait, checkwait] = useState(false);
 	
 	let photo = avatar.src;
-	let Fstatus : string = "";
+	const Fstatus = useRef("request friend");
 	const { online, setOnline } = useLogContext();
 	const [Userdata, UsersetData] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
-
+	
 	const pathname = usePathname();
+
 	let name: string = "";
-	let friend: string = "";
+	const friend  = useRef("not friend");
 	name = pathname.split("/")[2];
+	const router = useRouter();
+	if (name == "not-found")
+		return (<NotFound />);
+	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-		UsersetData(data);
-		if (data?.friendship == "PENDING")
-			Fstatus = "cancel request";
-		else if (data?.friendship == "WAITING")
-			Fstatus = "accept request";
-		else if (data?.friendship == "ACCEPTED")
-			Fstatus = "remove friend";
-		else if (data?.friendship == "BLOCKED")
-			Fstatus = "unblock";
-		else
-			Fstatus = "request friend";
-	}
+		console.log(data);
+		if (data == undefined){
+			Cookies.remove("access_token");
+			setOnline("OFF");
+			hooks.logInHook.setState(false);
+		}
 
+		if (data?.statusCode == 404){
+			console.log("user not found");
+			router.push("/users/not-found");
+		}
+		UsersetData(data);
+		if (data?.status == "PENDING")
+		Fstatus.current = "cancel request";
+		else if (data?.status == "WAITING")
+		Fstatus.current = "accept request";
+		else if (data?.status == "ACCEPTED")
+			Fstatus.current = "remove friend";
+		else if (data?.status == "BLOCKED")
+			Fstatus.current = "unblock";
+		else
+			Fstatus.current = "request friend";
+		if (data?.status)
+			friend.current = data?.status;
+		else
+			friend.current = "not friend";
+	}
+	
 	// enum Status {
 	// 	PENDING
 	// 	WAITING
@@ -62,26 +83,34 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
+
+	useEffect(() => {hooks.waitHook.setState(true);},[]);
+
 	useEffect(() => {
-		hooks.waitHook.setState(true);
 		if (online == "ON")
 			fetchData();
 	}, [online, refresh]);
-
+	
 	
 	if (Userdata?.photo != null)
 	photo = Userdata.photo;
 	else
 		photo = avatar.src;
 
-	function friendEvent(e : MouseEvent){
+	async function friendEvent(e : MouseEvent){
 		e.preventDefault();
-		const res =  SendFriendRequest({user: name, status: Fstatus});
-		if (res == undefined)
-			alert("error");
-		setRefresh(!refresh);
+		try{
+			const res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
+			if (res == undefined){
+				Cookies.remove("access_token");
+				setOnline("OFF");
+				hooks.logInHook.setState(false);
+			}
+			console.log(res);
+			setRefresh(!refresh);
+		}catch(err){
+			alert(err);}
 	}
-
 
 	
 	if (!wait) { return (<div>loading...</div>)}
@@ -94,9 +123,9 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 					<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
 					<h1 className='text-3xl pt-3 ' > {Userdata?.username} </h1>
 
-					<button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus}</button>
-					<button onClick={()=>{SendFriendRequest({user: name, status: "Block"})}} className="m-4 bg-red-600 p-3 rounded-md">Block</button>
-					<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{Userdata?.friendship}</span>
+					<button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
+					<button onClick={()=>{SendFriendRequest({username: name, status: "Block"})}} className="m-4 bg-red-600 p-3 rounded-md">Block</button>
+					<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>
 
 					<button className='ml-auto  w-[100px] h-[40px] flex justify-center p-3  bg-yellow-500 rounded-lg hover:bg-yellow-600 items-center gap-2 font-semibold'><span className='text-2xl'><FaCog /></span> EDIT</button>
 					<div className='w-auto h-auto mt-[50px] m-2 p-3 bg-teal-200/30 rounded-lg hover:bg-white/30 '> this thebio place bla bbab alblab abla blablb lab lab lab lab lab </div>

@@ -10,6 +10,7 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 	// if ((user != undefined && user != "") && Api == "Profile") {
 	// 	data = await Get(APIs.User + user);
 	// }
+
 	if (Api == "User") 
 		data = await Get(APIs.User + user);
 	else if (Api == "Profile") 

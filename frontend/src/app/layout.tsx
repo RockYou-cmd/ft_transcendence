@@ -4,7 +4,8 @@ import './globals.css'
 import Navbar from './Components/navbar'
 import React from 'react'
 import LogContextProvider from './Components/Log/LogContext'
-
+import { config } from '@fortawesome/fontawesome-svg-core'
+config.autoAddCss = false
 
 
 const inter = Inter({ subsets: ['latin'] })

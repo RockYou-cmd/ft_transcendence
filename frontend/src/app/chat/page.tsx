@@ -17,6 +17,7 @@ import { ChatOptions } from '../Props/Interfaces';
 import Add from './Components/Add';
 import SearchBar from '../Components/Fetch/SearchBar';
 
+
 export interface Friends {
 	title: string;
 	image: any;
@@ -58,6 +59,8 @@ let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], des
 
 export default function Chat() {
 
+	const [idS, setIdS] = useState(false);
+
 	const [log, setLog] = useState(false);
 	const [data, setData] = useState({} as any);
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
@@ -96,9 +99,11 @@ export default function Chat() {
 				"pointer-events": "none",
 			})
 			setOption(false);
+			setIdS(true);
 		}
-		else
+		else{
 			setStyle({});
+			setIdS(false);}
 	}, [createG, explore, newChat]);
 
 	function Explore(user: any) {
@@ -143,7 +148,7 @@ export default function Chat() {
 								<Friends channel={friends} />
 
 							</section>
-							<Cnvs />
+							<Cnvs style={setIdS}/>
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}

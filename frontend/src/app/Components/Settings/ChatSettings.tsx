@@ -4,7 +4,7 @@ import {APIs} from '../../Props/APIs';
 
 
 
-export async function SendFriendRequest({user, status}: {user : string, status : string}){
+export async function SendFriendRequest({username, status}: {username : string, status : string}){
 
 	let subApi = "";
 
@@ -12,28 +12,30 @@ export async function SendFriendRequest({user, status}: {user : string, status :
 
 
 	if (status == "request friend")
-		subApi = "send";
+		subApi = APIs.SendFriendRequest +  "send";
 	else if (status == "cancel request")
-		subApi = "cancel";
+		subApi = APIs.Remove;
 	else if (status == "accept request")
-		subApi = "accept";
+		subApi = APIs.SendFriendRequest +  "accept";
 	else if (status == "remove friend")
-		subApi = "remove";
+		subApi = APIs.Remove;
 	else if (status == "block")
 		subApi = "block";
 	else if (status == "unblock")
 		subApi = "unblock";
 	
+	// console.log("user", username);
+	// console.log("status", status);
+	// console.log("api", subApi);
 	
 	
+	const data = {username : username};
 	
-	
-	const res = await Post({user}, APIs.SendFriendRequest + "/" + subApi);
-	
-	const response = await res.json();
-	
+	const res = await Post(data, subApi);
+
 	if (res.status == 401)
 		return undefined;
 	
-	return response;
+	return res;
+	// return response;
 }

@@ -50,7 +50,7 @@ const groupSettings : ChatOptions = {Option: ["leave", "addUser", "settings", "a
 // const adminSettings: ChatOptions = {Option: ["add", "remove", "view"],}
 
 
-export default function Cnvs() {
+export default function Cnvs({style} : {style: any}) {
 	
 	const [option, setOption] = useState(false);
 	const admin = true;
@@ -69,6 +69,7 @@ export default function Cnvs() {
 	const [settings, setSettings] = useState(false);
 	const [addAdmin, setAddAdmin] = useState(false);
 	
+	const [id, setId] = useState(false);
 	
 	const visible = useRef(null) as any;
 
@@ -90,8 +91,14 @@ export default function Cnvs() {
 	}
 
 	useEffect(() => {
-		if (invite || block || view || leave || addUser || settings || addAdmin)
+		if (invite || block || view || leave || addUser || settings || addAdmin){
 			setOption(false);
+			style(true);
+			setId(true);
+		}
+		else{
+			style(false);
+			setId(false);}
 	}, [invite, block, view, leave, addUser, settings, addAdmin]);
 
 	return(

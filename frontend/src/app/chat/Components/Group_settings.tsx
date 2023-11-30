@@ -43,7 +43,7 @@ export default function GroupSettings({close} : {close: any}){
 
 	return(
 		<>
-			<form className="CreateGroup" >
+			<form className="CreateGroup" id="child">
 				<h1>Group settings</h1>
 				<button onClick={()=>close(false)} className="closeBtn"><div></div></button>
 				<div className="line"></div>

@@ -14,6 +14,7 @@ export interface Api{
 	Search : string,
 	SendFriendRequest : string,
 	User : string,
+	Remove: string,
 }
 
 export const APIs : Api = { 
@@ -30,5 +31,6 @@ export const APIs : Api = {
 	googleToken: "http://localhost:3001/auth/google/callback",
 	intraToken: "http://localhost:3001/auth/intra/callback",
 	Search : "http://localhost:3001/user/search/?username=",
-	SendFriendRequest : "http://localhost:3001/request/send",
+	SendFriendRequest : "http://localhost:3001/request/",
+	Remove: "http://localhost:3001/user/remove",
 };

@@ -35,7 +35,7 @@ export default function CreateGroup({createG} : {createG: any}){
 
 	return(
 		<> 
-			<form className='CreateGroup' onSubmit={submitForm}>
+			<form className='CreateGroup' onSubmit={submitForm} id="child">
 				<h1>CREATE NEW GROUP</h1>
 				<button onClick={() =>{ createG(false)}} className='closeBtn'><div></div></button>
 				<div className='line'></div>
