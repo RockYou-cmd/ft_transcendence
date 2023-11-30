@@ -27,14 +27,36 @@ export class UserService {
 			throw err;
 		}
 	}
-	async getUser(user) {
+	async getData(user) {
 		try{
 			const ret = await prisma.user.findUnique({
 				where : {
-					username:user.username,
+					username: user.username,
+				}
+			})
+			if (!ret)
+				throw new NotFoundException("User Not Found");
+			return ret;
+			
+		}
+		catch(err) {
+			console.log("getData !Error!");
+			throw err;
+		}
+	}
+	
+	async getUser(account , user) {
+		try{
+			const ret = await prisma.user.findUnique({
+				where : {
+					username: user.username,
 				},
 				include: {
-					friends:true
+					friends: {
+						where: {
+							friendId: account.id
+						}
+					}
 				}
 			})
 			if (!ret)
@@ -80,7 +102,6 @@ export class UserService {
 				}
 			}
 		});
-		console.log(username, ret);
 		return {users:ret};
 	}
 
@@ -91,7 +112,6 @@ export class UserService {
 					username: friend.username
 				}
 			});
-			console.log(user.userId)
 			const deletedUserRl = await prisma.friend.delete({
 				where: {
 					friendId_userId: {

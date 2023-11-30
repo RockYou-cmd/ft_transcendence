@@ -9,7 +9,7 @@ export class TwoFactorAuthenticationService {
 
 	async generateTwoFactorAuthSecret(user) {
 		try {
-			const ret = await this.userService.getUser(user);
+			const ret = await this.userService.getData(user);
 			if (ret.is2faEnabled)
 				throw "2FA already enabled!";
 			const secret = speakeasy.generateSecret({
@@ -32,7 +32,7 @@ export class TwoFactorAuthenticationService {
 
 	async enableTwoFactorAuthentication(user, token) {
 		try{
-			const ret = await this.userService.getUser(user);
+			const ret = await this.userService.getData(user);
 			const validated = await speakeasy.totp.verify({
 				secret: ret.temp2fa,
 				token

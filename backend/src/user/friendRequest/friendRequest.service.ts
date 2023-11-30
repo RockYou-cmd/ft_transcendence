@@ -13,7 +13,7 @@ export class FriendRequestService {
 	async sendRequest(user, friend) {
 
 		try{
-			const friendUser = await this.userService.getUser(friend);
+			const friendUser = await this.userService.getData(friend);
 			const sender = await prisma.user.update({
 				where: {
 					username: user.username,
@@ -52,7 +52,7 @@ export class FriendRequestService {
 
 	async acceptRequest(user, sender) {
 		try {
-			const senderGet = await this.userService.getUser(sender);
+			const senderGet = await this.userService.getData(sender);
 			const receiverRL = await prisma.friend.update({
 				where: {
 					friendId_userId: {
