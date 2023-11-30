@@ -8,6 +8,7 @@ import { friends } from './page';
 import Add from './Components/Add';
 import GroupSettings from './Components/Group_settings';
 import Confirm from './Components/Confirm';
+import Invite from './Components/Invite';
 
 interface user{
 	username: string;
@@ -126,6 +127,8 @@ export default function Cnvs() {
 			{addAdmin && <Add Users={friends} Make={Explore} title={"Add admin"} join={"MAKE ADMIN"} exploreG={setAddAdmin}/>}
 			{settings && <GroupSettings close={setSettings}/>}
 			{leave && <Confirm Make={Explore} title={"Leave this group"} close={setLeave} user={User}/>}
+			{block && <Confirm Make={Explore} title={`Block ${User.username}`} close={setBlock} user={User}/>}
+			{invite && <Invite User={User} close={setInvite}/>}
 		</>
 
 	)

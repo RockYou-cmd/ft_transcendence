@@ -7,14 +7,13 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 
 	let data: any;
 
-	if ((user != undefined && user != "") && Api == "Profile") {
+	// if ((user != undefined && user != "") && Api == "Profile") {
+	// 	data = await Get(APIs.User + user);
+	// }
+	if (Api == "User") 
 		data = await Get(APIs.User + user);
-		console.log("datasdadsaa");
-	}
-	else if (Api == "Profile") {
+	else if (Api == "Profile") 
 		data = await Get(APIs.Profile);
-		console.log("alae");
-	}
 	else if (Api == "Chat")
 		data = await Get(APIs.Chat);
 	else if (Api == "Game")

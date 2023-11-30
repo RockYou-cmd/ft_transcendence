@@ -62,11 +62,11 @@
 }
 
 
-
 #SearchComponent .g_img{
 	width:45px;
 	height: 45px;
 	border:2px solid #ffff;
+	margin-left: 7px;
 }
 
 #SearchComponent .results span{
@@ -84,3 +84,5 @@
 	margin: 7px 0px 7px auto;
 	background-color: green;
 }
+
+

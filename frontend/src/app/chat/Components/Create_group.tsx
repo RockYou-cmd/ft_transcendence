@@ -64,7 +64,7 @@ export default function CreateGroup({createG} : {createG: any}){
 				<input style={prStyle} ref={gPass} type="password" placeholder="Enter group password" />
 				<label>Group picture</label>
 				<input ref={gPic} type="file" />
-				<button type='submit'>CREATE GROUP</button>
+				<button className='submit' type='submit'>CREATE GROUP</button>
 			</form>
 		</>
 	)

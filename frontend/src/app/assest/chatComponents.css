@@ -148,7 +148,7 @@ input[type=file]::file-selector-button:hover {
 	background: rgba(255, 255, 255, 0.25);
 }
 
-.CreateGroup button:last-child{
+.CreateGroup .submit{
 	display: block;
 	background-color: rgba(32, 164, 243, 0.9);
 	width: fit-content;
@@ -158,8 +158,9 @@ input[type=file]::file-selector-button:hover {
 	font: 600 20px 'Inter', sans-serif;
 }
 
-.CreateGroup button:last-child:hover{ background-color: rgb(18, 133, 195);}
+.CreateGroup .submit:hover{ background-color: rgb(18, 133, 195);}
 
+/************************************** ADD COMPONENT  ********************************/
 
 .Add{
 	
@@ -203,12 +204,13 @@ input[type=file]::file-selector-button:hover {
 .Add .content .user{
 	display: flex;
 	flex-direction: row;
-	/* justify-content: space-between; */
 	align-items: center;
 	margin: 14px 0px;
 	background-color: rgba(117, 125, 134, 1);
 	border-radius: 10px;
 	padding: 4px 15px;
+	cursor: pointer;
+	&:hover{background-color: rgb(79, 85, 92);}
 }
 
 .Add .content .user h3{
@@ -222,6 +224,7 @@ input[type=file]::file-selector-button:hover {
 	font-weight: 500;
 	font-size: 20px;
 	margin: 0px 5px 0px auto;
+	&:hover{opacity: 0.85;}
 }
 
 .content .user .g_img{
@@ -269,3 +272,106 @@ input[type=file]::file-selector-button:hover {
 #Confirm button:first-of-type{ background-color: rgba(49, 132, 191, 1);}
 
 #Confirm button:last-child{ background-color: rgba(250, 77, 77, 1);}
+
+#Invite{
+	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	color: #ffff;
+	position: absolute;
+	top: 30%;
+	left: 35%;
+	width:30vh;
+	border-radius: 16px;
+	box-shadow: 0px 0px 3px 0px #e0e0e0;
+}
+
+#Invite div{
+	display: flex;
+	flex-direction: row;
+	margin:15px 10px;
+}
+
+#Invite h1{
+	text-align: center;
+	font-weight: 600;
+	font-size: 24px;
+	letter-spacing: 0.3px;
+	margin:1vh;
+}
+
+#Invite button{
+	padding:8px 35px;
+	width:50%;
+	font-size: 25px;
+}
+
+#Invite button:first-of-type{ background-color: rgba(235, 28, 36, 1);
+	border-bottom-left-radius: 16px;
+}
+#Invite button:last-child{ background-color: rgba(46, 81, 145, 1);
+	border-bottom-right-radius: 16px;
+}
+
+.showMembers{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	height: 10vh;
+	overflow-y: auto;
+
+
+
+	&::-webkit-scrollbar {display: none;}
+}
+
+.showMembers div{
+	width:150px;
+	background-color: rgba(117, 125, 134, 1);
+	/* margin:10px 0px; */
+	margin:10px auto;
+	cursor: pointer;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: row;
+	padding:5px 7px;
+
+	& h3{
+		font: 600 17px 'Poppins', sans-serif;
+		margin: auto;
+		margin-left: 10px;
+	}
+
+	& .g_img{
+		width:45px;
+		height: 45px;
+	}
+	&:hover{opacity: 0.7;}
+}
+
+.CreateGroup footer {
+	display: flex;
+	flex-wrap: wrap;
+	margin:auto;
+	align-items: center;
+	justify-content: center;
+	margin: 30px 0px 10px;
+}
+
+.CreateGroup footer button{
+	padding: 10px 30px;
+	margin:10px;
+	border-radius: 10px;
+	font: 600 18px 'Inter', sans-serif;
+	&:hover{opacity: 0.7;}
+}
+
+.CreateGroup footer button::-webkit-scrollbar {display: none;}
+
+.CreateGroup .add{background-color: rgb(89, 177, 0);}
+
+.CreateGroup .rem{background-color:#ff2638;}
+
+
+.showMembers .admin{background-color: rgba(255, 51, 102, 1);}
+
+
+
