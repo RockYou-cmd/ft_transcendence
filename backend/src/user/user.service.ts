@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import * as argon from "argon2"
 
@@ -107,17 +107,17 @@ export class UserService {
 		return {users:ret};
 	}
 
-	async removeUserFromFriends(user, friend) {
+	async removeUserFromFriends(account, user) {
 		try {
 			const friendUser = await prisma.user.findUnique({
 				where: {
-					username: friend.username
+					username: user.username
 				}
 			});
 			const deletedUserRl = await prisma.friend.delete({
 				where: {
 					friendId_userId: {
-						userId: user.userId,
+						userId: account.userId,
 						friendId: friendUser.id
 					}
 				}
@@ -127,7 +127,7 @@ export class UserService {
 				where: {
 					friendId_userId: {
 						userId: friendUser.id,
-						friendId: user.userId
+						friendId: account.userId
 					}
 				}
 			})
@@ -136,6 +136,32 @@ export class UserService {
 			throw err;
 		}
 
+	}
+
+	async getFriends(account) {
+		
+		try{
+			console.log(account.username);
+			const {friends} = await prisma.user.findUnique({
+				where: {
+					username: account.username
+				},
+				select: {
+					friends: {
+						where: {
+							status: "ACCEPTED"
+						}
+					}
+				}
+			});
+			console.log("friends: ", friends)
+			return {friends: friends};
+		}
+		catch (err) {
+			console.log("get Friends error");
+			throw err;
+		}
+		
 	}
 	
 }

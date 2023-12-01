@@ -35,4 +35,11 @@ export class UserController{
 	async removeUserFromFriends(@Req() req, @Body() friend) {
 		return this.UserService.removeUserFromFriends(req.user, friend);
 	}
+
+	@Get("friends")
+	@UseGuards(AuthGuard)
+	async getFriends(@Req() account) {
+		return this.UserService.getFriends(account.user);
+	}
+	 
 }
