@@ -100,11 +100,28 @@ export class ChatService {
 			where: {
 				OR: [
 					{
-						senderId: account.username,
-					},
-					{
-						senderId: user.username
+						AND: [
+							{
+								senderId: account.username,
+							},
+							{
+								receiverId: user.username
+							}
+						]
 					}
+					,
+					{
+						AND: [
+							{
+								senderId: user.username,
+							},
+							{
+								receiverId: account.username
+							}
+
+						]
+					}
+
 				]
 			}
 		});

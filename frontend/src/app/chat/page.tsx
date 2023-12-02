@@ -20,55 +20,44 @@ import StartChat from './Components/StartChat';
 
 
 
-export interface Friends {
-	username: string;
-	photo: any;
-	lastMsg: string;
-	lastMsgTime: string;
-	status: boolean;
-}
-
-
 
 export interface Group {
 	title: string;
 	image: any;
 	lastMsg: string;
 	lastMsgTime: string;
+	id: number;
 }
 
 export let channels: Group[] = [];
-channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00" });
-channels.push({ title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35" });
-channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50" });
-channels.push({ title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35" });
-channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00" });
-channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50" });
-
-export let friends: Friends[] = [];
-friends.push({ username: "bboulhan", photo: bboulhan, lastMsg: "hello", lastMsgTime: "12:00", status: true });
-friends.push({ username: "ael-korc", photo: ael_korc, lastMsg: "hello", lastMsgTime: "16:35", status: false });
-friends.push({ username: "youssef", photo: yel_qabl, lastMsg: "hello", lastMsgTime: "08:50", status: true });
-friends.push({ username: "brahim", photo: ael_korc, lastMsg: "hello", lastMsgTime: "16:35", status: false });
+channels.push({ title: "bboulhan", image: bboulhan, lastMsg: "Hello", lastMsgTime: "12:00", id: 1 });
+channels.push({ title: "ael_korc", image: ael_korc, lastMsg: "Hello", lastMsgTime: "12:00", id: 2 });
+channels.push({ title: "yel_qabl", image: yel_qabl, lastMsg: "Hello", lastMsgTime: "12:00", id: 3 });
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create group", "Explore groups", "Start new chat"] };
 
 
 export default function Chat() {
 
-	const [idS, setIdS] = useState(false);
 	const [User, setUser] = useState({} as any);
 
+	//hooks for login
 	const [log, setLog] = useState(false);
 	const [data, setData] = useState({} as any);
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
+
+	const hooks = {
+		logInHook: { state: log, setState: setLog },
+		dataHook: { state: data, setState: setData },
+		cookieHook: { state: cookie, setState: setCookie },
+		waitHook: { state: wait, setState: checkwait },
+	}
+
+	/************************************************** */
+	
 	const [option, setOption] = useState(false);
-	const [click, setClick] = useState(false);
-	const [searchRes, setSearchRes] = useState(false);
-	const reciever = useRef("") as any;
 	const visible = useRef(null);
-	const [select, setSelect] = useState(false);
 
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);
@@ -77,12 +66,6 @@ export default function Chat() {
 	const [Style, setStyle] = useState({} as any);
 
 
-	const hooks = {
-		logInHook: { state: log, setState: setLog },
-		dataHook: { state: data, setState: setData },
-		cookieHook: { state: cookie, setState: setCookie },
-		waitHook: { state: wait, setState: checkwait },
-	}
 
 	function OptionHandler(option: string) {
 		if (option == "CreateG")
@@ -100,11 +83,10 @@ export default function Chat() {
 				"pointerEvents": "none",
 			})
 			setOption(false);
-			setIdS(true);
 		}
-		else{
+		else
 			setStyle({});
-			setIdS(false);}
+	
 	}, [createG, explore, newChat]);
 
 	function Explore(user: any) {
@@ -113,13 +95,9 @@ export default function Chat() {
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
-
-
-
 	useEffect(() => {
 		hooks.waitHook.setState(true);
 	}, []);
-
 
 
 	if (!hooks.waitHook.state) {
@@ -134,23 +112,18 @@ export default function Chat() {
 						<div className={"ChatPage"} style={Style}>
 							<section className="sec1">
 								<div className="searchBar">
-									{/* <input ref={visible}  type="text" className='searchInput'  placeholder="Search" /> */}
 									<SearchBar title={"profile"} />
 									<button ref={visible} onClick={() => { setOption(!option) }} className="Options">
-										{/* <button className="Options"> */}
-										<div className="straight"></div>
-										<div className="straight"></div>
-										<div className="straight"></div>
+										<div className="straight"></div><div className="straight"></div><div className="straight"></div>
 									</button>
 									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={chatOptions} />}
 								</div>
-								{/* <Options/> */}
 
-								<Groups channels={channels} />
+								<Groups  />
 								<Friends selectChat={setUser}/>
 
 							</section>
-							<Cnvs style={setIdS} User={User} />
+							<Cnvs User={User} />
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}

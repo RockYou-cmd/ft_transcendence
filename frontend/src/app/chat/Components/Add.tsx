@@ -1,6 +1,8 @@
 import '../../assest/chatComponents.css';
 import Image from 'next/image'
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect , useState} from 'react';
+import avatar from '../../../../public/avatar.png';
+
 
 export default function Add({Users , Make, title, join, exploreG} : {Users: any, Make: any, title: string, join : string, exploreG: any}){
 
@@ -23,6 +25,7 @@ export default function Add({Users , Make, title, join, exploreG} : {Users: any,
 			exploreG(false);
 	}
 
+	
 
 	return (
 		<>
@@ -31,10 +34,10 @@ export default function Add({Users , Make, title, join, exploreG} : {Users: any,
 				<input type="text" className='searchInput' placeholder="Search"/>
 				<button onClick={()=>exploreG(false)} className='closeBtn'><div></div></button>
 				<div className="content">
-					{Users.map((user : any)=>(<>
-						<div className="user" key={user}>
-							<Image className="g_img" src={user.photo} priority={true} alt="img" width={45} height={45}/>
-							<h3>{user.username}</h3>
+					{Users?.map((user : any, index : number)=>(<>
+						<div className="user" key={index}>
+							<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
+							<h3>{user?.username}</h3>
 							<button style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
 						</div>
 					</>))}

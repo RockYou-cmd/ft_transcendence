@@ -67,7 +67,6 @@ export class UserService {
 			
 		}
 		catch(err) {
-			console.log("getUser !Error!");
 			throw err;
 		}
 	}
@@ -158,33 +157,50 @@ export class UserService {
 			});
 			if (friends) {
 				const friendsIds = friends.map((friend) => friend.friendId)
-				if (chat){
+				if (chat != "false"){
 					const friendsWithChat = await prisma.user.findMany({
 						where: {
 							AND: {
 								id: {
 									in: friendsIds
 								},
-								messagesReceived: {
-
-									some: {
-										OR: [
-											{
-												receiverId: account.username
-											},
-											{
-												senderId: account.username
+								OR: [
+									{
+										messagesReceived: {
+											some: {
+												OR: [
+													{
+														receiverId: account.username
+													},
+													{
+														senderId: account.username
+													}
+												]
 											}
-										]
+										},
+									},
+									{
+										messagesSent: {
+											some: {
+												OR: [
+													{
+														receiverId: account.username
+													},
+													{
+														senderId: account.username
+													}
+												]
+											}
+										}
 									}
-								}
+								]
 							}
 						},
 						include: {
 							messagesReceived: true
 						}
 					})
-					return friendsWithChat;
+					return {friends:friendsWithChat};
 				}
 				const allFriends = await prisma.user.findMany({
 					where: {
@@ -193,14 +209,13 @@ export class UserService {
 						}
 					},
 				})
-				return allFriends;
+				return {friends:allFriends};
 			}
 			else {
 				throw new HttpException("User has no friends!", HttpStatus.NOT_FOUND);
 			}
 		}
 		catch (err) {
-			console.log("get Friends error");
 			throw err;
 		}
 		

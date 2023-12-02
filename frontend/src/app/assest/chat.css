@@ -259,7 +259,7 @@
 	flex-direction: column;
 	margin: 5vh 0px 2.5vh;
 	height: 65.5vh;
-	overflow-y:auto;
+	overflow-y:scroll;
 }
 
 .Msg::-webkit-scrollbar{display: none;}
