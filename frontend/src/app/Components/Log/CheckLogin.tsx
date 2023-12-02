@@ -15,10 +15,6 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 		data = await Get(APIs.User + user);
 	else if (Api == "Profile") 
 		data = await Get(APIs.Profile);
-	else if (Api == "Chat")
-		data = await Get(APIs.Chat);
-	else if (Api == "Game")
-		data = await Get(APIs.Game);
 	else if (Api == "Navbar")
 		data = await Get(APIs.Navbar);
 	return data;

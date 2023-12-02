@@ -3,8 +3,6 @@ export interface Api{
 	SignIn : string,
 	SignUp : string,
 	Profile : string,
-	Chat : string,
-	Game : string,
 	Navbar: string,
 	accessToken: string,
 	googleAuth: string,
@@ -15,6 +13,9 @@ export interface Api{
 	SendFriendRequest : string,
 	User : string,
 	Remove: string,
+	getChat: string,
+	sendMsg : string,
+	Friends: string,
 }
 
 export const APIs : Api = { 
@@ -22,8 +23,6 @@ export const APIs : Api = {
 	SignUp : "http://localhost:3001/auth/signUp",
 	Profile : "http://localhost:3001/user/profile",
 	User : "http://localhost:3001/user/?username=",
-	Chat : "",
-	Game : "",
 	Navbar: "http://localhost:3001/user/profile",
 	accessToken: "http://localhost:3001/auth/token",
 	googleAuth: "http://localhost:3001/auth/google",
@@ -33,4 +32,7 @@ export const APIs : Api = {
 	Search : "http://localhost:3001/user/search/?username=",
 	SendFriendRequest : "http://localhost:3001/request/",
 	Remove: "http://localhost:3001/user/remove",
+	getChat: "http://localhost:3001/message/chat/?username=",
+	sendMsg : "http://localhost:3001/message/send",
+	Friends: "http://localhost:3001/user/friends",
 };

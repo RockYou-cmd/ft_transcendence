@@ -16,14 +16,9 @@ export class ChatService {
 
 	async sendMessage(account, user, message) {
 		try{
-
-			console.log("accountUser: ", account.username)
-			console.log("UserName: ", user)
 			const {id} = await this.userService.getData(user);
 			const chat = await this.isChatCreated(account.username, user.username);
-			console.log("chat : ", chat);
 			if (!chat.length) {
-				console.log("clear chat");
 				var createdChat = await prisma.chat.create({
 					data: {
 						messages: {
@@ -80,14 +75,15 @@ export class ChatService {
 				select:{
 					messages: {
 						where: {
-							AND:[
+							OR:[
 								{
 									senderId: accountID
 								},
 								{
-									receiverId: userId
+									senderId: userId
 								}
 							]
+
 						}
 					}
 				}
@@ -104,18 +100,18 @@ export class ChatService {
 			select: {
 				messages: {
 					where: {
-						AND: [
+						OR: [
 							{
 								senderId: account.username,
 							},
 							{
-								receiverId: user.username
+								senderId: user.username
 							}
 						]
 					}
 				}
 			}
 		});
-		return chat;
+		return chat[0];
 	}
 }

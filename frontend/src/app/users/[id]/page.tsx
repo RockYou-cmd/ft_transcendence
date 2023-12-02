@@ -39,7 +39,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-		console.log(data);
+		
 		if (data == undefined){
 			Cookies.remove("access_token");
 			setOnline("OFF");
@@ -91,6 +91,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			fetchData();
 	}, [online, refresh]);
 	
+	console.log(online);
 	
 	if (Userdata?.photo != null)
 	photo = Userdata.photo;

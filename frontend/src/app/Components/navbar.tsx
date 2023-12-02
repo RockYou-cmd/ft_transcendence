@@ -9,7 +9,7 @@ import '../assest/navbar.css';
 import { useLogContext } from "./Log/LogContext";
 import SearchBar from "./Fetch/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { icon } from "@fortawesome/fontawesome-svg-core";
+import { faUser ,faMessage , faTableTennisPaddleBall} from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar() {
 
@@ -45,12 +45,12 @@ export default function Navbar() {
 				<SearchBar title={"profile"} />
 				<nav className="nav">
 
-					{/* <div>
-						<FontAwesomeIcon icon={["fas", "user"]} />
-					</div> */}
-					<Link href="/" ><li> Profile</li></Link>
-					<Link href="/chat" ><li> Chat</li></Link>
-					<Link href="/game" ><li> Game</li></Link>
+					{/* <div> */}
+					{/* </div> */}
+						
+					<Link href="/" ><li><FontAwesomeIcon icon={faUser} className="NavbarIcons"/>Profile</li></Link>
+					<Link href="/chat"><li><FontAwesomeIcon icon={faMessage} className="NavbarIcons" /> Chat</li></Link>
+					<Link href="/game"><li><FontAwesomeIcon icon={faTableTennisPaddleBall} className="NavbarIcons"  /> Game</li></Link>
 				</nav>
 
 				<Logout />

@@ -39,6 +39,7 @@ export class UserController{
 	@Get("friends")
 	@UseGuards(AuthGuard)
 	async getFriends(@Req() account) {
+		console.log("zbi");
 		return this.UserService.getFriends(account.user);
 	}
 	 

@@ -16,11 +16,13 @@ import CreateGroup from './Components/Create_group';
 import { ChatOptions } from '../Props/Interfaces';
 import Add from './Components/Add';
 import SearchBar from '../Components/Fetch/SearchBar';
+import StartChat from './Components/StartChat';
+
 
 
 export interface Friends {
-	title: string;
-	image: any;
+	username: string;
+	photo: any;
 	lastMsg: string;
 	lastMsgTime: string;
 	status: boolean;
@@ -35,7 +37,7 @@ export interface Group {
 	lastMsgTime: string;
 }
 
-let channels: Group[] = [];
+export let channels: Group[] = [];
 channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00" });
 channels.push({ title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35" });
 channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50" });
@@ -44,15 +46,10 @@ channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTim
 channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50" });
 
 export let friends: Friends[] = [];
-friends.push({ title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true });
-friends.push({ title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true });
-friends.push({ title: "Friend 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: true });
-friends.push({ title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false });
-friends.push({ title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false });
-friends.push({ title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true });
-friends.push({ title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false });
-friends.push({ title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false });
-friends.push({ title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false });
+friends.push({ username: "bboulhan", photo: bboulhan, lastMsg: "hello", lastMsgTime: "12:00", status: true });
+friends.push({ username: "ael-korc", photo: ael_korc, lastMsg: "hello", lastMsgTime: "16:35", status: false });
+friends.push({ username: "youssef", photo: yel_qabl, lastMsg: "hello", lastMsgTime: "08:50", status: true });
+friends.push({ username: "brahim", photo: ael_korc, lastMsg: "hello", lastMsgTime: "16:35", status: false });
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create group", "Explore groups", "Start new chat"] };
 
@@ -60,6 +57,7 @@ let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], des
 export default function Chat() {
 
 	const [idS, setIdS] = useState(false);
+	const [User, setUser] = useState({} as any);
 
 	const [log, setLog] = useState(false);
 	const [data, setData] = useState({} as any);
@@ -68,7 +66,10 @@ export default function Chat() {
 	const [option, setOption] = useState(false);
 	const [click, setClick] = useState(false);
 	const [searchRes, setSearchRes] = useState(false);
+	const reciever = useRef("") as any;
 	const visible = useRef(null);
+	const [select, setSelect] = useState(false);
+
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);
 	const [explore, setExplore] = useState(false);
@@ -96,7 +97,7 @@ export default function Chat() {
 		if (createG || explore || newChat) {
 			setStyle({
 				"filter": "blur(6px)",
-				"pointer-events": "none",
+				"pointerEvents": "none",
 			})
 			setOption(false);
 			setIdS(true);
@@ -118,6 +119,7 @@ export default function Chat() {
 	useEffect(() => {
 		hooks.waitHook.setState(true);
 	}, []);
+
 
 
 	if (!hooks.waitHook.state) {
@@ -145,15 +147,15 @@ export default function Chat() {
 								{/* <Options/> */}
 
 								<Groups channels={channels} />
-								<Friends channel={friends} />
+								<Friends selectChat={setUser}/>
 
 							</section>
-							<Cnvs style={setIdS}/>
+							<Cnvs style={setIdS} User={User} />
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}
 						{explore && <Add Users={channels} Make={Explore} title={"Explore Groups"} join={"JOIN"} exploreG={setExplore} />}
-
+						{newChat && <StartChat close={setNewChat} User={setUser}/>}
 					</div>
 				</>)}
 		</>

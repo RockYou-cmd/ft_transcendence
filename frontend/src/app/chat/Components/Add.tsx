@@ -1,6 +1,6 @@
 import '../../assest/chatComponents.css';
 import Image from 'next/image'
-import { useCallback } from 'react';
+import { MouseEvent } from 'react';
 
 export default function Add({Users , Make, title, join, exploreG} : {Users: any, Make: any, title: string, join : string, exploreG: any}){
 
@@ -10,8 +10,18 @@ export default function Add({Users , Make, title, join, exploreG} : {Users: any,
 	};
 	else if (join == "INVITE")
 		Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
+	else if (join == "StartChat")
+		Style = {"backgroundColor": "#1A66FF"};
+
 	else
 		Style = {"backgroundColor": "rgba(255, 51, 102, 1)"};
+
+	function MakeEvent(e: MouseEvent, user : any){
+		e.preventDefault();
+		Make(user);
+		if (join == "StartChat")
+			exploreG(false);
+	}
 
 
 	return (
@@ -23,13 +33,13 @@ export default function Add({Users , Make, title, join, exploreG} : {Users: any,
 				<div className="content">
 					{Users.map((user : any)=>(<>
 						<div className="user" key={user}>
-							<Image className="g_img" src={user.image} priority={true} alt="img" width={45} height={45}/>
-							<h3>{user.title}</h3>
-							<button style={Style} onClick={() => {Make(user)}}>{join}</button>
+							<Image className="g_img" src={user.photo} priority={true} alt="img" width={45} height={45}/>
+							<h3>{user.username}</h3>
+							<button style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
 						</div>
 					</>))}
 				</div>	
 			</div>
 		</>
 	)
-}
+}	

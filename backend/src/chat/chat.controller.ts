@@ -11,6 +11,7 @@ export class ChatController {
 	@Get("chat")
 	@UseGuards(AuthGuard)
 	async getMessages(@Req() account , @Query() user) {
+		console.log("here");
 		return this.chatService.getChat(account.user, user);
 	}
 

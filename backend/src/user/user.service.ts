@@ -154,6 +154,14 @@ export class UserService {
 					}
 				}
 			});
+			if (friends) {
+				const friendsData = await prisma.user.findUnique({
+				where: {
+				id: friends[0].friendId
+				}
+				})
+				return {friends: [friendsData]};
+			}
 			console.log("friends: ", friends)
 			return {friends: friends};
 		}
