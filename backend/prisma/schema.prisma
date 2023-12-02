@@ -16,6 +16,7 @@ model User {
   email                         String   @unique
   password                      String?
   photo                         String?
+  bio                           String?
   is2faEnabled                  Boolean? @default(false)
   twoFactorAuthenticationSecret String?
   temp2fa                       String?

@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, User } from "@prisma/client";
 import * as argon from "argon2"
 
 const prisma = new PrismaClient();
@@ -170,6 +170,22 @@ export class UserService {
 			throw err;
 		}
 		
+	}
+
+	async updateData(account, data) {
+		try {
+			console.log(account.username);
+			const user = await prisma.user.update({
+				where: {
+					username: account.username
+				},
+				data
+			})
+		}
+		catch (err) {
+			console.log(err);
+			throw new HttpException(err, HttpStatus.NOT_FOUND);
+		}
 	}
 	
 }

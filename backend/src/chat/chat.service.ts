@@ -96,22 +96,18 @@ export class ChatService {
 	}
 
 	async getChat(account, user) {
-		const chat = await prisma.chat.findMany({
-			select: {
-				messages: {
-					where: {
-						OR: [
-							{
-								senderId: account.username,
-							},
-							{
-								senderId: user.username
-							}
-						]
+		const messages = await prisma.message.findMany({
+			where: {
+				OR: [
+					{
+						senderId: account.username,
+					},
+					{
+						senderId: user.username
 					}
-				}
+				]
 			}
 		});
-		return chat[0];
+		return {messages};
 	}
 }

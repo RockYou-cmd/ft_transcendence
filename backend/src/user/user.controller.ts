@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query, Req, Request, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 
@@ -42,5 +42,10 @@ export class UserController{
 		console.log("zbi");
 		return this.UserService.getFriends(account.user);
 	}
-	 
+
+	@Put("update")
+	@UseGuards(AuthGuard)
+	async updateData(@Req() account, @Body() data) {
+		return this.UserService.updateData(account.user, data);
+	}
 }
