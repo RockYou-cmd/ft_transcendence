@@ -138,10 +138,9 @@ export class UserService {
 
 	}
 
-	async getFriends(account) {
+	async getFriends(account, chat) {
 		
 		try{
-			console.log(account.username);
 			const {friends} = await prisma.user.findUnique({
 				where: {
 					username: account.username
@@ -150,20 +149,55 @@ export class UserService {
 					friends: {
 						where: {
 							status: "ACCEPTED"
+						},
+						select:{
+							friendId: true
 						}
 					}
 				}
 			});
 			if (friends) {
-				const friendsData = await prisma.user.findUnique({
-				where: {
-				id: friends[0].friendId
+				const friendsIds = friends.map((friend) => friend.friendId)
+				if (chat){
+					const friendsWithChat = await prisma.user.findMany({
+						where: {
+							AND: {
+								id: {
+									in: friendsIds
+								},
+								messagesReceived: {
+
+									some: {
+										OR: [
+											{
+												receiverId: account.username
+											},
+											{
+												senderId: account.username
+											}
+										]
+									}
+								}
+							}
+						},
+						include: {
+							messagesReceived: true
+						}
+					})
+					return friendsWithChat;
 				}
+				const allFriends = await prisma.user.findMany({
+					where: {
+						id: {
+							in: friendsIds
+						}
+					},
 				})
-				return {friends: [friendsData]};
+				return allFriends;
 			}
-			console.log("friends: ", friends)
-			return {friends: friends};
+			else {
+				throw new HttpException("User has no friends!", HttpStatus.NOT_FOUND);
+			}
 		}
 		catch (err) {
 			console.log("get Friends error");
@@ -183,8 +217,7 @@ export class UserService {
 			})
 		}
 		catch (err) {
-			console.log(err);
-			throw new HttpException(err, HttpStatus.NOT_FOUND);
+			throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
 		}
 	}
 	
