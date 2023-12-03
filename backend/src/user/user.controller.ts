@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, Query, Request, UseGuards } from "@nestjs/common";
-import { userService } from "./user.service";
+import { Body, Controller, Get, Post, Put, Query, Req, Request, UseGuards } from "@nestjs/common";
+import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 
 @Controller("/user")
 
-export class userController{
-	constructor(private UserService: userService) {}
+export class UserController{
+	constructor(private UserService: UserService) {}
 
 	@Get("profile")
 	@UseGuards(AuthGuard)
@@ -15,8 +15,8 @@ export class userController{
 
 	@Get()
 	@UseGuards(AuthGuard)
-	getUser(@Query() user){
-		return this.UserService.getUser(user);
+	getUser(@Req() account, @Query() user){
+		return this.UserService.getUser(account.user, user);
 	}
 
 	@Get("all")
@@ -30,9 +30,21 @@ export class userController{
 		return this.UserService.search(data.username);
 	}
 
-	@Post("add")
+	@Post("remove")
 	@UseGuards(AuthGuard)
-	addFriend(@Body() friend, @Request() req) {
-		this.UserService.addFriend(friend, req.user);
+	async removeUserFromFriends(@Req() req, @Body() friend) {
+		return this.UserService.removeUserFromFriends(req.user, friend);
+	}
+
+	@Get("friends")
+	@UseGuards(AuthGuard)
+	async getFriends(@Req() account, @Query("chat") chat) {
+		return this.UserService.getFriends(account.user, chat);
+	}
+
+	@Put("update")
+	@UseGuards(AuthGuard)
+	async updateData(@Req() account, @Body() data) {
+		return this.UserService.updateData(account.user, data);
 	}
 }

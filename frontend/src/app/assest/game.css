@@ -1,5 +1,4 @@
 
-
 #container{
 	min-width: 1500px;
 	margin-top:100px;
@@ -8,3 +7,8 @@
 	padding:60px;
 }
 
+.GameMain{
+	background-color: #1F295E;
+	height: 92.8vh;
+	/* width: 100%; */
+}

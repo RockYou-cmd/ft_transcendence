@@ -28,13 +28,13 @@
 	border: 1px solid rgba(34, 40, 49, 1);
 	border-radius: 30px;
 	height: 46px;
-	margin: 28px;
+	margin: 28px auto;
 	padding:10px;
 	list-style: none;
 }
 
 #header .nav li{
-	padding:8px 30px;
+	padding:8px 20px;
 	border-radius: 30px;
 }
 
@@ -58,6 +58,8 @@
 	margin:22px;
 	position: absolute;
 	width:22%;
-	left:7vh;
+	left:100px;
 	z-index: 10;
 }
+
+.NavbarIcons{margin-right: 6px;}

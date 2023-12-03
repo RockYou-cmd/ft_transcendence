@@ -10,24 +10,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users{
-
-  id String @id() @default(uuid()) @unique
-
-  username String @unique
-
-  email String @unique
-
-  password String?
-
-  photo String?
-
-  friends Json[]
-
-  is2faEnabled Boolean? @default(false)
-
+model User {
+  id                            String   @id @default(uuid())
+  username                      String   @unique
+  email                         String   @unique
+  password                      String?
+  photo                         String?
+  bio                           String?
+  is2faEnabled                  Boolean? @default(false)
   twoFactorAuthenticationSecret String?
-
-  temp2fa String?
+  temp2fa                       String?
+  friends                       Friend[] @relation(name: "FriendsToUsers")
+  messagesSent     Message[] @relation("MessagesSent")
+  messagesReceived Message[] @relation("MessagesReceived")
 }
 
+model Chat {
+  id        String    @id @default(uuid())
+  messages  Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  chatId    String
+  sender    User     @relation(name: "MessagesSent", fields: [senderId], references: [username])
+  senderId  String
+  receiver  User     @relation(name: "MessagesReceived", fields: [receiverId], references: [username])
+  receiverId String
+}
+
+model Friend {
+  id       Int @id @default(autoincrement())
+  users    User[] @relation(name: "FriendsToUsers")
+  status   Status @default(PENDING)
+  friendId String
+  userId   String
+
+  @@unique([friendId, userId])
+}
+
+enum Status {
+  PENDING
+  WAITING
+  ACCEPTED
+}

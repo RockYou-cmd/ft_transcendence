@@ -80,8 +80,8 @@ export default function Form() {
 
 					<Link href="" className="forgot">Forgot your password?</Link>
 					<button className="btn" onClick={handleClick}>Login</button>
-					<Link href={APIs.intraAuth} className="Intra">Login with Intranet</Link>
-					<Link href={APIs.googleAuth} className="Intra Google">Login with Google</Link>
+					<Link href={APIs?.intraAuth} className="Intra">Login with Intranet</Link>
+					<Link href={APIs?.googleAuth} className="Intra Google">Login with Google</Link>
 
 
 					<Link href="/create" className="createbtn">Create an account</Link>

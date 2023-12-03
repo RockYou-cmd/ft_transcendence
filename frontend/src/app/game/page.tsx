@@ -49,12 +49,16 @@ export default function Game() {
 		<>
 			{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render :
 				(<>
-					<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "computer") }}> play with the computer</button>
-					<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "invite") }}> play with the frined</button>
-					<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "rank") }}> play rank</button>
-					{/* {opp == "computer" && <Canvas/>} */}
+					<div className='GameMain'>
 
-					{play == true ? (opp == "computer" ? <Canvas COM={true} /> : <Canvas COM={false} />) : null}</>)}
+						<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "computer") }}> play with the computer</button>
+						<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "invite") }}> play with the frined</button>
+						<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "rank") }}> play rank</button>
+						{/* {opp == "computer" && <Canvas/>} */}
+
+						{play == true ? (opp == "computer" ? <Canvas COM={true} /> : <Canvas COM={false} />) : null}
+					</div>
+				</>)}
 		</>
 	)
 }

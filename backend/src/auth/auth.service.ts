@@ -15,7 +15,7 @@ export class AuthService {
 		try
 		{
 			const hash = await argon.hash(user.password);
-			const ret = await prisma.users.create({
+			const ret = await prisma.user.create({
 				data:{
 					username: user.username,
 					email: user.email,
@@ -35,7 +35,7 @@ export class AuthService {
 
 	async signIn(user) {
 		try{
-			const ret = await prisma.users.findUnique({
+			const ret = await prisma.user.findUnique({
 				where : {
 					username:user.username,
 				}
@@ -59,14 +59,14 @@ export class AuthService {
 		try {
 			if (!user)
 				throw new UnauthorizedException();
-			var ret = await prisma.users.findUnique({
+			var ret = await prisma.user.findUnique({
 				where:{
 					email:user.email
 				}
 			})
-
+			
 			if (!ret) {
-				await prisma.users.create({
+					ret = await prisma.user.create({
 					data:{
 						username: user.username,
 						email: user.email,
@@ -74,7 +74,7 @@ export class AuthService {
 					}
 				})
 			}
-			return this.generateJwt(user);
+			return this.generateJwt(ret);
 
 		}
 		catch (err) {
@@ -86,7 +86,7 @@ export class AuthService {
 
 	async generateJwt(user) {
 		const payload = {
-			sub: user.id,
+			userId: user.id,
 			username: user.username
 		}
 		return {

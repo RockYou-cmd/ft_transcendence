@@ -26,6 +26,18 @@ input:focus, textarea:focus, select:focus{
 	background-color: "red";
 }
 
+#Parent{
+	filter: blur(8px);
+}
+
+#child{
+	/* filter: none; */
+	filter: blur(0px);
+}
+
+/* #Parent:active {
+	filter: blur(8px);
+} */
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

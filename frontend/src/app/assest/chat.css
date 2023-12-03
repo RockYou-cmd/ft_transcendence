@@ -192,10 +192,9 @@
 	margin:25px 18px 10px 6px;
 	border: 1px solid black;
 	border-radius: 20px;
-	height: 86.5vh;
 	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.8);
 	width: 64%;
-	padding:2vh;
+	padding:2vh 2vh 0vh;
 }
 
 .Chat .User{
@@ -211,6 +210,7 @@
 	margin-left: 30px;
 	margin-top: 4px;
 	color : rgba(255, 255, 255, 1);
+	cursor: pointer;
 }
 
 .Chat .User span{
@@ -259,7 +259,7 @@
 	flex-direction: column;
 	margin: 5vh 0px 2.5vh;
 	height: 65.5vh;
-	overflow-y:auto;
+	overflow-y:scroll;
 }
 
 .Msg::-webkit-scrollbar{display: none;}
@@ -341,7 +341,7 @@
 	flex-direction: row;
 	margin-top: 1.5vh;
 	position: relative;
-	padding: 1.5vh 0px;
+	padding: 1.5vh 0px 0vh;
 }
 
 .Send .line{
@@ -366,13 +366,53 @@
 	margin: 2px 0px 0px 17px;
 }
 
-.Send input{
+.Send .sendImg{
+	width: 30px;
+	height: 30px;
+	margin: 10px 0px 0px 12px;
+}
+
+.Send section{
 	background-color: rgba(13, 13, 13, 1);
 	border-radius: 10px;
 	width: 92%;
 	margin-right: 10px;
 	padding: 10px 30px;
-	/* padding: 0px 85%; */
+	display: flex;
+	flex-direction: row;
+	position: relative;
+}
+
+.Send section input{
+	background-color: rgba(13, 13, 13, 1);
+	border: none;
+	width: 100%;
+	color: rgba(255, 255, 255);
+	font-size: 16px;
+}
+
+
+.Send section .sendImg{
+	all:initial;
+	width: 35px;
+	height: 35px;
+	position: absolute;
+	right:10px;
+	top:5px;
+	cursor: pointer;
+	z-index: 1;
+	opacity: 0.01;
+
+}
+
+
+.Send .icon{
+	width: 35px;
+	height: 38px;
+	cursor: pointer;
+	position: absolute;
+	right:10px;
+	top:5px;
 }
 
 input:focus{

@@ -1,17 +1,20 @@
-import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { Prisma, PrismaClient, User } from "@prisma/client";
 import * as argon from "argon2"
 
 const prisma = new PrismaClient();
 
 @Injectable()
 
-export class userService {
+export class UserService {
 	async getProfile(user) {
 		try{
-			const ret = await prisma.users.findUnique({
+			const ret = await prisma.user.findUnique({
 				where : {
 					username:user.username,
+				},
+				include: {
+					friends:true
 				}
 			})
 			if (!ret)
@@ -20,15 +23,15 @@ export class userService {
 			
 		}
 		catch(err) {
-			console.log("getUser !Error!");
+			console.log("getProfile !Error!");
 			throw err;
 		}
 	}
-	async getUser(user) {
+	async getData(user) {
 		try{
-			const ret = await prisma.users.findUnique({
+			const ret = await prisma.user.findUnique({
 				where : {
-					username:user.username,
+					username: user.username,
 				}
 			})
 			if (!ret)
@@ -37,19 +40,57 @@ export class userService {
 			
 		}
 		catch(err) {
-			console.log("getUser !Error!");
+			console.log("getData !Error!");
+			throw err;
+		}
+	}
+	
+	async getUser(account , user) {
+		try{
+
+			const userData = await this.getData(user);
+			const ret = await prisma.user.findUnique({
+				where : {
+					username: account.username,
+				},
+				include: {
+					friends: {
+						where: {
+							friendId: userData.id
+						}
+					}
+				}
+			})
+			if (!ret)
+				throw new NotFoundException("User Not Found");
+			return {...userData, status:ret?.friends[0]?.status};
+			
+		}
+		catch(err) {
 			throw err;
 		}
 	}
 	
 	async getUsers() {
-		return prisma.users.findMany();
+		try {
+			return prisma.user.findMany({
+				include: {
+					friends:true,
+					messagesSent:true,
+					messagesReceived:true
+				}
+			});
+		}
+		catch(err) {
+			console.log("get all error");
+			return err;
+		}
 	}
 
 	async updateUser(user, field, value) {
 		const data = {[field]: value};
 		try {
-			const ret = await prisma.users.update({
+			const ret = await prisma.user.update({
 				where: {
 					username: user.username,
 				},
@@ -62,7 +103,7 @@ export class userService {
 
 	
 	async search(username) {
-		const ret = await prisma.users.findMany({
+		const ret = await prisma.user.findMany({
 			where: {
 				username: {
 					startsWith: username,
@@ -70,31 +111,137 @@ export class userService {
 				}
 			}
 		});
-		console.log(username, ret);
 		return {users:ret};
 	}
-	
-	async addFriend(friend, user) {
-		try{
-			console.log("friend name : ", friend);
-			const friendUser = await this.getUser(friend);
-			const ret = await prisma.users.update({
+
+	async removeUserFromFriends(account, user) {
+		try {
+			const friendUser = await prisma.user.findUnique({
 				where: {
-					username: user.username,
-				},
-				data: {
-					friends: {
-						push: JSON.stringify(friendUser)
+					username: user.username
+				}
+			});
+			const deletedUserRl = await prisma.friend.delete({
+				where: {
+					friendId_userId: {
+						userId: account.userId,
+						friendId: friendUser.id
 					}
 				}
 			})
-			console.log(ret);
-			if (!ret)
-				throw Error("update Error");
+	
+			const deletedFriendRl = await prisma.friend.delete({
+				where: {
+					friendId_userId: {
+						userId: friendUser.id,
+						friendId: account.userId
+					}
+				}
+			})
 		}
-		catch(err) {
-			console.log(err);
-			return err;
+		catch (err) {
+			throw err;
+		}
+
+	}
+
+	async getFriends(account, chat) {
+		
+		try{
+			const {friends} = await prisma.user.findUnique({
+				where: {
+					username: account.username
+				},
+				select: {
+					friends: {
+						where: {
+							status: "ACCEPTED"
+						},
+						select:{
+							friendId: true
+						}
+					}
+				}
+			});
+			if (friends) {
+				const friendsIds = friends.map((friend) => friend.friendId)
+				if (chat != "false"){
+					const friendsWithChat = await prisma.user.findMany({
+						where: {
+							AND: {
+								id: {
+									in: friendsIds
+								},
+								OR: [
+									{
+										messagesReceived: {
+											some: {
+												OR: [
+													{
+														receiverId: account.username
+													},
+													{
+														senderId: account.username
+													}
+												]
+											}
+										},
+									},
+									{
+										messagesSent: {
+											some: {
+												OR: [
+													{
+														receiverId: account.username
+													},
+													{
+														senderId: account.username
+													}
+												]
+											}
+										}
+									}
+								]
+							}
+						},
+						include: {
+							messagesReceived: true
+						}
+					})
+					return {friends:friendsWithChat};
+				}
+				const allFriends = await prisma.user.findMany({
+					where: {
+						id: {
+							in: friendsIds
+						}
+					},
+				})
+				return {friends:allFriends};
+			}
+			else {
+				throw new HttpException("User has no friends!", HttpStatus.NOT_FOUND);
+			}
+		}
+		catch (err) {
+			throw err;
+		}
+		
+	}
+
+	async updateData(account, data) {
+		try {
+			console.log(account.username);
+			const user = await prisma.user.update({
+				where: {
+					username: account.username
+				},
+				data
+			})
+		}
+		catch (err) {
+			throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
 		}
 	}
+	
 }

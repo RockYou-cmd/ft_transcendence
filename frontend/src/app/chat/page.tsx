@@ -16,14 +16,8 @@ import CreateGroup from './Components/Create_group';
 import { ChatOptions } from '../Props/Interfaces';
 import Add from './Components/Add';
 import SearchBar from '../Components/Fetch/SearchBar';
+import StartChat from './Components/StartChat';
 
-export interface Friends {
-	title: string;
-	image: any;
-	lastMsg: string;
-	lastMsgTime: string;
-	status: boolean;
-}
 
 
 
@@ -32,46 +26,26 @@ export interface Group {
 	image: any;
 	lastMsg: string;
 	lastMsgTime: string;
+	id: number;
 }
 
-let channels: Group[] = [];
-channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00" });
-channels.push({ title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35" });
-channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50" });
-channels.push({ title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35" });
-channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00" });
-channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50" });
-
-export let friends: Friends[] = [];
-friends.push({ title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true });
-friends.push({ title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true });
-friends.push({ title: "Friend 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: true });
-friends.push({ title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false });
-friends.push({ title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false });
-friends.push({ title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true });
-friends.push({ title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false });
-friends.push({ title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false });
-friends.push({ title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false });
+export let channels: Group[] = [];
+channels.push({ title: "bboulhan", image: bboulhan, lastMsg: "Hello", lastMsgTime: "12:00", id: 1 });
+channels.push({ title: "ael_korc", image: ael_korc, lastMsg: "Hello", lastMsgTime: "12:00", id: 2 });
+channels.push({ title: "yel_qabl", image: yel_qabl, lastMsg: "Hello", lastMsgTime: "12:00", id: 3 });
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create group", "Explore groups", "Start new chat"] };
 
 
 export default function Chat() {
 
+	const [User, setUser] = useState({} as any);
+
+	//hooks for login
 	const [log, setLog] = useState(false);
 	const [data, setData] = useState({} as any);
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
-	const [option, setOption] = useState(false);
-	const [click, setClick] = useState(false);
-	const [searchRes, setSearchRes] = useState(false);
-	const visible = useRef(null);
-	//  hooks for options
-	const [createG, setCreateG] = useState(false);
-	const [explore, setExplore] = useState(false);
-	const [newChat, setNewChat] = useState(false);
-	const [Style, setStyle] = useState({} as any);
-
 
 	const hooks = {
 		logInHook: { state: log, setState: setLog },
@@ -79,6 +53,19 @@ export default function Chat() {
 		cookieHook: { state: cookie, setState: setCookie },
 		waitHook: { state: wait, setState: checkwait },
 	}
+
+	/************************************************** */
+	
+	const [option, setOption] = useState(false);
+	const visible = useRef(null);
+
+	//  hooks for options
+	const [createG, setCreateG] = useState(false);
+	const [explore, setExplore] = useState(false);
+	const [newChat, setNewChat] = useState(false);
+	const [Style, setStyle] = useState({} as any);
+
+
 
 	function OptionHandler(option: string) {
 		if (option == "CreateG")
@@ -93,12 +80,13 @@ export default function Chat() {
 		if (createG || explore || newChat) {
 			setStyle({
 				"filter": "blur(6px)",
-				"pointer-events": "none",
+				"pointerEvents": "none",
 			})
 			setOption(false);
 		}
 		else
 			setStyle({});
+	
 	}, [createG, explore, newChat]);
 
 	function Explore(user: any) {
@@ -106,9 +94,6 @@ export default function Chat() {
 	}
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-
-
-
 
 	useEffect(() => {
 		hooks.waitHook.setState(true);
@@ -127,28 +112,23 @@ export default function Chat() {
 						<div className={"ChatPage"} style={Style}>
 							<section className="sec1">
 								<div className="searchBar">
-									{/* <input ref={visible}  type="text" className='searchInput'  placeholder="Search" /> */}
 									<SearchBar title={"profile"} />
 									<button ref={visible} onClick={() => { setOption(!option) }} className="Options">
-										{/* <button className="Options"> */}
-										<div className="straight"></div>
-										<div className="straight"></div>
-										<div className="straight"></div>
+										<div className="straight"></div><div className="straight"></div><div className="straight"></div>
 									</button>
 									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={chatOptions} />}
 								</div>
-								{/* <Options/> */}
 
-								<Groups channels={channels} />
-								<Friends channel={friends} />
+								<Groups  />
+								<Friends selectChat={setUser}/>
 
 							</section>
-							<Cnvs />
+							<Cnvs User={User} />
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}
 						{explore && <Add Users={channels} Make={Explore} title={"Explore Groups"} join={"JOIN"} exploreG={setExplore} />}
-
+						{newChat && <StartChat close={setNewChat} User={setUser}/>}
 					</div>
 				</>)}
 		</>
