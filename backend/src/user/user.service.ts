@@ -72,11 +72,19 @@ export class UserService {
 	}
 	
 	async getUsers() {
-		return prisma.user.findMany({
-			include: {
-				friends:true
-			}
-		});
+		try {
+			return prisma.user.findMany({
+				include: {
+					friends:true,
+					messagesSent:true,
+					messagesReceived:true
+				}
+			});
+		}
+		catch(err) {
+			console.log("get all error");
+			return err;
+		}
 	}
 
 	async updateUser(user, field, value) {

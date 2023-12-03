@@ -11,6 +11,8 @@ services:
     volumes:
       - "./backend:/app"
       - "/app/node_modules"
+    env_file:
+      - ./backend/.env
   database:
     image: postgres
     container_name: database
