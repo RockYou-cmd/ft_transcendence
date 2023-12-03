@@ -2,8 +2,8 @@ import React, { use } from 'react';
 import { useEffect, useState , useRef} from "react";
 import '../../assest/chatComponents.css';
 import '../../assest/chat.css';
-
-
+import { Post } from '@/app/Components/Fetch/post';
+import {APIs} from '../../Props/APIs'
 export default function CreateGroup({createG} : {createG: any}){
 
 	const [protectedChoice, setProtectedChoice] = useState(false);
@@ -30,6 +30,10 @@ export default function CreateGroup({createG} : {createG: any}){
 
 	function submitForm(e : any){
 		e.preventDefault();
+		const data = {gname : gName.current.value,
+		}
+		
+		// const res = Post(data, APIs.);
 	}
 
 
