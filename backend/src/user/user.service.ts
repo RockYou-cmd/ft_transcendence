@@ -77,7 +77,9 @@ export class UserService {
 				include: {
 					friends:true,
 					messagesSent:true,
-					messagesReceived:true
+					messagesReceived:true,
+					rooms: true,
+					owner: true
 				}
 			});
 		}
