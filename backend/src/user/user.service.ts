@@ -76,10 +76,9 @@ export class UserService {
 			return prisma.user.findMany({
 				include: {
 					friends:true,
-					messagesSent:true,
-					messagesReceived:true,
+					// messagesSent:true,
+					// messagesReceived:true,
 					rooms: true,
-					owner: true
 				}
 			});
 		}

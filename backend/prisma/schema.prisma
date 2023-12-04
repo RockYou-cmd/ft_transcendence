@@ -26,7 +26,6 @@ model User {
   messagesReceived Message[] @relation("MessagesReceived")
 
   rooms    RoomMembership[]
-  owner    Room[]
   rooomsMessages  RoomMessage[]
 }
 
@@ -37,8 +36,6 @@ model Room {
   privacy   RoomPrivacy @default(PUBLIC)
   password  String?
   members   RoomMembership[]
-  owner     User @relation(fields: [ownerUsername], references: [username])
-  ownerUsername   String
   messages  RoomMessage[]
   createdAt DateTime    @default(now())
 }
@@ -49,7 +46,8 @@ model RoomMembership {
   userId   String
   room     Room       @relation(fields: [roomId], references: [id])
   roomId   String
-  role     RoomRole
+  role     RoomRole @default(MEMBER)
+  status   RoomStatus?
 
   @@unique([userId, roomId])
 }
@@ -96,6 +94,12 @@ model Friend {
 enum RoomRole {
   MEMBER
   ADMIN
+  OWNER
+}
+
+enum RoomStatus {
+  MUTED
+  BANNED
 }
 
 enum RoomPrivacy {
