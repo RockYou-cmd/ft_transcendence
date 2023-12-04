@@ -35,6 +35,30 @@ export class RoomService {
 		}
 	}
 
+	async getChat(account, roomId) {
+		try {
+			const chat = await prisma.room.findUnique({
+				where: {
+					id: roomId
+				},
+				select: {
+					messages: true,
+					members: {
+						where: {
+							userId: account.username
+						}
+					}
+				}
+			})
+			return chat;
+
+		}
+		catch(err) {
+			throw err;
+		}
+	
+	}
+
 	async addMember(data) {
 		try{
 			const room = await prisma.roomMembership.create({
@@ -89,6 +113,7 @@ export class RoomService {
 					role: "ADMIN"
 				}
 			})
+
 			throw new HttpException("admin added succesfully!", HttpStatus.ACCEPTED);
 		}
 		catch(err) {
@@ -123,10 +148,14 @@ export class RoomService {
 					id: roomId
 				},
 				select: {
-					members: true
+					members: {
+						include: {
+							user: true
+						}
+					}
 				}
 			})
-			return {members: roomMembers};
+			return roomMembers;
 		}
 		catch (err) {
 			throw err;
@@ -164,15 +193,14 @@ export class RoomService {
 									userId: account.username
 								},
 								{
-									status: {
-										not: 'BANNED'
-									}
+									status: null
 								}
 							]
 						}
 					}
 				}
 			});
+			console.log(roomsIn)
 			return {rooms: roomsIn};
 		}
 		catch(err) {

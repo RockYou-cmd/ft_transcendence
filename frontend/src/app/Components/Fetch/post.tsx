@@ -27,10 +27,26 @@ export async function Get(path : string){
 
 	const res = await fetch(path, header);
 
+	console.log("res ",res);
 	if (res.status == 401)
 		return undefined;
-
 	const data = await res.json();
 	return data;
 
+}
+
+export async function Put(data : object, path : string){
+
+	const header = {
+		method: 'PUT',
+		Headers: {
+			'Content-Type': 'application/json',
+			'authorization': 'Bearer ' + Cookies.get('access_token'),
+		},
+		body: JSON.stringify(data),
+	};
+	console.log("data put", data);
+	const res = await fetch(path, header);
+	console.log("res put", res);
+	return res;
 }

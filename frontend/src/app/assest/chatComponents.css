@@ -210,10 +210,11 @@ input[type=file]::file-selector-button:hover {
 	border-radius: 10px;
 	padding: 4px 15px;
 	cursor: pointer;
+	position: relative;
 	&:hover{background-color: rgb(79, 85, 92);}
 }
 
-.Add .content .user h3{
+.Add .content h3{
 	font: 600 18px 'Poppins', sans-serif;
 	margin: 0px 10px;
 }
@@ -227,11 +228,19 @@ input[type=file]::file-selector-button:hover {
 	&:hover{opacity: 0.85;}
 }
 
-.content .user .g_img{
+.Add #optionsBar{
+	
+}
+
+.Add .admin{background-color: rgba(255, 51, 102);}
+.Add .owner{background-color: rgba(249, 172, 24);}
+
+.Add .content .g_img{
 	width:initial;
 	height: initial;
 	border:2px solid #ffff;
 }
+
 
 #Confirm{
 	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);

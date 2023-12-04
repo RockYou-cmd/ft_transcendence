@@ -39,7 +39,7 @@
 	rgba(255, 255, 255, 0.2);
 }
 
-.sec1 .Options{
+.sec1 .Options{ 
 	background-color:rgba(62, 70, 81, 1);
 	display: block;
 	width: 43px;
@@ -260,6 +260,7 @@
 	margin: 5vh 0px 2.5vh;
 	height: 65.5vh;
 	overflow-y:scroll;
+
 }
 
 .Msg::-webkit-scrollbar{display: none;}
@@ -268,8 +269,10 @@
 	display: block;
 	margin: 20px 5px;
 	position: relative;
+	margin-left:auto;
+	max-width: 50%;
 	/* padding: 10px; */
-
+	
 }
 
 .Chat .my_msg p{
@@ -280,6 +283,9 @@
 	margin-right: 12px;
 	background: #1A66FF;
 	border-radius: 9px;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .Chat .my_msg span{
@@ -289,7 +295,7 @@
 	color: rgba(255, 255, 255, 0.5);
 	position: absolute;
 	right:12px;
-	top:52px;
+	margin-top:5px;
 	
 }
 
@@ -300,7 +306,7 @@
 	border-left: 20px solid #1A66FF;
 	position: absolute;
 	right: 0px;
-	top: 28px;
+	bottom:0px;
 }
 
 .Chat .usr_msg .triangle{
@@ -310,13 +316,14 @@
 	border-right: 20px solid #757D86;
 	position: absolute;
 	left: 0px;
-	top: 28px;
+	bottom: 24px;
 }
 
 .Chat .usr_msg{
 	display: block;
 	margin: 20px 5px;
 	position: relative;
+	max-width: 50%;
 }
 
 .Chat .usr_msg p{
@@ -325,7 +332,10 @@
 	padding: 12px 40px;
 	background: #757D86;
 	border-radius: 9px;
-	margin-left: 12px;	
+	margin-left: 12px;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .Chat .usr_msg span{

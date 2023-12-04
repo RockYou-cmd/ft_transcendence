@@ -18,6 +18,13 @@ export class RoomController {
     return this.roomService.getRoomsIn(account.user);
   }
 
+  @Get("chat")
+  @UseGuards(AuthGuard)
+  async getChat(@Req() account, @Query("id") roomid) {
+	return this.roomService.getChat(account.user, roomid);
+  }
+
+
   @Post("create")
   @UseGuards(AuthGuard)
   async createRoom(@Req() account, @Body() data) {
@@ -46,6 +53,7 @@ export class RoomController {
   @Put("add/admin")
   @UseGuards(AuthGuard)
   async addAdmin(@Body() data) {
+	console.log("hhhhhh");
     return this.roomService.addAdmin(data);
   }
   
@@ -63,7 +71,7 @@ export class RoomController {
     return this.roomService.joinRoom(account.user, roomId);
   }
 
-  @Post("join/private")
+  @Post("join/protected")
   @UseGuards(AuthGuard)
   async joinPrivate(@Body() data) {
     return this.roomService.joinPrivate(data);

@@ -1,34 +1,59 @@
 import '../assest/chat.css';
-import { Group } from './page';
 import Image from 'next/image';
+import { MouseEvent } from 'react';
+import { Get } from '../Components/Fetch/post';
+import { APIs } from '../Props/APIs';
+import { useEffect, useState } from 'react';
+import avatar from '../../../public/avatar.png';
 
-import { channels } from './page';
+// import { channels } from './page';
 
-// let channels: Group[] = [];
 
-// channels.push({ title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", id: 1 });
-// channels.push({ title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", id: 2 });
-// channels.push({ title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", id: 3 });
-// channels.push({ title: "Group 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", id: 4 });
 
-export default function Groups(){
+
+export default function Groups({Group} : {Group : any}){
+
+	const [data, setData] = useState({} as any);
+
+	async function getRooms(){
+		const data = await Get(APIs.myGroups);
+		setData(data);
+	}
+
+	useEffect(() => {
+		getRooms();
+	}, []);
 	
+	
+	function SelecteEvent(e : MouseEvent, channel : any){
+		e.preventDefault();
+		Group(channel);
+	}
+	
+	// console.log("rooms ", data);
+
+
+	function PrintGroup({chn} : {chn : any}){
+		// const chn = rooms?.rooms;
+		const group =  <>
+			<div className="content" onClick={(e : MouseEvent)=>SelecteEvent(e, chn)}>
+				<Image className="g_img" src={chn?.photo ? chn.photo : avatar} priority={true} alt="img" width={70} height={70}/>
+				<h4>{chn?.name}</h4>
+				{/* <p>{chn.lastMsg}</p> */}
+				{/* <span>{chn.lastMsgTime}</span> */}
+				<div className="line"></div>
+			</div>
+			</>
+		return <div>{group}</div>
+	}
+
 
 	return(
 		<>
-		<div className="Groups">
+			<div className="Groups">
 				<span className="groupField">Groups</span>
 				<div className="content_g">
-					{channels.map((chn : any, index: number) => (<>
-			        <div className="content" key={chn.title} onClick={()=>console.log("clicked")}>
-						<Image className="g_img" src={chn.image} priority={true} alt="img" width={70} height={70}/>
-						<h4>{chn.title}</h4>
-						<p>{chn.lastMsg}</p>
-						<span>{chn.lastMsgTime}</span>
-						<div className="line"></div>
-					</div>
-					</>
-				))}
+					{data?.rooms?.map((data : any, index: any) => (<PrintGroup chn={data} key={index}/>))}
 				</div>
 			</div>
 		</>

@@ -73,7 +73,7 @@ export default function GroupSettings({close} : {close: any}){
 				<label>Change group picture</label>
 				<input ref={gPic} type="file" />
 	
-				<label>Group members</label>
+				{/* <label>Group members</label>
 				<div className='showMembers'>
 					{groupAmins.map((admin : Admins, index : number)=>(
 						<>
@@ -89,7 +89,7 @@ export default function GroupSettings({close} : {close: any}){
 					<button className='add'><div className='addSymbole'></div> add admin</button>
 					<button className='rem'><div className='removeSymbole'></div> remove member</button>
 					<button className='rem'><div className='removeSymbole'></div> remove admin</button>
-				</footer>
+				</footer> */}
 				<button className='submit'>Save</button>
 			</form>
 		</>
