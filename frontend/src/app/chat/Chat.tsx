@@ -43,7 +43,7 @@ const SuperSettings: ChatOptions = {
 
 
 
-export default function Cnvs({ User }: { User: any}) {
+export default function Cnvs({ User , refresh}: { User: any, refresh : boolean}) {
 
 	const [refresher, setRefresher] = useState(false);
 	const scroll = useRef(null) as any;

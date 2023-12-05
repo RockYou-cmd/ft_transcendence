@@ -5,7 +5,7 @@ import { MouseEvent, useEffect , useState} from 'react';
 import avatar from '../../../../public/avatar.png';
 import Options from './Options';
 import { constrainedMemory } from 'process';
-
+import '../../assest/Components.css';
 
 export default function Add({Users , Make, title, join, close} : {Users: any, Make: any, title: string, join : string, close: any}){
 
@@ -33,10 +33,11 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 	function Print(users : any){
 		const user = users?.users;
 		const print = <>
-			<div className={join == "JOIN" ? "user Join" : "user"}>
+			<div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				{<h3>{join == "JOIN" ? user?.name : user?.username}</h3>}
 				<button style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
+				{join == "JOIN" && <div className='Join'></div>}
 			</div>
 		</>
 		return <div>{print}</div>

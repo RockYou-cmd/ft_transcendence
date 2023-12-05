@@ -38,6 +38,7 @@ export default function Chat() {
 	const [Group, setGroup] = useState({} as any);
 	const [Members, setMembers] = useState({} as any);
 	const [Role, setRole] = useState("");
+	const [refresh, setRefresh] = useState(false);
 
 	// hooks for login
 	const [log, setLog] = useState(false);
@@ -88,11 +89,14 @@ export default function Chat() {
 				"pointerEvents": "none",
 			})
 			setOption(false);
-
 		}
 		else
 			setStyle({});
-	
+		
+		if (!createG || !explore || !newChat){
+			setRefresh(!refresh);
+			console.log("refreshed");
+		}
 	}, [createG, explore, newChat]);
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
@@ -125,11 +129,11 @@ export default function Chat() {
 									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionsHandler} content={chatOptions} />}
 								</div>
 
-								<Groups Group={setUser} />
-								<Friends selectChat={setUser}/>
+								<Groups Group={setUser} refresh={refresh}/>
+								<Friends selectChat={setUser} refresh={refresh} />
 
 							</section>
-							<Cnvs User={User}/>
+							<Cnvs User={User} refresh={refresh}/>
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}

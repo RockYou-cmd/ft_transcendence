@@ -11,7 +11,7 @@ import avatar from '../../../public/avatar.png';
 
 
 
-export default function Groups({Group} : {Group : any}){
+export default function Groups({Group, refresh} : {Group : any, refresh : boolean}){
 
 	const [data, setData] = useState({} as any);
 
@@ -22,7 +22,7 @@ export default function Groups({Group} : {Group : any}){
 
 	useEffect(() => {
 		getRooms();
-	}, []);
+	}, [refresh]);
 	
 	
 	function SelecteEvent(e : MouseEvent, channel : any){

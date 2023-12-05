@@ -8,7 +8,7 @@ import avatar from '../../../public/avatar.png';
 
 
 
-export default function Channel({selectChat} : { selectChat: any}){
+export default function Channel({selectChat, refresh} : { selectChat: any, refresh : boolean}){
 
 	const [data, setData] = useState({} as any);
 
@@ -19,7 +19,7 @@ export default function Channel({selectChat} : { selectChat: any}){
 
 	useEffect(() => {
 		getFriends();
-	}, []);
+	}, [refresh]);
 
 
 	function SelecteEvent(e : MouseEvent, friend : any){
