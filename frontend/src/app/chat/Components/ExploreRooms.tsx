@@ -4,6 +4,7 @@ import { APIs } from "../../Props/APIs"
 import { useState, useEffect, useRef } from "react"
 import { Get } from "../../Components/Fetch/post";
 import { Post } from "../../Components/Fetch/post";
+import '../../assest/Components.css'
 
 
 
@@ -13,12 +14,12 @@ export default function ExploreRooms({close} : {close: any}){
 	
 	function JoinGroup({Room} : {Room : any}){
 	
-	let res : any;
-	const PassWord = useRef(null);
+		let res : any;
+		const [password, setPassword] = useState("");
 
 		async function SubmitHandler(e : any){
 			e.preventDefault();
-			res = await Post({id : Room?.id, password : PassWord.current}, APIs.JoinRoom);
+			res = await Post({id : Room?.id, password :password}, APIs.JoinProtectedRoom);
 			if(res?.status == 201){
 				alert("Joined");
 				close(false);
@@ -26,20 +27,24 @@ export default function ExploreRooms({close} : {close: any}){
 			else{
 				alert("Wrong Password");
 			}
+			setPassword("");
+			console.log("res ", res);
 		}
+		
 
 		if (Room?.privacy == "PUBLIC"){
 			res = Post({id : Room?.id}, APIs.JoinRoom);
+			return null;
 		}
-	
-	if (Room?.privacy == "PUBLIC")
-		return null;
-	return(<>
-			<form className="JoinRoom" onSubmit={SubmitHandler}>
-				<input ref={PassWord} type="text" placeholder="Enter Password"/>
-				<button type="submit">Join</button>
-			</form>
-		</>)	
+		return(<>
+			<div className="Join">
+				<form className="PassWord" onSubmit={SubmitHandler}>
+					<label>Enter Password for {Room?.name} group</label>
+					<input type="text" value={password} placeholder="Enter Password" onChange={(e)=>setPassword(e.target.value)}/>
+					<button type="submit">Join</button>
+				</form>
+			</div>
+			</>)	
 	}
 
 
@@ -55,13 +60,14 @@ export default function ExploreRooms({close} : {close: any}){
 		getRooms();
 	}, []);
 
-
-
-
+	console.log("data ", data);
+	
 	return(
 		<>
-			<Add Users={data?.rooms} Make={setRoomSelected} title="Explore Groups" join="JOIN" close={close}/>
-			{roomSelected?.name ? <JoinGroup Room={roomSelected}/> : <></>}
+			<div className="JoinRoom">
+				<Add Users={data?.rooms} Make={setRoomSelected} title="Explore Groups" join="JOIN" close={close}/>
+				{roomSelected?.name ? <JoinGroup Room={roomSelected}/> : <></>}
+			</div>
 		</>
 	)
 }

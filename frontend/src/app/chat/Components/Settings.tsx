@@ -18,14 +18,13 @@ import AddMembers from "./AddMembers";
 
 const UserSettings: ChatOptions = {Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"]};
 const AdminSettings: ChatOptions = {Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"]};
-const SuperAdminSettings : ChatOptions = {Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute", "Make", "removeAdmin"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute", "Make Admin", "Remove Admin"]};
+const SuperAdminSettings : ChatOptions = {Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute", "MakeAdmin", "removeAdmin"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute", "Make Admin", "Remove Admin"]};
 
 
 export default function OwnerSettings({group, close, role} : {group : any, close: any, role : string}){
 
 
-	console.log("grou  p    ",group?.id);
-	console.log("role", role);
+	// console.log("grou  p    ",group?.id);
 /********************************************** */
 
 	const [data, setData] = useState({} as any);
@@ -33,7 +32,6 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 	async function getMembers(){
 		const data = await Get(APIs.members + group?.id);
 		setData(data);
-		console.log("data",  data);
 	}
 
 	useEffect(() => {
@@ -71,24 +69,22 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 			setBan(true);
 		else if (option == "Mute")
 			setMute(true);
-		else if (option == "Make")
+		else if (option == "MakeAdmin")
 			setMakeAdmin(true);
 		else if (option == "removeAdmin")
 			setRemoveAdmin(true);
 	}
 
 	async function wait(){
-		const res = await Make({ option: make, group: group, person: User.username });
-		console.log(res);
-		console.log("make", make);
+		const res = await Make({ option: make, group: group, person: User.user.username });
 	}
 
 	useEffect(() => {
 		if (make !== ""){
 			wait();
 		}
-		console.log("make", make);
 	}, [make]);
+
 
 	useEffect(() => {
 		if (kick)
@@ -101,7 +97,7 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 			setMake("MakeAdmin");
 		else if (removeAdmin)
 			setMake("removeAdmin");
-
+	
 	}, [sendMsg, kick, ban, mute, makeAdmin, removeAdmin]);
 
 	function Print(users : any){
@@ -124,7 +120,7 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 				<div className="content">
 					{data?.members?.map((user : any, index : number)=>(<Print key={index} users={user}/>))}
 				</div>
-				<button onClick={()=>setAdd(true)}>Add Member</button>
+				{role == "OWNER" && <button onClick={()=>setAdd(true)}>Add Member</button>}
 				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? SuperAdminSettings : (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings}/>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd}/>}

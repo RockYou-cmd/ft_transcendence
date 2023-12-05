@@ -200,7 +200,6 @@ export class RoomService {
 					}
 				}
 			});
-			console.log(roomsIn)
 			return {rooms: roomsIn};
 		}
 		catch(err) {
@@ -210,20 +209,22 @@ export class RoomService {
 
 	async joinRoom(account, roomId) {
 		try{
-			const room = await prisma.roomMembership.create({
-				data: {
-					user: {
-						connect: {
-							username: account.username
-						}
-					},
-					room: {
-						connect: {
-							id: roomId
-						}
-					}
-				}
-			});
+			console.log(account)
+			console.log(roomId)
+			// const room = await prisma.roomMembership.create({
+			// 	data: {
+			// 		user: {
+			// 			connect: {
+			// 				username: account.username
+			// 			}
+			// 		},
+			// 		room: {
+			// 			connect: {
+			// 				id: roomId
+			// 			}
+			// 		},
+			// 	}
+			// });
 			throw new HttpException("User joined the room", HttpStatus.ACCEPTED);
 		}
 		catch(err) {
@@ -231,16 +232,21 @@ export class RoomService {
 		}
 	}
 
-	async joinPrivate(data) {
+	async joinPrivate(account, data) {
 		try {
+			console.log("data : ", data)
 			const room = await prisma.room.findUnique({
 				where: {
 					id: data.id
 				}
 			});
 			if (data.password != room.password)
+			{
+				console.log("passs ",data.password);
 				throw new HttpException("Password incorrect!", HttpStatus.NOT_ACCEPTABLE);
-			this.joinRoom(data, data.id);
+			}
+			console.log(room);
+			this.joinRoom(account, data.id);
 		}	
 		catch(err) {
 			throw err;

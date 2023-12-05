@@ -73,8 +73,8 @@ export class RoomController {
 
   @Post("join/protected")
   @UseGuards(AuthGuard)
-  async joinPrivate(@Body() data) {
-    return this.roomService.joinPrivate(data);
+  async joinPrivate(@Req() account, @Body() data) {
+    return this.roomService.joinPrivate(account.user, data);
   }
 
   @Post("leave")

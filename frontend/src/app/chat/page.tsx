@@ -63,13 +63,7 @@ export default function Chat() {
 	const [createG, setCreateG] = useState(false);
 	const [explore, setExplore] = useState(false);
 	const [newChat, setNewChat] = useState(false);
-	// const [invite, setInvite] = useState(false);
-	// const [block, setBlock] = useState(false);
-	// const [view, setView] = useState(false);
-	// const [leave, setLeave] = useState(false);
-	// const [seeMem, setSeeMem] = useState(false);
-	// const [settings, setSettings] = useState(false);
-	// const [add, setAdd] = useState(false);
+
 	
 
 	const [Style, setStyle] = useState({} as any);
@@ -84,35 +78,10 @@ export default function Chat() {
 			setExplore(true);
 		else if (option == "NewChat")
 			setNewChat(true);
-		// else if (OptionsHandler == "invite")
-		// 	setInvite(true);
-		// else if (OptionsHandler == "block")
-		// 	setBlock(true);
-		// else if (OptionsHandler == "view")
-		// 	setView(true);
-		// else if (OptionsHandler == "leave")
-		// 	setLeave(true);
-		// else if (OptionsHandler == "see")
-		// 	setSeeMem(true);
-		// else if (OptionsHandler == "settings")
-		// 	setSettings(true);
-		// else if (OptionsHandler == "add")
-		// 	setAdd(true);
 
-	}
-
-	async function getRole(){
-		const data = await Get(APIs.Role);
-		setRole(data);
 	}
 
 	useEffect(() => {
-		// if (leave || seeMem || settings){
-		// 	getRole();
-		// }
-		// else
-		// 	setRole("");
-	
 		if (createG || explore || newChat ) {
 			setStyle({
 				"filter": "blur(6px)",
@@ -125,10 +94,6 @@ export default function Chat() {
 			setStyle({});
 	
 	}, [createG, explore, newChat]);
-
-	function Explore(user: any) {
-		
-	}
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
@@ -161,7 +126,7 @@ export default function Chat() {
 								</div>
 
 								<Groups Group={setUser} />
-								{/* <Friends selectChat={setUser}/> */}
+								<Friends selectChat={setUser}/>
 
 							</section>
 							<Cnvs User={User}/>

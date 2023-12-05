@@ -13,18 +13,18 @@ export async function Make({option , group, person}: {option : string, group :an
 	let Api  = "";
 	let put = false;
 
-	console.log("helllooowwww");
+	console.log("helllooowwww ", data);
 
 	if (option == "Kick"){
 		put = false;
 		Api = APIs.Kick;
 	}
 	else if (option == "Ban"){
-		put = false;
+		put = true;
 		Api = APIs.Ban;
 	}
 	else if (option == "Mute"){
-		put = false;
+		put = true;
 		Api = APIs.Mute;
 	}
 	else if (option == "MakeAdmin"){

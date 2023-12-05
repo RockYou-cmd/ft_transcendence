@@ -14,7 +14,7 @@ export default function CreateGroup({createG} : {createG: any}){
 	const gDesc = useRef(null) as any;
 	const gPass = useRef(null) as any;
 	const gPic = useRef(null) as any;
-	const [privacy, setPrivacy] = useState("PUBLIC" || "PRIVATE" || "PROTECTED");
+	const [privacy, setPrivacy] = useState("PROTECTED" || "PRIVATE" || "PUBLIC");
 	const gPrivacy = useRef(null) as any;
 
 
@@ -29,7 +29,7 @@ export default function CreateGroup({createG} : {createG: any}){
 			setPrStyle({});
 		}
 	}, [protectedChoice]);
-
+	
 	async function submitForm(e : any){
 		e.preventDefault();
 		if (gName.current.value && privacy != ""){

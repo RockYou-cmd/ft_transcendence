@@ -83,7 +83,6 @@ export default function Cnvs({ User }: { User: any}) {
 		}
 		const data = await Get(Api);
 		setChat(data);
-		console.log("data in chat ", data);
 		if (chat?.name)
 			setRole(data?.members[0]?.role);
 		
