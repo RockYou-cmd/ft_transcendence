@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Res } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { join } from 'path';
 
@@ -28,7 +28,7 @@ export class RoomService {
 			const room = await prisma.room.create({
 				data: roomData,
 			})
-			throw new HttpException("Room created succesfully!", HttpStatus.CREATED);
+			return "Room created succesfully!";
 		}
 		catch (err) {
 			throw err;
@@ -75,7 +75,7 @@ export class RoomService {
 					}
 				}
 			})
-			throw new HttpException("member added succesfully!", HttpStatus.CREATED);
+			return "member added succesfully!";
 		}
 		catch(err) {
 			throw err;
@@ -93,7 +93,7 @@ export class RoomService {
 					}
 				},
 			})
-			throw new HttpException("member removed succesfully!", HttpStatus.ACCEPTED);
+			return "member removed succesfully!";
 		}
 		catch(err) {
 			throw err;
@@ -114,7 +114,7 @@ export class RoomService {
 				}
 			})
 
-			throw new HttpException("admin added succesfully!", HttpStatus.ACCEPTED);
+			return "admin added succesfully!";
 		}
 		catch(err) {
 			throw err;
@@ -134,7 +134,7 @@ export class RoomService {
 					role: "MEMBER"
 				}
 			})
-			throw new HttpException("admin removed succesfully!", HttpStatus.CREATED);
+			return "admin removed succesfully";
 		}
 		catch(err) {
 			throw err;
@@ -211,23 +211,24 @@ export class RoomService {
 		try{
 			console.log(account)
 			console.log(roomId)
-			// const room = await prisma.roomMembership.create({
-			// 	data: {
-			// 		user: {
-			// 			connect: {
-			// 				username: account.username
-			// 			}
-			// 		},
-			// 		room: {
-			// 			connect: {
-			// 				id: roomId
-			// 			}
-			// 		},
-			// 	}
-			// });
-			throw new HttpException("User joined the room", HttpStatus.ACCEPTED);
+			const room = await prisma.roomMembership.create({
+				data: {
+					user: {
+						connect: {
+							username: account.username
+						}
+					},
+					room: {
+						connect: {
+							id: roomId
+						}
+					},
+				}
+			});
+			return "User joined"
 		}
 		catch(err) {
+			console.log(err);
 			throw err;
 		}
 	}
@@ -243,10 +244,9 @@ export class RoomService {
 			if (data.password != room.password)
 			{
 				console.log("passs ",data.password);
-				throw new HttpException("Password incorrect!", HttpStatus.NOT_ACCEPTABLE);
+				return "Password incorrect!";
 			}
-			console.log(room);
-			this.joinRoom(account, data.id);
+			return this.joinRoom(account, data.id);
 		}	
 		catch(err) {
 			throw err;
@@ -263,7 +263,7 @@ export class RoomService {
 					}
 				}
 			});
-			throw new HttpException("User left the room", HttpStatus.ACCEPTED);
+			return "User left the room";
 		}
 		catch(err) {
 			throw err;
@@ -284,7 +284,7 @@ export class RoomService {
 					status: 'BANNED'					
 				}
 			});
-			throw new HttpException("User Banned", HttpStatus.ACCEPTED);
+			return "User Banned";
 		}
 		catch (err) {
 			throw err;
@@ -302,7 +302,7 @@ export class RoomService {
 					}
 				},
 			});
-			throw new HttpException("User unBanned", HttpStatus.ACCEPTED);
+			return "User unBanned";
 		}
 		catch (err) {
 			throw err;

@@ -21,14 +21,34 @@ export class RoomController {
   @Get("chat")
   @UseGuards(AuthGuard)
   async getChat(@Req() account, @Query("id") roomid) {
-	return this.roomService.getChat(account.user, roomid);
+    return this.roomService.getChat(account.user, roomid);
   }
-
-
+  
+  
   @Post("create")
   @UseGuards(AuthGuard)
   async createRoom(@Req() account, @Body() data) {
     return this.roomService.createRoom(account.user, data);
+  }
+  
+  @Post("join")
+  @UseGuards(AuthGuard)
+  async joinRoom(@Req() account, @Body("id") roomId) {
+    console.log(roomId)
+    console.log(account.user.username)
+    return this.roomService.joinRoom(account.user, roomId);
+  }
+
+  @Post("join/protected")
+  @UseGuards(AuthGuard)
+  async joinPrivate(@Req() account, @Body() data) {
+    return this.roomService.joinPrivate(account.user, data);
+  }
+
+  @Post("leave")
+  @UseGuards(AuthGuard)
+  async leaveRoom(@Req() account, @Body("id") roomId) {
+    return this.roomService.leaveRoom(account.user, roomId);
   }
 
   @Get("members")
@@ -63,25 +83,6 @@ export class RoomController {
     return this.roomService.removeAdmin(data);
   }
 
-  @Post("join")
-  @UseGuards(AuthGuard)
-  async joinRoom(@Req() account, @Body("id") roomId) {
-    console.log(roomId)
-    console.log(account.user.username)
-    return this.roomService.joinRoom(account.user, roomId);
-  }
-
-  @Post("join/protected")
-  @UseGuards(AuthGuard)
-  async joinPrivate(@Req() account, @Body() data) {
-    return this.roomService.joinPrivate(account.user, data);
-  }
-
-  @Post("leave")
-  @UseGuards(AuthGuard)
-  async leaveRoom(@Req() account, @Body("id") roomId) {
-    return this.roomService.leaveRoom(account.user, roomId);
-  }
 
   @Put("ban/member")
   @UseGuards(AuthGuard)

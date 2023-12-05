@@ -78,7 +78,11 @@ export class UserService {
 					friends:true,
 					// messagesSent:true,
 					// messagesReceived:true,
-					rooms: true,
+					rooms: {
+						include: {
+							room:true
+						}
+					}
 				}
 			});
 		}
