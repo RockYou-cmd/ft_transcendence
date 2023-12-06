@@ -6,6 +6,14 @@ import { APIs } from '@/app/Props/APIs';
 import { Get, Post } from '@/app/Components/Fetch/post';
 
 
+interface Data{
+	name? : string,
+	description? : string,
+	privacy? : string,
+	password? : string,
+
+}
+
 export default function CreateGroup({createG} : {createG: any}){
 
 	const [protectedChoice, setProtectedChoice] = useState(false);

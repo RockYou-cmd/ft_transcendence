@@ -1,7 +1,7 @@
 
 export const LocalHost = "http://localhost:3001";
 export const Host = "http://10.12.11.1:3001";
-
+// export const Host = LocalHost;
  
 export interface Api{
 	SignIn : string,
@@ -36,6 +36,8 @@ export interface Api{
 	UnBan : string,
 	RoomChat : string,
 	members: string,
+	addNewMembers: string,
+
 }
 
 export const APIs : Api = { 
@@ -71,4 +73,5 @@ export const APIs : Api = {
 	JoinProtectedRoom : Host + "/room/join/protected",
 	RoomChat : Host + "/room/chat/?id=",
 	members: Host + "/room/members/?id=",
+	addNewMembers: Host + "/room/add/new/member/?id=",
 };

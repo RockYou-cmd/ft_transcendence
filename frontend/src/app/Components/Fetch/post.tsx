@@ -24,9 +24,7 @@ export async function Get(path : string){
 			'authorization': 'Bearer ' + Cookies.get('access_token'),
 		},
 	}
-
 	const res = await fetch(path, header);
-
 	if (res.status == 401)
 		return undefined;
 	const data = await res.json();
@@ -39,6 +37,5 @@ export async function Put(data : object, path : string){
 	const res = await axios.put(path, data,
 		{headers : {'authorization': 'Bearer ' + Cookies.get('access_token')}
 	});
-	console.log("res", res);
 	return res;
 }

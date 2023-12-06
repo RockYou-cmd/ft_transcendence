@@ -29,9 +29,6 @@ export default function Groups({Group, refresh} : {Group : any, refresh : boolea
 		e.preventDefault();
 		Group(channel);
 	}
-	
-	// console.log("rooms ", data);
-
 
 	function PrintGroup({chn} : {chn : any}){
 		// const chn = rooms?.rooms;

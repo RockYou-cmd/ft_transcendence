@@ -17,6 +17,9 @@ export default function StartChat({close, User} : {close: any, User : any}) {
 		getFriends();
 	}, []);
 
+	
+
+
 	return(
 		<>
 			<Add Users={data?.friends} Make={User} title="Start Chat" join="StartChat" close={close}/>

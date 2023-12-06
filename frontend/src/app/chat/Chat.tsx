@@ -1,6 +1,5 @@
 import '../assest/chat.css';
 import Image from 'next/image';
-import bboulhan from '../../../public/bboulhan.jpg';
 import { useEffect, useState, useRef, use } from "react";
 import Options from './Components/Options';
 import { ChatOptions } from '../Props/Interfaces';
@@ -15,10 +14,11 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import avatar from '../../../public/avatar.png';
 import { Post } from '../Components/Fetch/post';
-import { useLogContext } from '../Components/Log/LogContext';
+import { useLogContext, useSocket } from '../Components/Log/LogContext';
 import OwnerSettings from './Components/Settings';
-
-
+import { socket } from '../Components/Log/LogContext';
+import { MouseEvent , KeyboardEvent } from 'react';
+import StartChat from './Components/StartChat';
 
 function Leave(GroupId : any){
 	const res = Post({id: GroupId?.id}, APIs.LeaveRoom);
@@ -43,8 +43,9 @@ const SuperSettings: ChatOptions = {
 
 
 
-export default function Cnvs({ User , refresh}: { User: any, refresh : boolean}) {
+export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: any, OptionHandler :any}) {
 
+	const socket = useSocket();
 	const [refresher, setRefresher] = useState(false);
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
@@ -52,20 +53,14 @@ export default function Cnvs({ User , refresh}: { User: any, refresh : boolean})
 	const msgImg = useRef(null) as any;
 	const [input, setInput] = useState("");
 	const [option, setOption] = useState(false);
-	// const admin = true;
-	// const group = true;
 
 	//hooks for chat settings
-	const [invite, setInvite] = useState(false);
-	const [block, setBlock] = useState(false);
-	const [view, setView] = useState(false);
-	const [leave, setLeave] = useState(false);
-	const [settings, setSettings] = useState(false);
-	const [seeMem, setSeeMem] = useState(false);
 
 	const [group, setGroup] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
+
+	
 	
 	async function getChat(chat: any) {
 		let name = "";
@@ -73,6 +68,7 @@ export default function Cnvs({ User , refresh}: { User: any, refresh : boolean})
 		if (chat?.username != undefined){
 			name = chat?.username;
 			setGroup(false);
+			Role("");
 			setRole("");
 			Api = APIs.getChat + name;
 		}
@@ -83,68 +79,58 @@ export default function Cnvs({ User , refresh}: { User: any, refresh : boolean})
 		}
 		const data = await Get(Api);
 		setChat(data);
-		if (chat?.name)
+		if (chat?.name){
+			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
-		
+		}
 	}
-
-
-	function OptionHandler (option: string) {
-		
-		if (option == "invite")
-			setInvite(true);
-		else if (option == "block")
-			setBlock(true);
-		else if (option == "view")
-			setView(true);
-		else if (option == "leave")
-			setLeave(true);
-		else if (option == "see")
-			setSeeMem(true);
-		else if (option == "settings")
-			setSettings(true);
-	}
-
+	
 
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
 			getChat(User);
 	}, [User, refresher])
 
-	function Explore(user: any) {
-
-	}
-	//hooks for chat settings
 
 	const visible = useRef(null) as any;
-
-
-	async function send() {
-		if (input != "") {
+	
+	async function send(e : (MouseEvent | KeyboardEvent)) {
+		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any ))){
 			const data = { message: input, username: User.username };
-			const res = await Post(data, APIs.sendMsg);
+			const msg = {content : input, snederId : ""}
+			// const res = await Post(data, APIs.sendMsg);
 			setInput("");
+			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+			socket.emit("message",  {message : input});
 		}
-		// else if (msgImg.current?.files[0]){
-		// 	console.log(msgImg.current?.files[0]);
-		// 	Messages.push({user: sender, text: msgImg.current?.files[0], time: "12:00"});
-		// }
-		setRefresher(!refresher);
+		
+		// setRefresher(!refresher);
 	}
-
+	
 	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
 	}, [chat]);
 
+	useEffect(() => {
+		socket.on("message", (data: any) => {
+			console.log("data", data);
+			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, data]}));
+		})
+
+		return () => {
+			socket.off("message");
+		};
+	}, [socket]);
+
 	function PrintMsg(msgs: any) {
 
 		const msg = msgs?.msgs;
 		const message = <>
-			<div className={msg?.receiverId != User.username ? "usr_msg" : "my_msg"}>
+			<div className={msg?.senderId == User.username ? "usr_msg" : "my_msg"}>
 				<p>{msg?.content}</p>
-				<span >{msg?.createdAt}</span>
+				{/* <span >{msg?.createdAt}</span> */}
 				<div className='triangle'></div>
 			</div>
 		</>
@@ -154,14 +140,16 @@ export default function Cnvs({ User , refresh}: { User: any, refresh : boolean})
 
 	return (
 		<>
+
 			<div className="Chat">
+			{Object.keys(User).length != 0 ? <>
 				<section className='User'>
 
 					<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
-					<h1 onClick={() => { router.push("/users/" + User?.username) }}>{User?.username}</h1>
-					<span>{User?.status ? "online" : "offline"}</span>
+					<h1 onClick={() => {User?.username ? router.push("/users/" + User?.username) : null}}>{User?.username ? User?.username : User?.name}</h1>
+					<span>{User?.username ? (User?.status ? "online" : "offline") : null}</span>
 					<div className="line"></div>
-					{User?.status ? <div className="status"></div> : <></>}
+					{User?.status && <div className="status"></div>}
 
 					{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 						<div className='point'></div><div className='point'></div><div className='point'></div>
@@ -169,24 +157,17 @@ export default function Cnvs({ User , refresh}: { User: any, refresh : boolean})
 					{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content}/>}
 				</section>
 				<div className="Msg" ref={scroll}>
-					{chat?.messages?.map((msg: any) => (<PrintMsg key={msg.id} msgs={msg} />))}
+					{chat?.messages?.map((msg: any, index : number) => (<PrintMsg key={index} msgs={msg} />))}
 				</div>
 				<div className="Send" >
 					<div className="line"></div>
 					<section>
-						<input type="text" placeholder="Type a message" value={input} onChange={(e) => { setInput(e.target.value) }} />
+						<input type="text" placeholder="Type a message" value={input} onChange={(e) =>{ setInput(e.target.value) }} onKeyDown={(e : KeyboardEvent)=>send(e)} />
 						<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
 					</section>
-					<button onClick={send}><div></div></button>
-				</div>
-			</div>
-			
-			{view && router.push("/users/" + User?.username)}
-			{invite && <Invite User={User} close={setInvite} />}
-			{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
-			{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
-			{settings && <GroupSettings close={setSettings} />}
-			{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} />}
+					<button onClick={(e : MouseEvent)=>send(e)}><div></div></button>
+				</div></> : null}
+			</div>	
 			
 			
 			

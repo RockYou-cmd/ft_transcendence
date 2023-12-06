@@ -10,11 +10,30 @@ import { useLogContext } from "./Log/LogContext";
 import SearchBar from "./Fetch/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser ,faMessage , faTableTennisPaddleBall} from "@fortawesome/free-solid-svg-icons";
+import { useSocket } from "./Log/LogContext";
+// import { WebSocket } from "./Log/LogContext";
+// import { useContext } from "react";
 
 export default function Navbar() {
 
+	
+	const socket = useSocket();
+	
+
 	let photo = avatar;
 	const { online, setOnline } = useLogContext();
+	// const socket = io("http://10.12.11.1:3001");
+	
+	useEffect(() => {
+		// socket.on("connect", () => {
+		// 	// console.log("connected");
+		// });
+		// console.log("socket", socket);
+
+		// return () => {
+		// 	socket.off("connect");
+		// };
+	}, [socket]);
 
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
@@ -35,7 +54,7 @@ export default function Navbar() {
 	if (data?.photo != null) {
 		photo = data.photo;
 	}
-
+	
 	if (!wait || online == "OFF")
 		return (<></>);
 	return (

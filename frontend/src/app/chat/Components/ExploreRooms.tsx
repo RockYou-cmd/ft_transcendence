@@ -7,6 +7,8 @@ import { Post } from "../../Components/Fetch/post";
 import '../../assest/Components.css';
 import Image from 'next/image';
 import avatar from '../../../../public/avatar.png';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEyeLowVision ,faEye } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -16,30 +18,41 @@ import avatar from '../../../../public/avatar.png';
 export default function ExploreRooms({close} : {close: any}){
 	
 	const [data, setData] = useState({} as any);
+	const [search, setSearch] = useState(null) as any;
 	const [roomSelected, setRoomSelected] = useState({} as any);
+	const [refresh, setRefresh] = useState(false);
+	const [filtered, setFiltered] = useState({} as any);
 
 	function JoinGroup({Room} : {Room : any}){
 	
 		let res : any;
+		const [view, setView] = useState(false);
 		const [password, setPassword] = useState("");
 
 		async function SubmitHandler(e : any){
 			e.preventDefault();
 			res = await Post({id : Room?.id, password :password}, APIs.JoinProtectedRoom);
+			console.log(res);
 			if(res?.status == 201){
 				alert("Joined");
-				close(false);
+				setRoomSelected({});
+				setRefresh(!refresh);
 			}
 			else{
 				alert("Wrong Password");
 			}
 			setPassword("");
-			console.log("res ", res);
 		}
 		
+			async function Join(){
+				res = await Post({id : Room?.id}, APIs.JoinRoom);
+				setRefresh(!refresh);
+				setRoomSelected({});
+		
+			}
 
 		if (Room?.privacy == "PUBLIC"){
-			res = Post({id : Room?.id}, APIs.JoinRoom);
+			Join();
 			return null;
 		}
 		return(<>
@@ -47,7 +60,10 @@ export default function ExploreRooms({close} : {close: any}){
 				<form className="PassWord" onSubmit={SubmitHandler}>
 				<button onClick={()=>setRoomSelected({})} className='closeBtn'><div></div></button>
 					<label>Enter Password To Join {Room?.name} group</label>
-					<input type="text" value={password} placeholder="Enter Password" onChange={(e)=>setPassword(e.target.value)}/>
+					<div className="input">
+						<input type={view ? "text" : "password"} value={password} placeholder="Enter Password" onChange={(e)=>setPassword(e.target.value)}/>
+						{!view ? <FontAwesomeIcon icon={faEyeLowVision} onClick={()=>setView(!view)} style={{cursor: "pointer"}}/> : <FontAwesomeIcon icon={faEye} onClick={()=>setView(!view)} style={{cursor: "pointer"}}/>}
+					</div>
 					<button type="submit">Join</button>
 				</form>
 			</div>
@@ -58,12 +74,16 @@ export default function ExploreRooms({close} : {close: any}){
 
 	async function getRooms(){
 		const data = await Get(APIs.Groups);
+		// const filter = data?.rooms?.filter((room : any)=>{
+		// 	return room?.name?.toLowerCase().includes(search?.toLowerCase()) || room?.username?.toLowerCase().includes(search?.toLowerCase());
+		// })
+		// setData(filter);
 		setData(data);
 	}
 
 	useEffect(() => {
 		getRooms();
-	}, []);
+	}, [refresh, search]);
 
 	function Print(users : any){
 		const user = users?.users;
@@ -85,14 +105,12 @@ export default function ExploreRooms({close} : {close: any}){
 				
 				<div className="Add">
 					<h1>Explore Groups</h1>
-					<input type="text" className='searchInput' placeholder="Search"/>
+					<input type="text" className='searchInput' placeholder="Search" onChange={(e)=>setSearch(e.target.value)}/>
 					<button onClick={()=>close(false)} className='closeBtn'><div></div></button>
 					<div className="content">
 						{roomSelected?.name ? <JoinGroup Room={roomSelected}/> :
 						data?.rooms?.map((room : any, index : number)=>(<Print key={index} users={room}/>))}
 					</div>
-					{/* <Add Users={data?.rooms} Make={setRoomSelected} title="Explore Groups" join="JOIN" close={close}/>
-					{roomSelected?.name ? <JoinGroup Room={roomSelected}/> : <></>} */}
 				</div>
 			</div>
 		</>
