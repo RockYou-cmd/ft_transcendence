@@ -1,12 +1,8 @@
 import '../assest/chat.css';
 import Image from 'next/image';
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, useRef } from "react";
 import Options from './Components/Options';
 import { ChatOptions } from '../Props/Interfaces';
-import Add from './Components/Add';
-import GroupSettings from './Components/Group_settings';
-import Confirm from './Components/Confirm';
-import Invite from './Components/Invite';
 import { Get } from '../Components/Fetch/post'
 import { APIs } from '../Props/APIs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,9 +11,9 @@ import { useRouter } from 'next/navigation';
 import avatar from '../../../public/avatar.png';
 import { Post } from '../Components/Fetch/post';
 import { useLogContext, useSocket } from '../Components/Log/LogContext';
-import OwnerSettings from './Components/Settings';
 import { socket } from '../Components/Log/LogContext';
 import { MouseEvent , KeyboardEvent } from 'react';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import StartChat from './Components/StartChat';
 
 function Leave(GroupId : any){
@@ -116,7 +112,8 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 	useEffect(() => {
 		socket.on("message", (data: any) => {
 			console.log("data", data);
-			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, data]}));
+			const msg = {content : data, senderId : User.username}
+			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
 		})
 
 		return () => {
@@ -141,8 +138,6 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 	return (
 		<>
 
-			<div className="Chat">
-			{Object.keys(User).length != 0 ? <>
 				<section className='User'>
 
 					<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
@@ -165,11 +160,9 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 						<input type="text" placeholder="Type a message" value={input} onChange={(e) =>{ setInput(e.target.value) }} onKeyDown={(e : KeyboardEvent)=>send(e)} />
 						<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
 					</section>
-					<button onClick={(e : MouseEvent)=>send(e)}><div></div></button>
-				</div></> : null}
-			</div>	
-			
-			
+					<button onClick={(e : MouseEvent)=>send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{width :"20px",
+				height:"20px"}}/></button>
+				</div>
 			
 		</>
 

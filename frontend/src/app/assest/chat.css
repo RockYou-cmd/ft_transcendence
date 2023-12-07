@@ -376,16 +376,9 @@
 	border-radius: 10px;
 	width: 55px;
 	height: 50px;
+	padding:15px 11px 10px 10px;
 }
 
-.Send button div {
-	width: 0;
-	height: 0;
-	border-top: 16px solid transparent;
-	border-left: 26px solid #ffffff;
-	border-bottom: 16px solid transparent;
-	margin: 2px 0px 0px 17px;
-}
 
 .Send .sendImg {
 	width: 30px;
@@ -439,6 +432,29 @@
 
 input:focus {
 	outline: none;
+}
+
+.Chat .openChat{
+	padding:12px 35px 15px;
+	/* padding-right: 30px; */
+	background-color: rgb(29, 151, 222);
+	border-radius: 10px;
+	font-weight: 600;
+	font-size: 22px;
+	margin:36vh auto;
+	display: block;
+	&:hover{
+		background-color: rgb(54, 181, 255);
+		box-shadow: 0px 0px 20px 10px rgb(0, 130, 205);
+	
+	}
+
+}
+
+.openChat .icon{
+	width: 30px;
+	height: 30px;
+	margin-left: 30px;
 }
 
 /*********************************************** Options Bar ********************************************/

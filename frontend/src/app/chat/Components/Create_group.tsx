@@ -60,7 +60,6 @@ export default function CreateGroup({createG} : {createG: any}){
 					alert("Group name already exists");
 				}
 			}
-
 		}
 	}
 

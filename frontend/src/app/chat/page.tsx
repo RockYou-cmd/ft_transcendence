@@ -23,6 +23,8 @@ import Confirm from './Components/Confirm';
 import GroupSettings from './Components/Group_settings';
 import OwnerSettings from './Components/Settings';
 import { Post } from '../Components/Fetch/post';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Leave(GroupId : any){
 	const res = Post({id: GroupId?.id}, APIs.LeaveRoom);
@@ -111,7 +113,7 @@ export default function Chat() {
 	useEffect(() => {
 		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {
 			setStyle({
-				"filter": "blur(6px)",
+				"filter": "blur(7px)",
 				"pointerEvents": "none",
 			})
 			setOption(false);
@@ -153,7 +155,13 @@ export default function Chat() {
 								<Friends selectChat={setUser} refresh={refresh} />
 
 							</section>
-							<Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler}/>
+							<div className='Chat'>
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler}/>
+								: <>
+									<button className='openChat' onClick={()=>setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
+								</>}
+
+							</div>
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}
