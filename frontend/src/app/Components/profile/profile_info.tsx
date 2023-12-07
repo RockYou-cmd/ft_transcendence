@@ -7,6 +7,7 @@ import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
 import { useLogContext } from "../Log/LogContext";
 import { Post } from "../Fetch/post";
+import Setting from "./profile_setting";
 
 
 
@@ -15,6 +16,9 @@ export default function Profile_info() {
     const { online, setOnline } = useLogContext();
 	const imgRef = useRef(null) as any;
     let photo = avatar.src;
+
+
+
     async function fetchData() {
 		const data = await GetData({Api : "Profile", user : ""}) as any;
 		setData(data);
@@ -23,12 +27,13 @@ export default function Profile_info() {
     const [hover , setHover] = useState(false);
     const mousehover = useRef(null) as any;
     const [data, setData] = useState({} as any);
-    const [refresh, setRef] = useState(false);
+    const [refresh, setRef] = useState<boolean>(false);
 
     useEffect(()=>{
         if (online)
             fetchData();
-    }, [online]);
+// TODO
+    }, []);
 
 	// useEffect(()=>{setRef(!refresh)},[refresh])
 
@@ -41,19 +46,17 @@ export default function Profile_info() {
     
     const handleClick = (val : boolean) => {
         setShowSetting(val); 
-        console.log(showSetting);
     };
 
-	const [uploading, setUploading] = useState<boolean>(false);
 	const [selectedImage, setSelectedImage] = useState("");
 	const [selectedFile, setSelectedFile] = useState<File>();
-
 
     return(
    
             <div className="m-8 flex flex-row gap-8 h-[85vh] " >
 				
-				{showSetting? <Setting /> : <Info />}
+				{showSetting? <Setting handleClick={handleClick} /> : <Info />}
+				
 				<div ref={mousehover} className='gap-8 w-full grid  grid-cols-3 grid-rows-4 ' id={hover ? "profile_grid_blur" : ""} onMouseEnter={()=> setHover(true)} onMouseLeave={()=>setHover(false)} >
 					<div className="  rounded-lg  w-[30%]  bg-black/5 min-w-full overflow-hidden hover:ease-in-out hover:scale-105 duration-700 shadow-lg shadow-gray-500 not:hover-bg-orang {styles.child} "  id={hover ? "child" : ""}>2 is teh 
 						<div className=" relative w-full h-full m-[50%] rounded-full bg-blue-400 blur-3xl"></div>
@@ -80,8 +83,8 @@ export default function Profile_info() {
 	
 	function Info() {
 	  return (
-			<div className=" flex flex-col rounded-lg  items-center bg-teal-500 h-full min-w-[400px]  bg-gradient-to-r from-blue-700 to-blue-900" >profile info
-				<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
+			<div className=" flex flex-col rounded-lg  items-center  h-full min-w-[400px]  bg-gradient-to-r from-black/25 to-black/80" >profile info
+				<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2 w-[250px] h-[250px] bg-white flex-shrink-0'></Image>
 				<h1 className='text-3xl pt-3 ' > {data?.username} </h1>
 				<button  className='ml-auto  w-[100px] h-[40px] flex justify-center p-3  bg-yellow-500 rounded-lg hover:bg-yellow-600 items-center gap-2 font-semibold' onClick={()=> handleClick(true)}><span className='text-2xl'><FaCog /></span> EDIT</button>
 				
@@ -98,35 +101,5 @@ export default function Profile_info() {
 			</div>
 	  )
 	}
-
- 
-	function Setting() {
-	  return (
-
-			<div className="flex flex-col rounded-lg  items-center h-full min-w-[400px]  bg-black/40">profile_setting
-				<label>
-					<input type="file" hidden 
-						onChange={({target}) => { 
-						if (target.files) {
-							const file = target.files[0];
-							setSelectedImage(URL.createObjectURL(file));
-							setSelectedFile(file);
-					}}}>
-
-					</input>	
-					<div className="w-64 h-64 aspect-square rounded flex items-center justify-center gap-8 border-2 border-dashed cursor-pointer subpixel-antialiased overflow-hidden">
-						{selectedImage ? ( <img src={selectedImage} alt="profile_pic"/>) : (<span className="text-8xl	">+</span>)}
-					</div>
-				</label>
-				<form>
-				</form>			
-				<div className="flex gap-8 ">
-					<button className="bg-green-700 rounded w-32" onClick={()=> handleClick(false)}>Save</button>
-					<button className="bg-red-900 rounded w-32" onClick={()=> handleClick(false)}>Cancel</button>
-				</div>
-			</div>
-	  )
-	}
-	
-	
 }
+

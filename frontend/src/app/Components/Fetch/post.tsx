@@ -34,3 +34,17 @@ export async function Get(path : string){
 	return data;
 
 }
+
+export async function Put(data : object, path : string){
+	const header = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			'authorization': 'Bearer ' + Cookies.get('access_token'),
+		},
+		body: JSON.stringify(data),
+	};
+	const res = await fetch(path , header);
+
+	return res;
+}
