@@ -75,7 +75,7 @@ export class FriendRequestService {
 					status: "ACCEPTED"
 				}
 			})
-			return new HttpException("User accepted", HttpStatus.ACCEPTED);
+			return "User accepted";
 		}
 		catch (err) {
 			console.log("Accept error");

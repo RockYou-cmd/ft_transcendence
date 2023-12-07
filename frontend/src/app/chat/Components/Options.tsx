@@ -29,7 +29,7 @@ export default function Options({ visible , option, btnRef, setOptions, content}
 		<>
 			<div ref={optionsBar} id="optionsBar">
 				{content.Option.map((option: string, index: number) => (
-					<button key={index} className={index % 2 == 1 ? "middle" : ""}  onClick={()=> {setOptions(content.Option[index])}}>{content.desc[index]}</button>
+					<button key={index} className={index % 2 == 1 ? "middle" : ""} onClick={()=> {setOptions(option);visible(false)}}>{content.desc[index]}</button>
 				))}
 			</div>
 		</>	

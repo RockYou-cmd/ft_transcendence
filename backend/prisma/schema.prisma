@@ -21,9 +21,48 @@ model User {
   twoFactorAuthenticationSecret String?
   temp2fa                       String?
   friends                       Friend[] @relation(name: "FriendsToUsers")
+  
   messagesSent     Message[] @relation("MessagesSent")
   messagesReceived Message[] @relation("MessagesReceived")
+
+  rooms    RoomMembership[]
+  rooomsMessages  RoomMessage[]
 }
+
+model Room {
+  id        String      @id @default(uuid())
+  name      String
+  description String?
+  privacy   RoomPrivacy @default(PUBLIC)
+  password  String?
+  members   RoomMembership[]
+  messages  RoomMessage[]
+  createdAt DateTime    @default(now())
+}
+
+model RoomMembership {
+  id       Int        @id @default(autoincrement())
+  user     User       @relation(fields: [userId], references: [username])
+  userId   String
+  room     Room       @relation(fields: [roomId], references: [id])
+  roomId   String
+  role     RoomRole @default(MEMBER)
+  status   RoomStatus?
+
+  @@unique([userId, roomId])
+}
+
+model RoomMessage {
+  id        String     @id @default(uuid())
+  content   String
+  createdAt DateTime   @default(now())
+  room      Room       @relation(fields: [roomId], references: [id])
+  roomId    String
+  sender    User       @relation(fields: [senderId], references: [username])
+  senderId  String
+}
+
+
 
 model Chat {
   id        String    @id @default(uuid())
@@ -52,8 +91,27 @@ model Friend {
   @@unique([friendId, userId])
 }
 
+enum RoomRole {
+  MEMBER
+  ADMIN
+  OWNER
+}
+
+enum RoomStatus {
+  MUTED
+  BANNED
+}
+
+enum RoomPrivacy {
+  PUBLIC
+  PRIVATE
+  PROTECTED
+}
+
 enum Status {
   PENDING
   WAITING
   ACCEPTED
+  BlOCKED
+  UNAVAILABLE
 }

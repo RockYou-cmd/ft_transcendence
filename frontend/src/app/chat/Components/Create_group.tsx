@@ -2,8 +2,8 @@ import React, { use } from 'react';
 import { useEffect, useState , useRef} from "react";
 import '../../assest/chatComponents.css';
 import '../../assest/chat.css';
-import { Post } from '@/app/Components/Fetch/post';
-import {APIs} from '../../Props/APIs'
+
+
 export default function CreateGroup({createG} : {createG: any}){
 
 	const [protectedChoice, setProtectedChoice] = useState(false);
@@ -12,28 +12,24 @@ export default function CreateGroup({createG} : {createG: any}){
 	const gDesc = useRef(null) as any;
 	const gPass = useRef(null) as any;
 	const gPic = useRef(null) as any;
+	const [privacy, setPrivacy] = useState("PROTECTED" || "PRIVATE" || "PUBLIC");
 	const gPrivacy = useRef(null) as any;
 
 
 	useEffect(() => {
 		if (protectedChoice === true){
 			setPrStyle({
-				"pointer-events": "none",
+				"pointerEvents": "none",
 				"opacity": "0.3",
 			});
 		}
 		else{
 			setPrStyle({});
 		}
-		console.log(gPrivacy.current?.value, protectedChoice);
 	}, [protectedChoice]);
-
-	function submitForm(e : any){
+	
+	async function submitForm(e : any){
 		e.preventDefault();
-		const data = {gname : gName.current.value,
-		}
-		
-		// const res = Post(data, APIs.);
 	}
 
 
@@ -51,15 +47,15 @@ export default function CreateGroup({createG} : {createG: any}){
 				<label>Group privacy</label>
 				<form className='G_privacy'>
 					<div>
-						<input ref={gPrivacy} type="radio" id="public" name="privacy" value="public"  onChange={e=> setProtectedChoice(true)}/>
+						<input ref={gPrivacy} type="radio"  name="privacy" value="PUBLIC"  onChange={e=> {setProtectedChoice(true); setPrivacy(e.target.value);}}/>
 						<label htmlFor="public">Public</label>
 					</div>
 					<div>
-						<input ref={gPrivacy} type="radio" id="private" name="privacy" value="private" onChange={e=> setProtectedChoice(true)}/>
+						<input ref={gPrivacy} type="radio"  name="privacy" value="PRIVATE" onChange={e=> {setProtectedChoice(true); setPrivacy(e.target.value);}}/>
 						<label htmlFor="private">Private</label>
 					</div>
 					<div>
-						<input ref={gPrivacy} type="radio" id="protected" name="privacy" value="protected" defaultChecked onChange={e=> setProtectedChoice(false)}/>
+						<input ref={gPrivacy} type="radio"  name="privacy" value="PROTECTED" defaultChecked onChange={e=> {setProtectedChoice(false); setPrivacy(e.target.value);}}/>
 						<label htmlFor="protected">Protected</label>
 					</div>
 				</form>

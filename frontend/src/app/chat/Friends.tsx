@@ -8,7 +8,7 @@ import avatar from '../../../public/avatar.png';
 
 
 
-export default function Channel({selectChat} : { selectChat: any}){
+export default function Channel({selectChat, refresh} : { selectChat: any, refresh : boolean}){
 
 	const [data, setData] = useState({} as any);
 
@@ -19,7 +19,7 @@ export default function Channel({selectChat} : { selectChat: any}){
 
 	useEffect(() => {
 		getFriends();
-	}, []);
+	}, [refresh]);
 
 
 	function SelecteEvent(e : MouseEvent, friend : any){
@@ -27,25 +27,30 @@ export default function Channel({selectChat} : { selectChat: any}){
 		selectChat(friend);
 	}
 	
-	console.log("friends ", data);
+	function PrintFrinds(infos:any){
+		
+		const info = infos?.infos;
+		const friend = <>
+			<div className="content" onClick={(e : MouseEvent) => SelecteEvent(e, info)}>
+				<Image className="g_img" src={info?.photo ? info?.photo : avatar} priority={true} alt="img" width={70} height={70}/>
+				<h4>{info?.username}</h4>
+				{/* <p>{info?.messagesReceived.reduce()}</p> */}
+				<span>{info?.lastMsgTime}</span>
+				{info?.status ? <div className="status"></div> : <></>}
+				<div className="line"></div>
+			</div>
+			</>
+		return <div>{friend}</div>
+	}
+
 
 	return(
 		<>
 		<div className="Friends">
 			<span className="groupField">Friends</span>
 			<div className='content_f'>
-					{data?.friends?.map((friend : any) => (<>
-			        <div className="content" key={friend?.username} onClick={(e : MouseEvent) => SelecteEvent(e, friend)}>
-						<Image className="g_img" src={friend?.photo ? friend?.photo : avatar} priority={true} alt="img" width={70} height={70}/>
-						<h4>{friend?.username}</h4>
-						{/* <p>{friend?.messagesReceived.reduce()}</p> */}
-						<span>{friend.lastMsgTime}</span>
-						{friend.status ? <div className="status"></div> : <></>}
-						<div className="line"></div>
-					</div>
-					</>
-				))}
-		
+			
+				{data?.friends?.map((friend : any) => (<PrintFrinds key={friend.username} infos={friend}/>))}		
 			</div>
 		</div>
 		</>

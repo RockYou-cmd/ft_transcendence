@@ -45,9 +45,9 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			return;
 		}
 		
-		const FPS = 60;
+		const FPS = 50;
 		const BALL_SPEED = 1.2;
-		const COM_LVL = 0.12;
+		const COM_LVL = 0.15;
 		var ball_acc = 0.12;
 		
 		const context = game.current?.getContext('2d');

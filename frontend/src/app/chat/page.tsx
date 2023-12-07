@@ -2,46 +2,52 @@
 import '../assest/chat.css';
 import Image from 'next/image';
 import Groups from './Groups';
-import bboulhan from '../../../public/bboulhan.jpg';
-import ael_korc from '../../../public/ael-korc.jpg';
-import yel_qabl from '../../../public/yel-qabl.jpg';
 import Friends from "./Friends";
 import Cnvs from "./Chat";
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import LoG from "../Components/Log/Log";
-import Navbar from "../Components/navbar";
 import Options from "./Components/Options";
 import CreateGroup from './Components/Create_group';
 import { ChatOptions } from '../Props/Interfaces';
 import Add from './Components/Add';
 import SearchBar from '../Components/Fetch/SearchBar';
 import StartChat from './Components/StartChat';
+import { useRouter } from 'next/navigation';
+import { Get } from '../Components/Fetch/post'
+import { APIs } from '../Props/APIs';
+import ExploreRooms from './Components/ExploreRooms';
+import io from 'socket.io-client';
+import Invite from './Components/Invite';
+import Confirm from './Components/Confirm';
+import GroupSettings from './Components/Group_settings';
+import OwnerSettings from './Components/Settings';
+import { Post } from '../Components/Fetch/post';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
-
-
-export interface Group {
-	title: string;
-	image: any;
-	lastMsg: string;
-	lastMsgTime: string;
-	id: number;
+function Leave(GroupId : any){
+	const res = Post({id: GroupId?.id}, APIs.LeaveRoom);
+	
 }
 
-export let channels: Group[] = [];
-channels.push({ title: "bboulhan", image: bboulhan, lastMsg: "Hello", lastMsgTime: "12:00", id: 1 });
-channels.push({ title: "ael_korc", image: ael_korc, lastMsg: "Hello", lastMsgTime: "12:00", id: 2 });
-channels.push({ title: "yel_qabl", image: yel_qabl, lastMsg: "Hello", lastMsgTime: "12:00", id: 3 });
+function Block(User : any){
+	const res = Post({id: User?.id}, APIs.Block);
+}
 
-let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create group", "Explore groups", "Start new chat"] };
+let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
 
 
 export default function Chat() {
 
+	// hooks for data
 	const [User, setUser] = useState({} as any);
+	const [Group, setGroup] = useState({} as any);
+	const [Members, setMembers] = useState({} as any);
+	const [refresh, setRefresh] = useState(false);
+	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 
-	//hooks for login
+	// hooks for login
 	const [log, setLog] = useState(false);
 	const [data, setData] = useState({} as any);
 	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
@@ -55,50 +61,77 @@ export default function Chat() {
 	}
 
 	/************************************************** */
-	
+	// const socket = io("http://10.12.11.1:3001");
+
+	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
-
+	
+	
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);
 	const [explore, setExplore] = useState(false);
 	const [newChat, setNewChat] = useState(false);
+	const [invite, setInvite] = useState(false);
+	const [block, setBlock] = useState(false);
+	const [view, setView] = useState(false);
+	const [leave, setLeave] = useState(false);
+	const [settings, setSettings] = useState(false);
+	const [seeMem, setSeeMem] = useState(false);
+
+	
+
 	const [Style, setStyle] = useState({} as any);
 
 
 
-	function OptionHandler(option: string) {
+
+	function OptionsHandler(option: string) {
 		if (option == "CreateG")
 			setCreateG(true);
 		else if (option == "ExploreG")
 			setExplore(true);
 		else if (option == "NewChat")
 			setNewChat(true);
+		else if (option == "invite")
+			setInvite(true);
+		else if (option == "sendMsg")
+			setView(true);
+		else if (option == "view")
+			setView(true);
+		else if (option == "leave")
+			setLeave(true);
+		else if (option == "settings")
+			setSettings(true);
+		else if (option == "see")
+			setSeeMem(true);
+		else if (option == "block")
+			setBlock(true);
+
 	}
 
 	useEffect(() => {
-		if (createG || explore || newChat) {
+		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {
 			setStyle({
-				"filter": "blur(6px)",
+				"filter": "blur(7px)",
 				"pointerEvents": "none",
 			})
 			setOption(false);
 		}
 		else
 			setStyle({});
-	
-	}, [createG, explore, newChat]);
-
-	function Explore(user: any) {
-		console.log("user", user);
-	}
+		
+		if (!createG || !explore || !newChat || !invite || !leave || !settings || !seeMem || !block){
+			setRefresh(!refresh);
+			console.log("refreshed");
+		}
+	}, [createG, explore, newChat, invite, leave, settings, seeMem, block]);
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-
+	
 	useEffect(() => {
-		hooks.waitHook.setState(true);
+		hooks.waitHook.setState(true);  
 	}, []);
-
 
 	if (!hooks.waitHook.state) {
 		return (<><div>loading...</div></>)
@@ -107,7 +140,6 @@ export default function Chat() {
 		<>
 			{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render :
 				(<>
-					{/* <Navbar/> */}
 					<div className='Cover'>
 						<div className={"ChatPage"} style={Style}>
 							<section className="sec1">
@@ -116,21 +148,34 @@ export default function Chat() {
 									<button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 										<div className="straight"></div><div className="straight"></div><div className="straight"></div>
 									</button>
-									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={chatOptions} />}
+									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionsHandler} content={chatOptions} />}
 								</div>
 
-								<Groups  />
-								<Friends selectChat={setUser}/>
+								<Groups Group={setUser} refresh={refresh}/>
+								<Friends selectChat={setUser} refresh={refresh} />
 
 							</section>
-							<Cnvs User={User} />
+							<div className='Chat'>
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler}/>
+								: <>
+									<button className='openChat' onClick={()=>setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
+								</>}
+
+							</div>
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}
-						{explore && <Add Users={channels} Make={Explore} title={"Explore Groups"} join={"JOIN"} exploreG={setExplore} />}
-						{newChat && <StartChat close={setNewChat} User={setUser}/>}
+						{explore && <ExploreRooms close={setExplore}/>}
+						{newChat && <StartChat close={setNewChat} User={setUser} />}
+						{view && router.push("/users/" + User?.username)}
+						{invite && <Invite User={User} close={setInvite} />}
+						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
+						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
+						{settings && <GroupSettings close={setSettings} />}
+						{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} DirectMsg={setUser}/>}
 					</div>
-				</>)}
+				</>)
+			}
 		</>
 	);
 }

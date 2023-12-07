@@ -1,6 +1,6 @@
 
 import Cookies from 'js-cookie';
-
+import axios from 'axios';
 
 export async function Post(data : object, path : string){
 	const header = {
@@ -24,12 +24,9 @@ export async function Get(path : string){
 			'authorization': 'Bearer ' + Cookies.get('access_token'),
 		},
 	}
-
 	const res = await fetch(path, header);
-
 	if (res.status == 401)
 		return undefined;
-
 	const data = await res.json();
 	return data;
 
@@ -46,5 +43,5 @@ export async function Put(data : object, path : string){
 	};
 	const res = await fetch(path , header);
 
-	return res;
+ return res;
 }
