@@ -13,9 +13,9 @@ body{
  	-moz-osx-font-smoothing: grayscale;
   	font-smooth: always;
 	color:#FFFFFF;
-	font-family: 'Poppins';
+	font-family: 'Inter', sans-serif;
 	background-color: rgba(34, 40, 49, 1);
-
+	min-width: 810px;
 }
 
 input:focus, textarea:focus, select:focus{
@@ -24,6 +24,15 @@ input:focus, textarea:focus, select:focus{
 
 #header{
 	background-color: "red";
+}
+
+#Parent{
+	filter: blur(8px);
+}
+
+#child{
+	/* filter: none; */
+	filter: blur(0px);
 }
 
 /* #Parent:active {

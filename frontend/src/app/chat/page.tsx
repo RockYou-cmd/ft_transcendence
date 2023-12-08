@@ -17,15 +17,22 @@ import { useRouter } from 'next/navigation';
 import { Get } from '../Components/Fetch/post'
 import { APIs } from '../Props/APIs';
 import ExploreRooms from './Components/ExploreRooms';
+import io from 'socket.io-client';
+import Invite from './Components/Invite';
+import Confirm from './Components/Confirm';
+import GroupSettings from './Components/Group_settings';
+import OwnerSettings from './Components/Settings';
+import { Post } from '../Components/Fetch/post';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+function Leave(GroupId : any){
+	const res = Post({id: GroupId?.id}, APIs.LeaveRoom);
+	
+}
 
-
-export interface Group {
-	title: string;
-	image: any;
-	lastMsg: string;
-	lastMsgTime: string;
-	id: number;
+function Block(User : any){
+	const res = Post({id: User?.id}, APIs.Block);
 }
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
@@ -37,8 +44,8 @@ export default function Chat() {
 	const [User, setUser] = useState({} as any);
 	const [Group, setGroup] = useState({} as any);
 	const [Members, setMembers] = useState({} as any);
-	const [Role, setRole] = useState("");
 	const [refresh, setRefresh] = useState(false);
+	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 
 	// hooks for login
 	const [log, setLog] = useState(false);
@@ -54,7 +61,8 @@ export default function Chat() {
 	}
 
 	/************************************************** */
-	
+	// const socket = io("http://10.12.11.1:3001");
+
 	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
@@ -64,6 +72,12 @@ export default function Chat() {
 	const [createG, setCreateG] = useState(false);
 	const [explore, setExplore] = useState(false);
 	const [newChat, setNewChat] = useState(false);
+	const [invite, setInvite] = useState(false);
+	const [block, setBlock] = useState(false);
+	const [view, setView] = useState(false);
+	const [leave, setLeave] = useState(false);
+	const [settings, setSettings] = useState(false);
+	const [seeMem, setSeeMem] = useState(false);
 
 	
 
@@ -79,13 +93,27 @@ export default function Chat() {
 			setExplore(true);
 		else if (option == "NewChat")
 			setNewChat(true);
+		else if (option == "invite")
+			setInvite(true);
+		else if (option == "sendMsg")
+			setView(true);
+		else if (option == "view")
+			setView(true);
+		else if (option == "leave")
+			setLeave(true);
+		else if (option == "settings")
+			setSettings(true);
+		else if (option == "see")
+			setSeeMem(true);
+		else if (option == "block")
+			setBlock(true);
 
 	}
 
 	useEffect(() => {
-		if (createG || explore || newChat ) {
+		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {
 			setStyle({
-				"filter": "blur(6px)",
+				"filter": "blur(7px)",
 				"pointerEvents": "none",
 			})
 			setOption(false);
@@ -93,19 +121,13 @@ export default function Chat() {
 		else
 			setStyle({});
 		
-		if (!createG || !explore || !newChat){
+		if (!createG || !explore || !newChat || !invite || !leave || !settings || !seeMem || !block){
 			setRefresh(!refresh);
 			console.log("refreshed");
 		}
-	}, [createG, explore, newChat]);
+	}, [createG, explore, newChat, invite, leave, settings, seeMem, block]);
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-
-	useEffect(() => {
-		if (Object.keys(Group).length != 0){
-			
-		}
-	},[Group]);
 	
 	useEffect(() => {
 		hooks.waitHook.setState(true);  
@@ -133,13 +155,24 @@ export default function Chat() {
 								<Friends selectChat={setUser} refresh={refresh} />
 
 							</section>
-							<Cnvs User={User} refresh={refresh}/>
+							<div className='Chat'>
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler}/>
+								: <>
+									<button className='openChat' onClick={()=>setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
+								</>}
+
+							</div>
 						</div>
 
 						{createG && <CreateGroup createG={setCreateG} />}
 						{explore && <ExploreRooms close={setExplore}/>}
 						{newChat && <StartChat close={setNewChat} User={setUser} />}
-
+						{view && router.push("/users/" + User?.username)}
+						{invite && <Invite User={User} close={setInvite} />}
+						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
+						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
+						{settings && <GroupSettings close={setSettings} />}
+						{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} DirectMsg={setUser}/>}
 					</div>
 				</>)
 			}

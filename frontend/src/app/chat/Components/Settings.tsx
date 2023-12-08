@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation";
 import Add from "./Add";
 import { Make }from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Gruppo } from "next/font/google";
 
 
 const UserSettings: ChatOptions = {Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"]};
@@ -21,10 +24,11 @@ const AdminSettings: ChatOptions = {Option: ["invite", "sendMsg", "view", "Kick"
 const SuperAdminSettings : ChatOptions = {Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute", "MakeAdmin", "removeAdmin"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute", "Make Admin", "Remove Admin"]};
 
 
-export default function OwnerSettings({group, close, role} : {group : any, close: any, role : string}){
+export default function OwnerSettings({group, close, role , DirectMsg} : {group : any, close: any, role : string,DirectMsg : any}){
 
 
 	// console.log("grou  p    ",group?.id);
+	const [refresh, setRefresh] = useState(false);
 /********************************************** */
 
 	const [data, setData] = useState({} as any);
@@ -36,7 +40,7 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 
 	useEffect(() => {
 		getMembers();
-	}, []);
+	}, [refresh]);
 
 	/****************************************************** */
 	const [option, setOption] = useState(false);
@@ -53,8 +57,8 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 	const router = useRouter();
 	const [User, setUser] = useState({} as any);
 
-	const visible = useRef(null) as any;
 
+	const visible = useRef(null) as any;
 
 	function Settings(option : string){
 		if (option == "invite")
@@ -76,15 +80,28 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 	}
 
 	async function wait(){
-		const res = await Make({ option: make, group: group, person: User.user.username });
-	}
+		try{
+			const res = await Make({ option: make, group: group, person: User.user.username });
 
+		}catch(err){
+		}
+	}
+	
 	useEffect(() => {
 		if (make !== ""){
-			wait();
+			wait()
+			setRefresh(!refresh);
+			setMake("");
 		}
-	}, [make]);
+		if (!add)
+			setRefresh(!refresh);
+		if (sendMsg){
+			DirectMsg(User?.user);
+			close(false);
+		}
 
+	}, [make, add, sendMsg]);
+	
 
 	useEffect(() => {
 		if (kick)
@@ -97,16 +114,20 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 			setMake("MakeAdmin");
 		else if (removeAdmin)
 			setMake("removeAdmin");
-	
+		setKick(false);
+		setBan(false);
+		setMute(false);
+		setMakeAdmin(false);
+		setRemoveAdmin(false);
 	}, [sendMsg, kick, ban, mute, makeAdmin, removeAdmin]);
 
 	function Print(users : any){
 		const user = users?.users;
 		const print = <>
-			<div className={role == "ADMIN" ? "user admin" : role == "OWNER" ? "user owner" : "user"} ref={visible}>
+			<div className={user.role == "ADMIN" ? "user admin" : user.role == "OWNER" ? "user owner" : "user"} ref={visible}>
 				<Image className="g_img" src={user?.user?.photo ? user?.user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.user.username}</h3>
-				<button onClick={()=>{setOption(!option);setUser(user)}}>Options</button>
+				{(user.role != "OWNER" || role != "OWNER") && <button className="settings" onClick={()=>{setOption(!option);setUser(user)}}><FontAwesomeIcon icon={faBars} /></button>}
 			</div>
 		</>
 		return <div>{print}</div>
@@ -120,11 +141,11 @@ export default function OwnerSettings({group, close, role} : {group : any, close
 				<div className="content">
 					{data?.members?.map((user : any, index : number)=>(<Print key={index} users={user}/>))}
 				</div>
-				{role == "OWNER" && <button onClick={()=>setAdd(true)}>Add Member</button>}
 				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? SuperAdminSettings : (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings}/>}
+				{role == "OWNER" && <button className="addBtn" onClick={()=>setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd}/>}
-				{view && router.push("/users/" + User.username)}
+				{view && router.push("/users/" + User?.user?.username)}
 			</div>
 		</>
 	)

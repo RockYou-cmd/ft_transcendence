@@ -2,8 +2,6 @@ import React, { use } from 'react';
 import { useEffect, useState , useRef} from "react";
 import '../../assest/chatComponents.css';
 import '../../assest/chat.css';
-import { APIs } from '@/app/Props/APIs';
-import { Get, Post } from '@/app/Components/Fetch/post';
 
 
 export default function CreateGroup({createG} : {createG: any}){
@@ -32,28 +30,6 @@ export default function CreateGroup({createG} : {createG: any}){
 	
 	async function submitForm(e : any){
 		e.preventDefault();
-		if (gName.current.value && privacy != ""){
-			if (privacy == "PROTECTED" && !gPass.current.value){
-				
-				alert("Please enter a password");
-			}
-			else{
-				const data = { name : gName.current.value,
-					description : gDesc.current.value,
-					privacy : privacy,
-					password : gPass.current.value,
-				}
-				const res = await Post(data, APIs.CreateRoom);
-				if (res?.status == 201){
-					alert("Group created");
-					createG(false);
-				}
-				else{
-					alert("Group name already exists");
-				}
-			}
-
-		}
 	}
 
 
