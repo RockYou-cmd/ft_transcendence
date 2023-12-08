@@ -1,7 +1,7 @@
 
 export const LocalHost = "http://localhost:3001";
-export const Host = "http://10.12.11.1:3001";
-// export const Host = LocalHost;
+// export const Host = "http://10.12.11.1:3001";
+export const Host = LocalHost;
  
 export interface Api{
 	SignIn : string,

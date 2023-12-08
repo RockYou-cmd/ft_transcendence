@@ -74,16 +74,19 @@ export default function ExploreRooms({close} : {close: any}){
 
 	async function getRooms(){
 		const data = await Get(APIs.Groups);
-		// const filter = data?.rooms?.filter((room : any)=>{
-		// 	return room?.name?.toLowerCase().includes(search?.toLowerCase()) || room?.username?.toLowerCase().includes(search?.toLowerCase());
-		// })
-		// setData(filter);
 		setData(data);
+		if (search != null){
+			const filter = data?.rooms?.filter((room : any)=>{
+				return room?.name?.toLowerCase().includes(search?.toLowerCase());
+			})
+			setData({rooms : filter});
+		}
 	}
-
+	
 	useEffect(() => {
 		getRooms();
 	}, [refresh, search]);
+
 
 	function Print(users : any){
 		const user = users?.users;

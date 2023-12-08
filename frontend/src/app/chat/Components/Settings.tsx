@@ -26,10 +26,7 @@ const SuperAdminSettings : ChatOptions = {Option: ["invite", "sendMsg", "view", 
 
 export default function OwnerSettings({group, close, role , DirectMsg} : {group : any, close: any, role : string,DirectMsg : any}){
 
-
-	// console.log("grou  p    ",group?.id);
 	const [refresh, setRefresh] = useState(false);
-/********************************************** */
 
 	const [data, setData] = useState({} as any);
 
@@ -42,7 +39,7 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 		getMembers();
 	}, [refresh]);
 
-	/****************************************************** */
+
 	const [option, setOption] = useState(false);
 	const [invite, setInvite] = useState(false);
 	const [sendMsg, setSendMsg] = useState(false);
@@ -99,14 +96,19 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 			DirectMsg(User?.user);
 			close(false);
 		}
-
-	}, [make, add, sendMsg]);
+		if (view)
+			router.push("/users/" + User?.user?.username);
+		
+	}, [make, add, sendMsg, view]);
 	
-
+	useEffect(() => {
+	}, []);
+	
+	
 	useEffect(() => {
 		if (kick)
-			setMake("Kick");
-		else if (ban)
+		setMake("Kick");
+	else if (ban)
 			setMake("Ban");
 		else if (mute)
 			setMake("Mute");
@@ -145,7 +147,7 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 				{role == "OWNER" && <button className="addBtn" onClick={()=>setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd}/>}
-				{view && router.push("/users/" + User?.user?.username)}
+				{/* {view && router.push("/users/" + User?.user?.username)} */}
 			</div>
 		</>
 	)

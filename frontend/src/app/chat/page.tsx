@@ -123,11 +123,13 @@ export default function Chat() {
 		
 		if (!createG || !explore || !newChat || !invite || !leave || !settings || !seeMem || !block){
 			setRefresh(!refresh);
-			console.log("refreshed");
 		}
-	}, [createG, explore, newChat, invite, leave, settings, seeMem, block]);
+		if (view)
+			router.push("/users/" + User?.username);
+	}, [createG, explore, newChat, invite, leave, settings, seeMem, block, view]);
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
+	
 	
 	useEffect(() => {
 		hooks.waitHook.setState(true);  
@@ -167,7 +169,6 @@ export default function Chat() {
 						{createG && <CreateGroup createG={setCreateG} />}
 						{explore && <ExploreRooms close={setExplore}/>}
 						{newChat && <StartChat close={setNewChat} User={setUser} />}
-						{view && router.push("/users/" + User?.username)}
 						{invite && <Invite User={User} close={setInvite} />}
 						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
 						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}

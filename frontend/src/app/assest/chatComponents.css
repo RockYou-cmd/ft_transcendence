@@ -84,11 +84,25 @@
 	margin: 25px 0px 10px;
 }
 
-.CreateGroup input {
+.CreateGroup input{
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	background-color: rgba(255, 255, 255, 0.25);
 	padding: 9px;
 	border-radius: 10px;
+}
+
+.CreateGroup .input {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.25);
+	border-radius: 10px;
+	
+}
+
+.input input{
+	background-color:initial;
+	border:none;
+	padding: 9px 15px 9px 10px;
+	width: 90%;
 }
 
 .CreateGroup .G_privacy {

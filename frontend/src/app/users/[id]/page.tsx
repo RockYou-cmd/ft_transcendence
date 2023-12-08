@@ -47,7 +47,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		}
 
 		if (data?.statusCode == 404){
-			console.log("user not found");
 			router.push("/users/not-found");
 		}
 		UsersetData(data);
@@ -91,7 +90,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			fetchData();
 	}, [online, refresh]);
 	
-	console.log(online);
 	
 	if (Userdata?.photo != null)
 	photo = Userdata.photo;
@@ -107,7 +105,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 				setOnline("OFF");
 				hooks.logInHook.setState(false);
 			}
-			console.log(res);
 			setRefresh(!refresh);
 		}catch(err){
 			alert(err);}
