@@ -10,7 +10,6 @@ export default function Logout() {
 	const { online, setOnline } = useLogContext();
 	function logout(e: MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
-		Cookies.remove('access_token');
 		setOnline("OFF");
 		router.push("/");
 	}

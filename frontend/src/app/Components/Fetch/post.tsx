@@ -5,23 +5,31 @@ import axios from 'axios';
 export async function Post(data : object, path : string){
 	const header = {
 		method: 'POST',
+		credentials: 'include' as RequestCredentials,
 		headers: {
 			'Content-Type': 'application/json',
-			'authorization': 'Bearer ' + Cookies.get('access_token'),
+			// 'authorization': 'Bearer ' + Cookies.get('access_token'),
 		},
 		body: JSON.stringify(data),
 	};
 	const res = await fetch(path , header);
+	console.log(res.headers);
+	// try{
+	// 	const res = await axios.post(path, data, {withCredentials: true});
+	// 	return res;
 
+	// }catch(err){
+	// 	alert(err);
+	// }
 	return res;
 }
 
 export async function Get(path : string){
 	const header = {
+		credentials: 'include' as RequestCredentials,
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
-			'authorization': 'Bearer ' + Cookies.get('access_token'),
 		},
 	}
 	const res = await fetch(path, header);
@@ -29,19 +37,19 @@ export async function Get(path : string){
 		return undefined;
 	const data = await res.json();
 	return data;
-
 }
 
 export async function Put(data : object, path : string){
-	const header = {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json',
-			'authorization': 'Bearer ' + Cookies.get('access_token'),
-		},
-		body: JSON.stringify(data),
-	};
-	const res = await fetch(path , header);
+	// const header = {
+	// 	method: 'PUT',
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 		'authorization': 'Bearer ' + Cookies.get('access_token'),
+	// 	},
+	// 	body: JSON.stringify(data),
+	// };
+	// const res = await fetch(path , header);
+	const res = await axios.put(path, data, {withCredentials: true});
 
- return res;
+	return res;
 }

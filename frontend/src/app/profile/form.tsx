@@ -7,8 +7,8 @@ import Link from 'next/link';
 import React from 'react';
 import { APIs } from '../Props/APIs';
 import Cookies from 'js-cookie';
-import { useLogContext } from '../Components/Log/LogContext';
-
+import { useLogContext, useSocket } from '../Components/Log/LogContext';
+import { io } from 'socket.io-client';
 
 
 var data: { username: string, password: string } = {
@@ -18,6 +18,8 @@ var data: { username: string, password: string } = {
 
 export default function Form() {
 
+	const host = "http://localhost:3001";
+	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
 
 	const [wait, checkwait] = useState(false);
@@ -34,15 +36,25 @@ export default function Form() {
 			data.password = passwordRef.current?.value;
 			try {
 				const res = await Post(data, APIs.SignIn);
-				const responseData = await res.json();
+				// console.log(res);
+				// const responseData = await res.json();
 				if (res.status == 201) {
 					setLog(true);
-					Cookies.set('access_token', responseData.access_token);
-					setOnline("ON");
+					// Cookies.set('access_token', responseData.access_token);
+					if (online != "ON") {
+
+						setOnline("ON");
+						setSocket(io(host + "/events", {
+							auth: {
+								token: Cookies.get("access_token"),
+							}
+						}));
+						// console.log("socket created");
+					}
 				}
 				else {
 
-					alert(responseData.message);
+					// alert(responseData.message);
 				}
 
 			}
@@ -64,30 +76,28 @@ export default function Form() {
 	}, []);
 
 	if (!wait) {
-		return { render: (<><div>loading...</div><div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></>) }
+		return (<><div>loading...</div><div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></>)
 	}
 
-	return {
-		log,
-		render: (
-			<>
-				{/* <Link href="/" >back to Home</Link> */}
-				<div id="main">
-					<h2 className="title">Login</h2>
-					<div className="Fline"></div>
-					<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
-					<input ref={passwordRef} type="password" className="password" name="password" placeholder="Type your password" />
+	return (
+		<>
+			{/* <Link href="/" >back to Home</Link> */}
+			<div id="main">
+				<h2 className="title">Login</h2>
+				<div className="Fline"></div>
+				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
+				<input ref={passwordRef} type="password" className="password" name="password" placeholder="Type your password" />
 
-					<Link href="" className="forgot">Forgot your password?</Link>
-					<button className="btn" onClick={handleClick}>Login</button>
-					<Link href={APIs?.intraAuth} className="Intra">Login with Intranet</Link>
-					<Link href={APIs?.googleAuth} className="Intra Google">Login with Google</Link>
+				<Link href="" className="forgot">Forgot your password?</Link>
+				<button className="btn" onClick={handleClick}>Login</button>
+				<Link href={APIs?.intraAuth} className="Intra">Login with Intranet</Link>
+				<Link href={APIs?.googleAuth} className="Intra Google">Login with Google</Link>
 
 
-					<Link href="/create" className="createbtn">Create an account</Link>
-				</div>
-			</>
+				<Link href="/create" className="createbtn">Create an account</Link>
+			</div>
+		</>
 
-		)
-	}
+	)
+
 }

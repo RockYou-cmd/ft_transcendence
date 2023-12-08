@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { APIs } from "../../Props/APIs";
 import { Get } from "../Fetch/post";
 import Form from "../../profile/form";
+import { useLogContext } from "./LogContext";
 
 export async function GetData({ Api, user }: { Api: string, user: string }) {
 
@@ -24,14 +25,13 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 
 export default async function CheckLogin(LogIn: any) {
 
-
-	const { log, render } = Form();
+	// const { log, render } = Form();
 	let cookie = Cookies.get("access_token");
 
-	if (cookie == undefined) {
-		return (<>{log == false ? render : null}</>);
-	}
-	if (LogIn.logInHook?.state == false)
-		LogIn.logInHook?.setState(true);
+	// if (online == "OFF") {
+	// 	return (<>{log == false ? render : null}</>);
+	// }
+	// if (LogIn.logInHook?.state == false)
+	// 	LogIn.logInHook?.setState(true);
 	return (null)
 }

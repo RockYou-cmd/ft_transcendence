@@ -6,11 +6,15 @@ import { Get, Post } from "../../Components/Fetch/post";
 import Cookies from "js-cookie";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
-import { useLogContext } from "../../Components/Log/LogContext";
+import { useLogContext, useSocket } from "../../Components/Log/LogContext";
+import { io } from "socket.io-client";
+
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
 
 	const { online, setOnline } = useLogContext();
+	const { socket, setSocket } = useSocket();
+	const host = "http://localhost:3001";
 	const [code, setValue] = useState(null) as any;
 	const [value, setCode] = useState(false);
 
@@ -28,8 +32,14 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 			const data = await res.json();
 			if (res.status == 201) {
 				Cookies.set('access_token', data.access_token);
-				setOnline("ON");
-				router.push("/");
+				if (online != "ON") {
+					setOnline("ON");
+					router.push("/");
+					setSocket(io(host + "/events", {
+						withCredentials: true,
+					}));
+					console.log("socket created");
+				}
 			}
 			else {
 				alert(data.message);

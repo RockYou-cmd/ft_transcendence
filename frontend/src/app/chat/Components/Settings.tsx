@@ -40,6 +40,7 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 	}, [refresh]);
 
 
+	const [Style, setStyle] = useState<Object>({});
 	const [option, setOption] = useState(false);
 	const [invite, setInvite] = useState(false);
 	const [sendMsg, setSendMsg] = useState(false);
@@ -100,10 +101,7 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 			router.push("/users/" + User?.user?.username);
 		
 	}, [make, add, sendMsg, view]);
-	
-	useEffect(() => {
-	}, []);
-	
+
 	
 	useEffect(() => {
 		if (kick)
@@ -123,15 +121,31 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 		setRemoveAdmin(false);
 	}, [sendMsg, kick, ban, mute, makeAdmin, removeAdmin]);
 
+	function showOptions(e : MouseEvent, user : any){
+		setOption(!option);
+		setUser(user);
+		const {x, y} = e as any;
+		setStyle({
+			top: y + "px",
+			right: x + "px",
+		});
+ 	}
+
+
 	function Print(users : any){
 		const user = users?.users;
 		const print = <>
 			<div className={user.role == "ADMIN" ? "user admin" : user.role == "OWNER" ? "user owner" : "user"} ref={visible}>
 				<Image className="g_img" src={user?.user?.photo ? user?.user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.user.username}</h3>
-				{(user.role != "OWNER" || role != "OWNER") && <button className="settings" onClick={()=>{setOption(!option);setUser(user)}}><FontAwesomeIcon icon={faBars} /></button>}
+				{(user.role != "OWNER" || role != "OWNER") && <button className="UseraddBtn" onClick={(e : MouseEvent)=>showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
 			</div>
+			{/* <div className="posOpt"> */}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? SuperAdminSettings : (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings}/>}
+
+			{/* </div> */}
 		</>
+
 		return <div>{print}</div>
 	}
 	return(
@@ -143,7 +157,6 @@ export default function OwnerSettings({group, close, role , DirectMsg} : {group 
 				<div className="content">
 					{data?.members?.map((user : any, index : number)=>(<Print key={index} users={user}/>))}
 				</div>
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? SuperAdminSettings : (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings}/>}
 				{role == "OWNER" && <button className="addBtn" onClick={()=>setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd}/>}
