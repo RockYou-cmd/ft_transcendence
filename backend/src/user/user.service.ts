@@ -47,7 +47,6 @@ export class UserService {
 	
 	async getUser(account , user) {
 		try{
-
 			const userData = await this.getData(user);
 			const ret = await prisma.user.findUnique({
 				where : {
@@ -121,6 +120,8 @@ export class UserService {
 
 	async removeUserFromFriends(account, user) {
 		try {
+			console.log(account);
+			console.log(user);
 			const friendUser = await prisma.user.findUnique({
 				where: {
 					username: user.username
