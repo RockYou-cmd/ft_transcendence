@@ -10,7 +10,6 @@ export class UserController{
 	@Get("profile")
 	@UseGuards(AuthGuard)
 	getProfile(@Request() request){
-		console.log("request!!");
 		return this.UserService.getProfile(request.user);
 	}
 
@@ -45,7 +44,7 @@ export class UserController{
 
 	@Put("update")
 	@UseGuards(AuthGuard)
-	async updateData(@Req() account, @Body() data) {
+	async updateData(@Req() account, @Body("updatedData") data) {
 		return this.UserService.updateData(account.user, data);
 	}
 }
