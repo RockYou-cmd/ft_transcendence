@@ -53,14 +53,21 @@ export class RoomController {
 
   @Get("members")
   @UseGuards(AuthGuard)
-  async getMembers(@Query("id") roomId) {
-    return this.roomService.getMembers(roomId);
+  async getMembers(@Req() account, @Query("id") roomId) {
+    return this.roomService.getMembers(account.user, roomId);
   }
 
   @Post("add/member")
   @UseGuards(AuthGuard)
   async addMember(@Body() data) {
     return this.roomService.addMember(data);
+  }
+
+  @Get("add/new/member")
+  @UseGuards(AuthGuard)
+  async addNewMember(@Query("id") roomId) {
+    console.log("hahaha");
+    return this.roomService.addNewMember(roomId);
   }
   
   @Post("remove/member")
