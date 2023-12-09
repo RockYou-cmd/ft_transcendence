@@ -15,6 +15,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 	const { online, setOnline } = useLogContext();
 	const { socket, setSocket } = useSocket();
 	const host = "http://localhost:3001";
+	// const host = "http://10.12.11.1:3001";
 	const [code, setValue] = useState(null) as any;
 	const [value, setCode] = useState(false);
 

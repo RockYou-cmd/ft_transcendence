@@ -19,6 +19,7 @@ var data: { username: string, password: string } = {
 export default function Form() {
 
 	const host = "http://localhost:3001";
+	// const host = "http://10.12.11.1:3001";
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
 	const [hide, setHide] = useState(false);
@@ -34,6 +35,7 @@ export default function Form() {
 			data.password = passwordRef.current?.value;
 			try {
 				const res = await Post(data, APIs.SignIn);
+				const resData = await res?.json();
 				if (res.status == 201) {
 					if (online != "ON") {
 
@@ -45,7 +47,7 @@ export default function Form() {
 					}
 				}
 				else {
-
+					alert(resData.message);
 				}
 			}
 			catch (err) {

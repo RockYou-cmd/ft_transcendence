@@ -13,7 +13,6 @@ export async function Post(data : object, path : string){
 		body: JSON.stringify(data),
 	};
 	const res = await fetch(path , header);
-	console.log(res.headers);
 	// try{
 	// 	const res = await axios.post(path, data, {withCredentials: true});
 	// 	return res;

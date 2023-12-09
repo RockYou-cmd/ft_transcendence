@@ -96,7 +96,10 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			// const res = await Post(data, APIs.sendMsg);
 			setInput("");
 			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
-			socket.emit("test",  {message : input});
+			socket.emit("message",  {content : input,
+				reciever : User.username,
+				sender : me.username,
+			});
 		}
 		
 		// setRefresher(!refresher);
@@ -110,7 +113,7 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 	useEffect(() => {
 		socket.on("message", (data: any) => {
-			const msg = {content : data, senderId : User.username}
+			const msg = {content : data.message, senderId : data.reciever}
 			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
 		})
 

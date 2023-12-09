@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { HttpException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -43,10 +43,7 @@ export class AuthService {
 			if (!ret || !ret.password)
 				throw new NotFoundException();
 			if (!await argon.verify(ret.password, user.password))
-				return {
-					status:300,
-					message: "Password incorrect"
-				} // unAuthorized exception should be thrown
+				throw new HttpException("Password incorrect", 404) // unAuthorized exception should be thrown
 			return await this.generateJwt(ret);
 		}
 		catch(err) {
