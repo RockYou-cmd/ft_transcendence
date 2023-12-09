@@ -56,7 +56,6 @@ export default function Chat() {
 	}
 
 	/************************************************** */
-	// const socket = io("http://localhost:3001");
 
 	const router = useRouter();
 	const [option, setOption] = useState(false);

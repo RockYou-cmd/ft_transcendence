@@ -3,8 +3,8 @@ import { createContext, useContext, useState } from 'react';
 import { io, Socket } from "socket.io-client";
 
 
-const localhost = "http://localhost:3001";
-const host = "http://localhost:3001";
+// const localhost = "http://localhost:3001";
+// const host = "http://localhost:3001";
 
 type LogContextType = {
 	online: string;
@@ -18,7 +18,6 @@ type SocketType = {
 }
 
 
-// export const socket = io(host + "/events");
 
 export const WebSocket = createContext<SocketType | null>(null);
 

@@ -96,10 +96,9 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			// const res = await Post(data, APIs.sendMsg);
 			setInput("");
 			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
-			socket.emit("message",  {content : input,
-				reciever : User.username,
-				sender : me.username,
-			});
+			const message = {content : input, sender : me?.username, reciever : User?.username}
+			socket.emit("message",  {content : input, sender : me?.username, reciever : User?.username});
+			
 		}
 		
 		// setRefresher(!refresher);
@@ -113,10 +112,9 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 	useEffect(() => {
 		socket.on("message", (data: any) => {
-			const msg = {content : data.message, senderId : data.reciever}
+			const msg = {content : data.content, senderId : data.sender}
 			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
 		})
-
 		return () => {
 			socket.off("message");
 		};
@@ -127,8 +125,8 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 		const message = <>
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
+					{ msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 				<section>
-					{User?.name && msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 					
 					<p>{msg?.content}</p>
 				</section>

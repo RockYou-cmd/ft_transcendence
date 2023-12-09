@@ -35,10 +35,10 @@ export default function Form() {
 			data.password = passwordRef.current?.value;
 			try {
 				const res = await Post(data, APIs.SignIn);
-				const resData = await res?.json();
+				console.log(res);
 				if (res.status == 201) {
 					if (online != "ON") {
-
+						
 						setOnline("ON");
 						setSocket(io(host + "/events", {
 							withCredentials: true,
@@ -47,7 +47,8 @@ export default function Form() {
 					}
 				}
 				else {
-					alert(resData.message);
+					const resData = await res?.json();
+					alert(resData?.message);
 				}
 			}
 			catch (err) {

@@ -282,7 +282,7 @@ input[type=file]::file-selector-button:hover {
 	}
 }
 
-.Add .content .user .UseraddBtn {
+.Add .UseraddBtn {
 	padding: 4px 28px;
 	border-radius: 10px;
 	font: 500 20px 'Inter', sans-serif;

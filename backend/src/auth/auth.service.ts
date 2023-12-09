@@ -72,7 +72,6 @@ export class AuthService {
 				})
 			}
 			return await this.generateJwt(ret);
-
 		}
 		catch (err) {
 			console.log("oath vlidation error");

@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react"
 import { Get } from "../../Components/Fetch/post";
 import { Post } from "../../Components/Fetch/post";
 import '../../assest/Components.css';
+import '../../assest/chatComponents.css';
 import Image from 'next/image';
 import avatar from '../../../../public/avatar.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -64,7 +65,7 @@ export default function ExploreRooms({close} : {close: any}){
 						<input type={view ? "text" : "password"} value={password} placeholder="Enter Password" onChange={(e)=>setPassword(e.target.value)}/>
 						{!view ? <FontAwesomeIcon icon={faEyeLowVision} onClick={()=>setView(!view)} style={{cursor: "pointer"}}/> : <FontAwesomeIcon icon={faEye} onClick={()=>setView(!view)} style={{cursor: "pointer"}}/>}
 					</div>
-					<button type="submit">Join</button>
+					<button  type="submit">Join</button>
 				</form>
 			</div>
 			</>)	
@@ -94,7 +95,7 @@ export default function ExploreRooms({close} : {close: any}){
 			<div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name}</h3>
-				<button onClick={()=>setRoomSelected(user)}>JOIN</button>
+				<button className='UseraddBtn' onClick={()=>setRoomSelected(user)}>JOIN</button>
 			</div>
 		</>
 		return <div>{print}</div>
