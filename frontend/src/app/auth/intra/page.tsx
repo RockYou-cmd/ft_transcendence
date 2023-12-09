@@ -29,9 +29,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 	useEffect(() => {
 		async function fetchToken() {
 			const res = await Post({ code, }, APIs.intraToken);
-			const data = await res.json();
 			if (res.status == 201) {
-				Cookies.set('access_token', data.access_token);
 				if (online != "ON") {
 					setOnline("ON");
 					router.push("/");
@@ -42,7 +40,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				}
 			}
 			else {
-				alert(data.message);
+				// alert(data.message);
 			}
 		}
 		if (value && code)

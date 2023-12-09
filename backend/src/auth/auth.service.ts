@@ -22,7 +22,7 @@ export class AuthService {
 					password: hash
 				}
 			})
-			return this.generateJwt(ret);
+			return await this.generateJwt(ret);
 		}
 		catch(err)
 		{
@@ -47,7 +47,7 @@ export class AuthService {
 					status:300,
 					message: "Password incorrect"
 				} // unAuthorized exception should be thrown
-			return this.generateJwt(ret);
+			return await this.generateJwt(ret);
 		}
 		catch(err) {
 			console.log("SignIn !!Error!!");
@@ -74,7 +74,7 @@ export class AuthService {
 					}
 				})
 			}
-			return this.generateJwt(ret);
+			return await this.generateJwt(ret);
 
 		}
 		catch (err) {

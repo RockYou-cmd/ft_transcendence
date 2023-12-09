@@ -11,14 +11,14 @@ export class AuthController {
 
 	@Post("signUp")
 	async signUp(@Body() dto : authDto, @Res() res: Response) {
-		res.cookie("access_token", await this.authService.signUp(dto), {httpOnly: true});
+		res.cookie("access_token", await this.authService.signUp(dto), {httpOnly: false});
 		res.send("User ignedUp succesfully");
 	}
 	
 	@Post("signIn")
 	async singIn(@Body() ndto, @Res() res: Response) {
 		const token = await this.authService.signIn(ndto);
-		res.cookie("access_token", token, {httpOnly: true});
+		res.cookie("access_token", token, {httpOnly: false});
 		res.send("User signedIn succesfully");
 	}
 	
@@ -29,7 +29,7 @@ export class AuthController {
 	@Post("google/callback")
 	@UseGuards(AuthGuard("google"))
 	async googleCallback(@Req() req, @Res() res: Response) {
-		res.cookie("access_token", await this.authService.OAuthValidation(req.user), {httpOnly: true});
+		res.cookie("access_token", await this.authService.OAuthValidation(req.user), {httpOnly: false});
 		res.send("User signedIn succesfully");
 	}
 	
@@ -40,7 +40,13 @@ export class AuthController {
 	@Post("intra/callback")
 	@UseGuards(AuthGuard("42"))
 	async intraCallback(@Req() req, @Res() res: Response) {
-		res.cookie("access_token", await this.authService.OAuthValidation(req.user), {httpOnly: true});
+		res.cookie("access_token", await this.authService.OAuthValidation(req.user), {httpOnly: false});
 		res.send("User signedIn succesfully");
+	}
+
+	@Get("logout")
+	async logOut(@Res() res: Response) {
+		res.clearCookie("access_token");
+		res.send("User logedout succesfully");
 	}
 }

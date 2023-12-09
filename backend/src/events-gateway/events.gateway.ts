@@ -3,30 +3,35 @@ import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/web
 import { Server } from 'socket.io';
 import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
 
-@WebSocketGateway({cors: true, namespace: "eventss"})
+@WebSocketGateway({cors: {credentials:true, origin: "http://localhost:3000"}, namespace: "events", cookie: false})
 export class EventsGateway {
   constructor(private authGuard: AuthGuard) {};
 
   @WebSocketServer()
   server: Server;
 
-  sockets = new Map<string, string>();
+  sockets = new Map<string, string[]>();
   
   async handleConnection(client: any) {
-    if (client.handshake.auth.token)
-      var {username} = await this.authGuard.extractPayloadFromToken(client.handshake.auth.token);
-    console.log(username, " CONNECTED");
+    // var newSocket = this.sockets.get("name");
+    // newSocket.push("woiui")
+    // console.log(newSocket);
+    console.log(client.handshake);
+    // if (client.handshake)
+    //   var {username} = await this.authGuard.extractPayloadFromToken(client.handshake.auth.token);
+    console.log(client.id, " CONNECTED");
   }
   
   async handleDisconnect(client: any) {
     console.log(client.id, " DISCONNECT");
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @SubscribeMessage("test")
   test(client) {
-    this.sockets.set("name", "alae");
-    console.log(this.sockets);
+    // this.sockets.set("name" );
+    // this.sockets.set("name", "alae");
+    // console.log("all connected sockets: \n", this.sockets);
     console.log(client.id);
   }
 }
