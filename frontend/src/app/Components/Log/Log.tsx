@@ -35,10 +35,12 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 		fetchData();
 	}, [online]);
 
+	if (LogIn.waitHook.state == false) 
+		return null;
 
 	return (
 		<>
-			{online == "OFF" ? <Form /> : null}
+			{online == "OFF" && LogIn.waitHook.state ? <Form /> : null}
 		</>
 	)
 

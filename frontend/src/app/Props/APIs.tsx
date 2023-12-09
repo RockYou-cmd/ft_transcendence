@@ -37,6 +37,7 @@ export interface Api {
 	RoomChat: string,
 	members: string,
 	addNewMembers: string,
+	Logout : string,
 
 }
 
@@ -74,4 +75,6 @@ export const APIs: Api = {
 	RoomChat: Host + "/room/chat/?id=",
 	members: Host + "/room/members/?id=",
 	addNewMembers: Host + "/room/add/new/member/?id=",
+	Logout : Host + "/auth/logout",
+
 };
