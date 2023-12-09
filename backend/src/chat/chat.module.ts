@@ -4,7 +4,6 @@ import { ChatService } from "./chat.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
-import { ChatGateway } from './chat.gateway';
 
 @Module({
 	controllers: [ChatController],

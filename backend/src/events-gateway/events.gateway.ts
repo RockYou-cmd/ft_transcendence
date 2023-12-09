@@ -1,9 +1,10 @@
 import { Req, UseGuards } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
+import {parse} from "cookie";
 
-@WebSocketGateway({cors: {credentials:true, origin: "http://localhost:3000"}, namespace: "events", cookie: false})
+@WebSocketGateway({cors: {credentials:true, origin: "http://localhost:3000"}, namespace: "events"})
 export class EventsGateway {
   constructor(private authGuard: AuthGuard) {};
 
@@ -12,26 +13,29 @@ export class EventsGateway {
 
   sockets = new Map<string, string[]>();
   
-  async handleConnection(client: any) {
-    // var newSocket = this.sockets.get("name");
-    // newSocket.push("woiui")
-    // console.log(newSocket);
-    console.log(client.handshake);
-    // if (client.handshake)
-    //   var {username} = await this.authGuard.extractPayloadFromToken(client.handshake.auth.token);
-    console.log(client.id, " CONNECTED");
+  async handleConnection(client: Socket) {
+    const cookie = client.handshake.headers.cookie;
+    if (cookie) {
+      const access_token = parse(cookie).access_token;
+      var {username} = await this.authGuard.extractPayloadFromToken(access_token);
+      var newSocket = this.sockets.get(username) || [];
+      newSocket.push(client.id)
+      this.sockets.set(username, newSocket);
+      client.join(username);
+      console.log(this.sockets)
+    }
+    console.log(username, " CONNECTED");
   }
   
-  async handleDisconnect(client: any) {
+  async handleDisconnect(client: Socket) {
     console.log(client.id, " DISCONNECT");
   }
 
+  @SubscribeMessage('message')
   // @UseGuards(AuthGuard)
-  @SubscribeMessage("test")
-  test(client) {
-    // this.sockets.set("name" );
-    // this.sockets.set("name", "alae");
-    // console.log("all connected sockets: \n", this.sockets);
-    console.log(client.id);
+  handleMessage(client: Socket, payload) {
+    this.server.to(payload.username).emit(payload);
+    client.emit("message", "lesgoooooo motherfather");
   }
+
 }
