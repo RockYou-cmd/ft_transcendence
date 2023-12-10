@@ -78,6 +78,7 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
 		}
+		// console.log("data", data);
 	}
 	
 
@@ -94,16 +95,18 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			const data = { message: input, username: User.username };
 			const msg = {content : input, senderId : me?.username}
 			// const res = await Post(data, APIs.sendMsg);
-			setInput("");
-			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
-			const message = {content : input, sender : me?.username, reciever : User?.username}
-			socket.emit("message",  {content : input, sender : me?.username, reciever : User?.username});
+			if (input != ""){
+				setInput("");
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+				socket.emit("message",  {content : input, sender : me?.username, receiver : User?.username, chatId : chat?.messages[0]?.chatId || "noChat"});
+			}
 			
 		}
 		
 		// setRefresher(!refresher);
 	}
 	
+
 	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
@@ -112,8 +115,10 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 	useEffect(() => {
 		socket.on("message", (data: any) => {
-			const msg = {content : data.content, senderId : data.sender}
-			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+			const msg = {content : data.content, senderId : data.sender, chatId : data.chatId}
+			if (data.chatId == chat?.messages[0]?.chatId){
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+			}
 		})
 		return () => {
 			socket.off("message");

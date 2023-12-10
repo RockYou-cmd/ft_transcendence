@@ -14,10 +14,10 @@ export class ChatController {
 		return this.chatService.getChat(account.user, user);
 	}
 
-	@Post("send")
-	@UseGuards(AuthGuard)
-	async sendMessage(@Req() account, @Body() user) {
-		return this.chatService.sendMessage(account.user, user, user.message);
-	}
+	// @Post("send")
+	// @UseGuards(AuthGuard)
+	// async sendMessage(@Req() account, @Body() user) {
+	// 	return this.chatService.sendMessage(account.user, user, user.message);
+	// }
 
 }

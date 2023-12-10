@@ -14,86 +14,41 @@ export class ChatService {
 
 	}
 
-	async sendMessage(account, user, message) {
+	async sendMessage(payload) {
 		try{
-			const {id} = await this.userService.getData(user);
-			const chat = await this.isChatCreated(account.username, user.username);
-			if (!chat.length) {
-				var createdChat = await prisma.chat.create({
-					data: {
-						messages: {
-							create: {
-								content: message,
-								sender: {
-									connect: {
-										username:account.username
-									},
-								},
-								receiver: {
-									connect: {
-										username: user.username
-									}
-								}
-							}
-						}
-					}
-				})
-			}
-			else {
-				const chatId = chat[0].messages[0].chatId;
-				var updatedChat = await prisma.message.create({
-					data: {
-						content: message,
-						chat: {
-							connect: {
+			const chatId = payload.chatId;
+			console.log("chatId: ",chatId);
+			var updatedChat = await prisma.message.create({
+				data: {
+					content: payload.content,
+					chat: {
+						connectOrCreate: {
+							where: {
 								id: chatId
-							}
-						},
-						sender: {
-							connect: {
-								username: account.username
-							}
-						},
-						receiver: {
-							connect: {
-								username: user.username
-							}
+							},
+							create: {}
+						}
+					},
+					sender: {
+						connect: {
+							username: payload.sender
+						}
+					},
+					receiver: {
+						connect: {
+							username: payload.receiver
 						}
 					}
-				})
-			}
-			throw new HttpException("Message Sent!", HttpStatus.CREATED);
+				}
+			})
+			return "message sent!"
 		}
 		catch (err) {
 			throw err;
 		}
 	}
 
-	async isChatCreated(accountID, userId) {
-		try {
-			const chat = await prisma.chat.findMany({
-				select:{
-					messages: {
-						where: {
-							OR:[
-								{
-									senderId: accountID
-								},
-								{
-									senderId: userId
-								}
-							]
 
-						}
-					}
-				}
-			});
-			return chat;
-		}
-		catch(err) {
-			throw err;
-		}
-	}
 
 	async getChat(account, user) {
 		const messages = await prisma.message.findMany({

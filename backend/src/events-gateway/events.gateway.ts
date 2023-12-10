@@ -3,10 +3,11 @@ import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/web
 import { Server, Socket } from 'socket.io';
 import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
 import {parse} from "cookie";
+import { ChatService } from 'src/chat/chat.service';
 
 @WebSocketGateway({cors: {credentials:true, origin: "http://localhost:3000"}, namespace: "events"})
 export class EventsGateway {
-  constructor(private authGuard: AuthGuard) {};
+  constructor(private authGuard: AuthGuard, private chatService: ChatService) {};
 
   @WebSocketServer()
   server: Server;
@@ -32,9 +33,9 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: Socket, payload) {
-	console.log("data", payload);
-    this.server.to(payload.reciever).emit("message", payload);
+  handleMessage(client: Socket, payload: any) {
+    this.server.to(payload.receiver).emit("message", payload);
+    this.chatService.sendMessage(payload);
   }
 
 }

@@ -10,6 +10,7 @@ export class UserController{
 	@Get("profile")
 	@UseGuards(AuthGuard)
 	getProfile(@Request() request){
+		console.log(request.user);
 		return this.UserService.getProfile(request.user);
 	}
 
