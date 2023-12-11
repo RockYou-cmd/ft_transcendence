@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 @Injectable()
 export class RoomService {
 
+
 	async createRoom(account, data) {
 		try{
 			var roomData = {
@@ -81,6 +82,28 @@ export class RoomService {
 			throw err;
 		}
 	}
+
+	async addNewMember(roomId) {
+		try{
+			console.log(roomId);
+			const users = await prisma.user.findMany({
+				where:{
+					rooms: {
+						every: {
+							roomId: {
+								not: roomId
+							}
+						}
+					}
+				}
+			})
+			console.log("users: ", users);
+			return {users: users};
+		}
+		catch(err) {
+			throw err;
+		}
+	}
 	
 	
 	async removeMember(data) {
@@ -141,7 +164,7 @@ export class RoomService {
 		}
 	}
 
-	async getMembers(roomId) {
+	async getMembers(account, roomId) {
 		try{
 			const roomMembers = await prisma.room.findUnique({
 				where: {
@@ -242,10 +265,7 @@ export class RoomService {
 				}
 			});
 			if (data.password != room.password)
-			{
-				console.log("passs ",data.password);
-				return "Password incorrect!";
-			}
+				throw new Error("password incorrect");
 			return this.joinRoom(account, data.id);
 		}	
 		catch(err) {

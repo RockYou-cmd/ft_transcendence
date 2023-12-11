@@ -2,17 +2,27 @@
 import React from 'react';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { useLogContext } from './LogContext';
+import { Get } from '../Fetch/post';
+import { APIs } from '@/app/Props/APIs';
+
 
 export default function Logout() {
 	const router = useRouter();
 	const { online, setOnline } = useLogContext();
-	function logout(e: MouseEvent<HTMLButtonElement>) {
+	async function logout(e: MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
-		Cookies.remove('access_token');
-		setOnline("OFF");
-		router.push("/");
+		const res = await fetch(APIs.Logout, {
+			credentials: 'include' as RequestCredentials,
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		if (res?.status == 200){
+			setOnline("OFF");
+			router.push("/");
+		}
 	}
 
 	return (

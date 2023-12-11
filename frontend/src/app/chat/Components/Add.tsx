@@ -45,7 +45,7 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 			<div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name ? user?.name : user?.username}</h3>
-				<button style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
+				<button className='UseraddBtn' style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
 				{join == "JOIN" && <div className='Join'></div>}
 			</div>
 		</>

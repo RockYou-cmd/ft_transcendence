@@ -2,7 +2,18 @@ import React, { use } from 'react';
 import { useEffect, useState , useRef} from "react";
 import '../../assest/chatComponents.css';
 import '../../assest/chat.css';
+import { APIs } from '@/app/Props/APIs';
+import { Get, Post } from '@/app/Components/Fetch/post';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 
+interface Data{
+	name? : string,
+	description? : string,
+	privacy? : string,
+	password? : string,
+
+}
 
 export default function CreateGroup({createG} : {createG: any}){
 
@@ -14,6 +25,7 @@ export default function CreateGroup({createG} : {createG: any}){
 	const gPic = useRef(null) as any;
 	const [privacy, setPrivacy] = useState("PROTECTED" || "PRIVATE" || "PUBLIC");
 	const gPrivacy = useRef(null) as any;
+	const [hide, setHide] = useState(false);
 
 
 	useEffect(() => {
@@ -45,7 +57,7 @@ export default function CreateGroup({createG} : {createG: any}){
 				<input ref={gDesc} type="text" placeholder="Enter group description" />
 
 				<label>Group privacy</label>
-				<form className='G_privacy'>
+				<div className='G_privacy'>
 					<div>
 						<input ref={gPrivacy} type="radio"  name="privacy" value="PUBLIC"  onChange={e=> {setProtectedChoice(true); setPrivacy(e.target.value);}}/>
 						<label htmlFor="public">Public</label>
@@ -58,10 +70,13 @@ export default function CreateGroup({createG} : {createG: any}){
 						<input ref={gPrivacy} type="radio"  name="privacy" value="PROTECTED" defaultChecked onChange={e=> {setProtectedChoice(false); setPrivacy(e.target.value);}}/>
 						<label htmlFor="protected">Protected</label>
 					</div>
-				</form>
+				</div>
 
 				<label style={prStyle}>Group password</label>
-				<input style={prStyle} ref={gPass} type="password" placeholder="Enter group password" />
+				<div className='input'>
+					<input style={prStyle} ref={gPass} type={hide ? "text" : "password"} placeholder="Enter group password" />
+					{!hide ? <FontAwesomeIcon icon={faEyeLowVision} onClick={()=>setHide(!hide)} style={{cursor: "pointer"}}/> : <FontAwesomeIcon icon={faEye} onClick={()=>setHide(!hide)} style={{cursor: "pointer"}}/>}
+				</div>
 				<label>Group picture</label>
 				<input ref={gPic} type="file" />
 				<button className='submit' type='submit'>CREATE GROUP</button>

@@ -10,7 +10,6 @@ import Landing_navbar from '../Components/landing_page/Landing_navbar';
 export default function Home({setSignIn} : {setSignIn : any}) {
 
 
-
 	return (
 		<>
 		<div>

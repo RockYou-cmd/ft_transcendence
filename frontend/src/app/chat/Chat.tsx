@@ -10,11 +10,9 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import avatar from '../../../public/avatar.png';
 import { Post } from '../Components/Fetch/post';
-import { useLogContext, useSocket } from '../Components/Log/LogContext';
-import { socket } from '../Components/Log/LogContext';
+import { useLogContext, useSocket , useMe} from '../Components/Log/LogContext';
 import { MouseEvent , KeyboardEvent } from 'react';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import StartChat from './Components/StartChat';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 function Leave(GroupId : any){
 	const res = Post({id: GroupId?.id}, APIs.LeaveRoom);
@@ -41,7 +39,8 @@ const SuperSettings: ChatOptions = {
 
 export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: any, OptionHandler :any}) {
 
-	const socket = useSocket();
+	const {socket, setSocket} = useSocket();
+	const {me, setMe} = useMe() as any;
 	const [refresher, setRefresher] = useState(false);
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
@@ -79,6 +78,7 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
 		}
+		// console.log("data", data);
 	}
 	
 
@@ -93,16 +93,20 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 	async function send(e : (MouseEvent | KeyboardEvent)) {
 		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any ))){
 			const data = { message: input, username: User.username };
-			const msg = {content : input, snederId : ""}
+			const msg = {content : input, senderId : me?.username}
 			// const res = await Post(data, APIs.sendMsg);
-			setInput("");
-			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
-			socket.emit("message",  {message : input});
+			if (input != ""){
+				setInput("");
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+				socket.emit("message",  {content : input, sender : me?.username, receiver : User?.username, chatId : chat?.messages[0]?.chatId || "noChat"});
+			}
+			
 		}
 		
 		// setRefresher(!refresher);
 	}
 	
+
 	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
@@ -111,22 +115,26 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 	useEffect(() => {
 		socket.on("message", (data: any) => {
-			console.log("data", data);
-			const msg = {content : data, senderId : User.username}
-			setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+			const msg = {content : data.content, senderId : data.sender, chatId : data.chatId}
+			if (data.chatId == chat?.messages[0]?.chatId){
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+			}
 		})
-
 		return () => {
 			socket.off("message");
 		};
 	}, [socket]);
 
 	function PrintMsg(msgs: any) {
-
 		const msg = msgs?.msgs;
+
 		const message = <>
-			<div className={msg?.senderId == User.username ? "usr_msg" : "my_msg"}>
-				<p>{msg?.content}</p>
+			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
+					{ msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
+				<section>
+					
+					<p>{msg?.content}</p>
+				</section>
 				{/* <span >{msg?.createdAt}</span> */}
 				<div className='triangle'></div>
 			</div>

@@ -1,6 +1,9 @@
 import Create from "@/app/create/page";
 import "../../assest/chat.css";
+import "../../assest/chatComponents.css";
 import { useEffect , useRef , useState } from "react";
+
+
 
 
 export default function Options({ visible , option, btnRef, setOptions, content} : { visible: any, option: boolean,

@@ -13,6 +13,8 @@
 	border-radius: 50%;
 	margin: 20px;
 	margin-left: 40px;
+	width:60px;
+	height:60px;
 	border: 2px solid whitesmoke;
 }
 
@@ -58,7 +60,7 @@
 	margin:22px;
 	/* margin-right: auto; */
 	position: absolute;
-	width:22%;
+	width:20%;
 	left:100px;
 	z-index: 4;
 	/* &:current{

@@ -84,11 +84,25 @@
 	margin: 25px 0px 10px;
 }
 
-.CreateGroup input {
+.CreateGroup input{
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	background-color: rgba(255, 255, 255, 0.25);
 	padding: 9px;
 	border-radius: 10px;
+}
+
+.CreateGroup .input {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.25);
+	border-radius: 10px;
+	
+}
+
+.input input{
+	background-color:initial;
+	border:none;
+	padding: 9px 15px 9px 10px;
+	width: 90%;
 }
 
 .CreateGroup .G_privacy {
@@ -197,7 +211,6 @@ input[type=file]::file-selector-button:hover {
 .Add .content {
 	overflow: auto;
 	height: 43vh;
-
 	&::-webkit-scrollbar {
 		display: none;
 	}
@@ -242,6 +255,13 @@ input[type=file]::file-selector-button:hover {
 	}
 }
 
+.Add .user #optionsBar{
+	position: absolute;
+	right:-100px;
+	top:0px;
+	z-index: 50000;
+}
+
 .Add .content h3 {
 	font: 600 18px 'Inter', sans-serif;
 	margin: 0px 10px;
@@ -262,7 +282,7 @@ input[type=file]::file-selector-button:hover {
 	}
 }
 
-.Add .content .user button {
+.Add .UseraddBtn {
 	padding: 4px 28px;
 	border-radius: 10px;
 	font: 500 20px 'Inter', sans-serif;
@@ -277,7 +297,6 @@ input[type=file]::file-selector-button:hover {
 
 .Add .content .admin {
 	background: rgba(32, 164, 243, 0.9);
-
 	&:hover {
 		background: rgba(17, 112, 166, 0.9);
 	}
@@ -285,7 +304,6 @@ input[type=file]::file-selector-button:hover {
 
 .Add .content .owner {
 	background: rgba(249, 172, 24);
-
 	&:hover {
 		background: rgba(219, 148, 16, 0.901);
 	}
@@ -293,8 +311,8 @@ input[type=file]::file-selector-button:hover {
 
 
 .Add .content .g_img {
-	width: initial;
-	height: initial;
+	width: 45px;
+	height: 45px;
 	border: 2px solid #ffff;
 }
 

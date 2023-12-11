@@ -8,7 +8,7 @@ export class TwoFactorAuthenticationController {
 	constructor (private twoFactorAuthenticationService: TwoFactorAuthenticationService) {}
 
 	@Get("generate")
-	@UseGuards(AuthGuard)
+	// @UseGuards(AuthGuard)
 	generateTwoFactorAuthenticationSecret(@Req() req) {
 		console.log(req.user);
 		return this.twoFactorAuthenticationService.generateTwoFactorAuthSecret(req.user);

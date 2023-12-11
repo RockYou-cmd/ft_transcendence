@@ -40,9 +40,19 @@ export class TwoFactorAuthenticationService {
 			if (!validated)
 				throw new UnauthorizedException("Invalid 2fa token!");
 			this.userService.updateUser(user, "twoFactorAuthenticationSecret", ret.temp2fa)
+			this.userService.updateUser(user, "is2faEnabled", true)
 			return {status:"2fa enabled succesfully", code:200};
 		} catch (err) {
 			console.log("enableTwoFactorAuthentication Error!");
+			throw err;
+		}
+	}
+
+	async disableTwoFactorAuthentication(user, token) {
+		try{
+			this.userService.updateUser(user, "is2faEnabled", false)
+		} catch (err) {
+			console.log("disableTwoFactorAuthentication Error!");
 			throw err;
 		}
 	}

@@ -3,21 +3,20 @@ import { ChatService } from "./chat.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 
 
-@Controller("message")
+@Controller("chat")
 
 export class ChatController {
 	constructor(private chatService: ChatService) {};
 
-	@Get("chat")
+	@Get("get")
 	@UseGuards(AuthGuard)
 	async getMessages(@Req() account , @Query() user) {
 		return this.chatService.getChat(account.user, user);
 	}
 
-	@Post("send")
+	@Post("create")
 	@UseGuards(AuthGuard)
-	async sendMessage(@Req() account, @Body() user) {
-		return this.chatService.sendMessage(account.user, user, user.message);
+	async createChat(@Req()account, @Query() data) {
+		return this.chatService.createChat(account.user, data);
 	}
-
 }

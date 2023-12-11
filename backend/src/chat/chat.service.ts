@@ -10,121 +10,80 @@ export class ChatService {
 	
 	constructor(private userService: UserService) {};
 
-	async getMessages() {
 
+	async sendMessage(payload) {
+		// try{
+		// 	const chatId = payload.chatId;
+		// 	// console.log("chatId: ",chatId);
+		// 	var updatedChat = await prisma.message.create({
+		// 		data: {
+		// 			content: payload.content,
+		// 			chat: {
+		// 				connectOrCreate: {
+		// 					where: {
+		// 						id: chatId
+		// 					},
+		// 					create: {}
+		// 				}
+		// 			},
+		// 			sender: {
+		// 				connect: {
+		// 					username: payload.sender
+		// 				}
+		// 			},
+		// 			receiver: {
+		// 				connect: {
+		// 					username: payload.receiver
+		// 				}
+		// 			}
+		// 		}
+		// 	})
+		// 	// console.log(updatedChat)
+		// 	return "message sent!"
+		// }
+		// catch (err) {
+		// 	throw err;
+		// }
 	}
 
-	async sendMessage(account, user, message) {
-		try{
-			const {id} = await this.userService.getData(user);
-			const chat = await this.isChatCreated(account.username, user.username);
-			if (!chat.length) {
-				var createdChat = await prisma.chat.create({
-					data: {
-						messages: {
-							create: {
-								content: message,
-								sender: {
-									connect: {
-										username:account.username
-									},
-								},
-								receiver: {
-									connect: {
-										username: user.username
-									}
-								}
-							}
-						}
-					}
-				})
-			}
-			else {
-				const chatId = chat[0].messages[0].chatId;
-				var updatedChat = await prisma.message.create({
-					data: {
-						content: message,
-						chat: {
-							connect: {
-								id: chatId
-							}
-						},
-						sender: {
-							connect: {
-								username: account.username
-							}
-						},
-						receiver: {
-							connect: {
-								username: user.username
-							}
-						}
-					}
-				})
-			}
-			throw new HttpException("Message Sent!", HttpStatus.CREATED);
-		}
-		catch (err) {
-			throw err;
-		}
-	}
 
-	async isChatCreated(accountID, userId) {
+
+	async getChat(account, user) {
 		try {
-			const chat = await prisma.chat.findMany({
-				select:{
-					messages: {
-						where: {
-							OR:[
-								{
-									senderId: accountID
-								},
-								{
-									senderId: userId
-								}
-							]
-
+			const chats = await prisma.chat.findMany({
+				where: {
+					members: {
+						some: {
+							username: user.username
 						}
 					}
 				}
-			});
-			return chat;
-		}
-		catch(err) {
+			})
+			return {chats};
+		} catch (err) {
 			throw err;
 		}
 	}
 
-	async getChat(account, user) {
-		const messages = await prisma.message.findMany({
-			where: {
-				OR: [
-					{
-						AND: [
+	async createChat(account, data) {
+		try {
+			const chat = await prisma.chat.create({
+				data: {
+					members: {
+						connect: [
 							{
-								senderId: account.username,
+								username: account.username
 							},
 							{
-								receiverId: user.username
+								username: data.username
 							}
 						]
 					}
-					,
-					{
-						AND: [
-							{
-								senderId: user.username,
-							},
-							{
-								receiverId: account.username
-							}
-
-						]
-					}
-
-				]
-			}
-		});
-		return {messages};
+				}
+			})
+			return "new chat created";
+		} catch (err) {
+			throw err;
+		}
 	}
 }

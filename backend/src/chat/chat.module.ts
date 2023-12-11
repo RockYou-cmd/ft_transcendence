@@ -7,7 +7,7 @@ import { UserService } from "src/user/user.service";
 
 @Module({
 	controllers: [ChatController],
-	providers: [ChatService, AuthGuard, JwtService, UserService]
+	providers: [ChatService, AuthGuard, JwtService, UserService],
 })
 
 export class ChatModule {}
