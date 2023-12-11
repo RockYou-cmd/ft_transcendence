@@ -328,22 +328,5 @@ export class RoomService {
 			throw err;
 		}
 	}
-
-	async deleteChat(data) {
-		try {
-			prisma.chat.delete({
-				where: {
-					id:"g"
-				},
-				include: {
-					messages:
-				}
-			})
-			return "User unBanned";
-		}
-		catch (err) {
-			throw err;
-		}
-	}
 	
 }
