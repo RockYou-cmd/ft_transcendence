@@ -38,7 +38,7 @@ export interface Api {
 	members: string,
 	addNewMembers: string,
 	Logout : string,
-
+	createChat: string,
 }
 
 export const APIs: Api = {
@@ -55,7 +55,8 @@ export const APIs: Api = {
 	Search: Host + "/user/search/?username=",
 	SendFriendRequest: Host + "/request/",
 	Remove: Host + "/user/remove",
-	getChat: Host + "/message/chat/?username=",
+	getChat: Host + "/chat/get/?username=",
+	createChat: Host + "/chat/create",
 	sendMsg: Host + "/message/send",
 	Friends: Host + "/user/friends/?chat=",
 	Ban: Host + "/room/ban/member",

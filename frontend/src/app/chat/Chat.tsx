@@ -50,7 +50,6 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 	const [option, setOption] = useState(false);
 
 	//hooks for chat settings
-
 	const [group, setGroup] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
@@ -73,57 +72,70 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			Api = APIs.RoomChat + chat?.id;
 		}
 		const data = await Get(Api);
-		setChat(data);
+		if (data?.id == undefined){
+			const res = await Post({username : chat?.username}, APIs.createChat);
+			if (res.status == 201){
+				const data  = res.json();
+				setChat(data);
+			}
+		}
+		else
+			setChat(data);
+		
 		if (chat?.name){
 			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
 		}
-		// console.log("data", data);
+
+		
 	}
 	
 
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
 			getChat(User);
-	}, [User, refresher])
+	}, [User])
 
 
 	const visible = useRef(null) as any;
 	
 	async function send(e : (MouseEvent | KeyboardEvent)) {
 		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any ))){
-			const data = { message: input, username: User.username };
 			const msg = {content : input, senderId : me?.username}
 			// const res = await Post(data, APIs.sendMsg);
 			if (input != ""){
 				setInput("");
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
-				socket.emit("message",  {content : input, sender : me?.username, receiver : User?.username, chatId : chat?.messages[0]?.chatId || "noChat"});
+				let message : Object ;
+				if (chat?.id)
+					message = {content: input,sender: me?.username,receiver: User?.username, chatId : chat?.id}
+				else
+					message = {content: input,sender: me?.username,receiver: User?.name}
+				
+				socket.emit("message",  message);
+				console.log("chat id in send ", chat?.messages[0]?.chatId);
 			}
 			
 		}
 		
-		// setRefresher(!refresher);
 	}
 	
-
 	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
-	}, [chat]);
-
-	useEffect(() => {
 		socket.on("message", (data: any) => {
 			const msg = {content : data.content, senderId : data.sender, chatId : data.chatId}
-			if (data.chatId == chat?.messages[0]?.chatId){
+			// console.log("data id",  data.chatId);
+			// console.log("chat id", chat?.messages[0]?.chatId);
+			if (data?.chatId == chat?.chatId){
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
 			}
 		})
 		return () => {
 			socket.off("message");
 		};
-	}, [socket]);
+	}, [socket, chat]);
 
 	function PrintMsg(msgs: any) {
 		const msg = msgs?.msgs;
@@ -146,31 +158,31 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 	return (
 		<>
 
-				<section className='User'>
+			<section className='User'>
 
-					<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
-					<h1 onClick={() => {User?.username ? router.push("/users/" + User?.username) : null}}>{User?.username ? User?.username : User?.name}</h1>
-					<span>{User?.username ? (User?.status ? "online" : "offline") : null}</span>
-					<div className="line"></div>
-					{User?.status && <div className="status"></div>}
+				<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
+				<h1 onClick={() => {User?.username ? router.push("/users/" + User?.username) : null}}>{User?.username ? User?.username : User?.name}</h1>
+				<span>{User?.username ? (User?.status ? "online" : "offline") : null}</span>
+				<div className="line"></div>
+				{User?.status && <div className="status"></div>}
 
-					{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
-						<div className='point'></div><div className='point'></div><div className='point'></div>
-					</button>}
-					{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content}/>}
+				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
+					<div className='point'></div><div className='point'></div><div className='point'></div>
+				</button>}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content}/>}
+			</section>
+			<div className="Msg" ref={scroll}>
+				{chat?.messages?.map((msg: any, index : number) => (<PrintMsg key={index} msgs={msg} />))}
+			</div>
+			<div className="Send" >
+				<div className="line"></div>
+				<section>
+					<input type="text" placeholder="Type a message" value={input} onChange={(e) =>{ setInput(e.target.value) }} onKeyDown={(e : KeyboardEvent)=>send(e)} />
+					<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
 				</section>
-				<div className="Msg" ref={scroll}>
-					{chat?.messages?.map((msg: any, index : number) => (<PrintMsg key={index} msgs={msg} />))}
-				</div>
-				<div className="Send" >
-					<div className="line"></div>
-					<section>
-						<input type="text" placeholder="Type a message" value={input} onChange={(e) =>{ setInput(e.target.value) }} onKeyDown={(e : KeyboardEvent)=>send(e)} />
-						<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
-					</section>
-					<button onClick={(e : MouseEvent)=>send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{width :"20px",
-				height:"20px"}}/></button>
-				</div>
+				<button onClick={(e : MouseEvent)=>send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{width :"20px",
+			height:"20px"}}/></button>
+			</div>
 			
 		</>
 

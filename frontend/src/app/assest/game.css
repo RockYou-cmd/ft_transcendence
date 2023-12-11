@@ -10,5 +10,100 @@
 .GameMain{
 	background-color: #1F295E;
 	height: 92.8vh;
-	/* width: 100%; */
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 1% 3%;
 }
+
+.Leaderboard{
+	padding:1% 2.5%;
+
+	& h1{
+		font : 700 30px "Inter", sans-serif;
+		text-align: center;
+		margin:20px 0px;
+	}
+}
+
+.Leaderboard .content{
+	display: flex;
+	flex-direction: column;
+	padding: 20px 0px 40px 10px;
+
+}
+
+.rankTable{
+	display: flex;
+	flex-direction: row;
+	margin:15px 0px;
+	cursor: pointer;
+
+	background-color: #3184BF;
+	border-radius: 25px;
+	position: relative;
+	padding:12px;
+
+	&:hover{
+		background-color: #0e4c77;
+	}
+	
+	& h4{
+		position: absolute;
+		right: 75px;
+		
+	}
+	
+	& span{
+		position: absolute;
+		right: 30px;
+	}
+
+	& h2{
+		position: absolute;
+		left: -20px;
+	
+	}
+	
+	& h3 , span , h4 , h2{
+		font : 700 20px "Inter", sans-serif;
+		color: #fff;
+		
+	}
+
+	& h3{margin:0px 65px;}
+	
+	& .g_img{
+		width: 62px;
+		height: 62px;
+		position: absolute;
+		top:-7px;
+		left:0px;
+		border: 3px solid #fff;
+	}
+}
+
+.Leaderboard , .online{
+	border-radius: 50px;
+	width:35%;
+	background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%);
+	box-shadow: 2px 2px 20px 3px rgba(26, 213, 255, 0.25);
+
+}
+
+.online{
+
+}
+
+.gameMode{
+	width: 27%;
+	padding: 2vh;
+}
+
+
+
+
+
+
+
+
