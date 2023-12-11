@@ -34,6 +34,7 @@ export class EventsGateway {
 
   @SubscribeMessage('message')
   handleMessage(client: Socket, payload: any) {
+    console.log(payload.chatId)
     this.server.to(payload.receiver).emit("message", payload);
     this.chatService.sendMessage(payload);
   }

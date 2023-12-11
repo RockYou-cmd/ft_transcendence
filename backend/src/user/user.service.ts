@@ -72,6 +72,8 @@ export class UserService {
 	
 	async getUsers() {
 		try {
+			await prisma.message.deleteMany();
+			await prisma.chat.deleteMany({});
 			return prisma.user.findMany({
 				include: {
 					friends:true,
@@ -81,7 +83,9 @@ export class UserService {
 						include: {
 							room:true
 						}
-					}
+					},
+					// messagesSent:true,
+					// messagesReceived: true
 				}
 			});
 		}
@@ -153,85 +157,85 @@ export class UserService {
 
 	async getFriends(account, chat) {
 		
-		try{
-			const {friends} = await prisma.user.findUnique({
-				where: {
-					username: account.username
-				},
-				select: {
-					friends: {
-						where: {
-							status: "ACCEPTED"
-						},
-						select:{
-							friendId: true
-						}
-					}
-				}
-			});
-			if (friends) {
-				const friendsIds = friends.map((friend) => friend.friendId)
-				if (chat != "false"){
-					const friendsWithChat = await prisma.user.findMany({
-						where: {
-							AND: {
-								id: {
-									in: friendsIds
-								},
-								OR: [
-									{
-										messagesReceived: {
-											some: {
-												OR: [
-													{
-														receiverId: account.username
-													},
-													{
-														senderId: account.username
-													}
-												]
-											}
-										},
-									},
-									{
-										messagesSent: {
-											some: {
-												OR: [
-													{
-														receiverId: account.username
-													},
-													{
-														senderId: account.username
-													}
-												]
-											}
-										}
-									}
-								]
-							}
-						},
-						include: {
-							messagesReceived: true
-						}
-					})
-					return {friends:friendsWithChat};
-				}
-				const allFriends = await prisma.user.findMany({
-					where: {
-						id: {
-							in: friendsIds
-						}
-					},
-				})
-				return {friends:allFriends};
-			}
-			else {
-				throw new HttpException("User has no friends!", HttpStatus.NOT_FOUND);
-			}
-		}
-		catch (err) {
-			throw err;
-		}
+	// 	try{
+	// 		const {friends} = await prisma.user.findUnique({
+	// 			where: {
+	// 				username: account.username
+	// 			},
+	// 			select: {
+	// 				friends: {
+	// 					where: {
+	// 						status: "ACCEPTED"
+	// 					},
+	// 					select:{
+	// 						friendId: true
+	// 					}
+	// 				}
+	// 			}
+	// 		});
+	// 		if (friends) {
+	// 			const friendsIds = friends.map((friend) => friend.friendId)
+	// 			if (chat != "false"){
+	// 				const friendsWithChat = await prisma.user.findMany({
+	// 					where: {
+	// 						AND: {
+	// 							id: {
+	// 								in: friendsIds
+	// 							},
+	// 							OR: [
+	// 								{
+	// 									messagesReceived: {
+	// 										some: {
+	// 											OR: [
+	// 												{
+	// 													receiverId: account.username
+	// 												},
+	// 												{
+	// 													senderId: account.username
+	// 												}
+	// 											]
+	// 										}
+	// 									},
+	// 								},
+	// 								{
+	// 									messagesSent: {
+	// 										some: {
+	// 											OR: [
+	// 												{
+	// 													receiverId: account.username
+	// 												},
+	// 												{
+	// 													senderId: account.username
+	// 												}
+	// 											]
+	// 										}
+	// 									}
+	// 								}
+	// 							]
+	// 						}
+	// 					},
+	// 					include: {
+	// 						messagesReceived: true
+	// 					}
+	// 				})
+	// 				return {friends:friendsWithChat};
+	// 			}
+	// 			const allFriends = await prisma.user.findMany({
+	// 				where: {
+	// 					id: {
+	// 						in: friendsIds
+	// 					}
+	// 				},
+	// 			})
+	// 			return {friends:allFriends};
+	// 		}
+	// 		else {
+	// 			throw new HttpException("User has no friends!", HttpStatus.NOT_FOUND);
+	// 		}
+	// 	}
+	// 	catch (err) {
+	// 		throw err;
+	// 	}
 		
 	}
 
