@@ -51,10 +51,19 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		var ball_acc = 0.12;
 		
 		const context = game.current?.getContext('2d');
-		const gameWidth = game.current?.width || 0;
-		const gameHeight = game.current?.height || 0;
-	
-		
+		const parent = game.current?.parentElement;
+		game.current.width = parent?.clientWidth || 0;
+		game.current.height = parent?.clientHeight || 0;
+		// const gameWidth = game.current.offsetWidth || 0;
+		// const gameHeight = game.current.offsetHeight || 0;
+
+		const gameWidth = game.current.width || 0;
+		const gameHeight = game.current.height || 0;
+
+		console.log("offset ", game.current.offsetWidth, game.current.offsetHeight);
+		console.log("normal " ,game.current.width, game.current.height);
+		console.log("current ", gameWidth, gameHeight);
+
 		var net={
 			x : gameWidth / 2 - 1,
 			y : 0,
@@ -277,9 +286,9 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 
 	return (
 		<>
-			<div id="container" className='flex justify-center w- m-auto mt-12'>
+			<div id="container">
 				{/* <p className="score"> {myScore.current} | {oppScore.current} </p> */}
-				<canvas id="canvas" ref={game} width="1500" height="900" />
+				<canvas id="canvas" ref={game} />
 			</div>
 			{ COM ? (<>
 			<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
