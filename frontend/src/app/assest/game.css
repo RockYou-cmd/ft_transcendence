@@ -11,19 +11,19 @@
 	/* width: fit-content; */
 	padding:80px auto 30px;
 	align-items: center;
-	background-image: url("../../../public/Frame_1.png");
+	/* background-image: url("../../../public/Frame_1.png"); */
 	/* background:fixed; */
 	background-size:30vh;
 	background-position: center;
 
 	/* background-color: #fff; */
-	background-color: #20A4F3;
-
+	
 }
 
 #canvas{
 	width: 90%;
 	height: 90%;
+	background-color: #20A4F3;
 
 
 }

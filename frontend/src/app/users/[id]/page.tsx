@@ -114,7 +114,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	if (!wait) { return (<div>loading...</div>)}
 	return (
 		<>
-			{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render :
+			{online == "OFF" ? render :
 			
 			(<><div className="m-8 flex flex-row gap-8 h-[85vh] ">
 				<div className=" flex flex-col rounded-lg  items-center bg-teal-500 h-full min-w-[400px]  bg-gradient-to-r from-blue-700 to-blue-900" >profile info
