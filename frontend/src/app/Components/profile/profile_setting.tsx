@@ -1,9 +1,11 @@
 import { FC, ChangeEvent, FormEvent, useState } from "react";
 import Cookies from "js-cookie";
 import Modal from "./popup";
+import TwoAuth from "./2fa";
 
 interface Props {
   handleClick: (val: boolean) => void;
+  User : any;
 }
 
 interface FormData {
@@ -13,7 +15,7 @@ interface FormData {
   photo: string;
 }
 
-const Setting: FC<Props> = ({ handleClick }) => {
+const Setting: FC<Props> = ({ handleClick , User} ) => {
 
  ///// modal properties 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -81,7 +83,6 @@ const Setting: FC<Props> = ({ handleClick }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    
 
     try {
       // const { username, bio, photo } = formData;
@@ -100,7 +101,6 @@ const Setting: FC<Props> = ({ handleClick }) => {
         updatedData.photo = photo;
       }
   
-
       const response = await fetch('http://localhost:3001/user/update', {
         method: 'PUT',
         headers: {
@@ -134,7 +134,7 @@ const Setting: FC<Props> = ({ handleClick }) => {
         profile_setting
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-gray-900 rounded-md">
           <input
-            className="cursor-pointer justify-center w-64 aspect-square align-center items-center rounded border-2 border-dashed bg-black"
+            className="cursor-pointer justify-center w-64 aspect-square  align-center items-center rounded border-2 border-dashed bg-black"
             type="file"
             onChange={handleChange}
             name="photo"
@@ -146,6 +146,9 @@ const Setting: FC<Props> = ({ handleClick }) => {
           <div className="mb-6 font-bold">
             <label htmlFor="bio">Bio</label>
             <textarea id="bio" name="bio" onChange={handleChange}></textarea>
+          </div>
+          <div>
+          <TwoAuth User={User} />
           </div>
           <div className="flex gap-8">
             <button type="submit" className="bg-green-700 rounded w-32">Save</button>

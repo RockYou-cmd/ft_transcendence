@@ -17,6 +17,6 @@ export class ChatController {
 	@Post("create")
 	@UseGuards(AuthGuard)
 	async createChat(@Req()account, @Query() data) {
-		return this.chatService.createChat(account.user, data);
+		return  this.chatService.createChat(account.user, data);
 	}
 }
