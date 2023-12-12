@@ -22,8 +22,7 @@ export class TwoFactorAuthenticationService {
 				secret:secret.base32
 			})
 			const qr = await qrcode.toDataURL(otpAuthUrl);
-			console.log(qr)
-			return qr;
+			return {qr};
 		}
 		catch(err) {
 			console.log("generateTwoFactorAuthSecretUrl Error!");
