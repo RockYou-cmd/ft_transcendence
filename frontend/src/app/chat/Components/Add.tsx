@@ -6,6 +6,7 @@ import avatar from '../../../../public/avatar.png';
 import Options from './Options';
 import { constrainedMemory } from 'process';
 import '../../assest/Components.css';
+import Link from 'next/link';
 
 export default function Add({Users , Make, title, join, close} : {Users: any, Make: any, title: string, join : string, close: any}){
 
@@ -33,25 +34,27 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 
 	useEffect(() => {
 		const SearchRes = Users?.filter((user: any)=>{
-			return user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
+			return user.users[0].username.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
 		})
 		setData(SearchRes);
 	}, [Users, search]);
 
 	function Print(users : any){
-		const user = users?.users;
+		let user = users?.users;
+		if (join == "StartChat"){
+			user = user.users[0];
+		}
 		const print = <>
-			<div className={"user"}>
+			<Link href={"/users/" + user?.username} passHref={true} ><div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name ? user?.name : user?.username}</h3>
 				<button className='UseraddBtn' style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
 				{join == "JOIN" && <div className='Join'></div>}
-			</div>
+			</div></Link>
 		</>
 		return <div>{print}</div>
 	}
 	
-	console.log("data in add", data);
 	return (
 		<>
 			<div className="Add">

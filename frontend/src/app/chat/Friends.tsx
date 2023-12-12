@@ -21,7 +21,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 		getFriends();
 	}, [refresh]);
 
-
+	console.log("data in friends", data);
 
 	function SelecteEvent(e: MouseEvent, friend: any) {
 		e.preventDefault();
@@ -30,7 +30,8 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 
 	function PrintFrinds(infos: any) {
 
-		const info = infos?.infos;
+		let info = infos?.infos;
+		info = info?.members[0];
 		const friend = <>
 			<div className="content" onClick={(e: MouseEvent) => SelecteEvent(e, info)}>
 				<Image className="g_img" src={info?.photo ? info?.photo : avatar} priority={true} alt="img" width={70} height={70} />
@@ -51,7 +52,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 				<span className="groupField">Friends</span>
 				<div className='content_f'>
 
-					{data?.friends?.map((friend: any) => (<PrintFrinds key={friend.username} infos={friend} />))}
+					{data?.chats?.map((friend: any, index : number) => (<PrintFrinds key={index} infos={friend} />))}
 				</div>
 			</div>
 		</>

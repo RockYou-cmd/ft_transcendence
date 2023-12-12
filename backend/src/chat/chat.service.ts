@@ -1,89 +1,93 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
-import { UserService } from "src/user/user.service";
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { UserService } from 'src/user/user.service';
 
 const prisma = new PrismaClient();
 
-@Injectable() 
-
+@Injectable()
 export class ChatService {
-	
-	constructor(private userService: UserService) {};
+  constructor(private userService: UserService) {}
 
+  async sendMessage(payload) {
+    try {
+      const chatId = payload.chatId;
+      // console.log("chatId: ",chatId);
+      var updatedChat = await prisma.message.create({
+        data: {
+          content: payload.content,
+          chat: {
+            connectOrCreate: {
+              where: {
+                id: chatId,
+              },
+              create: {},
+            },
+          },
+          sender: {
+            connect: {
+              username: payload.sender,
+            },
+          },
+        },
+      });
+      // console.log(updatedChat)
+      return 'message sent!';
+    } catch (err) {
+      throw err;
+    }
+  }
 
-	async sendMessage(payload) {
-		// try{
-		// 	const chatId = payload.chatId;
-		// 	// console.log("chatId: ",chatId);
-		// 	var updatedChat = await prisma.message.create({
-		// 		data: {
-		// 			content: payload.content,
-		// 			chat: {
-		// 				connectOrCreate: {
-		// 					where: {
-		// 						id: chatId
-		// 					},
-		// 					create: {}
-		// 				}
-		// 			},
-		// 			sender: {
-		// 				connect: {
-		// 					username: payload.sender
-		// 				}
-		// 			},
-		// 			receiver: {
-		// 				connect: {
-		// 					username: payload.receiver
-		// 				}
-		// 			}
-		// 		}
-		// 	})
-		// 	// console.log(updatedChat)
-		// 	return "message sent!"
-		// }
-		// catch (err) {
-		// 	throw err;
-		// }
-	}
-
-
-
-	async getChat(account, user) {
-		try {
-			const chats = await prisma.chat.findMany({
-				where: {
+  async getChat(account, user) {
+    try {
+    //   await prisma.message.deleteMany();
+    //   await prisma.chat.deleteMany();
+      const chat = await prisma.user.findUnique({
+        where: {
+			username: account.username
+          },
+		  select: {
+			chats: {
+				where:{ 
 					members: {
-						some: {
+						some:{
 							username: user.username
 						}
 					}
+				},
+				include: {
+					messages: true
 				}
-			})
-			return {chats};
-		} catch (err) {
-			throw err;
-		}
-	}
+			}
+		  }
+      });
+      return chat;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-	async createChat(account, data) {
-		try {
-			const chat = await prisma.chat.create({
-				data: {
-					members: {
-						connect: [
-							{
-								username: account.username
-							},
-							{
-								username: data.username
-							}
-						]
-					}
-				}
-			})
-			return "new chat created";
-		} catch (err) {
-			throw err;
-		}
-	}
+  async createChat(account, data) {
+    try {
+      const chat = await prisma.chat.create({
+        data: {
+          members: {
+            connect: [
+              {
+                username: account.username,
+              },
+              {
+                username: data.username,
+              },
+            ],
+          },
+        },
+      });
+	  console.log("chato : ", chat);
+      return await this.getChat(account, data);
+    } catch (err) {
+      throw err;
+    }
+  }
 }

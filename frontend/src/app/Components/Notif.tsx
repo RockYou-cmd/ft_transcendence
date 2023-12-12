@@ -10,6 +10,14 @@ export default function Notif({content} : {content?: string}) {
 
 	const [show, setShow] = useState(false);
 
+	// useEffect(() => {
+	// 	if (show){
+	// 		const timer = setTimeout(() => {
+	// 			setShow(false);
+	// 		}, 5100);
+	// 		return () => clearTimeout(timer);
+	// 	}
+	// }, [show]);
 
 	return (
 		<>
@@ -18,8 +26,8 @@ export default function Notif({content} : {content?: string}) {
 		{ show &&
 			<div id="NotifBar">
 				<h1>ibra has send friend request</h1>
-				<button className="accept">Accept</button>
-				<button className="reject">Cancel</button>
+				<button className="accept" onClick={()=>setShow(!show)} >Accept</button>
+				<button className="reject" onClick={()=>setShow(!show)}>Cancel</button>
 			</div>
 		}
 		</>

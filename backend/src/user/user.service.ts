@@ -70,7 +70,7 @@ export class UserService {
 			if (!ret)
 				throw new NotFoundException("User Not Found");
 			console.log(ret);
-			return {...userData, status:ret.friends[0]?.status};
+			return {...userData, status:ret.friends[0]?.status, sender: ret.friends[0]?.sender.username};
 			
 		}
 		catch(err) {

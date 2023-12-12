@@ -69,7 +69,17 @@ export class FriendService {
 				where: {
 					members: {
 						some: {
-							username: account.username
+							username: account.username,
+							
+						},
+					}
+				},
+				select: {
+					members: {
+						where: {
+							NOT: {
+								username: account.username
+							}
 						}
 					}
 				}
@@ -83,7 +93,7 @@ export class FriendService {
 	async getFriends(account) {
 		try {
 			const friends = await prisma.user.findUnique({
-				where: account.username,
+				where: {username: account.username},
 				select: {
 					friends: {
 						where: {

@@ -12,6 +12,7 @@ export async function Post(data : object, path : string){
 		},
 		body: JSON.stringify(data),
 	};
+
 	const res = await fetch(path , header);
 	// try{
 	// 	const res = await axios.post(path, data, {withCredentials: true});

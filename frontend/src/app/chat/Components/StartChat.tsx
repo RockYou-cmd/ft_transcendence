@@ -17,8 +17,7 @@ export default function StartChat({ close, User }: { close: any, User: any }) {
 		getFriends();
 	}, []);
 
-	console.log("data friends", data);
-	console.log("friends", data?.friends);
+	// console.log("friends", data?.friends);
 	return (
 		<>
 			<Add Users={data?.friends} Make={User} title="Start Chat" join="StartChat" close={close} />

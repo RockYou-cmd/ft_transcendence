@@ -72,22 +72,22 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			Api = APIs.RoomChat + chat?.id;
 		}
 		const data = await Get(Api);
-		if (data?.id == undefined) {
+		console.log("data in chat", data);
+		if (data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: chat?.username }, APIs.createChat);
 			if (res.status == 201) {
-				const data = res.json();
-				setChat(data);
+				const datas = await res.json();
+				setChat(datas?.chats[0]);
 			}
 		}
-		else
-			setChat(data);
+		else{
+			setChat(data?.chats[0]);
+		}
 
 		if (chat?.name) {
 			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
 		}
-
-
 	}
 
 
@@ -95,40 +95,36 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 		if (Object.keys(User).length != 0)
 			getChat(User);
 	}, [User])
-
+	
 
 	const visible = useRef(null) as any;
 
 	async function send(e: (MouseEvent | KeyboardEvent)) {
 		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any))) {
 			const msg = { content: input, senderId: me?.username }
-			// const res = await Post(data, APIs.sendMsg);
 			if (input != "") {
 				setInput("");
-				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
-				let message: Object;
-				if (chat?.id)
-					message = { content: input, sender: me?.username, receiver: User?.username, chatId: chat?.id }
-				else
-					message = { content: input, sender: me?.username, receiver: User?.name }
+				setChat((chat : { messages: any }) => ({ ...chat, messages: [...chat.messages, msg] }));
 
+				const message = { content: input, sender: me?.username , chatId: chat?.id , receiver : User?.username};
 				socket.emit("message", message);
-				console.log("chat id in send ", chat?.messages[0]?.chatId);
+				// console.log("chat id in send ", chat?.messages[0]?.chatId);
 			}
-
 		}
-
 	}
-
 	useEffect(() => {
+
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
+	}, [chat]);
+		
+	useEffect(() => {
 		socket.on("message", (data: any) => {
 			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
 			// console.log("data id",  data.chatId);
 			// console.log("chat id", chat?.messages[0]?.chatId);
-			if (data?.chatId == chat?.chatId) {
+			if (data?.chatId == chat?.id) {
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}
 		})
@@ -154,6 +150,7 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 		return <div>{message}</div>
 
 	}
+
 
 	return (
 		<>

@@ -12,11 +12,11 @@ export async function SendFriendRequest({ username, status }: { username: string
 
 
 	if (status == "request friend")
-		subApi = APIs.SendFriendRequest + "send";
+		subApi = APIs.SendFriendRequest;
 	else if (status == "cancel request")
 		subApi = APIs.Remove;
 	else if (status == "accept request")
-		subApi = APIs.SendFriendRequest + "accept";
+		subApi = APIs.AcceptFriendRequest;
 	else if (status == "remove friend")
 		subApi = APIs.Remove;
 	else if (status == "block")

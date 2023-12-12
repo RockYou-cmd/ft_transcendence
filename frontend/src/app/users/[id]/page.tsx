@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Profile from "@/app/profile/profile";
 import Cookies from "js-cookie";
@@ -14,6 +14,7 @@ import { SendFriendRequest } from "@/app/Components/Settings/ChatSettings";
 import { MouseEvent } from "react";
 import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
+import Logout from "@/app/Components/Log/Logout";
 
 export default function UserProfile({ param }: { param: { id: string } }) {
 	
@@ -39,21 +40,20 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-		
+		console.log("data", data);
 		if (data == undefined){
-			Cookies.remove("access_token");
-			setOnline("OFF");
-			hooks.logInHook.setState(false);
+			Logout();
 		}
 
 		if (data?.statusCode == 404){
 			router.push("/users/not-found");
 		}
 		UsersetData(data);
-		if (data?.status == "PENDING")
-		Fstatus.current = "cancel request";
-		else if (data?.status == "WAITING")
+		
+		if (data?.status == "PENDING" && data?.sender == data?.username)
 		Fstatus.current = "accept request";
+		else if (data?.status == "PENDING")
+		Fstatus.current = "cancel request";
 		else if (data?.status == "ACCEPTED")
 			Fstatus.current = "remove friend";
 		else if (data?.status == "BLOCKED")
@@ -74,25 +74,20 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	//   }
 
 	const hooks = {
-		logInHook: { state: log, setState: setLog },
 		dataHook: { state: data, setState: setData },
-		cookieHook: { state: cookie, setState: setCookie },
 		waitHook: { state: wait, setState: checkwait },
 	}
-
+	
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-
-
-	useEffect(() => {hooks.waitHook.setState(true);},[]);
-
+	
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
 	}, [online, refresh]);
 	
-	
 	if (Userdata?.photo != null)
 	photo = Userdata.photo;
+
 	else
 		photo = avatar.src;
 
@@ -101,16 +96,14 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		try{
 			const res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
 			if (res == undefined){
-				Cookies.remove("access_token");
-				setOnline("OFF");
-				hooks.logInHook.setState(false);
+				Logout();
 			}
 			setRefresh(!refresh);
 		}catch(err){
 			alert(err);}
-	}
-
-	
+		}
+		
+		
 	if (!wait) { return (<div>loading...</div>)}
 	return (
 		<>
