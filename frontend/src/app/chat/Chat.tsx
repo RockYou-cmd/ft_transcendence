@@ -3,24 +3,24 @@ import Image from 'next/image';
 import { useEffect, useState, useRef } from "react";
 import Options from './Components/Options';
 import { ChatOptions } from '../Props/Interfaces';
-import { Get } from '../Components/Fetch/post'
+import { Get } from '../Components/Fetch/Fetch'
 import { APIs } from '../Props/APIs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import avatar from '../../../public/avatar.png';
-import { Post } from '../Components/Fetch/post';
-import { useLogContext, useSocket , useMe} from '../Components/Log/LogContext';
-import { MouseEvent , KeyboardEvent } from 'react';
+import { Post } from '../Components/Fetch/Fetch';
+import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
+import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
-function Leave(GroupId : any){
-	const res = Post({id: GroupId?.id}, APIs.LeaveRoom);
-	
+function Leave(GroupId: any) {
+	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
+
 }
 
-function Block(User : any){
-	const res = Post({id: User?.id}, APIs.Block);
+function Block(User: any) {
+	const res = Post({ id: User?.id }, APIs.Block);
 }
 
 
@@ -37,10 +37,10 @@ const SuperSettings: ChatOptions = {
 
 
 
-export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: any, OptionHandler :any}) {
+export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: any, OptionHandler: any }) {
 
-	const {socket, setSocket} = useSocket();
-	const {me, setMe} = useMe() as any;
+	const { socket, setSocket } = useSocket();
+	const { me, setMe } = useMe() as any;
 	const [refresher, setRefresher] = useState(false);
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
@@ -54,42 +54,42 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
 
-	
-	
+
+
 	async function getChat(chat: any) {
 		let name = "";
 		let Api = "";
-		if (chat?.username != undefined){
+		if (chat?.username != undefined) {
 			name = chat?.username;
 			setGroup(false);
 			Role("");
 			setRole("");
 			Api = APIs.getChat + name;
 		}
-		else{
+		else {
 			name = chat?.name;
 			setGroup(true);
 			Api = APIs.RoomChat + chat?.id;
 		}
 		const data = await Get(Api);
-		if (data?.id == undefined){
-			const res = await Post({username : chat?.username}, APIs.createChat);
-			if (res.status == 201){
-				const data  = res.json();
+		if (data?.id == undefined) {
+			const res = await Post({ username: chat?.username }, APIs.createChat);
+			if (res.status == 201) {
+				const data = res.json();
 				setChat(data);
 			}
 		}
 		else
 			setChat(data);
-		
-		if (chat?.name){
+
+		if (chat?.name) {
 			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
 		}
 
-		
+
 	}
-	
+
 
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
@@ -98,38 +98,38 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 
 	const visible = useRef(null) as any;
-	
-	async function send(e : (MouseEvent | KeyboardEvent)) {
-		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any ))){
-			const msg = {content : input, senderId : me?.username}
+
+	async function send(e: (MouseEvent | KeyboardEvent)) {
+		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any))) {
+			const msg = { content: input, senderId: me?.username }
 			// const res = await Post(data, APIs.sendMsg);
-			if (input != ""){
+			if (input != "") {
 				setInput("");
-				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
-				let message : Object ;
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
+				let message: Object;
 				if (chat?.id)
-					message = {content: input,sender: me?.username,receiver: User?.username, chatId : chat?.id}
+					message = { content: input, sender: me?.username, receiver: User?.username, chatId: chat?.id }
 				else
-					message = {content: input,sender: me?.username,receiver: User?.name}
-				
-				socket.emit("message",  message);
+					message = { content: input, sender: me?.username, receiver: User?.name }
+
+				socket.emit("message", message);
 				console.log("chat id in send ", chat?.messages[0]?.chatId);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
 		socket.on("message", (data: any) => {
-			const msg = {content : data.content, senderId : data.sender, chatId : data.chatId}
+			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
 			// console.log("data id",  data.chatId);
 			// console.log("chat id", chat?.messages[0]?.chatId);
-			if (data?.chatId == chat?.chatId){
-				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg]}));
+			if (data?.chatId == chat?.chatId) {
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}
 		})
 		return () => {
@@ -142,9 +142,9 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 
 		const message = <>
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
-					{ msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
+				{msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 				<section>
-					
+
 					<p>{msg?.content}</p>
 				</section>
 				{/* <span >{msg?.createdAt}</span> */}
@@ -161,7 +161,7 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 			<section className='User'>
 
 				<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
-				<h1 onClick={() => {User?.username ? router.push("/users/" + User?.username) : null}}>{User?.username ? User?.username : User?.name}</h1>
+				<h1 onClick={() => { User?.username ? router.push("/users/" + User?.username) : null }}>{User?.username ? User?.username : User?.name}</h1>
 				<span>{User?.username ? (User?.status ? "online" : "offline") : null}</span>
 				<div className="line"></div>
 				{User?.status && <div className="status"></div>}
@@ -169,21 +169,23 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 					<div className='point'></div><div className='point'></div><div className='point'></div>
 				</button>}
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content}/>}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content} />}
 			</section>
 			<div className="Msg" ref={scroll}>
-				{chat?.messages?.map((msg: any, index : number) => (<PrintMsg key={index} msgs={msg} />))}
+				{chat?.messages?.map((msg: any, index: number) => (<PrintMsg key={index} msgs={msg} />))}
 			</div>
 			<div className="Send" >
 				<div className="line"></div>
 				<section>
-					<input type="text" placeholder="Type a message" value={input} onChange={(e) =>{ setInput(e.target.value) }} onKeyDown={(e : KeyboardEvent)=>send(e)} />
+					<input type="text" placeholder="Type a message" value={input} onChange={(e) => { setInput(e.target.value) }} onKeyDown={(e: KeyboardEvent) => send(e)} />
 					<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
 				</section>
-				<button onClick={(e : MouseEvent)=>send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{width :"20px",
-			height:"20px"}}/></button>
+				<button onClick={(e: MouseEvent) => send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{
+					width: "20px",
+					height: "20px"
+				}} /></button>
 			</div>
-			
+
 		</>
 
 	)

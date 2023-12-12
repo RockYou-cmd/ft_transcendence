@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useRef, useEffect, use } from 'react';
 import { MouseEvent } from 'react';
 import { KeyboardEvent } from 'react';
-import { Get } from './post';
+import { Get } from './Fetch';
 import { APIs } from '../../Props/APIs';
 import Image from 'next/image';
 import avatar from '../../../../public/avatar.png';
@@ -12,7 +12,7 @@ import { useLogContext } from '../Log/LogContext';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
-export default function SearchBar({title }: { title: string }) {
+export default function SearchBar({ title }: { title: string }) {
 
 	const visible = useRef(null) as any;
 	const [data, setData] = useState({} as any);
@@ -74,7 +74,7 @@ export default function SearchBar({title }: { title: string }) {
 					<div className='line'></div>
 					<div className='resBar'  >
 						{data?.users?.map((user: any, index: number) => (
-							<div className='results' key={index} onClick={()=>{setInput("");router.push("/users/" + user.username)}}>
+							<div className='results' key={index} onClick={() => { setInput(""); router.push("/users/" + user.username) }}>
 								{user.photo == null ? <Image className="g_img" src={avatar} priority={true} alt="img" width={45} height={45} /> :
 									<Image className="g_img" src={user?.photo} priority={true} alt="img" width={45} height={45} />}
 								<span>{user.username}</span>

@@ -3,7 +3,7 @@ import React from 'react';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLogContext } from './LogContext';
-import { Get } from '../Fetch/post';
+import { Get } from '../Fetch/Fetch';
 import { APIs } from '@/app/Props/APIs';
 
 
@@ -19,7 +19,7 @@ export default function Logout() {
 				'Content-Type': 'application/json',
 			},
 		});
-		if (res?.status == 200){
+		if (res?.status == 200) {
 			setOnline("OFF");
 			router.push("/");
 		}

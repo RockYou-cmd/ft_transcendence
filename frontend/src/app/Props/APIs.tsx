@@ -20,6 +20,7 @@ export interface Api {
 	getChat: string,
 	sendMsg: string,
 	Friends: string,
+	FriendsChat : string,
 	Kick: string,
 	Ban: string,
 	Mute: string,
@@ -58,7 +59,7 @@ export const APIs: Api = {
 	getChat: Host + "/chat/get/?username=",
 	createChat: Host + "/chat/create",
 	sendMsg: Host + "/message/send",
-	Friends: Host + "/user/friends/?chat=",
+	Friends: Host + "/user/friends",
 	Ban: Host + "/room/ban/member",
 	UnBan: Host + "/room/unban/member",
 	addMember: Host + "/room/add/member",
@@ -77,5 +78,5 @@ export const APIs: Api = {
 	members: Host + "/room/members/?id=",
 	addNewMembers: Host + "/room/add/new/member/?id=",
 	Logout : Host + "/auth/logout",
-
+	FriendsChat : Host + "/user/friends/chats",
 };

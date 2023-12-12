@@ -2,14 +2,14 @@
 import Add from "./Add"
 import { APIs } from "../../Props/APIs"
 import { useState, useEffect } from "react"
-import { Get } from "../../Components/Fetch/post";
+import { Get } from "../../Components/Fetch/Fetch";
 
-export default function StartChat({close, User} : {close: any, User : any}) {
+export default function StartChat({ close, User }: { close: any, User: any }) {
 
 	const [data, setData] = useState({} as any);
 
-	async function getFriends(){
-		const data = await Get(APIs.Friends + "false");
+	async function getFriends() {
+		const data = await Get(APIs.Friends);
 		setData(data);
 	}
 
@@ -17,12 +17,11 @@ export default function StartChat({close, User} : {close: any, User : any}) {
 		getFriends();
 	}, []);
 
-	
-
-
-	return(
+	console.log("data friends", data);
+	console.log("friends", data?.friends);
+	return (
 		<>
-			<Add Users={data?.friends} Make={User} title="Start Chat" join="StartChat" close={close}/>
+			<Add Users={data?.friends} Make={User} title="Start Chat" join="StartChat" close={close} />
 		</>
 	)
 }

@@ -81,7 +81,7 @@ export class UserService {
 						include: {
 							room:true
 						}
-					},0
+					}
 				}
 			});
 		}
@@ -151,10 +151,41 @@ export class UserService {
 
 	}
 
-	async getFriends(account, chat) {
-		
-		try{
-			const {friends} = await prisma.user.findUnique({
+	async getFriendsChats(account) {
+		try {
+			const friends = await prisma.user.findUnique({
+				where: {
+					username: account.username
+				},
+				select: {
+					friends: {
+						where: {
+							users: {
+								some: {
+									chats: {
+										some:{ 
+											members: {
+												some: {
+													username: account.username
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			})
+			return friends
+		} catch (err) {
+			return err;
+		}
+	}
+
+	async getFriends(account) {
+		try {
+			const friends = await prisma.user.findUnique({
 				where: {
 					username: account.username
 				},
@@ -163,78 +194,17 @@ export class UserService {
 						where: {
 							status: "ACCEPTED"
 						},
-						select:{
-							friendId: true
+						select: {
+							users:true
 						}
 					}
 				}
-			});
-			if (friends) {
-				const friendsIds = friends.map((friend) => friend.friendId)
-				if (chat != "false"){
-					const friendsWithChat = await prisma.user.findMany({
-						where: {
-							AND: {
-								id: {
-									in: friendsIds
-								},
-								OR: [
-									{
-										messagesReceived: {
-											some: {
-												OR: [
-													{
-														receiverId: account.username
-													},
-													{
-														senderId: account.username
-													}
-												]
-											}
-										},
-									},
-									{
-										messagesSent: {
-											some: {
-												OR: [
-													{
-														receiverId: account.username
-													},
-													{
-														senderId: account.username
-													}
-												]
-											}
-										}
-									}
-								]
-							}
-						},
-						include: {
-							messagesReceived: true
-						}
-					})
-					return {friends:friendsWithChat};
-				}
-				const allFriends = await prisma.user.findMany({
-					where: {
-						id: {
-							in: friendsIds
-						}
-					},
-				})
-				return {friends:allFriends};
-			}
-			else {
-				throw new HttpException("User has no friends!", HttpStatus.NOT_FOUND);
-			}
-		}
-		catch (err) {
+			})
+			return friends;
+		} catch (err) {
 			throw err;
 		}
-		
 	}
-
 	async updateData(account, data) {
 		try {
 			console.log(account.username);

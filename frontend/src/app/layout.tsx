@@ -5,6 +5,7 @@ import Navbar from './Components/navbar'
 import React from 'react'
 import LogContextProvider from './Components/Log/LogContext'
 import { config } from '@fortawesome/fontawesome-svg-core'
+import Notif from './Components/Notif'
 config.autoAddCss = false
 
 
@@ -25,6 +26,7 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<LogContextProvider>
 					<Navbar />
+					<Notif />
 					{children}
 				</LogContextProvider>
 			</body>

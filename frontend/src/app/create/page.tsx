@@ -4,7 +4,7 @@ import '../assest/create.css';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Post } from '../Components/Fetch/post';
+import { Post } from '../Components/Fetch/Fetch';
 import { APIs } from '../Props/APIs';
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string } = {

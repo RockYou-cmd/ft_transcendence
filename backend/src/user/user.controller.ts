@@ -37,11 +37,17 @@ export class UserController{
 		return this.UserService.removeUserFromFriends(req.user, friend);
 	}
 
+	@Get("friends/chats")
+	@UseGuards(AuthGuard)
+	async getFriendsChats(@Req() account) {
+		return this.UserService.getFriendsChats(account.user);
+	}
 	@Get("friends")
 	@UseGuards(AuthGuard)
-	async getFriends(@Req() account, @Query("chat") chat) {
-		return this.UserService.getFriends(account.user, chat);
+	async getFriends(@Req() account) {
+		return this.UserService.getFriends(account.user);
 	}
+
 
 	@Put("update")
 	@UseGuards(AuthGuard)

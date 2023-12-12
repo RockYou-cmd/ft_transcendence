@@ -19,7 +19,7 @@ import Invite from './Components/Invite';
 import Confirm from './Components/Confirm';
 import GroupSettings from './Components/Group_settings';
 import OwnerSettings from './Components/Settings';
-import { Post } from '../Components/Fetch/post';
+import { Post } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogContext, useMe } from '../Components/Log/LogContext';

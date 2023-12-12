@@ -35,7 +35,6 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 		const SearchRes = Users?.filter((user: any)=>{
 			return user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
 		})
-	
 		setData(SearchRes);
 	}, [Users, search]);
 
@@ -52,7 +51,7 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 		return <div>{print}</div>
 	}
 	
-
+	console.log("data in add", data);
 	return (
 		<>
 			<div className="Add">

@@ -79,3 +79,25 @@
 }
 
 .NavbarIcons{margin-right: 6px;}
+
+#NotifBar{
+	position: absolute;
+	width: 300px;
+	z-index: 10;
+	border : 1px solid #fff;
+	background-color: #fff;
+	padding:20px;
+	color: black;
+	right:0px;
+	animation: showUp 5s forwards 1 alternate;
+}
+
+@keyframes showUp{
+	0%{
+		transform: translateX(100%);
+		display: none;
+	}
+	100%{
+		transform: translateX(0%);
+	}
+}

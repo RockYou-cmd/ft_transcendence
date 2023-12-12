@@ -1,21 +1,21 @@
 import React, { use } from 'react';
-import { useEffect, useState , useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import '../../assest/chatComponents.css';
 import '../../assest/chat.css';
 import { APIs } from '@/app/Props/APIs';
-import { Get, Post } from '@/app/Components/Fetch/post';
+import { Get, Post } from '@/app/Components/Fetch/Fetch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 
-interface Data{
-	name? : string,
-	description? : string,
-	privacy? : string,
-	password? : string,
+interface Data {
+	name?: string,
+	description?: string,
+	privacy?: string,
+	password?: string,
 
 }
 
-export default function CreateGroup({createG} : {createG: any}){
+export default function CreateGroup({ createG }: { createG: any }) {
 
 	const [protectedChoice, setProtectedChoice] = useState(false);
 	const [prStyle, setPrStyle] = useState({});
@@ -29,27 +29,27 @@ export default function CreateGroup({createG} : {createG: any}){
 
 
 	useEffect(() => {
-		if (protectedChoice === true){
+		if (protectedChoice === true) {
 			setPrStyle({
 				"pointerEvents": "none",
 				"opacity": "0.3",
 			});
 		}
-		else{
+		else {
 			setPrStyle({});
 		}
 	}, [protectedChoice]);
-	
-	async function submitForm(e : any){
+
+	async function submitForm(e: any) {
 		e.preventDefault();
 	}
 
 
-	return(
-		<> 
+	return (
+		<>
 			<form className='CreateGroup' onSubmit={submitForm} id="child">
 				<h1>CREATE NEW GROUP</h1>
-				<button onClick={() =>{ createG(false)}} className='closeBtn'><div></div></button>
+				<button onClick={() => { createG(false) }} className='closeBtn'><div></div></button>
 				<div className='line'></div>
 				<label>Group name</label>
 				<input ref={gName} type="text" placeholder="Enter group name" />
@@ -59,15 +59,15 @@ export default function CreateGroup({createG} : {createG: any}){
 				<label>Group privacy</label>
 				<div className='G_privacy'>
 					<div>
-						<input ref={gPrivacy} type="radio"  name="privacy" value="PUBLIC"  onChange={e=> {setProtectedChoice(true); setPrivacy(e.target.value);}}/>
+						<input ref={gPrivacy} type="radio" name="privacy" value="PUBLIC" onChange={e => { setProtectedChoice(true); setPrivacy(e.target.value); }} />
 						<label htmlFor="public">Public</label>
 					</div>
 					<div>
-						<input ref={gPrivacy} type="radio"  name="privacy" value="PRIVATE" onChange={e=> {setProtectedChoice(true); setPrivacy(e.target.value);}}/>
+						<input ref={gPrivacy} type="radio" name="privacy" value="PRIVATE" onChange={e => { setProtectedChoice(true); setPrivacy(e.target.value); }} />
 						<label htmlFor="private">Private</label>
 					</div>
 					<div>
-						<input ref={gPrivacy} type="radio"  name="privacy" value="PROTECTED" defaultChecked onChange={e=> {setProtectedChoice(false); setPrivacy(e.target.value);}}/>
+						<input ref={gPrivacy} type="radio" name="privacy" value="PROTECTED" defaultChecked onChange={e => { setProtectedChoice(false); setPrivacy(e.target.value); }} />
 						<label htmlFor="protected">Protected</label>
 					</div>
 				</div>
@@ -75,7 +75,7 @@ export default function CreateGroup({createG} : {createG: any}){
 				<label style={prStyle}>Group password</label>
 				<div className='input'>
 					<input style={prStyle} ref={gPass} type={hide ? "text" : "password"} placeholder="Enter group password" />
-					{!hide ? <FontAwesomeIcon icon={faEyeLowVision} onClick={()=>setHide(!hide)} style={{cursor: "pointer"}}/> : <FontAwesomeIcon icon={faEye} onClick={()=>setHide(!hide)} style={{cursor: "pointer"}}/>}
+					{!hide ? <FontAwesomeIcon icon={faEyeLowVision} onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} />}
 				</div>
 				<label>Group picture</label>
 				<input ref={gPic} type="file" />
