@@ -20,7 +20,9 @@ model User {
   is2faEnabled                  Boolean? @default(false)
   twoFactorAuthenticationSecret String?
   temp2fa                       String?
-  friends                       Friend[] @relation(name: "FriendsToUsers")
+  friends                       FriendShip[]
+  requestsSent                  FriendShip[] @relation(name: "requestsSent")
+  blockedBy                     FriendShip[] @relation(name: "blockedBy")
   
   chats             Chat[]
   chatsMessages     Message[]
@@ -82,15 +84,18 @@ model Message {
   senderId  String
 }
 
-model Friend {
-  id       Int @id @default(autoincrement())
-  users    User[] @relation(name: "FriendsToUsers")
-  status   Status @default(PENDING)
-  friendId String
-  userId   String
-
-  @@unique([friendId, userId])
+model FriendShip {
+  id        Int @id @default(autoincrement())
+  users      User[]
+  userId    String
+  status    Status @default(PENDING)
+  sender   User   @relation(name: "requestsSent",fields: [senderId], references: [id])
+  senderId String
+  blocked  User?   @relation(name: "blockedBy", fields: [blockedId], references: [id])
+  blockedId String?
+  @@unique([userId, senderId])
 }
+
 
 enum RoomRole {
   MEMBER
@@ -111,8 +116,6 @@ enum RoomPrivacy {
 
 enum Status {
   PENDING
-  WAITING
   ACCEPTED
   BlOCKED
-  UNAVAILABLE
 }

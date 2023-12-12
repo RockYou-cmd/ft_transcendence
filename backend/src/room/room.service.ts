@@ -232,8 +232,6 @@ export class RoomService {
 
 	async joinRoom(account, roomId) {
 		try{
-			console.log(account)
-			console.log(roomId)
 			const room = await prisma.roomMembership.create({
 				data: {
 					user: {
