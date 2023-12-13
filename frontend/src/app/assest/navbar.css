@@ -90,6 +90,20 @@
 	color: black;
 	right:0px;
 	
+	& h1{
+		font: 500 19px 'Inter', sans-serif;
+		margin-bottom: 10px;
+	}
+
+	& section {
+		margin: 0px 10px;
+		font : 500 17px 'Inter', sans-serif;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		flex-direction: row;
+	}
+
 	& :after{
 		content: '';
 		position: absolute;
@@ -100,13 +114,10 @@
 		background-color: green;
 		/* animation: showUp 5s linear forwards; */
 	}
-
 }
 
 @keyframes showUp{
-	/* 0%{
-		transform: translateX(100%);
-	} */
+
 	100%{
 		width: 0%;
 	}

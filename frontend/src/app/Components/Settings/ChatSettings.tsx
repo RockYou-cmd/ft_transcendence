@@ -1,5 +1,5 @@
 
-import { Post } from '../Fetch/Fetch';
+import { Post, Put } from '../Fetch/Fetch';
 import { APIs } from '../../Props/APIs';
 
 
@@ -7,7 +7,7 @@ import { APIs } from '../../Props/APIs';
 export async function SendFriendRequest({ username, status }: { username: string, status: string }) {
 
 	let subApi = "";
-
+	let res : any;
 
 
 
@@ -22,7 +22,7 @@ export async function SendFriendRequest({ username, status }: { username: string
 	else if (status == "block")
 		subApi = APIs.Block;
 	else if (status == "unblock")
-		subApi = "unblock";
+		subApi = APIs.Remove;
 
 	// console.log("user", username);
 	// console.log("status", status);
@@ -30,8 +30,12 @@ export async function SendFriendRequest({ username, status }: { username: string
 
 
 	const data = { username: username };
-
-	const res = await Post(data, subApi);
+	console.log("data", data);
+	console.log("status", status);
+	if (status == "block")
+		res = await Put(data, subApi);
+	else
+		res = await Post(data, subApi);
 
 	if (res.status == 401)
 		return undefined;

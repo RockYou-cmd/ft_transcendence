@@ -37,11 +37,11 @@ const SuperSettings: ChatOptions = {
 
 
 
-export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: any, OptionHandler: any }) {
+export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any, Role: any, OptionHandler: any , refresh : boolean}) {
 
 	const { socket, setSocket } = useSocket();
 	const { me, setMe } = useMe() as any;
-	const [refresher, setRefresher] = useState(false);
+	const status = useRef("");
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
 	const router = useRouter();
@@ -76,12 +76,16 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 		if (data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: chat?.username }, APIs.createChat);
 			if (res.status == 201) {
+				console.log("create res", res);
 				const datas = await res.json();
+				status.current = datas?.friends[0]?.status;
 				setChat(datas?.chats[0]);
+				console.log("chat datas", datas);
 			}
 		}
 		else{
 			setChat(data?.chats[0]);
+			status.current = data?.friends[0]?.status;
 		}
 
 		if (chat?.name) {
@@ -95,35 +99,31 @@ export default function Cnvs({ User, Role, OptionHandler }: { User: any, Role: a
 		if (Object.keys(User).length != 0)
 			getChat(User);
 	}, [User])
+	console.log("status", status.current);
 	
-
 	const visible = useRef(null) as any;
 
 	async function send(e: (MouseEvent | KeyboardEvent)) {
 		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any))) {
-			const msg = { content: input, senderId: me?.username }
-			if (input != "") {
-				setInput("");
+			if (input != "" && status.current !== "BLOCKED") {
+				const msg = { content: input, senderId: me?.username }
 				setChat((chat : { messages: any }) => ({ ...chat, messages: [...chat.messages, msg] }));
-
+				
 				const message = { content: input, sender: me?.username , chatId: chat?.id , receiver : User?.username};
 				socket.emit("message", message);
 				// console.log("chat id in send ", chat?.messages[0]?.chatId);
 			}
+			setInput("");
 		}
 	}
-	useEffect(() => {
 
+	
+	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
-	}, [chat]);
-		
-	useEffect(() => {
 		socket.on("message", (data: any) => {
 			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
-			// console.log("data id",  data.chatId);
-			// console.log("chat id", chat?.messages[0]?.chatId);
 			if (data?.chatId == chat?.id) {
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}

@@ -41,8 +41,9 @@ export class ChatService {
 
   async getChat(account, user) {
     try {
-      //   await prisma.message.deleteMany();
-      //   await prisma.chat.deleteMany();
+        // await prisma.message.deleteMany();
+        // await prisma.chat.deleteMany();
+		// await prisma.friendShip.deleteMany();
       const chat = await prisma.user.findUnique({
         where: {
           username: account.username,
@@ -74,8 +75,8 @@ export class ChatService {
           },
         },
       });
-      console.log({chat: chat.chats[0], status: chat.friends[0].status});
       return chat;
+
     } catch (err) {
       throw err;
     }

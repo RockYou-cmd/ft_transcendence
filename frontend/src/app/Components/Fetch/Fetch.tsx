@@ -40,16 +40,15 @@ export async function Get(path : string){
 }
 
 export async function Put(data : object, path : string){
-	// const header = {
-	// 	method: 'PUT',
-	// 	headers: {
-	// 		'Content-Type': 'application/json',
-	// 		'authorization': 'Bearer ' + Cookies.get('access_token'),
-	// 	},
-	// 	body: JSON.stringify(data),
-	// };
-	// const res = await fetch(path , header);
-	const res = await axios.put(path, data, {withCredentials: true});
-
+	const header = {
+		method: 'PUT',
+		credentials: 'include' as RequestCredentials,
+		headers: {
+			'Content-Type': 'application/json',
+			// 'authorization': 'Bearer ' + Cookies.get('access_token'),
+		},
+		body: JSON.stringify(data),
+	};
+	const res = await fetch(path , header);
 	return res;
 }

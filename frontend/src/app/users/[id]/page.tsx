@@ -44,8 +44,8 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		if (data == undefined){
 			Logout();
 		}
-
-		if (data?.statusCode == 404){
+		
+		if (data?.statusCode == 404 || data?.blocked == data?.username){
 			router.push("/users/not-found");
 		}
 		UsersetData(data);
@@ -66,12 +66,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			friend.current = "not friend";
 	}
 	
-	// enum Status {
-	// 	PENDING
-	// 	WAITING
-	// 	ACCEPTED
-	// 	BLOCKED
-	//   }
+
 
 	const hooks = {
 		dataHook: { state: data, setState: setData },
@@ -91,10 +86,14 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	else
 		photo = avatar.src;
 
-	async function friendEvent(e : MouseEvent){
+	async function friendEvent(e : MouseEvent, option?: string){
 		e.preventDefault();
 		try{
-			const res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
+			let res : any;
+			if (option == "block")
+				res = await SendFriendRequest({username: Userdata?.username, status: "block"});
+			else 
+				res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
 			if (res == undefined){
 				Logout();
 			}
@@ -115,7 +114,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 					<h1 className='text-3xl pt-3 ' > {Userdata?.username} </h1>
 
 					<button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
-					<button onClick={()=>{SendFriendRequest({username: name, status: "Block"})}} className="m-4 bg-red-600 p-3 rounded-md">Block</button>
+					<button onClick={(e : MouseEvent)=>friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
 					<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>
 
 					<button className='ml-auto  w-[100px] h-[40px] flex justify-center p-3  bg-yellow-500 rounded-lg hover:bg-yellow-600 items-center gap-2 font-semibold'><span className='text-2xl'><FaCog /></span> EDIT</button>

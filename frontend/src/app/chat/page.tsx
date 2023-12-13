@@ -146,7 +146,7 @@ export default function Chat() {
 
 							</section>
 							<div className='Chat'>
-								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} />
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
 									: <>
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</>}

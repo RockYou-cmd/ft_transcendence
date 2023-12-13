@@ -153,26 +153,51 @@ export class FriendService {
 		})
 		if (!friendShip || !friendShip.friends)
 				throw new HttpException("friend not found", HttpStatus.NOT_FOUND);
-		return friendShip.friends[0].id;
+		return friendShip.friends[0]?.id;
 	}
 
 	async blockFriend(account, user) {
 		try {
 			const friendShipId = await this.getFriendShipId(account, user);
-			const blocked = await prisma.friendShip.update({
-				where: {
-					id: friendShipId
-				},
-				data: {
-					blocked: {
-						connect: {
-							username: user.username
-						}
+			console.log("ror, ", friendShipId);
+			if (!friendShipId) {
+				var blocked = await prisma.friendShip.create({
+					data: {
+						blocked: {
+							connect: {
+								username: account.username
+							}
+						},
+						users: {
+							connect: [
+								{
+									username: account.username
+								},
+								{
+									username: user.username
+								}
+							]
+						},
+						status: "BLOCKED"
+					}
+				})
+			}
+			else {
+				var blocked = await prisma.friendShip.update({
+					where: {
+						id: friendShipId
 					},
-					status: "BlOCKED"
-				}
-			})
-			console.log(blocked);
+					data: {
+						blocked: {
+							connect: {
+								username: user.username
+							}
+						},
+						status: "BLOCKED"
+					}
+				})
+
+			}
 			return "User blocked"
 		} catch (err) {
 			throw err

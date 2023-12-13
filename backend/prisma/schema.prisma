@@ -87,10 +87,10 @@ model Message {
 model FriendShip {
   id        Int @id @default(autoincrement())
   users      User[]
-  userId    String
+  userId    String?
   status    Status @default(PENDING)
-  sender   User   @relation(name: "requestsSent",fields: [senderId], references: [id])
-  senderId String
+  sender   User?   @relation(name: "requestsSent",fields: [senderId], references: [id])
+  senderId String?
   blocked  User?   @relation(name: "blockedBy", fields: [blockedId], references: [id])
   blockedId String?
   @@unique([userId, senderId])
@@ -117,5 +117,5 @@ enum RoomPrivacy {
 enum Status {
   PENDING
   ACCEPTED
-  BlOCKED
+  BLOCKED
 }
