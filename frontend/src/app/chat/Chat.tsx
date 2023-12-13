@@ -40,6 +40,7 @@ const SuperSettings: ChatOptions = {
 export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any, Role: any, OptionHandler: any , refresh : boolean}) {
 
 	const { socket, setSocket } = useSocket();
+	const ChatID = useRef("");
 	const { me, setMe } = useMe() as any;
 	const status = useRef("");
 	const scroll = useRef(null) as any;
@@ -56,39 +57,48 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 
 
 
-	async function getChat(chat: any) {
+	async function getChat(channel: any) {
 		let name = "";
 		let Api = "";
-		if (chat?.username != undefined) {
-			name = chat?.username;
+		if (channel?.username != undefined) {
+			name = channel?.username;
 			setGroup(false);
 			Role("");
 			setRole("");
 			Api = APIs.getChat + name;
 		}
 		else {
-			name = chat?.name;
+			name = channel?.name;
 			setGroup(true);
-			Api = APIs.RoomChat + chat?.id;
+			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-		console.log("data in chat", data);
-		if (data?.chats[0]?.id == undefined) {
-			const res = await Post({ username: chat?.username }, APIs.createChat);
+		
+		if (channel?.username && data?.chats[0]?.id == undefined) {
+			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
-				console.log("create res", res);
+				
 				const datas = await res.json();
 				status.current = datas?.friends[0]?.status;
+				ChatID.current = datas?.chats[0]?.id;
 				setChat(datas?.chats[0]);
-				console.log("chat datas", datas);
+				
 			}
 		}
 		else{
-			setChat(data?.chats[0]);
-			status.current = data?.friends[0]?.status;
+			if (channel?.username != undefined){
+				setChat(data?.chats[0]);
+				ChatID.current = data?.chats[0]?.id;
+				status.current = data?.friends[0]?.status;
+			}
+			else{
+				setChat(data);
+				
+				ChatID.current = channel?.id;
+			}
 		}
 
-		if (chat?.name) {
+		if (channel?.name) {
 			Role(data?.members[0]?.role);
 			setRole(data?.members[0]?.role);
 		}
@@ -99,7 +109,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		if (Object.keys(User).length != 0)
 			getChat(User);
 	}, [User])
-	console.log("status", status.current);
+	
 	
 	const visible = useRef(null) as any;
 
@@ -109,9 +119,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				const msg = { content: input, senderId: me?.username }
 				setChat((chat : { messages: any }) => ({ ...chat, messages: [...chat.messages, msg] }));
 				
-				const message = { content: input, sender: me?.username , chatId: chat?.id , receiver : User?.username};
+				const message = { content: input, sender: me?.username , chatId: ChatID.current , receiver : User?.username};
 				socket.emit("message", message);
-				// console.log("chat id in send ", chat?.messages[0]?.chatId);
+				
 			}
 			setInput("");
 		}
@@ -124,7 +134,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		}
 		socket.on("message", (data: any) => {
 			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
-			if (data?.chatId == chat?.id) {
+			if (data?.chatId == ChatID.current) {
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}
 		})

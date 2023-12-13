@@ -91,17 +91,31 @@
 	right:0px;
 	
 	& h1{
-		font: 500 19px 'Inter', sans-serif;
-		margin-bottom: 10px;
+		font: 500 18px 'Inter', sans-serif;
+		margin-bottom: 20px;
 	}
 
 	& section {
-		margin: 0px 10px;
+		margin:0px 15px;
 		font : 500 17px 'Inter', sans-serif;
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
 		flex-direction: row;
+	}
+
+	& button{
+		border-radius: 12px;
+		color: #fff;
+		padding:6px 20px;
+	}
+
+	& button:first-of-type{
+		background-color: #ff2638;
+	}
+
+	& button:last-of-type{
+		background-color: blue;
 	}
 
 	& :after{
