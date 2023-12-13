@@ -78,10 +78,11 @@ export class FriendService {
 					members: {
 						where: {
 							NOT: {
-								username: account.username
-							}
+								username: account.username,
+							},
+							
 						}
-					}
+					},
 				}
 			});
 			return {chats}
@@ -154,4 +155,28 @@ export class FriendService {
 				throw new HttpException("friend not found", HttpStatus.NOT_FOUND);
 		return friendShip.friends[0].id;
 	}
+
+	async blockFriend(account, user) {
+		try {
+			const friendShipId = await this.getFriendShipId(account, user);
+			const blocked = await prisma.friendShip.update({
+				where: {
+					id: friendShipId
+				},
+				data: {
+					blocked: {
+						connect: {
+							username: user.username
+						}
+					},
+					status: "BlOCKED"
+				}
+			})
+			console.log(blocked);
+			return "User blocked"
+		} catch (err) {
+			throw err
+		}
+	}
+
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards, Req } from "@nestjs/common";
+import { Body, Controller, Get, Post, Request, UseGuards, Req, Put } from "@nestjs/common";
 import { authDto } from "src/auth/auth.dto";
 import { FriendService } from "./friend.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
@@ -38,4 +38,11 @@ export class FriendController {
 	async removeUserFromFriends(@Req() account, @Body() friend) {
 		return this.friendService.removeFriend(account.user, friend);
 	}
+
+	@Put("Block")
+	@UseGuards(AuthGuard)
+	async blockFriend(@Req()account, @Body()user) {
+		return this.friendService.blockFriend(account.user, user);
+	}
+	
 }

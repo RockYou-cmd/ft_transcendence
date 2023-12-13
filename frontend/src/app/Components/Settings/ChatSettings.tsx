@@ -20,7 +20,7 @@ export async function SendFriendRequest({ username, status }: { username: string
 	else if (status == "remove friend")
 		subApi = APIs.Remove;
 	else if (status == "block")
-		subApi = "block";
+		subApi = APIs.Block;
 	else if (status == "unblock")
 		subApi = "unblock";
 

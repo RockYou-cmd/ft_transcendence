@@ -35,4 +35,5 @@ export class UserController{
 	async updateData(@Req() account, @Body("updatedData") data) {
 		return this.UserService.updateData(account.user, data);
 	}
+
 }

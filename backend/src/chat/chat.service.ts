@@ -84,7 +84,6 @@ export class ChatService {
           },
         },
       });
-	  console.log("chato : ", chat);
       return await this.getChat(account, data);
     } catch (err) {
       throw err;

@@ -74,7 +74,7 @@ export const APIs : Api = {
 	JoinRoom: Host + "/room/join",
 	CreateRoom: Host + "/room/create",
 	LeaveRoom: Host + "/room/leave",
-	Block: Host + "/user/block",
+	Block: Host + "/friend/block",
 	JoinProtectedRoom: Host + "/room/join/protected",
 	RoomChat: Host + "/room/chat/?id=",
 	members: Host + "/room/members/?id=",
