@@ -5,7 +5,7 @@ import { MouseEvent, useEffect , useState} from 'react';
 import avatar from '../../../../public/avatar.png';
 import '../../assest/Components.css';
 import Link from 'next/link';
-import { Make }from '../../Components/Fetch/Make';
+import { Make as Ban }from '../../Components/Fetch/Make';
 
 export default function Add({Users , Make, title, join, close, id} : {Users: any, Make: any, title: string, join : string, close: any, id? : any}){
 
@@ -37,18 +37,23 @@ export default function Add({Users , Make, title, join, close, id} : {Users: any
 		setData(SearchRes);
 	}, [Users, search]);
 
-	console.log("id ", id);
 
 	function Print(users : any){
 		let user = users?.users;
 		if (join == "StartChat"){
 			user = user.users[0];
 		}
+		if (user?.username == "yel-qabl")
+			console.log("user", user);
 		const print = <>
 			<Link href={"/users/" + user?.username} passHref={true} ><div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name ? user?.name : user?.username}</h3>
-				{user.status == "BANNED" ? <button className='UseraddBtn' style={Style} onClick={Make("Kick", id, user?.username)}>UNBAN</button>
+				{user?.rooms[0]?.status== "BANNED" ? <button className='UseraddBtn' style={Style} onClick={()=>Ban({
+					option: "Kick",
+					group: id,
+					person: user?.username,
+				})}>UNBAN</button>
 				:  <button className='UseraddBtn' style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
 				}
 				{join == "JOIN" && <div className='Join'></div>}

@@ -36,6 +36,8 @@ export async function Make({ option, group, person }: { option: string, group: a
 		Api = APIs.RemoveAdmin;
 	}
 
+
+	console.log("data in make", data, " option ",option);
 	let res: any;
 	if (put == false)
 		res = await Post(data, Api);
