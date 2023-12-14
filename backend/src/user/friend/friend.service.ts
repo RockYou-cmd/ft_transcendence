@@ -159,7 +159,6 @@ export class FriendService {
 	async blockFriend(account, user) {
 		try {
 			const friendShipId = await this.getFriendShipId(account, user);
-			console.log("ror, ", friendShipId);
 			if (!friendShipId) {
 				var blocked = await prisma.friendShip.create({
 					data: {
