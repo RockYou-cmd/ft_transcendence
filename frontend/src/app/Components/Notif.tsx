@@ -1,6 +1,6 @@
 "use client"
 
-import { useMe , useSocket } from '../Components/Log/LogContext'
+import { useMe , useSocket , useSilence } from '../Components/Log/LogContext'
 import { useEffect, useState } from 'react';
 import '../assest/navbar.css';
 import Image from 'next/image';
@@ -18,6 +18,7 @@ export default function Notif({content} : {content?: string}) {
 	const [show, setShow] = useState(false);
 	const { socket, setSocket } = useSocket();
 	const [msg, setMsg] = useState<Msg>();
+	const { silence, setSilence } = useSilence();
 	const router = useRouter();
 	// const [Reply, setReply] = useState(false);
 	const { me, setMe } = useMe() as any;
@@ -26,6 +27,7 @@ export default function Notif({content} : {content?: string}) {
 		if (show){
 			const timer = setTimeout(() => {
 				setShow(false);
+				setMsg({} as Msg);
 			}, 5100);
 			return () => clearTimeout(timer);
 		}
@@ -35,7 +37,8 @@ export default function Notif({content} : {content?: string}) {
 		if (socket) {
 			socket.on("message", (data: any) => {
 				setMsg(data);
-				setShow(true);
+				if (!silence)
+					setShow(true);
 			})
 		}
 		return () => {socket?.off("message");}
@@ -46,7 +49,7 @@ export default function Notif({content} : {content?: string}) {
 		<>
 			{/* <button onClick={()=>setShow(!show)}>show</button> */}
 
-		{ show &&
+		{ show && !silence &&
 			<div id="NotifBar">
 				<h1>New Message</h1>
 				<h1>{msg?.sender} : {msg?.content}</h1>

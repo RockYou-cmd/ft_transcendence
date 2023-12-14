@@ -40,9 +40,9 @@ export default function Form() {
 					if (online != "ON") {
 
 						setOnline("ON");
-						setSocket(io(host + "/events", {
-							withCredentials: true,
-						}));
+						// setSocket(io(host + "/events", {
+						// 	withCredentials: true,
+						// }));
 						// console.log("socket created");
 					}
 				}

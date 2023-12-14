@@ -24,13 +24,15 @@ export default function AddMembers({ group, close }: { group: any, close: any })
 	}, [refresh]);
 
 
+	console.log("data in addMembers", data);
+
 	async function AddMem(User: any) {
 		await Post({ id: group.id, username: User?.username }, APIs.addMember);
 		setRefresh(!refresh);
 	}
 	return (
 		<>
-			<Add Users={data?.users} Make={AddMem} title="Add Members" join="JOIN" close={close} />
+			<Add Users={data?.users} Make={AddMem} title="Add Members" join="ADD" close={close} id={group}/>
 		</>
 	)
 

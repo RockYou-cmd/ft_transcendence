@@ -6,10 +6,10 @@ import Logout from "./Log/Logout";
 import { GetData } from "./Log/CheckLogin";
 import { useEffect, useRef, useState } from "react";
 import '../assest/navbar.css';
-import { useLogContext , useSocket, useMe} from "./Log/LogContext";
+import { useLogContext , useSocket, useMe, useSilence} from "./Log/LogContext";
 import SearchBar from "./Fetch/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUser ,faMessage , faTableTennisPaddleBall , faBell} from "@fortawesome/free-solid-svg-icons";
+import { faUser ,faMessage , faTableTennisPaddleBall , faBell, faBellSlash} from "@fortawesome/free-solid-svg-icons";
 
 // import { WebSocket } from "./Log/LogContext";
 // import { useContext } from "react";
@@ -19,11 +19,11 @@ export default function Navbar() {
 	
 	// const socket = useSocket();
 	const {me, setMe} = useMe();
+	const {silence, setSilence} = useSilence();
 	
 
 	let photo = avatar;
 	const { online, setOnline } = useLogContext();
-
 
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
@@ -32,7 +32,6 @@ export default function Navbar() {
 		const data = await GetData({Api : "Navbar", user: ""}) as any;
 		setData(data);
 		setMe(data);
-		
 	}
 
 
@@ -65,7 +64,9 @@ export default function Navbar() {
 					<Link href="/game"><li><FontAwesomeIcon icon={faTableTennisPaddleBall} className="NavbarIcons"  /> Game</li></Link>
 				</nav>
 				 
-				<button className="NotifBtn"><FontAwesomeIcon icon={faBell} className="icon" /></button>
+				<button className="NotifBtn" onClick={()=>setSilence(!silence)}>
+				{silence == false ? <FontAwesomeIcon icon={faBell} className="icon" /> : <FontAwesomeIcon icon={faBellSlash} className="icon" style={{color : "#ff2638"}}/>}
+				</button>
 				
 				<Logout />
 			</header>

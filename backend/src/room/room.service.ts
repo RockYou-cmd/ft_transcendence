@@ -356,7 +356,6 @@ export class RoomService {
 					}
 				}
 			})
-			console.log(message)
 			return message;
 			
 		} catch (err) {
