@@ -27,7 +27,7 @@
 	align-items: center;
 	justify-content: space-between;
 	background-color: rgba(34, 40, 49, 1);
-	border: 1px solid rgba(34, 40, 49, 1);
+	border: 1px solid rgb(81, 81, 81);
 	border-radius: 30px;
 	height: 46px;
 	margin: 28px auto;

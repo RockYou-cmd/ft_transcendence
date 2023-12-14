@@ -38,7 +38,6 @@ export interface Api {
 	members: string,
 	addNewMembers: string,
 	Logout : string,
-
 }
 
 export const APIs : Api = { 
@@ -76,5 +75,4 @@ export const APIs : Api = {
 	members: Host + "/room/members/?id=",
 	addNewMembers: Host + "/room/add/new/member/?id=",
 	Logout : Host + "/auth/logout",
-
 };

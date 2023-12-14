@@ -16,9 +16,9 @@ const TwoAuth = ({User} : {User : any}) => {
 
         const qrCodeResponse = await fetch(`http://localhost:3001/2fa/generate`, {
           method: 'GET',
+          credentials: 'include' as RequestCredentials,
           headers: {
             'Content-Type': 'application/json',
-            'authorization': 'Bearer ' + Cookies.get('access_token'),
         }}) 
         const tmp = await qrCodeResponse.json();
         setQRCodeBase64(tmp.qr);
@@ -55,27 +55,29 @@ const TwoAuth = ({User} : {User : any}) => {
 
   return (
     <div>
-      <h2>Profile Settings</h2>
-      <div>
-        <label>
+      <div >
+        <label className='text-white font-bold relative inline-flex items-center cursor-pointer '>
           Enable 2FA:
-          <input
-            type="checkbox"
+          <input  className='ml-[40%] mb-7 sr-only peer'
+            type="checkbox"            
             checked={User?.is2FAEnabled}
             onChange={handleToggle2FA}
           />
+        <div className="group relative ml-16 peer ring-0 bg-rose-400 rounded-full outline-none duration-300 after:duration-300 w-20 h-8  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-8 after:w-8 after:top1 after:left1 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95 peer-checked:after:rotate-0">
+        </div>
         </label>
       </div>
       {showQRCode && (
         <div>
-          <img src={`${qrCodeBase64}`} alt="QR Code" />
+          <img src={`${qrCodeBase64}`} alt="QR Code" className='ml-[25%] mt-5'/>
           <input
+          className='mt-6 ml-[20%]'
             type="text"
             placeholder="Enter Verification Code"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
           />
-          <button onClick={handleVerification}>Verify</button>
+          <button className="bg-teal-700 text-white font-bold rounded w-[4rem] ml-3"onClick={handleVerification}>Verify</button>
           <p>{verificationResult}</p>
         </div>
       )}
