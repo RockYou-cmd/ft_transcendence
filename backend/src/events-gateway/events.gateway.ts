@@ -52,7 +52,7 @@ export class EventsGateway {
   
   @SubscribeMessage("roomMessage")
   handleRoomMessage(client: Socket, payload: any) {
-    console.log(payload);
+    // console.log(payload);
     // this.server.to(payload.receiver).emit("roomMessage", payload);
     console.log("lesgooooo");
   }

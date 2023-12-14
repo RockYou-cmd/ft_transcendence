@@ -44,13 +44,12 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-		console.log("data", data);
+
 		if (data == undefined){
 			Logout();
 		}
 		
 		if (data?.statusCode == 404 || (data?.blocked && data?.blocked  !== data?.username)){
-			console.log("user ", data?.username, "blocked ", data?.blocked);
 			router.push("/users/not-found");
 		}
 		UsersetData(data);

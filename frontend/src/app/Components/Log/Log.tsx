@@ -22,14 +22,11 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 			}
 			else {
 					if (online == "ON"){
-						
 						setSocket(io(host + "/events", {
 							withCredentials: true,
 						}));
-						console.log("socket created ", online);
 					}
 					setOnline("ON");
-
 			}
 
 		}

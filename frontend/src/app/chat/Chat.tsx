@@ -5,6 +5,7 @@ import Options from './Components/Options';
 import { ChatOptions } from '../Props/Interfaces';
 import { Get } from '../Components/Fetch/Fetch'
 import { APIs } from '../Props/APIs';
+import { Message } from '../Props/Interfaces';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
@@ -77,7 +78,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-		
+		// conso
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
@@ -103,10 +104,11 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		}
 
 		if (channel?.name) {
-			Role(data?.members[0]?.role);
-			setRole(data?.members[0]?.role);
+			Role(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
+			setRole(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
 		}
 	}
+
 
 
 	useEffect(() => {
@@ -128,15 +130,28 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	
 	const visible = useRef(null) as any;
 
-	async function send(e: (MouseEvent | KeyboardEvent)) {
-		if (e.type == "click" || (e.type == "keydown" && ((e as KeyboardEvent).key == "Enter" as any))) {
-			if (input != "" && status.current !== "BLOCKED") {
-				const msg = { content: input, senderId: me?.username }
-				setChat((chat : { messages: any }) => ({ ...chat, messages: [...chat.messages, msg] }));
-				
-				const message = { content: input, sender: me?.username , chatId: ChatID.current , receiver : User?.username};
-				socket.emit(Room.current, message);
-				
+	async function send(e: MouseEvent | KeyboardEvent) {
+		if (
+			e.type === "click" ||
+			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
+		) {
+			if (input !== "" && status.current !== "BLOCKED") {
+				const msg = { content: input, senderId: me?.username };
+				setChat((chat: { messages: any }) => ({
+					...chat,
+					messages: [...chat.messages, msg],
+				}));
+
+				const message: Message = {
+					content: input,
+					sender: me?.username,
+					chatId: ChatID.current,
+				};
+				if (!group) {
+					socket.emit(Room.current, { ...message, receiver: User?.username });
+				} else {
+					socket.emit(Room.current, { ...message, receivers: chat?.members });
+				}
 			}
 			setInput("");
 		}
@@ -147,15 +162,14 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
-		socket.on(Room.current, (data: any) => {
+		socket?.on(Room.current, (data: any) => {
 			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
 			if (data?.chatId == ChatID.current) {
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}
 		})
-		console.log(Room.current);
 		return () => {
-			socket.off(Room.current);
+			socket?.off(Room.current);
 		};
 	}, [socket, chat]);
 

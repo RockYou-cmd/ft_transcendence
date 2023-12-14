@@ -58,7 +58,7 @@ export default function Create() {
 				const data: { username: string, password: string, email: string } = { username: info.username, password: info.password, email: info.email };
 
 				const res = await Post(data, APIs.SignUp);
-				console.log(res);
+
 				const msg = await res.json();
 
 				if (res.status == 201) {
