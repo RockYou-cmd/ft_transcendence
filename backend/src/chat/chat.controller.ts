@@ -11,12 +11,13 @@ export class ChatController {
 	@Get("get")
 	@UseGuards(AuthGuard)
 	async getMessages(@Req() account , @Query() user) {
-		return this.chatService.getChat(account.user, user);
+		return await this.chatService.getChat(account.user, user);
 	}
 
 	@Post("create")
 	@UseGuards(AuthGuard)
-	async createChat(@Req()account, @Query() data) {
-		return this.chatService.createChat(account.user, data);
+	async createChat(@Req()account, @Body() data) {
+		console.log("created Chat ------------")
+		return  await this.chatService.createChat(account.user, data);
 	}
 }

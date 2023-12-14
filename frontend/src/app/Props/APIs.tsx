@@ -15,11 +15,13 @@ export interface Api {
 	intraToken: string,
 	Search: string,
 	SendFriendRequest: string,
+	AcceptFriendRequest : string,
 	User: string,
 	Remove: string,
 	getChat: string,
 	sendMsg: string,
 	Friends: string,
+	FriendsChat : string,
 	Kick: string,
 	Ban: string,
 	Mute: string,
@@ -38,6 +40,10 @@ export interface Api {
 	members: string,
 	addNewMembers: string,
 	Logout : string,
+<<<<<<< HEAD
+=======
+	createChat: string,
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 }
 
 export const APIs : Api = { 
@@ -52,11 +58,13 @@ export const APIs : Api = {
 	googleToken: Host + "/auth/google/callback",
 	intraToken: Host + "/auth/intra/callback",
 	Search: Host + "/user/search/?username=",
-	SendFriendRequest: Host + "/request/",
-	Remove: Host + "/user/remove",
-	getChat: Host + "/message/chat/?username=",
+	SendFriendRequest: Host + "/friend/send/request",
+	AcceptFriendRequest: Host + "/friend/accept/request",
+	Remove: Host + "/friend/remove",
+	getChat: Host + "/chat/get/?username=",
+	createChat: Host + "/chat/create",
 	sendMsg: Host + "/message/send",
-	Friends: Host + "/user/friends/?chat=",
+	Friends: Host + "/friend/all",
 	Ban: Host + "/room/ban/member",
 	UnBan: Host + "/room/unban/member",
 	addMember: Host + "/room/add/member",
@@ -69,10 +77,14 @@ export const APIs : Api = {
 	JoinRoom: Host + "/room/join",
 	CreateRoom: Host + "/room/create",
 	LeaveRoom: Host + "/room/leave",
-	Block: Host + "/user/block",
+	Block: Host + "/friend/block",
 	JoinProtectedRoom: Host + "/room/join/protected",
 	RoomChat: Host + "/room/chat/?id=",
 	members: Host + "/room/members/?id=",
 	addNewMembers: Host + "/room/add/new/member/?id=",
 	Logout : Host + "/auth/logout",
+<<<<<<< HEAD
+=======
+	FriendsChat : Host + "/friend/chats",
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 };

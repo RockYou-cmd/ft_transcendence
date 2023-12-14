@@ -19,13 +19,17 @@ import Invite from './Components/Invite';
 import Confirm from './Components/Confirm';
 import GroupSettings from './Components/Group_settings';
 import OwnerSettings from './Components/Settings';
-import { Post } from '../Components/Fetch/post';
+import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogContext, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
+<<<<<<< HEAD
 import Lottie from "lottie-react";
 import chatAnimation from "../../../public/chatAnimation.json"
+=======
+import { useSearchParams } from 'next/navigation';
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
@@ -33,7 +37,7 @@ function Leave(GroupId: any) {
 }
 
 function Block(User: any) {
-	const res = Post({ id: User?.id }, APIs.Block);
+	const res = Put({ username: User?.username }, APIs.Block);
 }
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
@@ -43,6 +47,8 @@ export default function Chat() {
 
 	const { me, setMe } = useMe();
 	const { online, setOnline } = useLogContext();
+	const param = useSearchParams();
+	
 	// hooks for data
 	const [User, setUser] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
@@ -62,7 +68,8 @@ export default function Chat() {
 	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
-
+	
+	// setUser
 
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);
@@ -79,8 +86,8 @@ export default function Chat() {
 
 	const [Style, setStyle] = useState({} as any);
 
-
-
+	
+	
 	function OptionsHandler(option: string) {
 		if (option == "CreateG")
 			setCreateG(true);
@@ -91,19 +98,30 @@ export default function Chat() {
 		else if (option == "invite")
 			setInvite(true);
 		else if (option == "sendMsg")
-			setView(true);
-		else if (option == "view")
+		setView(true);
+	else if (option == "view")
 			setView(true);
 		else if (option == "leave")
 			setLeave(true);
 		else if (option == "settings")
 			setSettings(true);
 		else if (option == "see")
-			setSeeMem(true);
-		else if (option == "block")
+		setSeeMem(true);
+	else if (option == "block")
 			setBlock(true);
-
+		
 	}
+
+
+	useEffect(() => {
+		async function fetchData(user : string) {
+			const data = await Get(APIs.User + user);
+			setUser(data);
+		}
+		if (param.get("user") != null)
+			fetchData(param.get("user") as string);
+	},	[]);
+
 
 	useEffect(() => {
 		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {
@@ -148,9 +166,14 @@ export default function Chat() {
 
 							</section>
 							<div className='Chat'>
+<<<<<<< HEAD
 								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} />
 									: < >
 										<Lottie className='w-[40%] flex m-auto justify-center items-center'  animationData={chatAnimation} loop={true}  />
+=======
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
+									: <>
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</>}
 							</div>

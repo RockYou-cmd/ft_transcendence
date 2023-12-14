@@ -48,9 +48,9 @@ export class TwoFactorAuthenticationService {
 		}
 	}
 
-	async disableTwoFactorAuthentication(user, token) {
+	async disableTwoFactorAuthentication(account) {
 		try{
-			this.userService.updateUser(user, "is2faEnabled", false)
+			this.userService.updateUser(account, "is2faEnabled", false)
 		} catch (err) {
 			console.log("disableTwoFactorAuthentication Error!");
 			throw err;

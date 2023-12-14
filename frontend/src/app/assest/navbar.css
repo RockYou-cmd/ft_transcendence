@@ -27,7 +27,11 @@
 	align-items: center;
 	justify-content: space-between;
 	background-color: rgba(34, 40, 49, 1);
+<<<<<<< HEAD
 	border: 1px solid rgb(81, 81, 81);
+=======
+	border: 1px solid rgb(107, 108, 111);
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 	border-radius: 30px;
 	height: 46px;
 	margin: 28px auto;
@@ -48,12 +52,15 @@
 #logout{
 	background-color: rgba(34, 40, 49, 1);
 	border-radius: 30px;
+	border: 1px solid rgb(107, 108, 111);
 	padding: 0px 20px;
 	margin: 30px 50px 30px 0px; 
 }
 
 #logout:hover{
 	background-color: #ff2638;
+	border-color: #ff2638;
+	box-shadow: 0px 0px 12px 1px #ff2638;
 }
 
 #header #SearchComponent{
@@ -79,3 +86,61 @@
 }
 
 .NavbarIcons{margin-right: 6px;}
+
+#NotifBar{
+	position: absolute;
+	width: 300px;
+	z-index: 10;
+	border : 1px solid #fff;
+	background-color: #fff;
+	padding:10px 20px 15px;
+	color: black;
+	right:0px;
+	
+	& h1{
+		font: 600 18px 'Inter', sans-serif;
+		margin-bottom: 10px;
+	}
+
+	& section {
+		margin:0px 15px;
+		font : 500 17px 'Inter', sans-serif;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		flex-direction: row;
+	}
+
+	& button{
+		border-radius: 12px;
+		color: #fff;
+		padding:6px 20px;
+	}
+
+	& button:first-of-type{
+		background-color: green;
+		/* background-color: #ff2638; */
+	}
+
+	& button:last-of-type{
+		background-color: blue;
+	}
+
+	& :after{
+		content: '';
+		position: absolute;
+		left : 0px;
+		bottom: 0px;
+		width:100%;
+		height: 5px;
+		background-color: green;
+		animation: showUp 5s linear forwards;
+	}
+}
+
+@keyframes showUp{
+
+	100%{
+		width: 0%;
+	}
+}

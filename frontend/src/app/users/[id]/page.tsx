@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Profile from "@/app/profile/profile";
 import Cookies from "js-cookie";
@@ -14,6 +14,7 @@ import { SendFriendRequest } from "@/app/Components/Settings/ChatSettings";
 import { MouseEvent } from "react";
 import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
+import Logout from "@/app/Components/Log/Logout";
 
 export default function UserProfile({ param }: { param: { id: string } }) {
 	
@@ -29,31 +30,34 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	const [refresh, setRefresh] = useState(false);
 	
 	const pathname = usePathname();
-
+	const hooks = {
+		dataHook: { state: data, setState: setData },
+		waitHook: { state: wait, setState: checkwait },
+	}
+	
 	let name: string = "";
 	const friend  = useRef("not friend");
 	name = pathname.split("/")[2];
 	const router = useRouter();
-	if (name == "not-found")
-		return (<NotFound />);
+
+	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-		
-		if (data == undefined){
-			Cookies.remove("access_token");
-			setOnline("OFF");
-			hooks.logInHook.setState(false);
-		}
 
-		if (data?.statusCode == 404){
+		if (data == undefined){
+			Logout();
+		}
+		
+		if (data?.statusCode == 404 || (data?.blocked && data?.blocked  !== data?.username)){
 			router.push("/users/not-found");
 		}
 		UsersetData(data);
-		if (data?.status == "PENDING")
-		Fstatus.current = "cancel request";
-		else if (data?.status == "WAITING")
+		
+		if (data?.status == "PENDING" && data?.sender == data?.username)
 		Fstatus.current = "accept request";
+		else if (data?.status == "PENDING")
+		Fstatus.current = "cancel request";
 		else if (data?.status == "ACCEPTED")
 			Fstatus.current = "remove friend";
 		else if (data?.status == "BLOCKED")
@@ -65,56 +69,46 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		else
 			friend.current = "not friend";
 	}
-	
-	// enum Status {
-	// 	PENDING
-	// 	WAITING
-	// 	ACCEPTED
-	// 	BLOCKED
-	//   }
-
-	const hooks = {
-		logInHook: { state: log, setState: setLog },
-		dataHook: { state: data, setState: setData },
-		cookieHook: { state: cookie, setState: setCookie },
-		waitHook: { state: wait, setState: checkwait },
-	}
-
-	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-
-
-	useEffect(() => {hooks.waitHook.setState(true);},[]);
 
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
 	}, [online, refresh]);
+
 	
+	
+	
+
 	
 	if (Userdata?.photo != null)
 	photo = Userdata.photo;
+
 	else
 		photo = avatar.src;
 
-	async function friendEvent(e : MouseEvent){
+	async function friendEvent(e : MouseEvent, option?: string){
 		e.preventDefault();
 		try{
-			const res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
-			if (res == undefined){
-				Cookies.remove("access_token");
-				setOnline("OFF");
-				hooks.logInHook.setState(false);
+			let res : any;
+			if (option == "block")
+			res = await SendFriendRequest({username: Userdata?.username, status: "block"});
+		else 
+		res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
+	if (res == undefined){
+				Logout();
 			}
 			setRefresh(!refresh);
 		}catch(err){
 			alert(err);}
-	}
-
-	
-	if (!wait) { return (<div>loading...</div>)}
-	return (
-		<>
-			{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render :
+		}
+		
+		if (name == "not-found")
+			return (<NotFound />);
+		
+		if (!wait) { return (<div>loading...</div>)}
+		return (
+			<>
+			{online == "OFF" ? render :
 			
 			(<><div className="m-8 flex flex-row gap-8 h-[85vh] ">
 				<div className=" flex flex-col rounded-lg  items-center bg-teal-500 h-full min-w-[400px]  bg-gradient-to-r from-blue-700 to-blue-900" >profile info
@@ -122,7 +116,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 					<h1 className='text-3xl pt-3 ' > {Userdata?.username} </h1>
 
 					<button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
-					<button onClick={()=>{SendFriendRequest({username: name, status: "Block"})}} className="m-4 bg-red-600 p-3 rounded-md">Block</button>
+					<button onClick={(e : MouseEvent)=>friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
 					<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>
 
 					<button className='ml-auto  w-[100px] h-[40px] flex justify-center p-3  bg-yellow-500 rounded-lg hover:bg-yellow-600 items-center gap-2 font-semibold'><span className='text-2xl'><FaCog /></span> EDIT</button>

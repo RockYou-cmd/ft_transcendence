@@ -9,9 +9,8 @@ export class UserController{
 
 	@Get("profile")
 	@UseGuards(AuthGuard)
-	getProfile(@Request() request){
-		console.log(request.user);
-		return this.UserService.getProfile(request.user);
+	getProfile(@Request() account){
+		return this.UserService.getProfile(account.user);
 	}
 
 	@Get()
@@ -31,27 +30,10 @@ export class UserController{
 		return this.UserService.search(data.username);
 	}
 
-	@Post("remove")
-	@UseGuards(AuthGuard)
-	async removeUserFromFriends(@Req() req, @Body() friend) {
-		return this.UserService.removeUserFromFriends(req.user, friend);
-	}
-
-	@Get("friends/chats")
-	@UseGuards(AuthGuard)
-	async getFriendsChats(@Req() account) {
-		return this.UserService.getFriendsChats(account.user);
-	}
-	@Get("friends")
-	@UseGuards(AuthGuard)
-	async getFriends(@Req() account) {
-		return this.UserService.getFriends(account.user);
-	}
-
-
 	@Put("update")
 	@UseGuards(AuthGuard)
 	async updateData(@Req() account, @Body("updatedData") data) {
 		return this.UserService.updateData(account.user, data);
 	}
+
 }

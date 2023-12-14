@@ -7,14 +7,16 @@ import { useState, useEffect, useRef } from 'react';
 import LoG from '../Components/Log/Log';
 import { useLogContext } from '../Components/Log/LogContext';
 import Loading from '../loading';
+import LeaderBoard from './Components/LeaderBoard';
+import Game from './Game';
+import GameMode from './Components/GameMode';
 
 
 
-export default function Game() {
+export default function GamePage() {
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
-	const [opp, setOpp] = useState("");
-	const [play, setPlay] = useState(false);
+	const [Mode, setMode] = useState("");
 	const { online, setOnline } = useLogContext();
 
 	const hooks = {
@@ -24,8 +26,7 @@ export default function Game() {
 
 	const clickHandler = (e: MouseEvent, choice: string) => {
 		e.preventDefault();
-		setOpp(choice);
-		setPlay(true);
+		setMode(choice);
 	};
 
 
@@ -41,15 +42,24 @@ export default function Game() {
 		<>
 			{online == "OFF" ? render :
 				(<>
-					<div className='GameMain'>
+					{Mode == "" ? <div className='GameMain'>
+						
+						<LeaderBoard />
+						<GameMode Mode={Mode} setMode={setMode} />
+						{/* <div className='gameMode'>
+							<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "computer") }}> play with the computer</button>
+							<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "invite") }}> play with the frined</button>
+							<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "rank") }}> play rank</button>
 
-						<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "computer") }}> play with the computer</button>
-						<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "invite") }}> play with the frined</button>
-						<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "rank") }}> play rank</button>
-						{/* {opp == "computer" && <Canvas/>} */}
+						</div> */}
+						<div className='online'>
+						</div>
 
-						{play == true ? (opp == "computer" ? <Canvas COM={true} /> : <Canvas COM={false} />) : null}
+							
 					</div>
+					
+					: <Game Mode={Mode} setMode={setMode}/> }
+
 				</>)}
 		</>
 	)

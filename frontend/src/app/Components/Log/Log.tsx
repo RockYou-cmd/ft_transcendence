@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { GetData } from "./CheckLogin";
 import { useLogContext, useSocket } from "./LogContext";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import Form from "../../profile/form";
-
 
 
 
@@ -22,21 +21,21 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 				setOnline("OFF");
 			}
 			else {
-				if (online != "ON") {
+					if (online == "ON"){
+						setSocket(io(host + "/events", {
+							withCredentials: true,
+						}));
+						console.log("socket created");
+					}
 					setOnline("ON");
-					setSocket(io(host + "/events", {
-						withCredentials: true,
-					}));
-					console.log("socket created");
-				}
-
 			}
 
 		}
 		fetchData();
+		return () => {socket?.disconnect()};
 	}, [online]);
 
-	if (LogIn.waitHook.state == false) 
+	if (LogIn.waitHook.state == false)
 		return null;
 
 	return (

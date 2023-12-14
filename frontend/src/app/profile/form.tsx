@@ -1,7 +1,7 @@
 
 import '../assest/login.css'
 import { useEffect, useRef, useState } from 'react';
-import { Post } from '../Components/Fetch/post';
+import { Post } from '../Components/Fetch/Fetch';
 import Link from 'next/link';
 import React from 'react';
 import { APIs } from '../Props/APIs';
@@ -38,11 +38,11 @@ export default function Form() {
 				console.log(res);
 				if (res.status == 201) {
 					if (online != "ON") {
-						
+
 						setOnline("ON");
-						setSocket(io(host + "/events", {
-							withCredentials: true,
-						}));
+						// setSocket(io(host + "/events", {
+						// 	withCredentials: true,
+						// }));
 						// console.log("socket created");
 					}
 				}

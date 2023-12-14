@@ -2,7 +2,7 @@
 import React, { useState, useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { APIs } from "../../Props/APIs";
-import { Get, Post } from "../../Components/Fetch/post";
+import { Get, Post } from "../../Components/Fetch/Fetch";
 import Cookies from "js-cookie";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
@@ -34,10 +34,10 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				if (online != "ON") {
 					setOnline("ON");
 					router.push("/");
-					setSocket(io(host + "/events", {
-						withCredentials: true,
-					}));
-					console.log("socket created");
+					// setSocket(io(host + "/events", {
+					// 	withCredentials: true,
+					// }));
+					// console.log("socket created");
 				}
 			}
 			else {

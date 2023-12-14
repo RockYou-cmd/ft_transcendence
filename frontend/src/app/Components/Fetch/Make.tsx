@@ -1,42 +1,44 @@
 
 
 import { APIs } from "@/app/Props/APIs";
-import { Post } from "./post";
-import { Put } from "./post";
+import { Post } from "./Fetch";
+import { Put } from "./Fetch";
 
 
 
 
-export async function Make({option , group, person}: {option : string, group :any, person : string}){
+export async function Make({ option, group, person }: { option: string, group: any, person: string }) {
 
-	const data = {id : group?.id, username : person};
-	let Api  = "";
+	const data = { id: group?.id, username: person };
+	let Api = "";
 	let put = false;
 
 	console.log("helllooowwww ", data);
 
-	if (option == "Kick"){
+	if (option == "Kick") {
 		put = false;
 		Api = APIs.Kick;
 	}
-	else if (option == "Ban"){
+	else if (option == "Ban") {
 		put = true;
 		Api = APIs.Ban;
 	}
-	else if (option == "Mute"){
+	else if (option == "Mute") {
 		put = true;
 		Api = APIs.Mute;
 	}
-	else if (option == "MakeAdmin"){
+	else if (option == "MakeAdmin") {
 		put = true;
 		Api = APIs.MakeAdmin;
 	}
-	else if (option == "removeAdmin"){
+	else if (option == "removeAdmin") {
 		put = true;
 		Api = APIs.RemoveAdmin;
 	}
 
-	let res : any;
+
+	console.log("data in make", data, " option ",option);
+	let res: any;
 	if (put == false)
 		res = await Post(data, Api);
 	else

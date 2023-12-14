@@ -55,14 +55,23 @@ export class UserService {
 				include: {
 					friends: {
 						where: {
-							friendId: userData.id
+							users: {
+								some: {
+									username: user.username
+								}
+							}
+						},
+						include: {
+							sender: true,
+							blocked: true
 						}
 					}
 				}
 			})
 			if (!ret)
 				throw new NotFoundException("User Not Found");
-			return {...userData, status:ret?.friends[0]?.status};
+			console.log(ret);
+			return {...userData, status:ret.friends[0]?.status, sender: ret.friends[0]?.sender?.username, blocked: ret.friends[0]?.blocked?.username};
 			
 		}
 		catch(err) {
@@ -72,8 +81,6 @@ export class UserService {
 	
 	async getUsers() {
 		try {
-			await prisma.message.deleteMany();
-			await prisma.chat.deleteMany({});
 			return prisma.user.findMany({
 				include: {
 					friends:true,
@@ -83,9 +90,7 @@ export class UserService {
 						include: {
 							room:true
 						}
-					},
-					// messagesSent:true,
-					// messagesReceived: true
+					}
 				}
 			});
 		}
@@ -122,83 +127,6 @@ export class UserService {
 		return {users:ret};
 	}
 
-	async removeUserFromFriends(account, user) {
-		try {
-			console.log(account);
-			console.log(user);
-			const friendUser = await prisma.user.findUnique({
-				where: {
-					username: user.username
-				}
-			});
-			const deletedUserRl = await prisma.friend.delete({
-				where: {
-					friendId_userId: {
-						userId: account.userId,
-						friendId: friendUser.id
-					}
-				}
-			})
-	
-			const deletedFriendRl = await prisma.friend.delete({
-				where: {
-					friendId_userId: {
-						userId: friendUser.id,
-						friendId: account.userId
-					}
-				}
-			})
-		}
-		catch (err) {
-			throw err;
-		}
-
-	}
-
-	async getFriendsChats(account) {
-		try {
-			const friends = await prisma.user.findUnique({
-				where: {
-					username: account.username
-				},
-				select: {
-					friends: {
-						where: {
-							users: {
-								some: {
-									chats: {
-										some:{ 
-											members: {
-												some: {
-													username: account.username
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			})
-			return {friends}
-		} catch (err) {
-			return err;
-		}
-	}
-
-	async getFriends(account) {
-		try {
-			const friends = await prisma.user.findUnique({
-				where: account.username,
-				select: {
-					friends: true
-				}
-			})
-		} catch (err) {
-			throw err;
-		}
-	}
 	async updateData(account, data) {
 		try {
 			console.log(account.username);

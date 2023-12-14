@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { APIs } from "../../Props/APIs";
-import { Get } from "../Fetch/post";
+import { Get } from "../Fetch/Fetch";
 import Form from "../../profile/form";
 import { useLogContext } from "./LogContext";
 
@@ -12,9 +12,9 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 	// 	data = await Get(APIs.User + user);
 	// }
 
-	if (Api == "User") 
+	if (Api == "User")
 		data = await Get(APIs.User + user);
-	else if (Api == "Profile") 
+	else if (Api == "Profile")
 		data = await Get(APIs.Profile);
 	else if (Api == "Navbar")
 		data = await Get(APIs.Navbar);

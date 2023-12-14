@@ -13,3 +13,11 @@ export interface ChatOptions{
 	desc: string[];
 }
 
+export interface Message {
+	content: string;
+	sender: string;
+	chatId: string;
+	receiver?: string;
+	receivers?: any;
+}
+
