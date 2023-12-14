@@ -323,5 +323,45 @@ export class RoomService {
 			throw err;
 		}
 	}
+
+	async muteMember(data) {
+		const memberShip = await prisma.roomMembership.update({
+			where: {
+				userId_roomId: {
+					userId: data.username,
+					roomId: data.id
+				}
+			},
+			data: {
+				status: "MUTED",
+				mutedTime: new Date()
+			}
+		})
+	}
+
+	async sendMessage(data) {
+		try {
+			const message = await prisma.roomMessage.create({
+				data: {
+					content: data.content,
+					room: {
+						connect: {
+							id: data.chatId
+						},
+					},
+					sender: {
+						connect: {
+							username: data.sender
+						}
+					}
+				}
+			})
+			console.log(message)
+			return message;
+			
+		} catch (err) {
+			throw err;
+		}
+	}
 	
 }
