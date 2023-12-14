@@ -19,11 +19,12 @@ import Invite from './Components/Invite';
 import Confirm from './Components/Confirm';
 import GroupSettings from './Components/Group_settings';
 import OwnerSettings from './Components/Settings';
-import { Post, Put } from '../Components/Fetch/Fetch';
+import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogContext, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
+import { useSearchParams } from 'next/navigation';
 
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
@@ -41,6 +42,8 @@ export default function Chat() {
 
 	const { me, setMe } = useMe();
 	const { online, setOnline } = useLogContext();
+	const param = useSearchParams();
+	
 	// hooks for data
 	const [User, setUser] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
@@ -60,7 +63,8 @@ export default function Chat() {
 	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
-
+	
+	// setUser
 
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);
@@ -77,8 +81,8 @@ export default function Chat() {
 
 	const [Style, setStyle] = useState({} as any);
 
-
-
+	
+	
 	function OptionsHandler(option: string) {
 		if (option == "CreateG")
 			setCreateG(true);
@@ -89,19 +93,30 @@ export default function Chat() {
 		else if (option == "invite")
 			setInvite(true);
 		else if (option == "sendMsg")
-			setView(true);
-		else if (option == "view")
+		setView(true);
+	else if (option == "view")
 			setView(true);
 		else if (option == "leave")
 			setLeave(true);
 		else if (option == "settings")
 			setSettings(true);
 		else if (option == "see")
-			setSeeMem(true);
-		else if (option == "block")
+		setSeeMem(true);
+	else if (option == "block")
 			setBlock(true);
-
+		
 	}
+
+
+	useEffect(() => {
+		async function fetchData(user : string) {
+			const data = await Get(APIs.User + user);
+			setUser(data);
+		}
+		if (param.get("user") != null)
+			fetchData(param.get("user") as string);
+	},	[]);
+
 
 	useEffect(() => {
 		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {

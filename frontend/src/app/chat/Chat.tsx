@@ -13,6 +13,7 @@ import { Post } from '../Components/Fetch/Fetch';
 import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { get } from 'http';
 
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
@@ -41,6 +42,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 
 	const { socket, setSocket } = useSocket();
 	const ChatID = useRef("");
+	const Room = useRef("");
 	const { me, setMe } = useMe() as any;
 	const status = useRef("");
 	const scroll = useRef(null) as any;
@@ -63,6 +65,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		if (channel?.username != undefined) {
 			name = channel?.username;
 			setGroup(false);
+			Room.current = "message";
 			Role("");
 			setRole("");
 			Api = APIs.getChat + name;
@@ -70,6 +73,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		else {
 			name = channel?.name;
 			setGroup(true);
+			Room.current = "roomMessage";
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
@@ -109,6 +113,17 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		if (Object.keys(User).length != 0)
 			getChat(User);
 	}, [User])
+
+	useEffect(() => {
+		async function fetchData() {
+			const data = await Get(APIs.getChat + User?.username);
+			// setChat(data?.chats[0]);
+			status.current = data?.friends[0]?.status;
+		}
+		if (chat && Object.keys(chat).length != 0) {
+			fetchData();
+		}
+	}, [refresh])
 	
 	
 	const visible = useRef(null) as any;
@@ -120,7 +135,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				setChat((chat : { messages: any }) => ({ ...chat, messages: [...chat.messages, msg] }));
 				
 				const message = { content: input, sender: me?.username , chatId: ChatID.current , receiver : User?.username};
-				socket.emit("message", message);
+				socket.emit(Room.current, message);
 				
 			}
 			setInput("");
@@ -132,14 +147,15 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
-		socket.on("message", (data: any) => {
+		socket.on(Room.current, (data: any) => {
 			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
 			if (data?.chatId == ChatID.current) {
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}
 		})
+		console.log(Room.current);
 		return () => {
-			socket.off("message");
+			socket.off(Room.current);
 		};
 	}, [socket, chat]);
 

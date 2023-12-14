@@ -165,7 +165,7 @@ export class FriendService {
 					data: {
 						blocked: {
 							connect: {
-								username: account.username
+								username: user.username
 							}
 						},
 						users: {

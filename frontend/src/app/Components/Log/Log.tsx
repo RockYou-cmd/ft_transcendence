@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GetData } from "./CheckLogin";
 import { useLogContext, useSocket } from "./LogContext";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import Form from "../../profile/form";
 
 
@@ -13,6 +13,7 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 	// const host = "http://10.12.11.1:3001";
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
+	let ios: Socket;
 
 	useEffect(() => {
 		async function fetchData() {
@@ -22,21 +23,23 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 				setOnline("OFF");
 			}
 			else {
-				if (online != "ON") {
-					setOnline("ON");
+				// if (online != "ON") {
+					// setOnline("ON");
 					setSocket(io(host + "/events", {
 						withCredentials: true,
 					}));
-					console.log("socket created");
-				}
+					
+				// }
+				console.log("socket created ", ios);
 
 			}
 
 		}
 		fetchData();
+		return () => {socket?.disconnect(); console.log("socket disconnected")};
 	}, [online]);
 
-	if (LogIn.waitHook.state == false) 
+	if (LogIn.waitHook.state == false)
 		return null;
 
 	return (

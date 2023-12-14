@@ -40,7 +40,6 @@ export default function Profile_info() {
 	const handleClick = (val: boolean) => {
 		setShowSetting(val);
 	};
-	console.log("herreeee",data);
 
 	return (
 		<div className="m-8 flex flex-row gap-8 h-[85vh] ">

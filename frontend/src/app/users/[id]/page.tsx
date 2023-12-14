@@ -30,13 +30,17 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	const [refresh, setRefresh] = useState(false);
 	
 	const pathname = usePathname();
-
+	const hooks = {
+		dataHook: { state: data, setState: setData },
+		waitHook: { state: wait, setState: checkwait },
+	}
+	
 	let name: string = "";
 	const friend  = useRef("not friend");
 	name = pathname.split("/")[2];
 	const router = useRouter();
-	if (name == "not-found")
-		return (<NotFound />);
+
+	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
@@ -45,7 +49,8 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			Logout();
 		}
 		
-		if (data?.statusCode == 404 || data?.blocked == data?.username){
+		if (data?.statusCode == 404 || (data?.blocked && data?.blocked  !== data?.username)){
+			console.log("user ", data?.username, "blocked ", data?.blocked);
 			router.push("/users/not-found");
 		}
 		UsersetData(data);
@@ -65,20 +70,16 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		else
 			friend.current = "not friend";
 	}
-	
 
-
-	const hooks = {
-		dataHook: { state: data, setState: setData },
-		waitHook: { state: wait, setState: checkwait },
-	}
-	
-	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-	
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
 	}, [online, refresh]);
+
+	
+	
+	
+
 	
 	if (Userdata?.photo != null)
 	photo = Userdata.photo;
@@ -91,10 +92,10 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		try{
 			let res : any;
 			if (option == "block")
-				res = await SendFriendRequest({username: Userdata?.username, status: "block"});
-			else 
-				res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
-			if (res == undefined){
+			res = await SendFriendRequest({username: Userdata?.username, status: "block"});
+		else 
+		res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
+	if (res == undefined){
 				Logout();
 			}
 			setRefresh(!refresh);
@@ -102,10 +103,12 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			alert(err);}
 		}
 		
+		if (name == "not-found")
+			return (<NotFound />);
 		
-	if (!wait) { return (<div>loading...</div>)}
-	return (
-		<>
+		if (!wait) { return (<div>loading...</div>)}
+		return (
+			<>
 			{online == "OFF" ? render :
 			
 			(<><div className="m-8 flex flex-row gap-8 h-[85vh] ">
