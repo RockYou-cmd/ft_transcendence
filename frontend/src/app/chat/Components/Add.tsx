@@ -34,7 +34,9 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 
 	useEffect(() => {
 		const SearchRes = Users?.filter((user: any)=>{
-			return user.users[0].username.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
+			if (join == "StartChat")
+				return user.users[0].username.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
+			return user?.username?.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
 		})
 		setData(SearchRes);
 	}, [Users, search]);
