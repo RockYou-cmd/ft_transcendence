@@ -49,7 +49,7 @@ export default function LeaderBoard() {
 				<h1>RANK</h1>
 				<div className='content'>
 
-					{data?.friends?.map((friend: any) => (<Print key={friend.username} info={friend} />))}
+					{data?.friends?.map((friend: any, index : number) => (<Print key={index} info={friend} />))}
 				</div>
 
 			</div>

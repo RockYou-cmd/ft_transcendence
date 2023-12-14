@@ -27,7 +27,7 @@
 	align-items: center;
 	justify-content: space-between;
 	background-color: rgba(34, 40, 49, 1);
-	border: 1px solid rgba(34, 40, 49, 1);
+	border: 1px solid rgb(107, 108, 111);
 	border-radius: 30px;
 	height: 46px;
 	margin: 28px auto;
@@ -48,12 +48,15 @@
 #logout{
 	background-color: rgba(34, 40, 49, 1);
 	border-radius: 30px;
+	border: 1px solid rgb(107, 108, 111);
 	padding: 0px 20px;
 	margin: 30px 50px 30px 0px; 
 }
 
 #logout:hover{
 	background-color: #ff2638;
+	border-color: #ff2638;
+	box-shadow: 0px 0px 12px 1px #ff2638;
 }
 
 #header #SearchComponent{
@@ -92,7 +95,7 @@
 	
 	& h1{
 		font: 600 18px 'Inter', sans-serif;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 	}
 
 	& section {

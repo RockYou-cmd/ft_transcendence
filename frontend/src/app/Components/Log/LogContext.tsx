@@ -1,10 +1,9 @@
 "use client";
 import { createContext, useContext, useState } from 'react';
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 
-// const localhost = "http://localhost:3001";
-// const host = "http://localhost:3001";
+
 
 type LogContextType = {
 	online: string;
@@ -17,6 +16,7 @@ type SocketType = {
 	setSocket: React.Dispatch<React.SetStateAction<Socket | null>>;
 }
 
+// type Silence
 
 
 export const WebSocket = createContext<SocketType | null>(null);

@@ -32,21 +32,14 @@ export default function Notif({content} : {content?: string}) {
 	}, [show]);
 
 	useEffect(() => {
-		console.log("socket",socket)
 		if (socket) {
 			socket.on("message", (data: any) => {
 				setMsg(data);
 				setShow(true);
 			})
-			console.log("on");
 		}
-		return () => {
-			socket?.off("message");
-			console.log("off");
-		}
+		return () => {socket?.off("message");}
 	}, [socket]);
-
-	console.log("show ", show);
 
 	// <Link href={"/chat/?user=" + msg?.sender} >Reply</Link>
 	return (
@@ -55,6 +48,7 @@ export default function Notif({content} : {content?: string}) {
 
 		{ show &&
 			<div id="NotifBar">
+				<h1>New Message</h1>
 				<h1>{msg?.sender} : {msg?.content}</h1>
 				<section>
 					<button className="accept" onClick={()=>setShow(false)}><Link href={"/chat/?user=" + msg?.sender} >Reply</Link></button>

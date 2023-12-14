@@ -21,7 +21,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 		getFriends();
 	}, [refresh]);
 
-	console.log("data in friends", data);
+	// console.log("data in friends", data);
 
 	function SelecteEvent(e: MouseEvent, friend: any) {
 		e.preventDefault();

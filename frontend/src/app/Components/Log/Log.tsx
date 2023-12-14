@@ -6,14 +6,12 @@ import Form from "../../profile/form";
 
 
 
-
 export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 	const host = "http://localhost:3001";
 	// const host = "http://10.12.11.1:3001";
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
-	let ios: Socket;
 
 	useEffect(() => {
 		async function fetchData() {
@@ -23,20 +21,20 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 				setOnline("OFF");
 			}
 			else {
-				// if (online != "ON") {
-					// setOnline("ON");
-					setSocket(io(host + "/events", {
-						withCredentials: true,
-					}));
-					
-				// }
-				console.log("socket created ", ios);
+					if (online == "ON"){
+						
+						setSocket(io(host + "/events", {
+							withCredentials: true,
+						}));
+						console.log("socket created ", online);
+					}
+					setOnline("ON");
 
 			}
 
 		}
 		fetchData();
-		return () => {socket?.disconnect(); console.log("socket disconnected")};
+		return () => {socket?.disconnect()};
 	}, [online]);
 
 	if (LogIn.waitHook.state == false)

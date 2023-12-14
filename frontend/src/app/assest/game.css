@@ -146,12 +146,38 @@
 
 }
 
-.gameMode{
+.GameMode{
 	width: 27%;
 	padding: 2vh;
 }
 
+.MatchMaking{
+	padding:10px 50px;
+	width: 30vh;
+	background-color: #011627;
+	position: absolute;
+	
+	& h1{
+		font : 700 24px "Inter", sans-serif;
+		text-align: center;
+		margin-bottom:15px;
+	}
 
+	& .g_img{height: 60px; width: 60px;
+	border: 2px solid #fff;}
+
+	& section {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		margin:10px;
+	}
+}
+
+.GamePage { 
+	position: relative;
+}
 
 
 

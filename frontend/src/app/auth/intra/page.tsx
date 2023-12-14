@@ -34,10 +34,10 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				if (online != "ON") {
 					setOnline("ON");
 					router.push("/");
-					setSocket(io(host + "/events", {
-						withCredentials: true,
-					}));
-					console.log("socket created");
+					// setSocket(io(host + "/events", {
+					// 	withCredentials: true,
+					// }));
+					// console.log("socket created");
 				}
 			}
 			else {

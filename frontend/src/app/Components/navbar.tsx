@@ -66,6 +66,7 @@ export default function Navbar() {
 				</nav>
 				 
 				<button className="NotifBtn"><FontAwesomeIcon icon={faBell} className="icon" /></button>
+				
 				<Logout />
 			</header>
 

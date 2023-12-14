@@ -9,13 +9,14 @@ import { useLogContext } from '../Components/Log/LogContext';
 import Loading from '../loading';
 import LeaderBoard from './Components/LeaderBoard';
 import Game from './Game';
+import GameMode from './Components/GameMode';
 
 
 
 export default function GamePage() {
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
-	const [opp, setOpp] = useState("");
+	const [Mode, setMode] = useState("");
 	const { online, setOnline } = useLogContext();
 
 	const hooks = {
@@ -25,7 +26,7 @@ export default function GamePage() {
 
 	const clickHandler = (e: MouseEvent, choice: string) => {
 		e.preventDefault();
-		setOpp(choice);
+		setMode(choice);
 	};
 
 
@@ -41,23 +42,23 @@ export default function GamePage() {
 		<>
 			{online == "OFF" ? render :
 				(<>
-					{opp == "" ? <div className='GameMain'>
+					{Mode == "" ? <div className='GameMain'>
 						
 						<LeaderBoard />
-						
-						<div className='gameMode'>
+						<GameMode Mode={Mode} setMode={setMode} />
+						{/* <div className='gameMode'>
 							<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "computer") }}> play with the computer</button>
 							<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "invite") }}> play with the frined</button>
 							<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => { clickHandler(e, "rank") }}> play rank</button>
 
-						</div>
+						</div> */}
 						<div className='online'>
 						</div>
 
 							
 					</div>
 					
-					: <Game Mode={opp} setMode={setOpp}/> }
+					: <Game Mode={Mode} setMode={setMode}/> }
 
 				</>)}
 		</>
