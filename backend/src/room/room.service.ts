@@ -44,13 +44,10 @@ export class RoomService {
 				},
 				select: {
 					messages: true,
-					members: {
-						where: {
-							userId: account.username
-						}
-					}
+					members: true
 				}
 			})
+			// console.log(chat);
 			return chat;
 
 		}

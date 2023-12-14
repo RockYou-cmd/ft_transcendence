@@ -24,7 +24,7 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 			}
 			else {
 				// if (online != "ON") {
-					// setOnline("ON");
+					setOnline("ON");
 					setSocket(io(host + "/events", {
 						withCredentials: true,
 					}));
