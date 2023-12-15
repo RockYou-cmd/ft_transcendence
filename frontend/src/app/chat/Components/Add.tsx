@@ -3,25 +3,21 @@ import "../../assest/chat.css";
 import Image from 'next/image'
 import { MouseEvent, useEffect , useState} from 'react';
 import avatar from '../../../../public/avatar.png';
-import Options from './Options';
-import { constrainedMemory } from 'process';
 import '../../assest/Components.css';
 import Link from 'next/link';
+import { Make as Ban }from '../../Components/Fetch/Make';
 
-export default function Add({Users , Make, title, join, close} : {Users: any, Make: any, title: string, join : string, close: any}){
+export default function Add({Users , Make, title, join, close, id} : {Users: any, Make: any, title: string, join : string, close: any, id? : any}){
 
-	
 	const [option, setOption] = useState(false);
 	const [search, setSearch] = useState("");
 	const [data, setData] = useState(null) as any;
 
 	let Style: any = {};
 
-	if (join == "JOIN")
+	if (join == "JOIN" || "ADD" || "Group")
 		Style = {"backgroundColor": "rgba(249, 172, 24, 1)" ,
 	};
-	else if (join == "Group")
-		Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
 	else if (join == "StartChat")
 		Style = {"backgroundColor": "#1A66FF"};
 
@@ -36,21 +32,30 @@ export default function Add({Users , Make, title, join, close} : {Users: any, Ma
 		const SearchRes = Users?.filter((user: any)=>{
 			if (join == "StartChat")
 				return user.users[0].username.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
-			return user?.username?.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());
+			return user.username.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());	
 		})
 		setData(SearchRes);
 	}, [Users, search]);
+
 
 	function Print(users : any){
 		let user = users?.users;
 		if (join == "StartChat"){
 			user = user.users[0];
 		}
+		if (user?.username == "yel-qabl")
+			console.log("user", user);
 		const print = <>
 			<Link href={"/users/" + user?.username} passHref={true} ><div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name ? user?.name : user?.username}</h3>
-				<button className='UseraddBtn' style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
+				{user?.rooms[0]?.status== "BANNED" ? <button className='UseraddBtn' style={Style} onClick={()=>Ban({
+					option: "Kick",
+					group: id,
+					person: user?.username,
+				})}>UNBAN</button>
+				:  <button className='UseraddBtn' style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
+				}
 				{join == "JOIN" && <div className='Join'></div>}
 			</div></Link>
 		</>

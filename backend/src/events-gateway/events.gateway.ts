@@ -58,6 +58,6 @@ export class EventsGateway {
       console.log("room message event called ");
       this.server.to(receiver.userId).except(payload.sender).emit("roomMessage", payload);
     });
-    this.roomService.sendMessage(payload)      
+	this.roomService.sendMessage(payload)   
   }
 }

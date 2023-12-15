@@ -24,7 +24,12 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogContext, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
+<<<<<<< HEAD
+import Lottie from "lottie-react";
+import chatAnimation from "../../../public/chatAnimation.json"
+=======
 import { useSearchParams } from 'next/navigation';
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
@@ -161,11 +166,16 @@ export default function Chat() {
 
 							</section>
 							<div className='Chat'>
+<<<<<<< HEAD
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} />
+									: < >
+										<Lottie className='w-[40%] flex m-auto justify-center items-center'  animationData={chatAnimation} loop={true}  />
+=======
 								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
 									: <>
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</>}
-
 							</div>
 						</div>
 

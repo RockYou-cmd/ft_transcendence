@@ -40,7 +40,10 @@ export interface Api {
 	members: string,
 	addNewMembers: string,
 	Logout : string,
+<<<<<<< HEAD
+=======
 	createChat: string,
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 }
 
 export const APIs : Api = { 
@@ -80,5 +83,8 @@ export const APIs : Api = {
 	members: Host + "/room/members/?id=",
 	addNewMembers: Host + "/room/add/new/member/?id=",
 	Logout : Host + "/auth/logout",
+<<<<<<< HEAD
+=======
 	FriendsChat : Host + "/friend/chats",
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 };

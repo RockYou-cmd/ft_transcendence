@@ -133,7 +133,7 @@ export default function Profile_info() {
 					</span>{" "}
 					EDIT
 				</button>
-				<div className="w-[95%] h-fit mt-[50px]  p-3 bg-black-200/30 rounded-lg hover:bg-black/70 ">
+				<div className="w-[95%] box-shadow: inset 0 -2px 4px h-fit mt-[50px]  p-3 rounded-lg bg-black/70 ">
 					{" "}
 					{data.bio}{" "}
 				</div>

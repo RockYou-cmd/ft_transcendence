@@ -25,6 +25,7 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 						setSocket(io(host + "/events", {
 							withCredentials: true,
 						}));
+						console.log("socket created");
 					}
 					setOnline("ON");
 			}

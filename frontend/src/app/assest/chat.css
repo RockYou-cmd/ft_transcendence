@@ -462,7 +462,7 @@ input:focus {
 	border-radius: 10px;
 	font-weight: 600;
 	font-size: 22px;
-	margin:36vh auto;
+	margin:auto auto;
 	display: block;
 	&:hover{
 		background-color: rgb(54, 181, 255);

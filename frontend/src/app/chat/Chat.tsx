@@ -152,6 +152,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				} else {
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
 				}
+				console.log("message sent");
 			}
 			setInput("");
 		}
@@ -180,7 +181,6 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
 				{msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 				<section>
-
 					<p>{msg?.content}</p>
 				</section>
 				{/* <span >{msg?.createdAt}</span> */}
@@ -188,7 +188,6 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			</div>
 		</>
 		return <div>{message}</div>
-
 	}
 
 

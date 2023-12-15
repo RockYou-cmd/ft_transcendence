@@ -27,7 +27,11 @@
 	align-items: center;
 	justify-content: space-between;
 	background-color: rgba(34, 40, 49, 1);
+<<<<<<< HEAD
+	border: 1px solid rgb(81, 81, 81);
+=======
 	border: 1px solid rgb(107, 108, 111);
+>>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 	border-radius: 30px;
 	height: 46px;
 	margin: 28px auto;
