@@ -49,7 +49,7 @@ export default function Add({Users , Make, title, join, close, id} : {Users: any
 			<Link href={"/users/" + user?.username} passHref={true} ><div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name ? user?.name : user?.username}</h3>
-				{user?.rooms[0]?.status== "BANNED" ? <button className='UseraddBtn' style={Style} onClick={()=>Ban({
+				{join != "StartChat" && user?.rooms[0]?.status== "BANNED" ? <button className='UseraddBtn' style={Style} onClick={()=>Ban({
 					option: "Kick",
 					group: id,
 					person: user?.username,
