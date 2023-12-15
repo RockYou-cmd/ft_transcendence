@@ -202,13 +202,22 @@ export class RoomService {
     try {
       const rooms = await prisma.room.findMany({
         where: {
-          members: {
-            every: {
-              userId: {
-                not: account.username,
+          AND: [
+            {
+              members: {
+                every: {
+                  userId: {
+                    not: account.username,
+                  },
+                },
               },
             },
-          },
+            {
+              privacy: {
+                not: "PRIVATE",
+              },
+            },
+          ],
         },
       });
       return { rooms: rooms };
@@ -229,7 +238,7 @@ export class RoomService {
                 },
                 {
                   status: {
-                    not: "BANNED"
+                    not: "BANNED",
                   },
                 },
               ],
@@ -366,6 +375,27 @@ export class RoomService {
       });
       console.log(message);
       return message;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async modifyRoom(data) {
+    try {
+      var newData = {
+        name: data.name,
+        description: data.description,
+        privacy: data.privacy,
+        password: data.password
+      };
+      const modifiedRoom = await prisma.room.update({
+        where: {
+          id: data.id,
+        },
+        data: newData,
+      });
+      console.log(newData);
+      return "room modified successfully"
     } catch (err) {
       throw err;
     }
