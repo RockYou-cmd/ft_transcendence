@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import '../../assest/chatComponents.css';
 import '../../assest/chat.css';
 import { APIs } from '@/app/Props/APIs';
-import { Get, Post } from '@/app/Components/Fetch/Fetch';
+import { Get, Post , Put} from '@/app/Components/Fetch/Fetch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 
@@ -49,15 +49,28 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			gDesc.current.value = info?.description;
 			setPrivacy(info?.privacy);
 			gPass.current.value = info?.password;
-		
 		}
 	},[]);
+
+	async function changeSettings(e: any) {
+		e.preventDefault();
+		const res = await Put({
+			name : gName.current.value,
+			description : gDesc.current.value,
+			privacy : privacy,
+			password : gPass.current.value,
+			id : info?.id,
+		}, APIs.roomModify);
+		if (res?.status == 201)
+			alert("Group settings changed");
+		else
+			alert("failed to change settings");
+	}
 
 	async function submitForm(e: any) {
 		e.preventDefault();
 		if (gName.current.value && privacy != ""){
 			if (privacy == "PROTECTED" && !gPass.current.value){
-
 				alert("Please enter a password");
 			}
 			else{
@@ -81,7 +94,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 
 	return (
 		<>
-			<form className='CreateGroup' onSubmit={submitForm} >
+			<form className='CreateGroup' onSubmit={!change ? submitForm : changeSettings} >
 				<h1>{!change ? "CREATE NEW GROUP" : "CHANGE GROUP SETTINGS"}</h1>
 				<button onClick={() => close(false) } className='closeBtn' ><div></div></button>
 				<div className='line'></div>
