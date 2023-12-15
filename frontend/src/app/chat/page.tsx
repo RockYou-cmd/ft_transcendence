@@ -170,13 +170,13 @@ export default function Chat() {
 							</div>
 						</div>
 
-						{createG && <CreateGroup createG={setCreateG} />}
+						{createG && <CreateGroup close={setCreateG} change={false} />}
 						{explore && <ExploreRooms close={setExplore} />}
 						{newChat && <StartChat close={setNewChat} User={setUser} />}
 						{invite && <Invite User={User} close={setInvite} />}
 						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
 						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
-						{settings && <GroupSettings close={setSettings} />}
+						{settings && <CreateGroup close={setSettings} change={true} info={User}/>}
 						{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} DirectMsg={setUser} />}
 					</div>
 				</>)

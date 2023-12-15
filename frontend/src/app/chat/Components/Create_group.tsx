@@ -15,30 +15,43 @@ interface Data {
 
 }
 
-export default function CreateGroup({ createG }: { createG: any }) {
+export default function CreateGroup({ close , change, info}: { close: any, change : boolean, info? : any}) {
 
-	const [protectedChoice, setProtectedChoice] = useState(false);
+	const [input, setInput] = useState("");
+	const [input2, setInput2] = useState("");
+
 	const [prStyle, setPrStyle] = useState({});
+	
 	const gName = useRef(null) as any;
 	const gDesc = useRef(null) as any;
 	const gPass = useRef(null) as any;
 	const gPic = useRef(null) as any;
-	const [privacy, setPrivacy] = useState("PROTECTED" || "PRIVATE" || "PUBLIC");
-	const gPrivacy = useRef(null) as any;
+	const [privacy, setPrivacy] = useState("PUBLIC" || "PRIVATE" || "PROTECTED");
 	const [hide, setHide] = useState(false);
 
 
 	useEffect(() => {
-		if (protectedChoice === true) {
-			setPrStyle({
-				"pointerEvents": "none",
-				"opacity": "0.3",
-			});
-		}
-		else {
+		if (privacy == "PROTECTED") {
 			setPrStyle({});
 		}
-	}, [protectedChoice]);
+		else {
+			setPrStyle({
+				"pointerEvents": "none",
+				"opacity": "0.2",
+			});
+		}
+	}, [privacy]);
+
+
+	useEffect(() => {
+		if (change){
+			gName.current.value = info?.name;
+			gDesc.current.value = info?.description;
+			setPrivacy(info?.privacy);
+			gPass.current.value = info?.password;
+		
+		}
+	},[]);
 
 	async function submitForm(e: any) {
 		e.preventDefault();
@@ -56,7 +69,7 @@ export default function CreateGroup({ createG }: { createG: any }) {
 				const res = await Post(data, APIs.CreateRoom);
 				if (res?.status == 201){
 					alert("Group created");
-					createG(false);
+					close(false);
 				}
 				else{
 					alert("Group name already exists");
@@ -68,27 +81,27 @@ export default function CreateGroup({ createG }: { createG: any }) {
 
 	return (
 		<>
-			<form className='CreateGroup' onSubmit={submitForm} id="child">
-				<h1>CREATE NEW GROUP</h1>
-				<button onClick={() => { createG(false) }} className='closeBtn'><div></div></button>
+			<form className='CreateGroup' onSubmit={submitForm} >
+				<h1>{!change ? "CREATE NEW GROUP" : "CHANGE GROUP SETTINGS"}</h1>
+				<button onClick={() => close(false) } className='closeBtn' ><div></div></button>
 				<div className='line'></div>
 				<label>Group name</label>
-				<input ref={gName} type="text" placeholder="Enter group name" />
+				<input ref={gName} type="text" placeholder="Enter group name" value={gName.current?.value || input} onChange={(e)=>setInput(e.target.value)}/>
 				<label>Group description</label>
-				<input ref={gDesc} type="text" placeholder="Enter group description" />
+				<input ref={gDesc} type="text" placeholder="Enter group description" value={gDesc.current?.value || input2} onChange={(e)=>setInput2(e.target.value)}/>
 
 				<label>Group privacy</label>
 				<div className='G_privacy'>
 					<div>
-						<input ref={gPrivacy} type="radio" name="privacy" value="PUBLIC" onChange={e => { setProtectedChoice(true); setPrivacy(e.target.value); }} />
+						<input type="radio" name="privacy" value="PUBLIC" checked={privacy == "PUBLIC"} onChange={e => setPrivacy(e.target.value)} />
 						<label htmlFor="public">Public</label>
 					</div>
 					<div>
-						<input ref={gPrivacy} type="radio" name="privacy" value="PRIVATE" onChange={e => { setProtectedChoice(true); setPrivacy(e.target.value); }} />
+						<input type="radio" name="privacy" value="PRIVATE" checked={privacy == "PRIVATE"}  onChange={e => setPrivacy(e.target.value)} />
 						<label htmlFor="private">Private</label>
 					</div>
 					<div>
-						<input ref={gPrivacy} type="radio" name="privacy" value="PROTECTED" defaultChecked onChange={e => { setProtectedChoice(false); setPrivacy(e.target.value); }} />
+						<input type="radio" name="privacy" value="PROTECTED" checked={privacy == "PROTECTED"}  onChange={e =>  setPrivacy(e.target.value) } />
 						<label htmlFor="protected">Protected</label>
 					</div>
 				</div>
@@ -100,7 +113,7 @@ export default function CreateGroup({ createG }: { createG: any }) {
 				</div>
 				<label>Group picture</label>
 				<input ref={gPic} type="file" />
-				<button className='submit' type='submit'>CREATE GROUP</button>
+				<button className='submit' type='submit'>{!change ?  "CREATE GROUP" : "SAVE"}</button>
 			</form>
 		</>
 	)
