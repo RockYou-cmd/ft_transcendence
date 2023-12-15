@@ -80,7 +80,6 @@ export class RoomController {
   @Put("add/admin")
   @UseGuards(AuthGuard)
   async addAdmin(@Body() data) {
-	console.log("hhhhhh");
     return this.roomService.addAdmin(data);
   }
   

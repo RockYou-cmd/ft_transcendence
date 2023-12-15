@@ -49,7 +49,7 @@ model RoomMembership {
   room     Room       @relation(fields: [roomId], references: [id])
   roomId   String
   role     RoomRole @default(MEMBER)
-  status   RoomStatus?
+  status   RoomStatus @default(ANGEL)
   mutedTime DateTime?
 
 
@@ -106,6 +106,7 @@ enum RoomRole {
 enum RoomStatus {
   MUTED
   BANNED
+  ANGEL
 }
 
 enum RoomPrivacy {

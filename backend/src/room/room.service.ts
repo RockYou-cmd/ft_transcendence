@@ -106,8 +106,8 @@ export class RoomService {
         include: {
           rooms: {
             where: {
-              roomId: roomId
-            }
+              roomId: roomId,
+            },
           },
         },
       });
@@ -184,6 +184,11 @@ export class RoomService {
             include: {
               user: true,
             },
+            where: {
+              status: {
+                not: "BANNED",
+              },
+            },
           },
         },
       });
@@ -223,7 +228,9 @@ export class RoomService {
                   userId: account.username,
                 },
                 {
-                  status: null,
+                  status: {
+                    not: "BANNED"
+                  },
                 },
               ],
             },
