@@ -44,11 +44,11 @@ export interface Api {
 	roomModify: string,
 }
 
-export const APIs : Api = { 
-	SignIn : Host + "/auth/signIn",
-	SignUp : Host + "/auth/signUp",
-	Profile : Host + "/user/profile", 
-	User : Host + "/user/?username=",
+export const APIs : Api = {
+	SignIn: Host + "/auth/signIn",
+	SignUp: Host + "/auth/signUp",
+	Profile: Host + "/user/profile",
+	User: Host + "/user/?username=",
 	Navbar: Host + "/user/profile",
 	accessToken: Host + "/auth/token",
 	googleAuth: Host + "/auth/google",
