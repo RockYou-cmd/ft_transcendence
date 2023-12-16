@@ -28,6 +28,7 @@ import Lottie from "lottie-react";
 import chatAnimation from "../../../public/chatAnimation.json"
 import { useSearchParams } from 'next/navigation';
 
+
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
 
