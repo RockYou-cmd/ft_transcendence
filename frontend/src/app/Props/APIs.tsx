@@ -40,17 +40,14 @@ export interface Api {
 	members: string,
 	addNewMembers: string,
 	Logout : string,
-<<<<<<< HEAD
-=======
 	createChat: string,
->>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 }
 
-export const APIs : Api = { 
-	SignIn : Host + "/auth/signIn",
-	SignUp : Host + "/auth/signUp",
-	Profile : Host + "/user/profile", 
-	User : Host + "/user/?username=",
+export const APIs : Api = {
+	SignIn: Host + "/auth/signIn",
+	SignUp: Host + "/auth/signUp",
+	Profile: Host + "/user/profile",
+	User: Host + "/user/?username=",
 	Navbar: Host + "/user/profile",
 	accessToken: Host + "/auth/token",
 	googleAuth: Host + "/auth/google",
@@ -82,9 +79,6 @@ export const APIs : Api = {
 	RoomChat: Host + "/room/chat/?id=",
 	members: Host + "/room/members/?id=",
 	addNewMembers: Host + "/room/add/new/member/?id=",
-	Logout : Host + "/auth/logout",
-<<<<<<< HEAD
-=======
-	FriendsChat : Host + "/friend/chats",
->>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
+	Logout: Host + "/auth/logout",
+	FriendsChat: ""
 };
