@@ -24,12 +24,9 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogContext, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
-<<<<<<< HEAD
 import Lottie from "lottie-react";
 import chatAnimation from "../../../public/chatAnimation.json"
-=======
 import { useSearchParams } from 'next/navigation';
->>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
@@ -98,18 +95,17 @@ export default function Chat() {
 		else if (option == "invite")
 			setInvite(true);
 		else if (option == "sendMsg")
-		setView(true);
-	else if (option == "view")
+			setView(true);
+		else if (option == "view")
 			setView(true);
 		else if (option == "leave")
 			setLeave(true);
 		else if (option == "settings")
 			setSettings(true);
 		else if (option == "see")
-		setSeeMem(true);
-	else if (option == "block")
+			setSeeMem(true);
+		else if (option == "block")
 			setBlock(true);
-		
 	}
 
 
@@ -166,26 +162,21 @@ export default function Chat() {
 
 							</section>
 							<div className='Chat'>
-<<<<<<< HEAD
-								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} />
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
 									: < >
 										<Lottie className='w-[40%] flex m-auto justify-center items-center'  animationData={chatAnimation} loop={true}  />
-=======
-								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
-									: <>
->>>>>>> 725ffe3bc31569616b3d0906e155049ce6fe22e0
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</>}
 							</div>
 						</div>
 
-						{createG && <CreateGroup createG={setCreateG} />}
+						{createG && <CreateGroup close={setCreateG} change={false} />}
 						{explore && <ExploreRooms close={setExplore} />}
 						{newChat && <StartChat close={setNewChat} User={setUser} />}
 						{invite && <Invite User={User} close={setInvite} />}
 						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
 						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
-						{settings && <GroupSettings close={setSettings} />}
+						{settings && <CreateGroup close={setSettings} change={true} info={User}/>}
 						{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} DirectMsg={setUser} />}
 					</div>
 				</>)

@@ -59,15 +59,16 @@ export default function Create() {
 
 				const res = await Post(data, APIs.SignUp);
 
-				const msg = await res.json();
-
+				
 				if (res.status == 201) {
 					alert('user created');
 					route.refresh();
 					route.push('/');
 				}
-				else
+				else{
+					const msg = await res?.json();
 					alert(msg.message);
+				}
 			}
 
 		}

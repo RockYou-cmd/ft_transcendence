@@ -30,8 +30,7 @@ export async function SendFriendRequest({ username, status }: { username: string
 
 
 	const data = { username: username };
-	console.log("data", data);
-	console.log("status", status);
+
 	if (status == "block")
 		res = await Put(data, subApi);
 	else

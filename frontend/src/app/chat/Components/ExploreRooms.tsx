@@ -33,7 +33,6 @@ export default function ExploreRooms({ close }: { close: any }) {
 		async function SubmitHandler(e: any) {
 			e.preventDefault();
 			res = await Post({ id: Room?.id, password: password }, APIs.JoinProtectedRoom);
-			console.log(res);
 			if (res?.status == 201) {
 				alert("Joined");
 				setRoomSelected({});

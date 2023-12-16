@@ -35,7 +35,6 @@ export default function Form() {
 			data.password = passwordRef.current?.value;
 			try {
 				const res = await Post(data, APIs.SignIn);
-				console.log(res);
 				if (res.status == 201) {
 					if (online != "ON") {
 

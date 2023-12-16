@@ -20,7 +20,7 @@ export default function StartChat({ close, User }: { close: any, User: any }) {
 	// console.log("friends", data?.friends);
 	return (
 		<>
-			<Add Users={data?.friends} Make={User} title="Start Chat" join="StartChat" close={close} />
+			<Add Users={data?.friends} Make={User} title="Start Chat" join="Start Chat" close={close} />
 		</>
 	)
 }

@@ -30,6 +30,13 @@ export class RoomController {
   async createRoom(@Req() account, @Body() data) {
     return this.roomService.createRoom(account.user, data);
   }
+
+  @Put("modify")
+  @UseGuards(AuthGuard)
+  async modifyRoom(@Req() account, @Body() data) {
+    return this.roomService.modifyRoom(data);
+  }
+
   
   @Post("join")
   @UseGuards(AuthGuard)
@@ -80,7 +87,6 @@ export class RoomController {
   @Put("add/admin")
   @UseGuards(AuthGuard)
   async addAdmin(@Body() data) {
-	console.log("hhhhhh");
     return this.roomService.addAdmin(data);
   }
   

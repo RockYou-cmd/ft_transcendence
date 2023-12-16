@@ -13,7 +13,6 @@ export async function Make({ option, group, person }: { option: string, group: a
 	let Api = "";
 	let put = false;
 
-	console.log("helllooowwww ", data);
 
 	if (option == "Kick") {
 		put = false;
@@ -37,7 +36,6 @@ export async function Make({ option, group, person }: { option: string, group: a
 	}
 
 
-	console.log("data in make", data, " option ",option);
 	let res: any;
 	if (put == false)
 		res = await Post(data, Api);
