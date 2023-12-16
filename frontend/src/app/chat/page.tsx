@@ -2,122 +2,185 @@
 import '../assest/chat.css';
 import Image from 'next/image';
 import Groups from './Groups';
-import bboulhan from '../../../public/bboulhan.jpg';
-import ael_korc from '../../../public/ael-korc.jpg';
-import yel_qabl from '../../../public/yel-qabl.jpg';
 import Friends from "./Friends";
 import Cnvs from "./Chat";
-import { useEffect, useState , useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
-import LoG from "../Components/Log";
-import Navbar from "../Components/navbar";
+import LoG from "../Components/Log/Log";
 import Options from "./Components/Options";
+import CreateGroup from './Components/Create_group';
+import { ChatOptions } from '../Props/Interfaces';
+import SearchBar from '../Components/Fetch/SearchBar';
+import StartChat from './Components/StartChat';
+import { useRouter } from 'next/navigation';
+import { APIs } from '../Props/APIs';
+import ExploreRooms from './Components/ExploreRooms';
+import Invite from './Components/Invite';
+import Confirm from './Components/Confirm';
+import GroupSettings from './Components/Group_settings';
+import OwnerSettings from './Components/Settings';
+import { Post, Put ,Get } from '../Components/Fetch/Fetch';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLogContext, useMe } from '../Components/Log/LogContext';
+import Loading from '../loading';
+import Lottie from "lottie-react";
+import chatAnimation from "../../../public/chatAnimation.json"
+import { useSearchParams } from 'next/navigation';
 
+function Leave(GroupId: any) {
+	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
 
-export interface Friends{
-	title: string;
-	image: any;
-	lastMsg: string;
-	lastMsgTime: string;
-	status: boolean;
 }
 
-
-
-export interface Group{
-	title: string;
-	image: any;
-	lastMsg: string;
-	lastMsgTime: string;
+function Block(User: any) {
+	const res = Put({ username: User?.username }, APIs.Block);
 }
 
-export default function Chat(){
+let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
 
-	const [log, setLog] = useState(false);
+
+export default function Chat() {
+
+	const { me, setMe } = useMe();
+	const { online, setOnline } = useLogContext();
+	const param = useSearchParams();
+	
+	// hooks for data
+	const [User, setUser] = useState({} as any);
+	const [refresh, setRefresh] = useState(false);
+	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
+
+	// hooks for login
 	const [data, setData] = useState({} as any);
-	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
 	const [wait, checkwait] = useState(false);
-	const [option, setOption] = useState(false);
-	const visible = useRef(null);
 
 	const hooks = {
-		logInHook: { state: log, setState: setLog },
 		dataHook: { state: data, setState: setData },
-		cookieHook: { state: cookie, setState: setCookie },	
 		waitHook: { state: wait, setState: checkwait },
 	}
 
+	/************************************************** */
+
+	const router = useRouter();
+	const [option, setOption] = useState(false);
+	const visible = useRef(null);
 	
-	let channels : Group[] = [];
-	channels.push({title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00"});
-	channels.push({title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35"});
-	channels.push({title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50"});
-	channels.push({title: "Group 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35"});
-	channels.push({title: "Group 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00"});
-	channels.push({title: "Group 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50"});
+	// setUser
 
-	let friends : Friends[] = [];
-	friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
-	friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
-	friends.push({title: "Friend 3", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: true});
-	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
-	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
-	friends.push({title: "Friend 1", image: bboulhan, lastMsg: "brahim", lastMsgTime: "12:00", status: true});
-	friends.push({title: "Friend 2", image: ael_korc, lastMsg: "alae", lastMsgTime: "16:35", status: false});
-	friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
-	friends.push({title: "Friend 4", image: yel_qabl, lastMsg: "youssef", lastMsgTime: "08:50", status: false});
+	//  hooks for options
+	const [createG, setCreateG] = useState(false);
+	const [explore, setExplore] = useState(false);
+	const [newChat, setNewChat] = useState(false);
+	const [invite, setInvite] = useState(false);
+	const [block, setBlock] = useState(false);
+	const [view, setView] = useState(false);
+	const [leave, setLeave] = useState(false);
+	const [settings, setSettings] = useState(false);
+	const [seeMem, setSeeMem] = useState(false);
 
-	// const outSide = (e: MouseEvent) => {
-	// 	if (visible.current && !(visible.current as any).contains(e.target as Node)) {
-	// 		setOption(false);
-	// 		alert("out");
-	// 	}
-	// };
 
-	let render = LoG({page: "Profile", LogIn: hooks}) as any;
+
+	const [Style, setStyle] = useState({} as any);
+
+	
+	
+	function OptionsHandler(option: string) {
+		if (option == "CreateG")
+			setCreateG(true);
+		else if (option == "ExploreG")
+			setExplore(true);
+		else if (option == "NewChat")
+			setNewChat(true);
+		else if (option == "invite")
+			setInvite(true);
+		else if (option == "sendMsg")
+			setView(true);
+		else if (option == "view")
+			setView(true);
+		else if (option == "leave")
+			setLeave(true);
+		else if (option == "settings")
+			setSettings(true);
+		else if (option == "see")
+			setSeeMem(true);
+		else if (option == "block")
+			setBlock(true);
+	}
+
 
 	useEffect(() => {
-		hooks.waitHook.setState(true);
-	}, []);
- 
-	// useEffect(() => {
-	// 	document.addEventListener("mousedown", outSide);
-	// 	return () => {
-	// 		document.removeEventListener("mousedown", outSide);
-	// 	};
-	// }, [visible]);
+		async function fetchData(user : string) {
+			const data = await Get(APIs.User + user);
+			setUser(data);
+		}
+		if (param.get("user") != null)
+			fetchData(param.get("user") as string);
+	},	[]);
+
+
+	useEffect(() => {
+		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {
+			setStyle({
+				"filter": "blur(7px)",
+				"pointerEvents": "none",
+			})
+			setOption(false);
+		}
+		else
+			setStyle({});
+
+		if (!createG || !explore || !newChat || !invite || !leave || !settings || !seeMem || !block) {
+			setRefresh(!refresh);
+		}
+		if (view)
+			router.push("/users/" + User?.username);
+	}, [createG, explore, newChat, invite, leave, settings, seeMem, block, view]);
+
+	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
 	if (!hooks.waitHook.state) {
-		return (<><div>loading...</div></>)
+		return (<Loading />)
 	}
 	return (
 		<>
-		{hooks.logInHook.state == false && hooks.cookieHook.state == "" ? render : 
-		(<>
-		<div ref={visible}>
-		<Navbar/>
-		<div className="ChatPage">
-			<section className="sec1">
-				<div className="searchBar">
-					<input type="text" placeholder="Search" />
-					<button onClick={() => {setOption(!option);}} className="Options">
-					{/* <button className="Options"> */}
-						<div className="straight"></div>
-						<div className="straight"></div>
-						<div className="straight"></div>
-					</button>
-					{option && <Options/>}
-				</div>
-				{/* <Options/> */}
-				
-			<Groups channels={channels}/>
-			<Friends channel={friends}/>
-				
-			</section>
-			<Cnvs/>
-			
-		</div>
-		</div></>)}
+			{online == "OFF" ? render :
+				(<>
+					<div className='Cover'>
+						<div className={"ChatPage"} style={Style}>
+							<section className="sec1">
+								<div className="searchBar">
+									<SearchBar title={"profile"} />
+									<button ref={visible} onClick={() => { setOption(!option) }} className="Options">
+										<div className="straight"></div><div className="straight"></div><div className="straight"></div>
+									</button>
+									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionsHandler} content={chatOptions} />}
+								</div>
+
+								<Groups Group={setUser} refresh={refresh} />
+								<Friends selectChat={setUser} refresh={refresh} />
+
+							</section>
+							<div className='Chat'>
+								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
+									: < >
+										<Lottie className='w-[40%] flex m-auto justify-center items-center'  animationData={chatAnimation} loop={true}  />
+										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
+									</>}
+							</div>
+						</div>
+
+						{createG && <CreateGroup close={setCreateG} change={false} />}
+						{explore && <ExploreRooms close={setExplore} />}
+						{newChat && <StartChat close={setNewChat} User={setUser} />}
+						{invite && <Invite User={User} close={setInvite} />}
+						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
+						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
+						{settings && <CreateGroup close={setSettings} change={true} info={User}/>}
+						{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} DirectMsg={setUser} />}
+					</div>
+				</>)
+			}
 		</>
 	);
 }

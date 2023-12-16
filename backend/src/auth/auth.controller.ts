@@ -1,42 +1,52 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { authDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { get } from 'http';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private authService: AuthService) {}
 
 	@Post("signUp")
-	signUp(@Body() dto : authDto) {
-		return this.authService.signUp(dto);
+	async signUp(@Body() dto : authDto, @Res() res: Response) {
+		res.cookie("access_token", await this.authService.signUp(dto), {httpOnly: false});
+		res.send("User ignedUp succesfully");
 	}
-
+	
 	@Post("signIn")
-	singIn(@Body() ndto) {
-		return this.authService.signIn(ndto);
+	async singIn(@Body() ndto, @Res() res: Response) {
+		const token = await this.authService.signIn(ndto);
+		res.cookie("access_token", token, {httpOnly: false});
+		res.send("User signedIn succesfully");
 	}
-
+	
 	@UseGuards(AuthGuard("google"))
 	@Get("google")
 	google() {}
 	
 	@Post("google/callback")
 	@UseGuards(AuthGuard("google"))
-	googleCallback(@Req() req) {
-		return this.authService.OAuthValidation(req.user);
+	async googleCallback(@Req() req, @Res() res: Response) {
+		res.cookie("access_token", await this.authService.OAuthValidation(req.user), {httpOnly: false});
+		res.send("User signedIn succesfully");
 	}
-
+	
 	@UseGuards(AuthGuard("42"))
 	@Get("intra")
-	async intra() {
-		return "intra";
-	}
-
+	async intra() {}
+	
 	@Post("intra/callback")
 	@UseGuards(AuthGuard("42"))
-	intraCallback(@Req() req) {
-		return this.authService.OAuthValidation(req.user);
+	async intraCallback(@Req() req, @Res() res: Response) {
+		res.cookie("access_token", await this.authService.OAuthValidation(req.user), {httpOnly: false});
+		res.send("User signedIn succesfully");
+	}
+
+	@Get("logout")
+	async logOut(@Res() res: Response) {
+		res.clearCookie("access_token");
+		res.send("User logedout succesfully");
 	}
 }

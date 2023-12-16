@@ -10,22 +10,113 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users{
-
-  id String @id() @default(uuid()) @unique
-
-  username String @unique
-
-  email String @unique
-
-  password String?
-
-  photo String?
-
-  is2faEnabled Boolean? @default(false)
-
+model User {
+  id                            String   @id @default(uuid())
+  username                      String   @unique
+  email                         String   @unique
+  password                      String?
+  photo                         String?
+  bio                           String?
+  is2faEnabled                  Boolean? @default(false)
   twoFactorAuthenticationSecret String?
+  temp2fa                       String?
+  friends                       FriendShip[]
+  requestsSent                  FriendShip[] @relation(name: "requestsSent")
+  blockedBy                     FriendShip[] @relation(name: "blockedBy")
+  
+  chats             Chat[]
+  chatsMessages     Message[]
 
-  temp2fa String?
+  rooms    RoomMembership[]
+  rooomsMessages  RoomMessage[]
 }
 
+model Room {
+  id        String      @id @default(uuid())
+  name      String
+  description String?
+  privacy   RoomPrivacy @default(PUBLIC)
+  password  String?
+  members   RoomMembership[]
+  messages  RoomMessage[]
+  createdAt DateTime    @default(now())
+}
+
+model RoomMembership {
+  id       Int        @id @default(autoincrement())
+  user     User       @relation(fields: [userId], references: [username])
+  userId   String
+  room     Room       @relation(fields: [roomId], references: [id])
+  roomId   String
+  role     RoomRole @default(MEMBER)
+  status   RoomStatus @default(ANGEL)
+  mutedTime DateTime?
+
+
+  @@unique([userId, roomId])
+}
+
+model RoomMessage {
+  id        String     @id @default(uuid())
+  content   String
+  createdAt DateTime   @default(now())
+  room      Room       @relation(fields: [roomId], references: [id])
+  roomId    String
+  sender    User       @relation(fields: [senderId], references: [username])
+  senderId  String
+}
+
+
+
+model Chat {
+  id        String    @id @default(uuid())
+  messages  Message[]
+  members   User[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  chatId    String
+  sender    User     @relation(fields: [senderId], references: [username])
+  senderId  String
+}
+
+model FriendShip {
+  id        Int @id @default(autoincrement())
+  users      User[]
+  userId    String?
+  status    Status @default(PENDING)
+  sender   User?   @relation(name: "requestsSent",fields: [senderId], references: [id])
+  senderId String?
+  blocked  User?   @relation(name: "blockedBy", fields: [blockedId], references: [id])
+  blockedId String?
+  @@unique([userId, senderId])
+}
+
+
+enum RoomRole {
+  MEMBER
+  ADMIN
+  OWNER
+}
+
+enum RoomStatus {
+  MUTED
+  BANNED
+  ANGEL
+}
+
+enum RoomPrivacy {
+  PUBLIC
+  PRIVATE
+  PROTECTED
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}

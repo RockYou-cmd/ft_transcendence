@@ -9,11 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.0",
+    "@fortawesome/free-solid-svg-icons": "^6.5.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.6.1",
+    "cloudinary": "^1.41.0",
+    "install": "^0.13.0",
     "js-cookie": "^3.0.5",
+    "lottie-react": "^2.4.0",
     "next": "14.0.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^4.12.0",
+    "socket.io-client": "^4.7.2",
+    "styled-components": "^6.1.1"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
@@ -23,7 +32,8 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.1",
-    "postcss": "^8",
+    "postcss": "^8.4.31",
+    "postcss-nesting": "^12.0.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

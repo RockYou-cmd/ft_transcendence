@@ -1,50 +1,44 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-
+import RootLayout from './layout';
 import './assest/login.css';
-import Link from 'next/link';
-import Form from './profile/form';
 import { MouseEvent } from 'react';
-import CheckLogin from './Components/CheckLogin';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-// import Loading_hook from './hooks/loading_hook';
+import Profile from './profile/profile';
+import Home from './profile/home';
+import LoG from './Components/Log/Log';
+import { useLogContext } from './Components/Log/LogContext';
+import Loading from './loading';
 
-export default function Home() {
 
-	// var {log, render} = Form();
+
+
+export default function App() {
+
+	const { online, setOnline } = useLogContext();
+	const [SignIn, setSignIn] = useState(false);
+	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
-	const router = useRouter();
-	const [sign, setSign] = useState(false);
-
-	
-	function handleClick(event: MouseEvent<HTMLButtonElement>) {
-		event.preventDefault();
-		setSign(true);
-		router.push("/profile");
+	const hooks = {
+		dataHook: { state: data, setState: setData },
+		waitHook: { state: wait, setState: checkwait },
 	}
-	
-	
 
-	
-	useEffect(() => {
-		checkwait(true);
-	}, []);
+	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
+	// console.log(online);
 
-
-	if (!wait)
-		return (<div>loading...</div>);
-
+	if (!hooks.waitHook.state) {
+		return (<Loading />)
+	}
 	return (
 		<>
-			<React.StrictMode>
-
-				<h1 className='Ping'>Ping Pong</h1>
-				{Cookies.get("access_token") == undefined && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={handleClick}>Sing In</button>}
-			</React.StrictMode>
+			<div>
+				{online == "OFF" ? (!SignIn && online == "OFF" ? <Home setSignIn={setSignIn} /> : render) : <Profile User={""} />}
+			</div>
+			{SignIn && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={() => setSignIn(false)}>back</button>}
 		</>
 	)
 }

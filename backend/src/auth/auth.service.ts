@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { HttpException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -15,14 +15,14 @@ export class AuthService {
 		try
 		{
 			const hash = await argon.hash(user.password);
-			const ret = await prisma.users.create({
+			const ret = await prisma.user.create({
 				data:{
 					username: user.username,
 					email: user.email,
 					password: hash
 				}
 			})
-			return this.generateJwt(ret);
+			return await this.generateJwt(ret);
 		}
 		catch(err)
 		{
@@ -35,19 +35,16 @@ export class AuthService {
 
 	async signIn(user) {
 		try{
-			const ret = await prisma.users.findUnique({
+			const ret = await prisma.user.findUnique({
 				where : {
 					username:user.username,
 				}
 			});
-			if (!ret)
+			if (!ret || !ret.password)
 				throw new NotFoundException();
 			if (!await argon.verify(ret.password, user.password))
-				return {
-					status:300,
-					message: "Password incorrect"
-				} // unAuthorized exception should be thrown
-			return this.generateJwt(ret);
+				throw new HttpException("Password incorrect", 404) // unAuthorized exception should be thrown
+			return await this.generateJwt(ret);
 		}
 		catch(err) {
 			console.log("SignIn !!Error!!");
@@ -59,14 +56,14 @@ export class AuthService {
 		try {
 			if (!user)
 				throw new UnauthorizedException();
-			var ret = await prisma.users.findUnique({
+			var ret = await prisma.user.findUnique({
 				where:{
 					email:user.email
 				}
 			})
-
+			
 			if (!ret) {
-				await prisma.users.create({
+					ret = await prisma.user.create({
 					data:{
 						username: user.username,
 						email: user.email,
@@ -74,8 +71,7 @@ export class AuthService {
 					}
 				})
 			}
-			return this.generateJwt(user);
-
+			return await this.generateJwt(ret);
 		}
 		catch (err) {
 			console.log("oath vlidation error");
@@ -86,11 +82,9 @@ export class AuthService {
 
 	async generateJwt(user) {
 		const payload = {
-			sub: user.id,
+			userId: user.id,
 			username: user.username
 		}
-		return {
-			access_token: await this.jwtService.signAsync(payload)
-		};
+		return await this.jwtService.signAsync(payload);
 	}
 }

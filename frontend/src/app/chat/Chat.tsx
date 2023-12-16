@@ -1,78 +1,227 @@
 import '../assest/chat.css';
 import Image from 'next/image';
-import bboulhan from '../../../public/bboulhan.jpg';
+import { useEffect, useState, useRef } from "react";
+import Options from './Components/Options';
+import { ChatOptions } from '../Props/Interfaces';
+import { Get } from '../Components/Fetch/Fetch'
+import { APIs } from '../Props/APIs';
+import { Message } from '../Props/Interfaces';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
+import avatar from '../../../public/avatar.png';
+import { Post } from '../Components/Fetch/Fetch';
+import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
+import { MouseEvent, KeyboardEvent } from 'react';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { get } from 'http';
 
-interface user{
-	username: string;
-	image: any;
-	status: string;
-	classname: string;
-	
+function Leave(GroupId: any) {
+	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
+
 }
 
-interface message{
-	user: user;
-	text: string;
-	time: string;
+function Block(User: any) {
+	const res = Post({ id: User?.id }, APIs.Block);
 }
 
 
-export default function Cnvs() {
+const chatSettings: ChatOptions = { Option: ["invite", "block", "view"], desc: ["invite for a game", "Block user", "View profile"] };
+
+const AdminSettings: ChatOptions = {
+	Option: ["leave", "see"],
+	desc: ["Leave Group", "See Members"]
+};
+const SuperSettings: ChatOptions = {
+	Option: ["leave", "see", "settings"],
+	desc: ["Leave Group", "See Members", "Group Settings"]
+};
+
+
+
+export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any, Role: any, OptionHandler: any , refresh : boolean}) {
+
+	const { socket, setSocket } = useSocket();
+	const ChatID = useRef("");
+	const Room = useRef("");
+	const { me, setMe } = useMe() as any;
+	const status = useRef("");
+	const scroll = useRef(null) as any;
+	const [chat, setChat] = useState({} as any);
+	const router = useRouter();
+	const msgImg = useRef(null) as any;
+	const [input, setInput] = useState("");
+	const [option, setOption] = useState(false);
+
+	//hooks for chat settings
+	const [group, setGroup] = useState(false);
+	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
+	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
+
+
+
+	async function getChat(channel: any) {
+		let name = "";
+		let Api = "";
+		if (channel?.username != undefined) {
+			name = channel?.username;
+			setGroup(false);
+			Room.current = "message";
+			Role("");
+			setRole("");
+			Api = APIs.getChat + name;
+		}
+		else {
+			name = channel?.name;
+			setGroup(true);
+			Room.current = "roomMessage";
+			Api = APIs.RoomChat + channel?.id;
+		}
+		const data = await Get(Api);
+		// conso
+		if (channel?.username && data?.chats[0]?.id == undefined) {
+			const res = await Post({ username: channel?.username }, APIs.createChat);
+			if (res.status == 201) {
+				
+				const datas = await res.json();
+				status.current = datas?.friends[0]?.status;
+				ChatID.current = datas?.chats[0]?.id;
+				setChat(datas?.chats[0]);
+				
+			}
+		}
+		else{
+			if (channel?.username != undefined){
+				setChat(data?.chats[0]);
+				ChatID.current = data?.chats[0]?.id;
+				status.current = data?.friends[0]?.status;
+			}
+			else{
+				setChat(data);
+				
+				ChatID.current = channel?.id;
+			}
+		}
+
+		if (channel?.name) {
+			Role(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
+			setRole(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
+		}
+	}
+
+
+
+	useEffect(() => {
+		if (Object.keys(User).length != 0)
+			getChat(User);
+	}, [User])
+
+	useEffect(() => {
+		async function fetchData() {
+			const data = await Get(APIs.getChat + User?.username);
+			// setChat(data?.chats[0]);
+			status.current = data?.friends[0]?.status;
+		}
+		if (chat && Object.keys(chat).length != 0) {
+			fetchData();
+		}
+	}, [refresh])
 	
+	
+	const visible = useRef(null) as any;
 
-	let User : user = {username: "alae", image: bboulhan, status: "online", classname: "usr_msg"};
-	let Me : user = {username: "brahim", image: bboulhan, status: "online", classname: "my_msg"};
-	let Messages : message[] = [];
-	Messages.push({user: User, text: "hello", time: "12:00" });
-	Messages.push({user: Me, text: "helloooo", time: "16:00"});
-	Messages.push({user: User, text: "hi i m here", time: "12:35"});
-	Messages.push({user: Me, text: "hello", time: "17:20"});
-	Messages.push({user: Me, text: "hello", time: "17:20"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
-	Messages.push({user: Me, text: "hello", time: "20:01"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
-	Messages.push({user: Me, text: "hello", time: "17:20"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
-	Messages.push({user: Me, text: "hello", time: "17:20"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
-	Messages.push({user: User, text: "helasda dsasd asd asdlo", time: "21:32"});
+	async function send(e: MouseEvent | KeyboardEvent) {
+		if (
+			e.type === "click" ||
+			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
+		) {
+			if (input !== "" && status.current !== "BLOCKED") {
+				const msg = { content: input, senderId: me?.username };
+				setChat((chat: { messages: any }) => ({
+					...chat,
+					messages: [...chat.messages, msg],
+				}));
 
-	const my_msg = "my_msg";
-	const user_msg = "usr_msg";
-	let msg: string = "";
+				const message: Message = {
+					content: input,
+					sender: me?.username,
+					chatId: ChatID.current,
+				};
+				if (!group) {
+					socket.emit(Room.current, { ...message, receiver: User?.username });
+				} else {
+					socket.emit(Room.current, { ...message, receivers: chat?.members });
+				}
+				console.log("message sent");
+			}
+			setInput("");
+		}
+	}
 
-	return(
-		<>
-			<div className="Chat">
-				<section className='User'>
-					<Image className='g_img' src={bboulhan} priority={true} alt="img" width={75} height={75}/>
-					<h1>{User.username}</h1>
-					<span>{User.status}</span>
-					<div className="line"></div>
-					{User.status == "online" ? <div className="status"></div> : <></>}
-					<button>
-						<div className='point'></div>
-						<div className='point'></div>
-						<div className='point'></div>
-					</button>
+	
+	useEffect(() => {
+		if (scroll.current) {
+			scroll.current.scrollTop = scroll.current.scrollHeight;
+		}
+		socket?.on(Room.current, (data: any) => {
+			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
+			if (data?.chatId == ChatID.current) {
+				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
+			}
+		})
+		return () => {
+			socket?.off(Room.current);
+		};
+	}, [socket, chat]);
+
+	function PrintMsg(msgs: any) {
+		const msg = msgs?.msgs;
+
+		const message = <>
+			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
+				{msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
+				<section>
+					<p>{msg?.content}</p>
 				</section>
-				<div className="Msg">
-					{Messages.map((msg, index) => (<>
-						<div className={msg.user.classname} key={index}>
-						<p >{msg.text}</p>
-						<span >{msg.time}</span>
-						<div className='triangle'></div>
-						</div>
-					</>))}
-				</div>
-				<div className="Send">
-					<div className="line"></div>
-					<input type="text" placeholder="Type a message" />
-					<button><div></div></button>
-				</div>
-			</div>	
+				{/* <span >{msg?.createdAt}</span> */}
+				<div className='triangle'></div>
+			</div>
+		</>
+		return <div>{message}</div>
+	}
+
+
+	return (
+		<>
+
+			<section className='User'>
+
+				<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
+				<h1 onClick={() => { User?.username ? router.push("/users/" + User?.username) : null }}>{User?.username ? User?.username : User?.name}</h1>
+				<span>{User?.username ? (User?.status ? "online" : "offline") : null}</span>
+				<div className="line"></div>
+				{User?.status && <div className="status"></div>}
+
+				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
+					<div className='point'></div><div className='point'></div><div className='point'></div>
+				</button>}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content} />}
+			</section>
+			<div className="Msg" ref={scroll}>
+				{chat?.messages?.map((msg: any, index: number) => (<PrintMsg key={index} msgs={msg} />))}
+			</div>
+			<div className="Send" >
+				<div className="line"></div>
+				<section>
+					<input type="text" placeholder="Type a message" value={input} onChange={(e) => { setInput(e.target.value) }} onKeyDown={(e: KeyboardEvent) => send(e)} />
+					<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
+				</section>
+				<button onClick={(e: MouseEvent) => send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{
+					width: "20px",
+					height: "20px"
+				}} /></button>
+			</div>
+
 		</>
 
 	)

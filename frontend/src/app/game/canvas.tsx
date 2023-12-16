@@ -1,9 +1,14 @@
 "use client"
 import '../assest/game.css'
-import {useRef, useEffect, useState, use} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import React from 'react';
 import { MouseEvent } from 'react';
 import router from 'next/navigation';
+import { useMe } from '../Components/Log/LogContext'
+import Image from 'next/image';
+import avatar from '../../../public/avatar.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRobot } from '@fortawesome/free-solid-svg-icons';
 
 export interface Player {
 	x: number;
@@ -15,7 +20,7 @@ export interface Player {
 
 
 
-var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
+// var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
 
 export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 	
@@ -23,8 +28,9 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 	// const [pause, setPause] = useState(false);
 	var pause = useRef(false);
 	const [startGame, setStart] = useState(true);
-	var myScore = useRef(0);
-	var oppScore = useRef(0);
+	const [myScore, setMyScore] = useState(0);
+	const [oppScore, setOppScore] = useState(0);
+	const {me, setMe} = useMe();
 	var pos = useRef({
 		x: 0,
 		y: 0,
@@ -33,7 +39,7 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 
 	let xValue = useRef<HTMLInputElement>(null);
 	let yValue = useRef<HTMLInputElement>(null);
-	let score = useRef<HTMLInputElement>(null);
+	// let score = useRef<HTMLInputElement>(null);
 	
 	const [Xv, setX] = useState('');
 	const [Yv, setY] = useState('');
@@ -47,14 +53,20 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		
 		const FPS = 60;
 		const BALL_SPEED = 1.2;
-		const COM_LVL = 0.12;
-		var ball_acc = 0.12;
+		const COM_LVL = 0.15;
+		var ball_acc = 0.18;
 		
 		const context = game.current?.getContext('2d');
-		const gameWidth = game.current?.width || 0;
-		const gameHeight = game.current?.height || 0;
-	
-		
+		const parent = game.current?.parentElement;
+		game.current.width = parent?.clientWidth || 0;
+		game.current.height = parent?.clientHeight || 0;
+		// const gameWidth = game.current.offsetWidth || 0;
+		// const gameHeight = game.current.offsetHeight || 0;
+
+		const gameWidth = game.current.width || 0;
+		const gameHeight = game.current.height || 0;
+
+
 		var net={
 			x : gameWidth / 2 - 1,
 			y : 0,
@@ -138,8 +150,8 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			
 			drawNet();
 			// draw the score
-			drawText(player1.score as any, gameWidth / 4, gameHeight / 5, "WHITE");
-			drawText(player2.score as any, 3 * gameWidth / 4, gameHeight / 5, "WHITE");
+			// drawText(player1.score as any, gameWidth / 4, gameHeight / 5, "WHITE");
+			// drawText(player2.score as any, 3 * gameWidth / 4, gameHeight / 5, "WHITE");
 			//draw the padels
 			drawRect(player1.x, player1.y, player1.width, player1.height, player1.color);
 			drawRect(player2.x, player2.y, player2.width, player2.height, player2.color);
@@ -215,9 +227,11 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			if (ball.x + ball.radius <= 0){
 				player2.score++;
 				reset();
+				setOppScore(player2.score);
 			} else if ((ball.x - ball.radius) >= gameWidth){
 				player1.score++;
 				reset();
+				setMyScore(player1.score);
 			}
 		}
 
@@ -231,8 +245,6 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 				updateCOM();
 			else
 				updateOPP(OPP!);
-			myScore.current = player1.score;
-			oppScore.current = player2.score;
 		}
 		
 		document.body.addEventListener("keydown", function(key){
@@ -271,21 +283,31 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			setRestart("Start");
 		pause.current = false;
 		setBtn("Pause");
+		setMyScore(0);
+		setOppScore(0);
 	}
 
 
 
 	return (
 		<>
-			<div id="container" className='flex justify-center w- m-auto mt-12'>
-				{/* <p className="score"> {myScore.current} | {oppScore.current} </p> */}
-				<canvas id="canvas" ref={game} width="1500" height="900" />
+			<div id="container">
+
+			<section>
+				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={70} height={70}/>
+				<h1>{(me as {username : string})?.username}</h1>
+				{/* <h1>hewa</h1> */}
+				<h2>{myScore} | {oppScore}</h2>
+				<h1>Computer</h1>
+				<FontAwesomeIcon id='icon' icon={faRobot} />
+			</section>				
+
+				<canvas id="canvas" ref={game} />
 			</div>
 			{ COM ? (<>
 			<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
 			<button className='bg-black text-white p-2 rounded m-5' onClick={Restart}>{restart}</button> </>)
-		: null	
-		}
+		: null	}
 		</>
 	)
 }

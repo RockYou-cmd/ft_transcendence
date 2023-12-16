@@ -10,12 +10,19 @@ export class TwoFactorAuthenticationController {
 	@Get("generate")
 	@UseGuards(AuthGuard)
 	generateTwoFactorAuthenticationSecret(@Req() req) {
+		console.log(req.user);
 		return this.twoFactorAuthenticationService.generateTwoFactorAuthSecret(req.user);
 	}
 
 	@Post("enable")
 	@UseGuards(AuthGuard)
-	enableTwoFactorAuthentication(@Req() req, @Body() tokenObj:twoFactorAuthenticationDto) {
-		return this.twoFactorAuthenticationService.enableTwoFactorAuthentication(req.user, tokenObj.token);
+	enableTwoFactorAuthentication(@Req() account, @Body() tokenObj:twoFactorAuthenticationDto) {
+		return this.twoFactorAuthenticationService.enableTwoFactorAuthentication(account.user, tokenObj.token);
+	}
+
+	@Post("disable")
+	@UseGuards(AuthGuard)
+	disableTwoFactorAuthentication(@Req() account, @Body() tokenObj:twoFactorAuthenticationDto) {
+		return this.twoFactorAuthenticationService.disableTwoFactorAuthentication(account.user);
 	}
 }

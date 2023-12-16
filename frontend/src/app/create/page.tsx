@@ -4,7 +4,8 @@ import '../assest/create.css';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {Post} from '../Components/post';
+import { Post } from '../Components/Fetch/Fetch';
+import { APIs } from '../Props/APIs';
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string } = {
 	firstname: '',
@@ -28,7 +29,6 @@ export default function Create() {
 	const repeat_passwordRef = useRef<HTMLInputElement>(null);
 	const [wait, checkwait] = useState(false);
 	const route = useRouter();
-	const [refresh, checkRefresh] = useState(false);
 	const [Fname, checkFname] = useState('');
 	const [Lname, checkLname] = useState('');
 	const [Email, checkEmail] = useState('');
@@ -57,17 +57,18 @@ export default function Create() {
 			else {
 				const data: { username: string, password: string, email: string } = { username: info.username, password: info.password, email: info.email };
 
-				const res = await Post(data, 'http://localhost:3001/auth/signUp');
-				console.log(res);
-				const msg = await res.json();
+				const res = await Post(data, APIs.SignUp);
 
+				
 				if (res.status == 201) {
 					alert('user created');
 					route.refresh();
-					route.push('/profile');
+					route.push('/');
 				}
-				else
+				else{
+					const msg = await res?.json();
 					alert(msg.message);
+				}
 			}
 
 		}
@@ -128,7 +129,7 @@ export default function Create() {
 
 				<button type="submit">Create</button>
 
-				<p>you already have account ? <Link href="/Profile"><span>Sing IN</span></Link> </p>
+				<p>you already have account ? <Link href="/"><span>Sing IN</span></Link> </p>
 
 			</form>
 		</>

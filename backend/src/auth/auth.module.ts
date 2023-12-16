@@ -9,6 +9,6 @@ import { TwoFactorAuthenticationModule } from './2fa/2fa.module';
 @Module({
   providers: [AuthService, googleStrategy, intraStrategy],
   controllers: [AuthController],
-  imports: [JwtModule.register({secret:"hard", signOptions:{expiresIn:"90m"}}), TwoFactorAuthenticationModule]
+  imports: [JwtModule.register({secret:"hard", signOptions:{expiresIn:"24h"}}), TwoFactorAuthenticationModule]
 })
 export class AuthModule {}

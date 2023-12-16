@@ -1,0 +1,145 @@
+#SearchComponent {
+	margin: 12px 20px 15px 20px;
+	position: absolute;
+	width: 70%;
+	border-radius: 20px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(13, 13, 13, 1);
+	z-index: 2;
+}
+
+
+#SearchComponent .resBar {
+	background-color: rgba(13, 13, 13, 1);
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	margin-top: 5px;
+	padding: 0px 15px;
+	width: 100%;
+	height: 74%;
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+#SearchComponent .line {
+	all: initial;
+	width: 90%;
+	margin: 0px 15px 20px;
+	height: 1px;
+	background-color: rgba(255, 255, 255, 0.25);
+	margin-bottom: 5px;
+	display: block;
+}
+
+#SearchComponent .searchInput {
+	height: 54px;
+	width: 100%;
+	margin: initial;
+	border: initial;
+	border-radius: initial;
+	background-color: initial;
+}
+
+#SearchComponent .results {
+	width: 100%;
+	height: 55px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 7px 0px;
+	background-color: rgb(59, 63, 67);
+	border-radius: 10px;
+	padding: 5px;
+	cursor: pointer;
+
+	&:hover {
+		background-color: rgba(127, 137, 147, 0.8);
+	}
+}
+
+
+#SearchComponent .g_img {
+	width: 45px;
+	height: 45px;
+	border: 2px solid #ffff;
+	margin-left: 7px;
+}
+
+#SearchComponent .results span {
+	font: 600 16px 'Inter', sans-serif;
+	margin: 0px 10px;
+	width: 30%;
+	/* line-height: 20px; */
+}
+
+#SearchComponent button {
+	padding: 8px;
+	border-radius: 10px;
+	font-weight: 500;
+	font-size: 13px;
+	margin: 7px 0px 7px auto;
+	background-color: green;
+}
+
+.JoinRoom .user button {
+	background-color: rgba(249, 172, 24, 1);
+	position: relative;
+}
+
+
+.Join .PassWord {
+	display: flex;
+	flex-direction: column;
+	justify-content: baseline;
+	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* color: #ffff; */
+	padding: 35px 50px 20px;
+	width: 30vh;
+	position: absolute;
+	top: 20%;
+	left: 12%;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 16px;
+	box-shadow: 2px 6px 15px 2px rgba(12, 10, 11, 0.80);
+
+}
+
+.PassWord label {
+	font: 600 18px 'Inter', sans-serif;
+	color: #ffff;
+	margin-bottom: 10px;
+	word-spacing: 3px;
+	text-align: center;
+	line-height: 18px;
+}
+
+.PassWord .input {
+	color: aliceblue;
+	background-color: #0D0D0D;
+	border: 3px solid rgba(255, 255, 255, 0.20);
+	padding: 8px 20px;
+	border-radius: 20px;
+	position: relative;
+}
+
+.PassWord .input input {
+	width: 90%;
+	background-color: #0D0D0D;
+	border: none;
+	color: #ffff;
+	font: 500 16px 'Inter', sans-serif;
+	padding-right: 20px;
+}
+
+.PassWord button:last-child {
+	padding: 6px 35px;
+	margin: 25px auto 0px;
+	border-radius: 10px;
+	font: 600 20px 'Inter', sans-serif;
+	background: linear-gradient(180deg, #FFAA05 0%, #F3CD84 100%);
+}
