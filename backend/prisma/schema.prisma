@@ -34,6 +34,7 @@ model User {
 model Room {
   id        String      @id @default(uuid())
   name      String
+  photo	 	String?
   description String?
   privacy   RoomPrivacy @default(PUBLIC)
   password  String?

@@ -14,7 +14,7 @@ import { Post } from '../Components/Fetch/Fetch';
 import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { get } from 'http';
+import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
 
 function Leave(GroupId: any) {
 	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
@@ -135,15 +135,19 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			e.type === "click" ||
 			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
 		) {
-			if (input !== "" && status.current !== "BLOCKED") {
-				const msg = { content: input, senderId: me?.username };
+			if ((input !== "" || msgImg.current?.files[0] != undefined) && status.current !== "BLOCKED") {
+				const img = await fileUploadFunction(msgImg.current.files[0]);
+				const s = img ? img : input;
+				const msg = { content: s, senderId: me?.username };
+
 				setChat((chat: { messages: any }) => ({
 					...chat,
 					messages: [...chat.messages, msg],
 				}));
 
 				const message: Message = {
-					content: input,
+					type : "message",
+					content: s,
 					sender: me?.username,
 					chatId: ChatID.current,
 				};
@@ -152,9 +156,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				} else {
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
 				}
-				console.log("message sent");
 			}
 			setInput("");
+			msgImg.current.value = null;
 		}
 	}
 
@@ -181,7 +185,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
 				{msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 				<section>
-					<p>{msg?.content}</p>
+					{
+						(msg?.content as string).includes("https://res.cloudinary.com") ? <Image src={msg?.content} alt='img' width={100} height={100} style={{width: "fit-content" , height : "fit-content"}}/> : <p>{msg?.content}</p>
+					}
 				</section>
 				{/* <span >{msg?.createdAt}</span> */}
 				<div className='triangle'></div>

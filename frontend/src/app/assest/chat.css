@@ -286,19 +286,31 @@
 	/* padding: 10px; */
 }
 
+.Chat .usr_msg section{
+	padding: 10px 20px;
+	background: #757D86;
+	margin-left: 12px;
+	border-radius: 9px;
+	width: fit-content;
+}
+
+
+.Chat .my_msg section{
+	padding: 10px 20px;
+	background: #1A66FF;
+	margin-right: 12px;
+	border-radius: 9px;
+	margin-left: auto;
+	position: relative;
+	width: fit-content;
+}
 
 .Chat .my_msg p {
-	display: block;
 	width: fit-content;
-	padding: 12px 40px;
-	margin-left: auto;
-	margin-right: 12px;
-	background: #1A66FF;
-	border-radius: 9px;
+	padding: 2px 20px 5px;
 	overflow-wrap: break-word;
 	word-wrap: break-word;
 	word-break: break-word;
-	position: relative;
 }
 
 .Chat .my_msg span {
@@ -338,15 +350,6 @@
 	margin: 20px 5px;
 	position: relative;
 	max-width: 50%;
-}
-
-.Chat .usr_msg section{
-	padding: 10px 20px;
-	background: #757D86;
-	margin-left: 12px;
-	border-radius: 9px;
-	width: fit-content;
-	
 }
 
 .Chat .Msg .usr_msg h4{

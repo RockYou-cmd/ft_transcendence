@@ -20,7 +20,7 @@ import OwnerSettings from './Components/Settings';
 import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLogContext, useMe } from '../Components/Log/LogContext';
+import { useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
 import { useSearchParams } from 'next/navigation';
 import Loading from '../loading';
 // import Lottie from "lottie-react";
@@ -30,19 +30,23 @@ async function Leave(GroupId: any) {
 	await Post({ id: GroupId?.id }, APIs.LeaveRoom);
 }
 
-async function Block(User: any) {
-	await Put({ username: User?.username }, APIs.Block);
-}
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
 
 
 export default function Chat() {
 
-	const { me, setMe } = useMe();
-	const { online, setOnline } = useLogContext();
+	const { me } = useMe() as any;
+	const { socket } = useSocket();
+	const { online } = useLogContext();
 	const param = useSearchParams();
 	
+	async function Block(User: any) {
+		const res = await Put({ username: User?.username }, APIs.Block);
+		if (res.ok) {
+			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
+		}
+	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
@@ -105,6 +109,14 @@ export default function Chat() {
 			setBlock(true);
 	}
 
+	useEffect(() => {
+		socket?.on("update", (data: any) => {
+			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
+				setUser({});
+			}
+		});
+		return () => {socket?.off("update");}
+	},[socket])
 
 	useEffect(() => {
 		async function fetchData(user : string) {
@@ -115,6 +127,9 @@ export default function Chat() {
 			fetchData(param.get("user") as string);
 	},	[]);
 
+	useEffect(() => {
+		setRefresh(!refresh);
+	}, [User]);
 
 	useEffect(() => {
 		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {

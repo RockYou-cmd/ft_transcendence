@@ -23,6 +23,7 @@ export class RoomService {
       };
       roomData.members.create["role"] = "OWNER";
       if (data.privacy == "PROTECTED") roomData["password"] = data.password;
+	  if (data.photo) roomData["photo"] = data.photo;
       const room = await prisma.room.create({
         data: roomData,
       });
@@ -380,6 +381,7 @@ export class RoomService {
       var newData = {
         name: data.name,
         description: data.description,
+		photo: data.photo,
         privacy: data.privacy,
         password: data.password,
       };

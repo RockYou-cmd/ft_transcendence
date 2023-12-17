@@ -16,7 +16,7 @@ import { Make } from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { useMe, useSocket } from "@/app/Components/Log/LogContext";
 
 const UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
 const AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"] };
@@ -29,6 +29,8 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	const [search, setSearch] = useState<string>("");
 	const [data, setData] = useState({} as any);
 	const [origin, setOrigin] = useState({} as any);
+	const { socket } = useSocket();
+	const { me } = useMe() as any;
 
 
 	async function getMembers() {
@@ -89,8 +91,8 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 
 	async function wait() {
 		try {
-			const res = await Make({ option: make, group: group, person: User.user.username });
-
+			const res =	await Make({ option: make, group: group, person: User.user.username , socket : socket , me : me});
+			setMake("");
 		} catch (err) {
 		}
 	}
@@ -99,7 +101,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		if (make !== "") {
 			wait()
 			setRefresh(!refresh);
-			setMake("");
 		}
 		if (!add)
 			setRefresh(!refresh);
@@ -109,7 +110,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		}
 		if (view)
 			router.push("/users/" + User?.user?.username);
-
+		// console.log("make ", make);
 	}, [make, add, sendMsg, view]);
 
 
@@ -118,8 +119,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			setMake("Kick");
 		else if (ban)
 			setMake("Ban");
-		else if (mute)
-			setMake("Mute");
 		else if (makeAdmin)
 			setMake("MakeAdmin");
 		else if (removeAdmin)
@@ -142,7 +141,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	}
 
 	function MuteOption(User: any) {
-		const [date, setDate] = useState();
 		const [time, setTime] = useState("1");
 		const visible = useRef(null) as any;
 

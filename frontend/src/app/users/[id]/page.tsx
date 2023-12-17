@@ -2,30 +2,30 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
-import Profile from "@/app/profile/profile";
-import Cookies from "js-cookie";
 import { GetData } from "@/app/Components/Log/CheckLogin";
 import Image from "next/image";
 import avatar from "../../../../public/avatar.png";
 import LoG from "@/app/Components/Log/Log";
-import { useLogContext } from "@/app/Components/Log/LogContext";
+import { useLogContext, useMe, useSocket } from "@/app/Components/Log/LogContext";
 import { FaCog } from "react-icons/fa";
 import { SendFriendRequest } from "@/app/Components/Settings/ChatSettings";
 import { MouseEvent } from "react";
 import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
 import Logout from "@/app/Components/Log/Logout";
+import Loading from "@/app/loading";
 
 export default function UserProfile({ param }: { param: { id: string } }) {
 	
-	const [log, setLog] = useState(false);
 	const [data, setData] = useState({} as any);
-	const [cookie, setCookie] = useState(Cookies.get("access_token") || "");
+	const { socket } = useSocket();
+	const { me } = useMe() as any;
 	const [wait, checkwait] = useState(false);
+	const [show, setShow] = useState(false);
 	
 	let photo = avatar.src;
 	const Fstatus = useRef("request friend");
-	const { online, setOnline } = useLogContext();
+	const { online } = useLogContext();
 	const [Userdata, UsersetData] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
 	
@@ -52,6 +52,9 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		if (data?.statusCode == 404 || (data?.blocked && data?.blocked  !== data?.username)){
 			router.push("/users/not-found");
 		}
+		else
+			setShow(true);
+
 		UsersetData(data);
 		
 		if (data?.status == "PENDING" && data?.sender == data?.username)
@@ -75,8 +78,13 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			fetchData();
 	}, [online, refresh]);
 
-	
-	
+	useEffect(() => {
+		socket?.on("update", (data: any) => {
+			setRefresh(!refresh);
+			console.log("update", data);
+		});
+		return () => {socket?.off("update");}
+	},[socket, refresh]);	
 	
 
 	
@@ -91,21 +99,21 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		try{
 			let res : any;
 			if (option == "block")
-			res = await SendFriendRequest({username: Userdata?.username, status: "block"});
+			res = await SendFriendRequest({username: Userdata?.username, status: "block", socket: socket, me: me}) || undefined;
 		else 
-		res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current}) || undefined;
-	if (res == undefined){
-				Logout();
+		res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current, socket: socket, me: me}) || undefined;
+		if (res == undefined){
+					Logout();
+				}
+				setRefresh(!refresh);
+			}catch(err){
+				alert(err);}
 			}
-			setRefresh(!refresh);
-		}catch(err){
-			alert(err);}
-		}
 		
 		if (name == "not-found")
 			return (<NotFound />);
 		
-		if (!wait) { return (<div>loading...</div>)}
+		if (!show) { return <Loading /> }
 		return (
 			<>
 			{online == "OFF" ? render :
