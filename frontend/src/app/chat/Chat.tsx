@@ -204,9 +204,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 
 				<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
 				<h1 onClick={() => { User?.username ? router.push("/users/" + User?.username) : null }}>{User?.username ? User?.username : User?.name}</h1>
-				<span>{User?.username ? (User?.status ? "online" : "offline") : null}</span>
+				<span>{User?.username ? User?.status : null}</span>
 				<div className="line"></div>
-				{User?.status && <div className="status"></div>}
+				{User?.status == "ONLINE" && <div className="status"></div>}
 
 				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 					<div className='point'></div><div className='point'></div><div className='point'></div>
