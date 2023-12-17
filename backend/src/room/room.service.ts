@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Res } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import { join } from "path";
+import * as argon from "argon2"
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,12 @@ export class RoomService {
       roomData.members.create["role"] = "OWNER";
       if (data.privacy == "PROTECTED") roomData["password"] = data.password;
 	  if (data.photo) roomData["photo"] = data.photo;
+      if (data.privacy == "PROTECTED")
+      {
+        const hash = await argon.hash(data.password)
+        console.log("Hash: ", hash);
+        roomData["password"] = hash;
+      }
       const room = await prisma.room.create({
         data: roomData,
       });
@@ -273,14 +280,14 @@ export class RoomService {
     }
   }
 
-  async joinPrivate(account, data) {
+  async joinProtected(account, data) {
     try {
       const room = await prisma.room.findUnique({
         where: {
           id: data.id,
         },
       });
-      if (data.password != room.password) throw new Error("password incorrect");
+      if (!await argon.verify(room.password, data.password)) throw new Error("password incorrect");
       return this.joinRoom(account, data.id);
     } catch (err) {
       throw err;

@@ -13,7 +13,7 @@ export class UserController{
 	getProfile(@Request() account){
 		return this.UserService.getProfile(account.user);
 	}
-
+	
 	@Get()
 	@UseGuards(AuthGuard)
 	getUser(@Req() account, @Query() user){

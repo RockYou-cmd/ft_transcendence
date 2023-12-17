@@ -9,6 +9,7 @@ import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 import { parse } from "cookie";
 import { ChatService } from "src/chat/chat.service";
 import { RoomService } from "src/room/room.service";
+import { UserService } from "src/user/user.service";
 
 @WebSocketGateway({
   cors: { credentials: true, origin: "http://localhost:3000" },
@@ -19,6 +20,7 @@ export class EventsGateway {
     private authGuard: AuthGuard,
     private chatService: ChatService,
     private roomService: RoomService,
+    private userService: UserService
   ) {}
 
   @WebSocketServer()
@@ -30,18 +32,24 @@ export class EventsGateway {
       const access_token = parse(cookie).access_token;
       var { username } =
         await this.authGuard.extractPayloadFromToken(access_token);
-      client.join(username);
+        client.join(username);
+        const userTabs = await this.server.in(username).fetchSockets();
+        if (userTabs.length)
+          this.userService.updateData({username}, {status: "ONLINE"})
+      }
+      console.log(username, " CONNECTED");
     }
-    console.log(username, " CONNECTED");
-  }
-
-  async handleDisconnect(client: Socket) {
-    const cookie = client.handshake.headers.cookie;
-    if (cookie) {
-      const access_token = parse(cookie).access_token;
-      var { username } =
+    
+    async handleDisconnect(client: Socket) {
+      const cookie = client.handshake.headers.cookie;
+      if (cookie) {
+        const access_token = parse(cookie).access_token;
+        var { username } =
         await this.authGuard.extractPayloadFromToken(access_token);
-      client.leave(username);
+        client.leave(username);
+        const userTabs = await this.server.in(username).fetchSockets();
+        if (!userTabs.length)
+          this.userService.updateData({username}, {status: "OFFLINE"})
     }
     console.log(username, " DISCONNECT");
   }
