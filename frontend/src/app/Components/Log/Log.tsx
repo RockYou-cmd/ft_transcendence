@@ -9,7 +9,7 @@ import Form from "../../profile/form";
 export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 	const host = "http://localhost:3001";
-	// const host = "http://10.12.11.1:3001";
+
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
 
@@ -22,6 +22,7 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 			}
 			else {
 					if (online == "ON"){
+						socket?.disconnect();
 						setSocket(io(host + "/events", {
 							withCredentials: true,
 						}));
@@ -32,7 +33,7 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 		}
 		fetchData();
-		return () => {socket?.disconnect()};
+	
 	}, [online]);
 
 	if (LogIn.waitHook.state == false)

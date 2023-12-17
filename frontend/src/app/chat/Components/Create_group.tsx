@@ -6,6 +6,7 @@ import { APIs } from '@/app/Props/APIs';
 import { Get, Post , Put} from '@/app/Components/Fetch/Fetch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
+import FileUpload from '@/app/Components/Fetch/ImageCloudUpload';
 
 interface Data {
 	name?: string,
@@ -26,6 +27,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 	const gDesc = useRef(null) as any;
 	const gPass = useRef(null) as any;
 	const gPic = useRef(null) as any;
+	const [upload, setUpload] = useState("");
 	const [privacy, setPrivacy] = useState("PUBLIC" || "PRIVATE" || "PROTECTED");
 	const [hide, setHide] = useState(false);
 
@@ -61,15 +63,17 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			password : gPass.current.value,
 			id : info?.id,
 		}, APIs.roomModify);
-		if (res?.status == 201)
+		if (res?.ok)
 			alert("Group settings changed");
 		else
 			alert("failed to change settings");
+		console.log(res);
 	}
 
 	async function submitForm(e: any) {
 		e.preventDefault();
 		if (gName.current.value && privacy != ""){
+			// FileUpload({selectedFile : gPic.current.files[0], onUploadComplete : setUpload})
 			if (privacy == "PROTECTED" && !gPass.current.value){
 				alert("Please enter a password");
 			}
@@ -78,6 +82,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 					description : gDesc.current.value,
 					privacy : privacy,
 					password : gPass.current.value,
+					photo : upload,
 				}
 				const res = await Post(data, APIs.CreateRoom);
 				if (res?.status == 201){
@@ -125,7 +130,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 					{!hide ? <FontAwesomeIcon icon={faEyeLowVision} onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} />}
 				</div>
 				<label>Group picture</label>
-				<input ref={gPic} type="file" />
+				<input ref={gPic} type="file" accept='image/*'/>
 				<button className='submit' type='submit'>{!change ?  "CREATE GROUP" : "SAVE"}</button>
 			</form>
 		</>

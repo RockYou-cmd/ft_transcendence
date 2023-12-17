@@ -5,7 +5,6 @@ import Groups from './Groups';
 import Friends from "./Friends";
 import Cnvs from "./Chat";
 import { useEffect, useState, useRef } from "react";
-import Cookies from "js-cookie";
 import LoG from "../Components/Log/Log";
 import Options from "./Components/Options";
 import CreateGroup from './Components/Create_group';
@@ -17,24 +16,22 @@ import { APIs } from '../Props/APIs';
 import ExploreRooms from './Components/ExploreRooms';
 import Invite from './Components/Invite';
 import Confirm from './Components/Confirm';
-import GroupSettings from './Components/Group_settings';
 import OwnerSettings from './Components/Settings';
 import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogContext, useMe } from '../Components/Log/LogContext';
-import Loading from '../loading';
-import Lottie from "lottie-react";
-import chatAnimation from "../../../public/chatAnimation.json"
 import { useSearchParams } from 'next/navigation';
+import Loading from '../loading';
+// import Lottie from "lottie-react";
+// import chatAnimation from "../../../public/chatAnimation.json"
 
-function Leave(GroupId: any) {
-	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
-
+async function Leave(GroupId: any) {
+	await Post({ id: GroupId?.id }, APIs.LeaveRoom);
 }
 
-function Block(User: any) {
-	const res = Put({ username: User?.username }, APIs.Block);
+async function Block(User: any) {
+	await Put({ username: User?.username }, APIs.Block);
 }
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
@@ -163,10 +160,11 @@ export default function Chat() {
 							</section>
 							<div className='Chat'>
 								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
-									: < >
-										<Lottie className='w-[40%] flex m-auto justify-center items-center'  animationData={chatAnimation} loop={true}  />
+									: <div className='openChat'>
+										{/* <Lottie className='w-[50%]'  animationData={chatAnimation} loop={true}  /> */}
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
-									</>}
+									</div>
+								}
 							</div>
 						</div>
 

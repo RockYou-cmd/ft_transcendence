@@ -456,13 +456,21 @@ input:focus {
 }
 
 .Chat .openChat{
+	display: flex;
+	margin:auto;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.Chat .openChat button{
 	padding:12px 35px 15px;
 	/* padding-right: 30px; */
 	background-color: rgb(29, 151, 222);
 	border-radius: 10px;
 	font-weight: 600;
 	font-size: 22px;
-	margin:auto auto;
+	margin:0px auto;
 	display: block;
 	&:hover{
 		background-color: rgb(54, 181, 255);

@@ -16,7 +16,6 @@ import { Make } from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Gruppo } from "next/font/google";
 
 
 const UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
@@ -130,7 +129,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		setMute(false);
 		setMakeAdmin(false);
 		setRemoveAdmin(false);
-	}, [sendMsg, kick, ban, mute, makeAdmin, removeAdmin]);
+	}, [sendMsg, kick, ban, makeAdmin, removeAdmin]);
 
 	function showOptions(e: MouseEvent, user: any) {
 		setOption(!option);
@@ -142,6 +141,41 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		});
 	}
 
+	function MuteOption(User: any) {
+		const [date, setDate] = useState();
+		const [time, setTime] = useState("1");
+		const visible = useRef(null) as any;
+
+		useEffect(() => {
+			const handleOutsideClick = (event: any) => {
+				if (!visible.current.contains(event.target as Node)) {
+					setMute(false);
+				}
+			};
+
+			document.addEventListener('mousedown', handleOutsideClick);
+
+			return () => {
+				document.removeEventListener('mousedown', handleOutsideClick);
+			};
+		},[]);
+
+		return (
+			<>
+				<div className="muteOption" ref={visible}>
+					<label>Mute {User?.username} for</label>
+					<select name="time"  onChange={(e)=>setTime(e.target.value)}>
+						{Array.from({ length: 23 }, (_, i) => (
+							<option key={i} value={i + 1}>
+								{i + 1} Hours
+							</option>
+						))}
+					</select>
+					<button> Mute</button>
+				</div>
+			</>
+		);
+	}
 
 	function Print(users: any) {
 		const user = users?.users;
@@ -152,9 +186,9 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				{(user.role != "OWNER" || role != "OWNER") && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
 			</div>
 		</>
-
 		return <div>{print}</div>
 	}
+
 	return (
 		<>
 			<div className="Add" >
@@ -168,6 +202,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd} />}
+				{mute && <MuteOption User={User}/>}
 				{/* {view && router.push("/users/" + User?.user?.username)} */}
 			</div>
 		</>
