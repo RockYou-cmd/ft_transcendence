@@ -61,9 +61,8 @@ export class AuthService {
 					email:user.email
 				}
 			})
-			
 			if (!ret) {
-					ret = await prisma.user.create({
+				ret = await prisma.user.create({
 					data:{
 						username: user.username,
 						email: user.email,
@@ -74,7 +73,6 @@ export class AuthService {
 			return await this.generateJwt(ret);
 		}
 		catch (err) {
-			console.log("oath vlidation error");
 			return err;
 		}
 			
@@ -85,6 +83,6 @@ export class AuthService {
 			userId: user.id,
 			username: user.username
 		}
-		return await this.jwtService.signAsync(payload);
+		return await this.jwtService.signAsync(payload, {secret: "doIwannaKnow"});
 	}
 }

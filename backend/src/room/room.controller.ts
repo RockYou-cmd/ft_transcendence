@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { AuthGuard } from 'src/auth/auth.guard/auth.guard';
-import { OwnerGuard } from './room.guard/role.guard';
+import { AdminGuard, MemberGuard, OwnerGuard } from './room.guard/role.guard';
 
 @Controller("room")
 export class RoomController {
@@ -20,7 +20,7 @@ export class RoomController {
   }
 
   @Get("chat")
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, MemberGuard)
   async getChat(@Req() account, @Query("id") roomid) {
     return this.roomService.getChat(account.user, roomid);
   }
@@ -58,7 +58,7 @@ export class RoomController {
   }
 
   @Get("members")
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, MemberGuard)
   async getMembers(@Req() account, @Query("id") roomId) {
     return this.roomService.getMembers(account.user, roomId);
   }
@@ -71,12 +71,12 @@ export class RoomController {
 
   @Get("add/new/member")
   @UseGuards(AuthGuard)
-  async addNewMember(@Query("id") roomId) {
+  async getMembersToAdd(@Query("id") roomId) {
     return this.roomService.getMembersToAdd(roomId);
   }
   
   @Post("remove/member")
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   async removeMember(@Body() data) {
     return this.roomService.removeMember(data);
     
@@ -89,22 +89,21 @@ export class RoomController {
   }
   
   @Put("remove/admin")
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, OwnerGuard)
   async removeAdmin(@Body() data) {
     return this.roomService.removeAdmin(data);
   }
 
 
   @Put("ban/member")
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   async banMember(@Body() data) {
     return this.roomService.banMember(data);
   }
 
   @Put("unban/member") 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   async unbanMember(@Body() data) {
     return this.roomService.unbanMember(data);
   }
-
 }

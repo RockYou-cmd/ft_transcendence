@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Put, Query, Req, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query, Req, Request, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
+import { Response } from "express";
 
 @Controller("/user")
 
@@ -32,8 +33,10 @@ export class UserController{
 
 	@Put("update")
 	@UseGuards(AuthGuard)
-	async updateData(@Req() account, @Body("updatedData") data) {
-		return this.UserService.updateData(account.user, data);
+	async updateData(@Req() account, @Res() res: Response, @Body("updatedData") data) {
+		const token = await this.UserService.updateData(account.user, data);
+		res.cookie("access_token", token, {httpOnly: true});
+		res.send("Name changed successfully");
 	}
 
 }

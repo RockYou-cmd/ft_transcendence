@@ -63,4 +63,9 @@ export class EventsGateway {
     });
     this.roomService.sendMessage(payload);
   }
+
+  @SubscribeMessage("update")
+  handleBlock(client: Socket, payload: any) {
+    this.server.to(payload.receiver).emit("update", payload);
+  }
 }
