@@ -43,7 +43,6 @@ export class RoomService {
           members: true,
         },
       });
-      // console.log(chat);
       return chat;
     } catch (err) {
       throw err;
@@ -74,7 +73,6 @@ export class RoomService {
 
   async getMembersToAdd(roomId) {
     try {
-      console.log(roomId);
       const users = await prisma.user.findMany({
         where: {
           OR: [
@@ -270,14 +268,12 @@ export class RoomService {
       });
       return "User joined";
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }
 
   async joinPrivate(account, data) {
     try {
-      console.log("data : ", data);
       const room = await prisma.room.findUnique({
         where: {
           id: data.id,
@@ -393,7 +389,6 @@ export class RoomService {
         },
         data: newData,
       });
-      console.log(newData);
       return "room modified successfully";
     } catch (err) {
       throw err;
