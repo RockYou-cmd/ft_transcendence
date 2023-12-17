@@ -17,6 +17,7 @@ model User {
   password                      String?
   photo                         String?
   bio                           String?
+  status                        UserStatus @default(ONLINE)
   is2faEnabled                  Boolean? @default(false)
   twoFactorAuthenticationSecret String?
   temp2fa                       String?
@@ -119,4 +120,9 @@ enum Status {
   PENDING
   ACCEPTED
   BLOCKED
+}
+
+enum UserStatus {
+  ONLINE
+  OFFLINE
 }

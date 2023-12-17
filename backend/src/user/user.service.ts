@@ -72,7 +72,6 @@ export class UserService {
 			})
 			if (!ret)
 				throw new NotFoundException("User Not Found");
-			console.log(ret);
 			return {...userData, status:ret.friends[0]?.status, sender: ret.friends[0]?.sender?.username, blocked: ret.friends[0]?.blocked?.username};
 			
 		}
