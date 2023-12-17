@@ -72,7 +72,7 @@ export class RoomService {
     }
   }
 
-  async addNewMember(roomId) {
+  async getMembersToAdd(roomId) {
     try {
       console.log(roomId);
       const users = await prisma.user.findMany({
@@ -373,7 +373,6 @@ export class RoomService {
           },
         },
       });
-      console.log(message);
       return message;
     } catch (err) {
       throw err;
@@ -386,7 +385,7 @@ export class RoomService {
         name: data.name,
         description: data.description,
         privacy: data.privacy,
-        password: data.password
+        password: data.password,
       };
       const modifiedRoom = await prisma.room.update({
         where: {
@@ -395,7 +394,26 @@ export class RoomService {
         data: newData,
       });
       console.log(newData);
-      return "room modified successfully"
+      return "room modified successfully";
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getMemberShip(roomId, username) {
+    try {
+      const memberShip = await prisma.roomMembership.findUnique({
+        where: {
+          userId_roomId: {
+            userId: username,
+            roomId: roomId,
+          },
+        },
+        select: {
+          role: true,
+        },
+      });
+      return memberShip.role;
     } catch (err) {
       throw err;
     }

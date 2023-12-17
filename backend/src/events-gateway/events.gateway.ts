@@ -18,13 +18,11 @@ export class EventsGateway {
   constructor(
     private authGuard: AuthGuard,
     private chatService: ChatService,
-    private roomService: RoomService
+    private roomService: RoomService,
   ) {}
 
   @WebSocketServer()
   server: Server;
-
-  sockets = new Map<string, string[]>();
 
   async handleConnection(client: Socket) {
     const cookie = client.handshake.headers.cookie;
@@ -32,32 +30,37 @@ export class EventsGateway {
       const access_token = parse(cookie).access_token;
       var { username } =
         await this.authGuard.extractPayloadFromToken(access_token);
-      var newSocket = this.sockets.get(username) || [];
-      newSocket.push(client.id);
-      this.sockets.set(username, newSocket);
       client.join(username);
-      //   console.log(this.sockets)
     }
     console.log(username, " CONNECTED");
   }
 
   async handleDisconnect(client: Socket) {
-    console.log(client.id, " DISCONNECT");
+    const cookie = client.handshake.headers.cookie;
+    if (cookie) {
+      const access_token = parse(cookie).access_token;
+      var { username } =
+        await this.authGuard.extractPayloadFromToken(access_token);
+      client.leave(username);
+    }
+    console.log(username, " DISCONNECT");
   }
 
   @SubscribeMessage("message")
   handleMessage(client: Socket, payload: any) {
-    console.log("normal message event called")
+    console.log("normal message event called");
     this.server.to(payload.receiver).emit("message", payload);
     this.chatService.sendMessage(payload);
   }
-  
+
   @SubscribeMessage("roomMessage")
   handleRoomMessage(client: Socket, payload: any) {
-    payload.receivers.forEach(receiver => {
-      console.log("room message event called ");
-      this.server.to(receiver.userId).except(payload.sender).emit("roomMessage", payload);
+    payload.receivers.forEach((receiver) => {
+      this.server
+        .to(receiver.userId)
+        .except(payload.sender)
+        .emit("roomMessage", payload);
     });
-	this.roomService.sendMessage(payload)   
+    this.roomService.sendMessage(payload);
   }
 }
