@@ -23,7 +23,7 @@ export default function Home({setSignIn} : {setSignIn : any}) {
         <ProfileCard imageurl={""} text={""} ></ProfileCard>
       </div>
       <div>
-        <Slider />
+        {/* <Slider /> */}
       </div>
 			<button className='relative cursor-pointer opacity-90 hover:opacity-100 transition-opacity p-[2px] bg-black rounded-[16px] bg-gradient-to-t from-[#8122b0] to-[#dc98fd] active:scale-95">
   <span className= "w-full h-full flex items-center gap-2 px-8 py-3 bg-[#B931FC] text-[#f1d5fe] rounded-[14px] bg-gradient-to-t from-[#a62ce2] to-[#c045fc]">

@@ -61,7 +61,7 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
       const response = await fetch(`https://api.cloudinary.com/v1_1/dkcnaj5qm/image/upload`, {
         method: 'POST',
         body: uploadData,
-      });
+      } );
   
       if (response.ok) {
         const data = await response.json();
@@ -135,15 +135,16 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
         <h1 className="text-white text-[1.3rem] mt-5 font-bold  ">PROFILE SETTING</h1>
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6 bg-gray-900 rounded-md ">
           <input
+          
             className="cursor-pointer w-64 aspect-square ml-[20%] items-center text-white rounded border-2 border-dashed bg-black"
             type="file"
             onChange={handleChange}
             name="photo"
             accept="image/*"
           />
-          <div className="mb-6 mt-5">
-            <label className="text-white font-bold " htmlFor="username">Username:<br/></label>
-            <input type="text" id="username" name="username" onChange={handleChange} className=" w-[100%] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+          <div className=" focus:ring mb-6 mt-5">
+            <label className=" text-white font-bold " htmlFor="username">Username:<br/></label>
+            <input type="text" id="username" value="" name="username" onChange={handleChange} className="  w-[100%] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
           </div>
           <div className="mb-6 font-bold">
             <label className="text-white" htmlFor="bio">Bio:</label>
