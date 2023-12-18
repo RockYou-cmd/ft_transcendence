@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Res } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import { join } from "path";
+import * as argon from "argon2"
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,13 @@ export class RoomService {
       };
       roomData.members.create["role"] = "OWNER";
       if (data.privacy == "PROTECTED") roomData["password"] = data.password;
+	  if (data.photo) roomData["photo"] = data.photo;
+      if (data.privacy == "PROTECTED")
+      {
+        const hash = await argon.hash(data.password)
+        console.log("Hash: ", hash);
+        roomData["password"] = hash;
+      }
       const room = await prisma.room.create({
         data: roomData,
       });
@@ -43,7 +51,6 @@ export class RoomService {
           members: true,
         },
       });
-      // console.log(chat);
       return chat;
     } catch (err) {
       throw err;
@@ -74,7 +81,6 @@ export class RoomService {
 
   async getMembersToAdd(roomId) {
     try {
-      console.log(roomId);
       const users = await prisma.user.findMany({
         where: {
           OR: [
@@ -270,20 +276,18 @@ export class RoomService {
       });
       return "User joined";
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }
 
-  async joinPrivate(account, data) {
+  async joinProtected(account, data) {
     try {
-      console.log("data : ", data);
       const room = await prisma.room.findUnique({
         where: {
           id: data.id,
         },
       });
-      if (data.password != room.password) throw new Error("password incorrect");
+      if (!await argon.verify(room.password, data.password)) throw new Error("password incorrect");
       return this.joinRoom(account, data.id);
     } catch (err) {
       throw err;
@@ -384,6 +388,7 @@ export class RoomService {
       var newData = {
         name: data.name,
         description: data.description,
+		photo: data.photo,
         privacy: data.privacy,
         password: data.password,
       };
@@ -393,7 +398,6 @@ export class RoomService {
         },
         data: newData,
       });
-      console.log(newData);
       return "room modified successfully";
     } catch (err) {
       throw err;

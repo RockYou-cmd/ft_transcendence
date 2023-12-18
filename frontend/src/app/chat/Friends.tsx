@@ -15,6 +15,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 	async function getFriends() {
 		const data = await Get(APIs.FriendsChat);
 		setData(data);
+		console.log("data in friends", data);
 	}
 
 	useEffect(() => {
@@ -38,7 +39,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 				<h4>{info?.username}</h4>
 				{/* <p>{info?.messagesReceived.reduce()}</p> */}
 				<span>{info?.lastMsgTime}</span>
-				{info?.status ? <div className="status"></div> : <></>}
+				{info?.status == "ONLINE" ? <div className="status"></div> : <></>}
 				<div className="line"></div>
 			</div>
 		</>
@@ -49,7 +50,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 	return (
 		<>
 			<div className="Friends">
-				<span className="groupField">Friends</span>
+				<span className="groupField">Chats</span>
 				<div className='content_f'>
 
 					{data?.chats?.map((friend: any, index : number) => (<PrintFrinds key={index} infos={friend} />))}

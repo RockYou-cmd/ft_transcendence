@@ -6,10 +6,13 @@ import { ChatService } from "src/chat/chat.service";
 import { UserService } from "src/user/user.service";
 import { ChatModule } from "src/chat/chat.module";
 import { RoomService } from "src/room/room.service";
+import { AuthModule } from "src/auth/auth.module";
+import { AuthService } from "src/auth/auth.service";
 
 
 @Module({
-	providers: [EventsGateway, AuthGuard, JwtService, ChatService, UserService, RoomService],
+	providers: [EventsGateway, ChatService, UserService, RoomService],
+	imports: [AuthModule]
 })
 
 export class EventsModule {}

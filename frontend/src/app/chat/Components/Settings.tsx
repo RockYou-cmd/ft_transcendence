@@ -16,8 +16,7 @@ import { Make } from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Gruppo } from "next/font/google";
-
+import { useMe, useSocket } from "@/app/Components/Log/LogContext";
 
 const UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
 const AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"] };
@@ -30,6 +29,8 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	const [search, setSearch] = useState<string>("");
 	const [data, setData] = useState({} as any);
 	const [origin, setOrigin] = useState({} as any);
+	const { socket } = useSocket();
+	const { me } = useMe() as any;
 
 
 	async function getMembers() {
@@ -90,8 +91,8 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 
 	async function wait() {
 		try {
-			const res = await Make({ option: make, group: group, person: User.user.username });
-
+			const res =	await Make({ option: make, group: group, person: User.user.username , socket : socket , me : me});
+			setMake("");
 		} catch (err) {
 		}
 	}
@@ -100,7 +101,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		if (make !== "") {
 			wait()
 			setRefresh(!refresh);
-			setMake("");
 		}
 		if (!add)
 			setRefresh(!refresh);
@@ -110,7 +110,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		}
 		if (view)
 			router.push("/users/" + User?.user?.username);
-
+		// console.log("make ", make);
 	}, [make, add, sendMsg, view]);
 
 
@@ -119,8 +119,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			setMake("Kick");
 		else if (ban)
 			setMake("Ban");
-		else if (mute)
-			setMake("Mute");
 		else if (makeAdmin)
 			setMake("MakeAdmin");
 		else if (removeAdmin)
@@ -130,7 +128,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		setMute(false);
 		setMakeAdmin(false);
 		setRemoveAdmin(false);
-	}, [sendMsg, kick, ban, mute, makeAdmin, removeAdmin]);
+	}, [sendMsg, kick, ban, makeAdmin, removeAdmin]);
 
 	function showOptions(e: MouseEvent, user: any) {
 		setOption(!option);
@@ -142,6 +140,40 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		});
 	}
 
+	function MuteOption(User: any) {
+		const [time, setTime] = useState("1");
+		const visible = useRef(null) as any;
+
+		useEffect(() => {
+			const handleOutsideClick = (event: any) => {
+				if (!visible.current.contains(event.target as Node)) {
+					setMute(false);
+				}
+			};
+
+			document.addEventListener('mousedown', handleOutsideClick);
+
+			return () => {
+				document.removeEventListener('mousedown', handleOutsideClick);
+			};
+		},[]);
+
+		return (
+			<>
+				<div className="muteOption" ref={visible}>
+					<label>Mute {User?.username} for</label>
+					<select name="time"  onChange={(e)=>setTime(e.target.value)}>
+						{Array.from({ length: 23 }, (_, i) => (
+							<option key={i} value={i + 1}>
+								{i + 1} Hours
+							</option>
+						))}
+					</select>
+					<button> Mute</button>
+				</div>
+			</>
+		);
+	}
 
 	function Print(users: any) {
 		const user = users?.users;
@@ -152,9 +184,9 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				{(user.role != "OWNER" || role != "OWNER") && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
 			</div>
 		</>
-
 		return <div>{print}</div>
 	}
+
 	return (
 		<>
 			<div className="Add" >
@@ -168,6 +200,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd} />}
+				{mute && <MuteOption User={User}/>}
 				{/* {view && router.push("/users/" + User?.user?.username)} */}
 			</div>
 		</>
