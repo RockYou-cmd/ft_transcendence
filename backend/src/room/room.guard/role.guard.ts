@@ -14,7 +14,9 @@ export class OwnerGuard {
     const request = context.switchToHttp().getRequest();
     const roomId = request.body.id;
     const username = request.user.username;
-    return "OWNER" === (await this.roomService.getMemberShip(roomId, username));
+    return (
+      'OWNER' === (await this.roomService.getMemberShip(roomId, username)).role
+    )
   }
 }
 
@@ -25,7 +27,10 @@ export class AdminGuard {
     const request = context.switchToHttp().getRequest();
     const roomId = request.body.id;
     const username = request.user.username;
-    return "ADMIN" || "OWNER" === (await this.roomService.getMemberShip(roomId, username));
+    return (
+      'ADMIN' ||
+      'OWNER' === (await this.roomService.getMemberShip(roomId, username)).role
+    )
   }
 }
 
@@ -36,6 +41,10 @@ export class MemberGuard {
     const request = context.switchToHttp().getRequest();
     const roomId = request.query.id;
     const username = request.user.username;
-    return "MEMBER" || "ADMIN" || "OWNER" === (await this.roomService.getMemberShip(roomId, username));
+    return (
+      'MEMBER' ||
+      'ADMIN' ||
+      'OWNER' === (await this.roomService.getMemberShip(roomId, username)).role
+    )
   }
 }

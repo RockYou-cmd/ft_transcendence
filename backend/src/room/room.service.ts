@@ -413,11 +413,8 @@ export class RoomService {
             roomId: roomId,
           },
         },
-        select: {
-          role: true,
-        },
       });
-      return memberShip.role;
+      return memberShip;
     } catch (err) {
       throw err;
     }
