@@ -57,16 +57,17 @@ export class AuthService {
     }
   }
 
-  async OAuthValidation(user) {
+  async OAuthValidation(data) {
     try {
-      if (!user) throw new UnauthorizedException();
-      var ret = await prisma.user.findUnique({
+      if (!data) throw new UnauthorizedException();
+      var user = await prisma.user.findUnique({
         where: {
-          email: user.email,
+          email: data.email,
         },
       });
-      if (!ret) {
-        ret = await prisma.user.create({
+      if (!user) {
+        var newUser = 1;
+        user = await prisma.user.create({
           data: {
             username: user.username,
             email: user.email,
@@ -74,8 +75,13 @@ export class AuthService {
           },
         });
       }
-      return await this.generateJwt(ret);
+      if (user.is2faEnabled) return 0;
+      var ret = { token: await this.generateJwt(user) };
+      if (newUser)
+        ret["new"] = 1;
+      return ret;
     } catch (err) {
+      console.log(err);
       return err;
     }
   }

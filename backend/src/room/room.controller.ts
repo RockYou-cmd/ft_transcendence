@@ -117,4 +117,10 @@ export class RoomController {
     async muteMember(@Body() data) {
         return this.roomService.muteMember(data)
     }
+
+    @Put('unmute/member')
+    @UseGuards(AuthGuard, AdminGuard)
+    async unMuteMember(@Body() data) {
+        return this.roomService.unMuteMember(data)
+    }
 }
