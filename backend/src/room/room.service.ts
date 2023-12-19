@@ -346,18 +346,26 @@ export class RoomService {
   }
 
   async muteMember(data) {
-    const memberShip = await prisma.roomMembership.update({
-      where: {
-        userId_roomId: {
-          userId: data.username,
-          roomId: data.id,
+    try {
+      const mutedDate = new Date(
+        new Date().setHours(new Date().getHours() + data.duration),
+      );
+
+      const memberShip = await prisma.roomMembership.update({
+        where: {
+          userId_roomId: {
+            userId: data.username,
+            roomId: data.id,
+          },
         },
-      },
-      data: {
-        status: "MUTED",
-        mutedTime: new Date(),
-      },
-    });
+        data: {
+          status: "MUTED",
+          mutedTime: mutedDate,
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   async sendMessage(data) {

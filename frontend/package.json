@@ -23,7 +23,8 @@
     "react-dom": "^18",
     "react-icons": "^4.12.0",
     "socket.io-client": "^4.7.2",
-    "styled-components": "^6.1.1"
+    "styled-components": "^6.1.1",
+    "swiper": "^11.0.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
