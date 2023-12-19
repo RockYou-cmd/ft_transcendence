@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -40,7 +41,7 @@ export class AuthController {
   }
   
   @Get("verifyToken")
-  async verifyToken(@Body() data, @Res() res: Response) {
+  async verifyToken(@Query() data, @Res() res: Response) {
     const ret = await this.twoFactorAuthenticationService.verifyToken(
       { username: data.username },
       data.token,

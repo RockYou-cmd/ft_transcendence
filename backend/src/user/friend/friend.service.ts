@@ -96,7 +96,6 @@ export class FriendService {
 					},
 				}
 			});
-			console.log(chats);
 			return {chats}
 		} catch (err) {
 			return err;

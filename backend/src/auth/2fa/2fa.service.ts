@@ -56,11 +56,13 @@ export class TwoFactorAuthenticationService {
 
   async verifyToken(user, token) {
     try {
+      console.log("hahaha");
       const ret = await this.userService.getData(user);
       const validated = await speakeasy.totp.verify({
         secret: ret.temp2fa,
         token,
       });
+      console.log(validated);
       if (!validated) throw new UnauthorizedException("Invalid 2fa token!");
       return ret;
     } catch (err) {
