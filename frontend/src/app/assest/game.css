@@ -10,7 +10,8 @@
 	height:87vh;
 	padding:30px auto;
 	align-items: center;
-	background-color: #20A4F3;
+
+	
 	
 
 	& section {
@@ -18,7 +19,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		width: 70%;
+		width: 50%;
 		
 		& h1 , h2{
 			font : 700 30px "Inter", sans-serif;
@@ -47,16 +48,25 @@
 	}
 }
 
+.shark{
+	background: url("../../../public/Frame_1.png") no-repeat center center;
+	background-color: #20A4F3;
+	/* background-size: 60vh; */
+}
+
+.dragon{
+	background: url("../../../public/dragon.png") no-repeat center center;
+	background-color: #FA4D4D;
+	/* background-size: 60vh; */
+}
+
 #canvas{
 	width: 90%;
 	height: 90%;
-	background: url("../../../public/Frame_1.png") no-repeat center center;
-	background-size: 60vh;
-	/* background-position: center center; */
-	/* background-image: no-repeat; */
-
 
 }
+
+
 
 .GameMain{
 	background-color: #1F295E;

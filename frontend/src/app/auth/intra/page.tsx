@@ -3,11 +3,9 @@ import React, { useState, useEffect, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { APIs } from "../../Props/APIs";
 import { Get, Post } from "../../Components/Fetch/Fetch";
-import Cookies from "js-cookie";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
 import { useLogContext, useSocket } from "../../Components/Log/LogContext";
-import { io } from "socket.io-client";
 
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {

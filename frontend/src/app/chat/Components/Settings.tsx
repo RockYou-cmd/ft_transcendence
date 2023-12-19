@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
-import { Get } from '../../Components/Fetch/Fetch';
+import { Get , Post } from '../../Components/Fetch/Fetch';
 import { APIs } from '../../Props/APIs'
 import Image from "next/image";
 import avatar from '../../../../public/avatar.png';
@@ -18,9 +18,9 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMe, useSocket } from "@/app/Components/Log/LogContext";
 
-const UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
-const AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"] };
-const SuperAdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute", "MakeAdmin", "removeAdmin"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute", "Make Admin", "Remove Admin"] };
+let UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
+let AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"] };
+let SuperAdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"] };
 
 
 export default function OwnerSettings({ group, close, role, DirectMsg }: { group: any, close: any, role: string, DirectMsg: any }) {
@@ -140,7 +140,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		});
 	}
 
-	function MuteOption(User: any) {
+	function MuteOption() {
 		const [time, setTime] = useState("1");
 		const visible = useRef(null) as any;
 
@@ -158,6 +158,22 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			};
 		},[]);
 
+		async function Mute(e : MouseEvent){
+			e.preventDefault();
+			try{
+				const res = await Post({id : group.id , username : User?.user?.username}, APIs.Mute);
+				console.log("res ",res);
+				// if (res.ok){
+					socket?.emit("update", {option : "Mute" , groupId : group?.id , receiver : User?.user?.username, sender : me?.username});
+				// }
+				setMute(false);
+			}catch(err){
+				console.log(err);
+			}
+			
+		}
+
+
 		return (
 			<>
 				<div className="muteOption" ref={visible}>
@@ -169,7 +185,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 							</option>
 						))}
 					</select>
-					<button> Mute</button>
+					<button onClick={Mute}> Mute</button>
 				</div>
 			</>
 		);
@@ -196,8 +212,8 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				<div className="content">
 					{data?.members?.map((user: any, index: number) => (<Print key={index} users={user} />))}
 				</div>
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? SuperAdminSettings : (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings} />}
-				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? (User.role == "ADMIN" ? {...SuperAdminSettings, Option : [...SuperAdminSettings.Option, "removeAdmin"], desc : [...SuperAdminSettings.desc, "Remove Admin"]} :  {...SuperAdminSettings, Option : [...SuperAdminSettings.Option, "MakeAdmin"], desc : [...SuperAdminSettings.desc, "Make Admin"]}) 
+					: (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings} />}				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd} />}
 				{mute && <MuteOption User={User}/>}

@@ -9,7 +9,6 @@ import Image from 'next/image';
 import avatar from '../../../public/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot } from '@fortawesome/free-solid-svg-icons';
-
 export interface Player {
 	x: number;
 	y: number;
@@ -22,7 +21,7 @@ export interface Player {
 
 // var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
 
-export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
+export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Map?: string}){
 	
 	const game = useRef<HTMLCanvasElement>(null);
 	// const [pause, setPause] = useState(false);
@@ -37,13 +36,10 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		score: 0,
 	});
 
-	let xValue = useRef<HTMLInputElement>(null);
-	let yValue = useRef<HTMLInputElement>(null);
+	// const [gameWidth, setGameWidth] = useState(0);
+	// const [gameHeight, setGameHeight] = useState(0);
 	// let score = useRef<HTMLInputElement>(null);
 	
-	const [Xv, setX] = useState('');
-	const [Yv, setY] = useState('');
-	const [Sc, setSc] = useState('');
 
 
 	useEffect(() => {
@@ -57,14 +53,13 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		var ball_acc = 0.18;
 		
 		const context = game.current?.getContext('2d');
-		const parent = game.current?.parentElement;
+		let parent = game.current?.parentElement;
 		game.current.width = parent?.clientWidth || 0;
 		game.current.height = parent?.clientHeight || 0;
-		// const gameWidth = game.current.offsetWidth || 0;
-		// const gameHeight = game.current.offsetHeight || 0;
-
-		const gameWidth = game.current.width || 0;
-		const gameHeight = game.current.height || 0;
+		let gameWidth = game.current.width || 0;
+		let gameHeight = game.current.height || 0;
+		// setGameHeight(game.current.height);
+		// setGameWidth(game.current.width);
 
 
 		var net={
@@ -136,7 +131,13 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		}
 		
 		function render(){
-			
+
+			// if (game.current?.width && game.current?.height){
+			// 	game.current.width = parent?.clientWidth || 0;
+			// 	game.current.height = parent?.clientHeight || 0;
+			// 	setGameHeight(game?.current?.height || 0);
+			// 	setGameWidth(game?.current?.width || 0);
+			// }
 			// clear the map
 			// drawRect(0, 0, gameWidth, gameHeight, 'black');
 			
@@ -287,11 +288,12 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		setOppScore(0);
 	}
 
+	console.log("Map", Map);
 
 
 	return (
 		<>
-			<div id="container">
+			<div id="container" className={Map}  >
 
 			<section>
 				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={70} height={70}/>

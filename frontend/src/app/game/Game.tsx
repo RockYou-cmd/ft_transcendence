@@ -11,6 +11,7 @@ import avatar from '../../../public/avatar.png';
 export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	
 	const { me, setMe } = useMe() as any;
+	const [map, setMap] = useState("black");
 
 	function MatchMaking(){
 		
@@ -37,8 +38,10 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 			<div className="GamePage">
 
 
-				{Mode == "computer" && <Canvas COM={true} />}
+				{Mode == "computer" && <Canvas COM={true} Map={map}/>}
 				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => setMode("")}> BACK</button>
+				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMap("dragon")}> dragon</button>
+				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMap("shark")}> shark</button>
 				{Mode == "rank" && <MatchMaking />}
 		
 			</div>

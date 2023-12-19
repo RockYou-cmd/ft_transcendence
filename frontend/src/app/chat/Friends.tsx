@@ -15,14 +15,12 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 	async function getFriends() {
 		const data = await Get(APIs.FriendsChat);
 		setData(data);
-		console.log("data in friends", data);
 	}
 
 	useEffect(() => {
 		getFriends();
 	}, [refresh]);
 
-	// console.log("data in friends", data);
 
 	function SelecteEvent(e: MouseEvent, friend: any) {
 		e.preventDefault();

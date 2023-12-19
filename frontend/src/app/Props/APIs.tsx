@@ -67,7 +67,7 @@ export const APIs : Api = {
 	UnBan: Host + "/room/unban/member",
 	addMember: Host + "/room/add/member",
 	Kick: Host + "/room/remove/member",
-	Mute: Host + "/role/mute",
+	Mute: Host + "/room/mute/member",
 	MakeAdmin: Host + "/room/add/admin",
 	RemoveAdmin: Host + "/room/remove/admin",
 	Groups: Host + "/room",

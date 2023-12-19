@@ -45,13 +45,14 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	const ChatID = useRef("");
 	const Room = useRef("");
 	const { me, setMe } = useMe() as any;
-	const status = useRef("");
+	const status = useRef({ status : "", sender : ""});
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
 	const router = useRouter();
 	const msgImg = useRef(null) as any;
 	const [input, setInput] = useState("");
 	const [option, setOption] = useState(false);
+	const Muted = useRef({ mute: false, id: "" });
 
 	//hooks for chat settings
 	const [group, setGroup] = useState(false);
@@ -78,13 +79,13 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-		// conso
+		console.log("data  ", data);
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
 				
 				const datas = await res.json();
-				status.current = datas?.friends[0]?.status;
+				status.current.status = datas?.friends[0]?.status;
 				ChatID.current = datas?.chats[0]?.id;
 				setChat(datas?.chats[0]);
 				
@@ -94,33 +95,36 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			if (channel?.username != undefined){
 				setChat(data?.chats[0]);
 				ChatID.current = data?.chats[0]?.id;
-				status.current = data?.friends[0]?.status;
+				status.current.status = data?.friends[0]?.status;
 			}
 			else{
 				setChat(data);
-				
 				ChatID.current = channel?.id;
+				
 			}
 		}
 
 		if (channel?.name) {
 			Role(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
 			setRole(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
-		}
+			if (data?.members.filter((member: any) => member?.userId == me?.username)[0]?.status == "MUTED") {
+				Muted.current = { mute: true, id: channel?.id };	
+			}
+		}	
 	}
 
-
+	// console.log("block", status.current.status);
 
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
 			getChat(User);
-	}, [User])
+	}, [refresh])
 
 	useEffect(() => {
 		async function fetchData() {
 			const data = await Get(APIs.getChat + User?.username);
 			// setChat(data?.chats[0]);
-			status.current = data?.friends[0]?.status;
+			status.current.status = data?.friends[0]?.status;
 		}
 		if (chat && Object.keys(chat).length != 0) {
 			fetchData();
@@ -135,15 +139,21 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			e.type === "click" ||
 			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
 		) {
-			if ((input !== "" || msgImg.current?.files[0] != undefined) && status.current !== "BLOCKED") {
-				const img = await fileUploadFunction(msgImg.current.files[0]);
-				const s = img ? img : input;
+			if ((input !== "" || msgImg.current?.files[0] != undefined)) {
+				let img : string = "";
+				if (msgImg.current?.files[0] != undefined)
+					img = await fileUploadFunction(msgImg.current.files[0]);
+				
+					const s = img ? img : input;
 				const msg = { content: s, senderId: me?.username };
 
-				setChat((chat: { messages: any }) => ({
-					...chat,
-					messages: [...chat.messages, msg],
-				}));
+				if (Muted.current.mute == false && status.current.status != "BLOCKED"){
+
+					setChat((chat: { messages: any }) => ({
+						...chat,
+						messages: [...chat.messages, msg],
+					}));
+				}
 
 				const message: Message = {
 					type : "message",
@@ -151,22 +161,43 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 					sender: me?.username,
 					chatId: ChatID.current,
 				};
-				if (!group) {
+				if (!group && status.current.status != "BLOCKED") {
 					socket.emit(Room.current, { ...message, receiver: User?.username });
-				} else {
+				} else if (group && Muted.current.mute == false){
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
+				}
+				else{
+					if (group && Muted.current.mute == true)
+						alert ("You are muted in this group");
+					else
+						alert("You are blocked by this user");	
 				}
 			}
 			setInput("");
 			msgImg.current.value = null;
 		}
 	}
-
+	// console.log("");
 	
 	useEffect(() => {
 		if (scroll.current) {
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
+		socket?.on("update", (data: any) => {
+			// console.log("update  ", data);
+			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
+				Muted.current = { mute: true, id: data?.groupId };
+			}
+			else if (data?.option == "block" && data?.receiver == me?.username) {
+				status.current.status = "BLOCKED";
+			}
+		});
+		socket?.on("muted",(data : any) =>{
+			
+			if (data?.chatId == ChatID.current){
+				Muted.current = { mute: true, id: data?.chatId };
+			}
+		});
 		socket?.on(Room.current, (data: any) => {
 			const msg = { content: data.content, senderId: data.sender, chatId: data.chatId }
 			if (data?.chatId == ChatID.current) {

@@ -70,7 +70,7 @@ export class EventsGateway {
     if (userData.status == 'MUTED') {
       const now = new Date()
       if (userData.mutedTime > now) {
-        client.emit('muted')
+        client.emit('muted', {roomId: payload.chatId})
         return
       } else
         this.userService.updateData(

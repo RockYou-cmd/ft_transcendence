@@ -41,9 +41,7 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 		res = await Put(data, Api);
 
 	if (res.ok && option == "Kick" || option == "Ban"){
-		console.log("socket send", option, group?.id, person, me?.username, socket);
 		socket?.emit("update", {type : "friendship",  option : option , groupId : group?.id , receiver : person, sender : me?.username});
-		// console.log("socket send", option);
 	}
 	return res;
 }
