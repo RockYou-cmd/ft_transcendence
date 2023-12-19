@@ -54,9 +54,7 @@ export default function Form() {
 				alert(err);
 				// return <Error error={err as Error} reset={LogIn.resetHooks} />
 			}
-
 		}
-
 		else {
 			alert('Please fill all fields');
 		};
