@@ -42,6 +42,7 @@ export interface Api {
 	Logout : string,
 	createChat: string,
 	roomModify: string,
+	unMute: string,
 }
 
 export const APIs : Api = {
@@ -83,4 +84,5 @@ export const APIs : Api = {
 	Logout : Host + "/auth/logout",
 	FriendsChat : Host + "/friend/chats",
 	roomModify : Host + "/room/modify",
+	unMute : Host + "/room/unmute/member",
 };

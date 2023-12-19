@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Post,
   Query,
   Req,
@@ -39,16 +37,16 @@ export class AuthController {
     res.cookie("access_token", token, { httpOnly: true });
     res.send("User signedIn succesfully");
   }
-  
+
   @Get("verifyToken")
   async verifyToken(@Query() data, @Res() res: Response) {
     const ret = await this.twoFactorAuthenticationService.verifyToken(
       { username: data.username },
       data.token,
-      );
-      const token = await this.authService.generateJwt(ret);
-      res.cookie("access_token", token, { httpOnly: true });
-      res.send("User signedIn succesfully");
+    );
+    const token = await this.authService.generateJwt(ret);
+    res.cookie("access_token", token, { httpOnly: true });
+    res.send("User signedIn succesfully");
   }
 
   @UseGuards(AuthGuard("google"))
@@ -58,12 +56,11 @@ export class AuthController {
   @Post("google/callback")
   @UseGuards(AuthGuard("google"))
   async googleCallback(@Req() req, @Res() res: Response) {
-    res.cookie(
-      "access_token",
-      await this.authService.OAuthValidation(req.user),
-      { httpOnly: true },
-    );
-    res.send("User signedIn succesfully");
+    const data = await this.authService.OAuthValidation(req.user);
+    if (!data.token) res.send("2faEnabled").status(425);
+    res.cookie("access_token", data.token, { httpOnly: true });
+    console.log(data.new);
+    res.send({message:"User signedIn succesfully", new: data.new});
   }
 
   @UseGuards(AuthGuard("42"))
@@ -73,11 +70,9 @@ export class AuthController {
   @Post("intra/callback")
   @UseGuards(AuthGuard("42"))
   async intraCallback(@Req() req, @Res() res: Response) {
-    res.cookie(
-      "access_token",
-      await this.authService.OAuthValidation(req.user),
-      { httpOnly: true },
-    );
+    const data = await this.authService.OAuthValidation(req.user);
+    if (!data) res.send("2faEnabled").status(425);
+    res.cookie("access_token", data.token, { httpOnly: true });
     res.send("User signedIn succesfully");
   }
 

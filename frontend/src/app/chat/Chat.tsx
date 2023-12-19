@@ -114,6 +114,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	}
 
 	// console.log("block", status.current.status);
+	
 
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
@@ -146,15 +147,15 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				
 					const s = img ? img : input;
 				const msg = { content: s, senderId: me?.username };
-
 				if (Muted.current.mute == false && status.current.status != "BLOCKED"){
-
+					
 					setChat((chat: { messages: any }) => ({
 						...chat,
 						messages: [...chat.messages, msg],
 					}));
 				}
-
+				
+				console.log("Muted", Muted.current);
 				const message: Message = {
 					type : "message",
 					content: s,
@@ -167,8 +168,10 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
 				}
 				else{
-					if (group && Muted.current.mute == true)
+					if (group && Muted.current.mute == true){
+						socket.emit(Room.current, { ...message, receivers: chat?.members });
 						alert ("You are muted in this group");
+					}
 					else
 						alert("You are blocked by this user");	
 				}
@@ -187,9 +190,13 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			// console.log("update  ", data);
 			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: true, id: data?.groupId };
+				console.log("Muted data", data);
 			}
 			else if (data?.option == "block" && data?.receiver == me?.username) {
 				status.current.status = "BLOCKED";
+			}
+			else if (data?.option == "unMute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
+				Muted.current = { mute: false, id: data?.groupId };
 			}
 		});
 		socket?.on("muted",(data : any) =>{

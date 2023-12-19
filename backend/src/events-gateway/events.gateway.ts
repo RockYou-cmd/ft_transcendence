@@ -67,16 +67,21 @@ export class EventsGateway {
       payload.chatId,
       payload.sender
     )
-    if (userData.status == 'MUTED') {
-      const now = new Date()
+    if (userData.status == "MUTED") {
+      const now = new Date();
       if (userData.mutedTime > now) {
+<<<<<<< HEAD
         client.emit('muted', {roomId: payload.chatId})
         return
+=======
+        client.emit("muted");
+        return;
+>>>>>>> eadfab87bc21867c3dd3e41d60a87ca8a9c0f07b
       } else
-        this.userService.updateData(
-          { username: payload.sender },
-          { status: 'ANGEL' }
-        )
+        this.roomService.unMuteMember({
+          id: userData.roomId,
+          username: userData.userId,
+        });
     }
     payload.receivers.forEach((receiver) => {
       this.server
