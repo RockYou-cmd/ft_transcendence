@@ -34,9 +34,7 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 	else
 		put = true;
 
-	// console.log(option , group?.id , person , me?.username);
 	
-
 
 	let res: any;
 	if (put == false)
@@ -44,7 +42,6 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 	else
 		res = await Put(data, Api);
 
-	console.log(res);	
 	if (res.ok){
 		socket?.emit("update", {type : "friendship",  option : option , groupId : group?.id , receiver : person, sender : me?.username});
 	}

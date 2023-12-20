@@ -288,9 +288,6 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 		setOppScore(0);
 	}
 
-	console.log("Map", Map);
-
-
 	return (
 		<>
 			<div id="container" className={Map}  >

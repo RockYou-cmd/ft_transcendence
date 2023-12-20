@@ -80,11 +80,7 @@ export default function Chat() {
 	const [settings, setSettings] = useState(false);
 	const [seeMem, setSeeMem] = useState(false);
 
-
-
 	const [Style, setStyle] = useState({} as any);
-
-	
 	
 	function OptionsHandler(option: string) {
 		if (option == "CreateG")
@@ -115,7 +111,7 @@ export default function Chat() {
 				setUser({});
 			}
 		});
-		return () => {socket?.off("update");}
+		return () => {socket?.off("update", ()=>{});}
 	},[socket])
 
 	useEffect(() => {

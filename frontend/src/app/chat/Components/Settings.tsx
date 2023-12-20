@@ -161,14 +161,11 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			e.preventDefault();
 			try{
 				const res = await Put({id : group.id , username : User?.user?.username, duration : time}, APIs.Mute);
-				console.log("res ",res);
-				console.log("time ", time);
 				if (res.ok){
 					socket?.emit("update", {option : "Mute" , groupId : group?.id , receiver : User?.user?.username, sender : me?.username});
 				}
 				setMute(false);
 			}catch(err){
-				console.log(err);
 			}
 			
 		}

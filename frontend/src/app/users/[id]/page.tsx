@@ -101,7 +101,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			if (option == "block")
 			res = await SendFriendRequest({username: Userdata?.username, status: "block", socket: socket, me: me}) || undefined;
 		else 
-		res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current, socket: socket, me: me}) || undefined;
+			res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current, socket: socket, me: me}) || undefined;
 		if (res == undefined){
 					Logout();
 				}
