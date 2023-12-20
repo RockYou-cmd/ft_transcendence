@@ -1,7 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";
-import { UserService } from 'src/user/user.service';
+import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class TwoFactorAuthenticationService {
@@ -10,7 +15,11 @@ export class TwoFactorAuthenticationService {
   async generateTwoFactorAuthSecret(user) {
     try {
       const ret = await this.userService.getData(user);
-      if (ret.is2faEnabled) throw "2FA already enabled!";
+      if (ret.is2faEnabled)
+        throw new HttpException(
+          "Two factor authentication already activated",
+          HttpStatus.FORBIDDEN,
+        );
       const secret = speakeasy.generateSecret({
         name: user.name,
         issuer: "RockYou",
@@ -24,7 +33,7 @@ export class TwoFactorAuthenticationService {
       return { qr };
     } catch (err) {
       console.log("generateTwoFactorAuthSecretUrl Error!");
-      return err;
+      throw err;
     }
   }
 
@@ -56,13 +65,16 @@ export class TwoFactorAuthenticationService {
 
   async verifyToken(user, token) {
     try {
-      console.log("hahaha");
       const ret = await this.userService.getData(user);
+      if (ret.is2faEnabled)
+        throw new HttpException(
+          "Two factor authentication already activated",
+          HttpStatus.FORBIDDEN,
+        );
       const validated = await speakeasy.totp.verify({
         secret: ret.temp2fa,
         token,
       });
-      console.log(validated);
       if (!validated) throw new UnauthorizedException("Invalid 2fa token!");
       return ret;
     } catch (err) {

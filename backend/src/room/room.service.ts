@@ -24,10 +24,9 @@ export class RoomService {
       };
       roomData.members.create["role"] = "OWNER";
       if (data.privacy == "PROTECTED") roomData["password"] = data.password;
-	  if (data.photo) roomData["photo"] = data.photo;
-      if (data.privacy == "PROTECTED")
-      {
-        const hash = await argon.hash(data.password)
+      if (data.photo) roomData["photo"] = data.photo;
+      if (data.privacy == "PROTECTED") {
+        const hash = await argon.hash(data.password);
         console.log("Hash: ", hash);
         roomData["password"] = hash;
       }
@@ -287,7 +286,8 @@ export class RoomService {
           id: data.id,
         },
       });
-      if (!await argon.verify(room.password, data.password)) throw new Error("password incorrect");
+      if (!(await argon.verify(room.password, data.password)))
+        throw new Error("password incorrect");
       return this.joinRoom(account, data.id);
     } catch (err) {
       throw err;
@@ -348,7 +348,7 @@ export class RoomService {
   async muteMember(data) {
     try {
       const mutedDate = new Date(
-        new Date().setHours(new Date().getHours() + data.duration),
+        new Date().setHours(new Date().getHours() + Number(data.duration)),
       );
 
       const memberShip = await prisma.roomMembership.update({
@@ -363,6 +363,26 @@ export class RoomService {
           mutedTime: mutedDate,
         },
       });
+      return "User muted successfully";
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async unMuteMember(data) {
+    try {
+      const memberShip = await prisma.roomMembership.update({
+        where: {
+          userId_roomId: {
+            userId: data.username,
+            roomId: data.id,
+          },
+        },
+        data: {
+          status: "ANGEL",
+        },
+      });
+      return "User unmuted successfully";
     } catch (err) {
       throw err;
     }
@@ -396,7 +416,7 @@ export class RoomService {
       var newData = {
         name: data.name,
         description: data.description,
-		photo: data.photo,
+        photo: data.photo,
         privacy: data.privacy,
         password: data.password,
       };

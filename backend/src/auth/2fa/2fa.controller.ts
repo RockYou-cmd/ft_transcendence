@@ -17,7 +17,6 @@ export class TwoFactorAuthenticationController {
 	@Post("enable")
 	@UseGuards(AuthGuard)
 	enableTwoFactorAuthentication(@Req() account, @Body() tokenObj: twoFactorAuthenticationDto) {
-		console.log("ioioio")
 		return this.twoFactorAuthenticationService.enableTwoFactorAuthentication(account.user, tokenObj.token);
 	}
 
