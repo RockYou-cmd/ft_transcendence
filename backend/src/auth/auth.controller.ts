@@ -33,9 +33,13 @@ export class AuthController {
   @Post("signIn")
   async singIn(@Body() ndto, @Res() res: Response) {
     const token = await this.authService.signIn(ndto);
-    if (!token) res.send("2faEnabled").status(425);
-    res.cookie("access_token", token, { httpOnly: true });
-    res.send("User signedIn succesfully");
+    console.log(token);
+    if (!token) res.status(425).json({message: "2faEnabled"});
+    else {
+      console.log('toksi')
+      res.cookie("access_token", token, { httpOnly: true });
+      res.send("User signedIn succesfully");
+    }
   }
 
   @Get("verifyToken")
@@ -44,9 +48,10 @@ export class AuthController {
       { username: data.username },
       data.token,
     );
+    console.log("kkk")
     const token = await this.authService.generateJwt(ret);
     res.cookie("access_token", token, { httpOnly: true });
-    res.send("User signedIn succesfully");
+    res.status(200).json({message:"token is valid"});
   }
 
   @UseGuards(AuthGuard("google"))
@@ -57,21 +62,20 @@ export class AuthController {
   @UseGuards(AuthGuard("google"))
   async googleCallback(@Req() req, @Res() res: Response) {
     const data = await this.authService.OAuthValidation(req.user);
-    if (!data.token) res.send("2faEnabled").status(425);
+    if (!data.token) res.status(425).json({message:"2faEnabled", username: req.user});
     res.cookie("access_token", data.token, { httpOnly: true });
-    console.log(data.new);
     res.send({message:"User signedIn succesfully", new: data.new});
   }
-
+  
   @UseGuards(AuthGuard("42"))
   @Get("intra")
   async intra() {}
-
+  
   @Post("intra/callback")
   @UseGuards(AuthGuard("42"))
   async intraCallback(@Req() req, @Res() res: Response) {
     const data = await this.authService.OAuthValidation(req.user);
-    if (!data) res.send("2faEnabled").status(425);
+    if (!data.token) res.status(425).json({message:"2faEnabled", username: req.user});
     res.cookie("access_token", data.token, { httpOnly: true });
     res.send("User signedIn succesfully");
   }

@@ -130,6 +130,7 @@ export class UserService {
 
 	async updateData(account, data) {
 		try {
+			console.log("a")
 			const user = await prisma.user.update({
 				where: {
 					username: account.username

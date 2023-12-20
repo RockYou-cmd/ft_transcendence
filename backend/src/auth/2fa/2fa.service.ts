@@ -66,16 +66,20 @@ export class TwoFactorAuthenticationService {
   async verifyToken(user, token) {
     try {
       const ret = await this.userService.getData(user);
-      if (ret.is2faEnabled)
-        throw new HttpException(
-          "Two factor authentication already activated",
-          HttpStatus.FORBIDDEN,
-        );
+      // if (ret.is2faEnabled)
+      //   throw new HttpException(
+      //     "Two factor authentication already activated",
+      //     HttpStatus.FORBIDDEN,
+      //   );
       const validated = await speakeasy.totp.verify({
         secret: ret.temp2fa,
         token,
       });
-      if (!validated) throw new UnauthorizedException("Invalid 2fa token!");
+      console.log(validated)
+      if (!validated) throw new HttpException(
+            "2fa token invalid",
+            HttpStatus.FORBIDDEN,
+          );;
       return ret;
     } catch (err) {
       throw err;
