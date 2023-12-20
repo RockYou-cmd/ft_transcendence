@@ -39,6 +39,21 @@ export async function Get(path : string){
 	return data;
 }
 
+
+export async function GetRes(path : string){
+	const header = {
+		credentials: 'include' as RequestCredentials,
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	}
+	const res = await fetch(path, header);
+	return res;
+}
+
+
+
 export async function Put(data : object, path : string){
 	const header = {
 		method: 'PUT',

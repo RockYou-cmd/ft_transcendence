@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 const TwoAuth = ({ User }: { User: any }) => {
-  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(User.is2FAEnabled);
   const [showQRCode, setShowQRCode] = useState(false);
   const [qrCodeBase64, setQRCodeBase64] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationResult, setVerificationResult] = useState('');
 
+  useEffect(()=>{
+    setIs2FAEnabled(User?.is2faEnabled);
+  },[User])
+
   const handleToggle2FA = async () => {
     if (!is2FAEnabled) {
       try {
-        const headers = new Headers();
-        // headers.append('authorization', 'Bearer ' + Cookies.get('access_token'));
-
         const qrCodeResponse = await fetch(`http://localhost:3001/2fa/generate`, {
           method: 'GET',
           credentials: 'include' as RequestCredentials,
@@ -22,31 +22,52 @@ const TwoAuth = ({ User }: { User: any }) => {
           },
         });
         const tmp = await qrCodeResponse.json();
+        console.log(tmp);
         setQRCodeBase64(tmp.qr);
-        console.log(qrCodeBase64);
         setShowQRCode(true);
       } catch (error) {
         console.error('Error fetching QR code:', error);
       }
-    } else {
+    } 
+    else {
       setShowQRCode(false);
       setVerificationResult('');
+      try {
+        const response = await fetch(`http://localhost:3001/2fa/disable`, {
+          method: 'POST',
+          credentials: 'include' as RequestCredentials,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
+        if (response.ok) {
+            console.log("succeful disable");
+        }
+        else {
+          console.log("error disable");
+        }
+     } catch (error) {
+       console.error('Error verifying code:', error);
+     }
     }
     setIs2FAEnabled(!is2FAEnabled);
   };
 
   const handleVerification = async () => {
     try {
-      const verifyResponse = await fetch(`http://localhost:3001/2fa/enable`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          // userId,
-          code: verificationCode,
-        }),
-      });
+       const verifyResponse = await fetch(`http://localhost:3001/2fa/enable`, {
+         method: 'POST',
+         credentials: 'include' as RequestCredentials,
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+           // userId,
+           token: verificationCode,
+      
+         }),
+       });
 
       const { message } = await verifyResponse.json();
       setVerificationResult(message);
@@ -63,7 +84,7 @@ const TwoAuth = ({ User }: { User: any }) => {
           <input
             className='ml-[40%] mb-7 sr-only peer'
             type="checkbox"
-            checked={User?.is2FAEnabled}
+            checked={is2FAEnabled}
             onChange={handleToggle2FA}
           />
           <div className="group relative ml-16 peer ring-0 bg-rose-400 rounded-full outline-none duration-300 after:duration-300 w-20 h-8  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-8 after:w-8 after:top1 after:left1 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95 peer-checked:after:rotate-0">

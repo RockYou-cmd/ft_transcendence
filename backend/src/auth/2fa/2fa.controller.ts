@@ -22,7 +22,7 @@ export class TwoFactorAuthenticationController {
 
 	@Post("disable")
 	@UseGuards(AuthGuard)
-	disableTwoFactorAuthentication(@Req() account, @Body() tokenObj:twoFactorAuthenticationDto) {
+	disableTwoFactorAuthentication(@Req() account) {
 		return this.twoFactorAuthenticationService.disableTwoFactorAuthentication(account.user);
 	}
 }
