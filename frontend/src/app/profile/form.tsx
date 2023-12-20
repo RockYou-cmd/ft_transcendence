@@ -18,15 +18,24 @@ var data: { username: string, password: string } = {
 
 export default function Form() {
 
+	async function verify2FA(username: string) // check if 2fa enabled
+	  {
+		const verify2FAResponse = await Post({ username : username}, "http://localhost:3001/auth/verifyToken");
+		return verify2FAResponse;
+	  }
+
+	  function handle2fa(e) {
+
+	  }
+	
 	const host = "http://localhost:3001";
 	// const host = "http://10.12.11.1:3001";
-	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
 	const [hide, setHide] = useState(false);
+	const [show2FA, setshow2FA] = useState(false);
 
 	const emailRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
-
 
 	async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
 		event.preventDefault();
@@ -37,12 +46,16 @@ export default function Form() {
 				const res = await Post(data, APIs.SignIn);
 				if (res.status == 201) {
 					if (online != "ON") {
-
+						
 						setOnline("ON");
-						// setSocket(io(host + "/events", {
-						// 	withCredentials: true,
-						// }));
-						// console.log("socket created");
+						
+					}
+				}
+				else if (res?.status == 425){
+					
+					const verify2FAResponse = await verify2FA(data.username);
+					if (verify2FAResponse?.status == 425){ //
+						setshow2FA(true);
 					}
 				}
 				else {
@@ -64,6 +77,7 @@ export default function Form() {
 		<>
 			{/* <Link href="/" >back to Home</Link> */}
 			<div id="main">
+				{!show2FA ?  <>
 				<h2 className="title">Login</h2>
 				<div className="Fline"></div>
 				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
@@ -71,14 +85,23 @@ export default function Form() {
 					<input ref={passwordRef} type={hide ? "text" : "password"} className="pasIn" name="password" placeholder="Type your password" />
 					{!hide ? <FontAwesomeIcon id="icon" icon={faEyeLowVision} onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} id="icon" onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} />}
 				</div>
-
 				<Link href="" className="forgot">Forgot your password?</Link>
 				<button className="btn" onClick={handleClick}>Login</button>
 				<Link href={APIs?.intraAuth} className="Intra">Login with Intranet</Link>
 				<Link href={APIs?.googleAuth} className="Intra Google">Login with Google</Link>
-
-
 				<Link href="/create" className="createbtn">Create an account</Link>
+			</> : 
+				<>
+				<div className='flex bg-red-500 items-center justify-center'>
+
+					<input 
+					type='text'>
+
+					</input>
+					<button onClick={handle2fa}> </button>
+				</div>
+				</>	
+				}
 			</div>
 		</>
 
