@@ -69,9 +69,9 @@ export class AuthService {
         var newUser = 1;
         user = await prisma.user.create({
           data: {
-            username: user.username,
-            email: user.email,
-            photo: user.photo,
+            username: data.username,
+            email: data.email,
+            photo: data.photo,
           },
         });
       }

@@ -33,8 +33,9 @@ export class EventsGateway {
       var { username } =
         await this.authGuard.extractPayloadFromToken(access_token)
       client.join(username)
-      const userTabs = await this.server.in(username).fetchSockets()
-      if (userTabs.length)
+      const userTabs = await this.server.in(username).fetchSockets();
+      console.log(username)
+      if (userTabs.length && username)
         this.userService.updateData({ username }, { status: 'ONLINE' })
     }
     console.log(username, ' CONNECTED')
