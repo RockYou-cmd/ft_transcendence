@@ -40,7 +40,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
-						router.push("/settingPage");
+						router.push("/setting");
 					else
 						router.push("/");
 					// setSocket(io(host + "/events", {

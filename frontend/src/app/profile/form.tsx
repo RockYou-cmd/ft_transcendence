@@ -9,8 +9,8 @@ import { useLogContext, useSocket } from '../Components/Log/LogContext';
 import { io } from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
-import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import ParticleBackground from '../Components/Log/particles';
 
 
 var data: { username: string, password: string } = {
@@ -95,8 +95,11 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 	},[])
 	return (
 		<>
+		<div className=' relative'>
+			<ParticleBackground />
+
 			{/* <Link href="/" >back to Home</Link> */}
-			<div id="main">
+			<div id="main" className='' >
 				{!show2FA ?  <>
 				<h2 className="title">Login</h2>
 				<div className="Fline"></div>
@@ -112,6 +115,7 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 				<Link href="/create" className="createbtn">Create an account</Link>
 			</> : 
 				<>
+
 				<form onSubmit={handle2fa} className='flex bg-red-500 items-center justify-center'>
 					<input className='text-black p-3'
 					type='text'
@@ -127,6 +131,7 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 				</>	
 				}
 			</div>
+		</div>
 		</>
 
 	)

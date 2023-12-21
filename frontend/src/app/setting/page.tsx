@@ -1,4 +1,9 @@
+'use client';
 import Setting from "../Components/profile/profile_setting";
+import {useEffect, useState } from "react";
+import {Get } from '../Components/Fetch/Fetch'
+import { APIs } from "../Props/APIs";
+
 
 // create asimole page setting 
 interface Props {
@@ -12,11 +17,27 @@ interface Props {
     photo_file: File | null;
     photo: string;
   }
- 
-export default function SettingPage({User} : {User : any}) {
+
+export default function SettingPage() {
+
+      const [data, setData] = useState<FormData>({} as FormData);
+      async function fetchData() {
+        const res = await Get(APIs.Profile);
+        setData(res);
+      
+      }
+      useEffect(() => {
+        fetchData();
+     
+      }, []);
+
+
     return (
-        <>
-            <Setting handleClick={()=>{}} User={User} />
-        </>
+
+        <div className="flex w-full justify-center mt-[20%]">
+
+            <Setting handleClick={()=>{}} User={data} />
+        </div>
+
     )
 }

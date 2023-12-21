@@ -33,11 +33,10 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
     bio: '',
     photo_file: null,
     photo: '',
+
   });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: any ) => {
     const { name, value, files } = e.target;
-
     if (name === 'photo' && files) {
       setFormData({
         ...formData,
@@ -50,6 +49,7 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
         [name]: value,
       });
     }
+    return value;
   };
 
   const uploadImage = async (file: File) => {
@@ -128,7 +128,7 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
     <div>
       <Modal isOpen={isModalOpen} closeModal={closeModal}>
           <h1> Your Profile is succefully updated</h1>
-          <p>thisi is teh test</p>
+          <p>this is the message text </p>
       </Modal>
       <div className="flex flex-col rounded-lg gap-8 items-center text-black h-full min-w-[450px] bg-black/40">
       <div className="fixed bg-rose-500 w-[15rem] h-[4rem] rounded-b-2xl z-[-1]"></div>
@@ -144,7 +144,7 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
           />
           <div className=" focus:ring mb-6 mt-5">
             <label className=" text-white font-bold " htmlFor="username">Username:<br/></label>
-            <input type="text" id="username" value="" name="username" onChange={handleChange} className="  w-[100%] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+            <input type="text" id="username"  name="username"  onChange={handleChange} className="  w-[100%] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
           </div>
           <div className="mb-6 font-bold">
             <label className="text-white" htmlFor="bio">Bio:</label>
