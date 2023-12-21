@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import Setting from "../Components/profile/profile_setting";
 import {useEffect, useState } from "react";
 import {Get } from '../Components/Fetch/Fetch'

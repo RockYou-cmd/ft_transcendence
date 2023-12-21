@@ -1,6 +1,10 @@
+
+
 .Cover {
 	position: relative;
 }
+
+
 
 .ChatPage {
 	display: flex;
@@ -223,9 +227,10 @@
 }
 
 .Chat .User span {
-	font-size: 14px;
-	font-weight: 400;
-	color: rgba(255, 255, 255, 0.85);
+	font-size: 11px;
+	letter-spacing: 0.3px;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.7);
 	position: absolute;
 	top: 38px;
 	left: 100px;

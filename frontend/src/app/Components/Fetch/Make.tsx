@@ -14,24 +14,26 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 	let Api = "";
 	let put = false;
 
-	if (option == "Kick") {
-		put = false;
+	if (option == "Kick") 
 		Api = APIs.Kick;
-	}
-	else if (option == "Ban") {
-		put = true;
+	
+	else if (option == "Ban") 
 		Api = APIs.Ban;
-	}
-	else if (option == "MakeAdmin") {
-		put = true;
+	
+	else if (option == "MakeAdmin") 
 		Api = APIs.MakeAdmin;
-	}
-	else if (option == "removeAdmin") {
-		put = true;
+	
+	else if (option == "removeAdmin") 
 		Api = APIs.RemoveAdmin;
-	}
+	
+	else if (option == "unMute") 
+		Api = APIs.unMute;
+	
+	if (option == "Kick")
+		put = false;
+	else
+		put = true;
 
-	// console.log(option , group?.id , person , me?.username);
 	
 
 	let res: any;
@@ -40,10 +42,8 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 	else
 		res = await Put(data, Api);
 
-	if (res.ok && option == "Kick" || option == "Ban"){
-		console.log("socket send", option, group?.id, person, me?.username, socket);
+	if (res.ok){
 		socket?.emit("update", {type : "friendship",  option : option , groupId : group?.id , receiver : person, sender : me?.username});
-		// console.log("socket send", option);
 	}
 	return res;
 }

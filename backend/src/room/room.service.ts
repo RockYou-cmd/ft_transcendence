@@ -304,6 +304,38 @@ export class RoomService {
           },
         },
       });
+      if (room.role == "OWNER") {
+        const newOwner = await prisma.roomMembership.findFirst({
+          where: {
+            AND: [
+              {
+                roomId: roomId,
+              },
+              {
+                OR: [
+                  {
+                    role: "ADMIN"
+                  },
+                  {
+                    role: "MEMBER"
+                  }
+                ]
+              },
+            ],
+          },
+        });
+        const assign = await prisma.roomMembership.update({
+          where: {
+            userId_roomId: {
+              roomId: roomId,
+              userId: newOwner.userId
+            },
+          },
+          data: {
+            role: "OWNER"
+          }
+        })
+      }
       return "User left the room";
     } catch (err) {
       throw err;

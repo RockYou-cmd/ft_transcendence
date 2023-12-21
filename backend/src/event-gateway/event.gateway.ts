@@ -10,12 +10,13 @@ import { parse } from 'cookie'
 import { ChatService } from 'src/chat/chat.service'
 import { RoomService } from 'src/room/room.service'
 import { UserService } from 'src/user/user.service'
+import { EventGuard } from './event.guard/event.guard'
 
 @WebSocketGateway({
   cors: { credentials: true, origin: 'http://localhost:3000' },
   namespace: 'events',
 })
-export class EventsGateway {
+export class EventGateway {
   constructor(
     private authGuard: AuthGuard,
     private chatService: ChatService,
@@ -56,6 +57,7 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('message')
+  @UseGuards(EventGuard)
   handleMessage(client: Socket, payload: any) {
     console.log('normal message event called')
     this.server.to(payload.receiver).emit('message', payload)
@@ -71,8 +73,8 @@ export class EventsGateway {
     if (userData.status == "MUTED") {
       const now = new Date();
       if (userData.mutedTime > now) {
-        client.emit("muted");
-        return;
+        client.emit('muted', {roomId: payload.chatId})
+        return
       } else
         this.roomService.unMuteMember({
           id: userData.roomId,
@@ -91,6 +93,9 @@ export class EventsGateway {
 
   @SubscribeMessage('update')
   handleBlock(client: Socket, payload: any) {
-    this.server.to(payload.receiver).emit('update', payload)
+	if (payload.option === "block" || payload.option === "unblock")
+    	this.server.to(payload.receiver).to(payload.sender).emit('update', payload)
+	else
+		this.server.to(payload.receiver).emit('update', payload)
   }
 }

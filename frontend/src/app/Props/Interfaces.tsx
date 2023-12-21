@@ -14,7 +14,7 @@ export interface ChatOptions{
 }
 
 export interface Message {
-	type : string;
+	type? : string;
 	content: string;
 	sender: string;
 	chatId: string;
