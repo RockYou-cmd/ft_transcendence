@@ -96,7 +96,6 @@ export class EventGateway {
     if (payload.option === "block")
       this.server.to(payload.receiver).to(payload.sender).emit('update', payload)
     else
-      this.server.to(payload.receiver).emit('update', payload)
-      
+      this.server.to(payload.receiver).emit("update", payload); 
   }
 }

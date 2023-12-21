@@ -6,9 +6,10 @@ import { FriendModule } from './user/friend/friend.module';
 import { ChatModule } from './chat/chat.module';
 import { RoomModule } from './room/room.module';
 import { EventModule } from './event-gateway/event.module';
+import { GameModule } from './game-gateway/game.module';
 
 @Module({
-  imports: [UserModule, FriendModule, ChatModule, RoomModule, EventModule],
+  imports: [UserModule, FriendModule, ChatModule, RoomModule, EventModule, GameModule],
   controllers: [AppController],
   providers: [AppService],
 })
