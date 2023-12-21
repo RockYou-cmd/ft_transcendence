@@ -15,12 +15,12 @@ export default function Profile_info() {
 	let photo = avatar.src;
 
 
-
+	
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
 	}
-
+	
 	const [hover, setHover] = useState(false);
 	const mousehover = useRef(null) as any;
 	const [data, setData] = useState({} as any);
@@ -39,6 +39,7 @@ export default function Profile_info() {
 
 	const handleClick = (val: boolean) => {
 		setShowSetting(val);
+		
 	};
 
 	return (
@@ -96,16 +97,6 @@ export default function Profile_info() {
 				>
 					7
 				</div>
-
-				<div className="rounded-lg  w-[30%] bg-black/5 min-w-full overflow-hidden hover:ease-in-out hover:scale-105 duration-700 shadow-lg shadow-gray-500 " id={hover ? "child" : ""}>4
-					<div className=" relative w-full h-full m-[50%] rounded-full bg-red-400 blur-3xl"></div>
-				</div>
-
-				<div className=" rounded-lg col-span-2 row-span-2 bg-black/5 hover:ease-in-out hover:scale-105 duration-700 shadow-lg shadow-cyan-500/50 " id={hover ? "child" : ""}>5
-					<Image src={img} width={100} height={100} alt="img" />
-				</div>
-				<div className="rounded-lg bg-black/5 hover:ease-in-out row-span-3 hover:scale-105 duration-700 shadow-lg shadow-cyan-500/50 " id={hover ? "child" : ""}>6</div>
-				<div className=" rounded-lg col-span-2 bg-black/5 hover:ease-in-out hover:scale-105 duration-700 shadow-lg shadow-cyan-500/50 " id={hover ? "child" : ""}>7</div>
 			</div>
 		</div>
 	);

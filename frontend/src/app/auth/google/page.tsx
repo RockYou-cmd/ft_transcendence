@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useLogContext, useSocket } from "../../Components/Log/LogContext";
 import { io } from "socket.io-client";
 import Form from "@/app/profile/form";
-
+import SettingPage from "@/app/setting/page";
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
 
@@ -33,19 +33,21 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 	useEffect(() => {
 		async function fetchToken() {
 			const res = await Post({ code, }, APIs.googleToken);
-			console.log("res", res);
+			const data = await res.json();
 			if (res.status == 201) {
+
 				if (online != "ON") {
 					setOnline("ON");
-					router.push("/");
+					if (data?.new == 1)
+						router.push("/settingPage");
+					else
+						router.push("/");
 					// setSocket(io(host + "/events", {
 					// 	withCredentials: true,
 					// }));
 				}
 			}
 			else if (res?.status == 425){
-				const data = await res.json();
-				console.log("data", data);
 				setTwoEA(true);
 				setUser(data?.username?.username);
 			}
