@@ -1,3 +1,4 @@
+"use client"
 import Setting from "../Components/profile/profile_setting";
 
 // create asimole page setting 

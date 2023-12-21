@@ -44,7 +44,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-		console.log("data", data);
 		if (data == undefined){
 			Logout();
 		}

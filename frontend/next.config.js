@@ -3,7 +3,7 @@ const nextConfig = {
 	reactStrictMode: false,
 	images: {
 		remotePatterns:[{
-			protocol: 'https',
+			// protocol: '*',
 			hostname: "**",
 		}],
 	},
@@ -13,3 +13,5 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
+
+// next.config.js

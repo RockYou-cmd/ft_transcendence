@@ -138,8 +138,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			if ((input !== "" || msgImg.current?.files[0] != undefined)) {
 				let img : string = "";
 				if (msgImg.current?.files[0] != undefined)
+					alert("Uploading image");
 					img = await fileUploadFunction(msgImg.current.files[0]);
-				
+					alert("Image uploaded");
 					const s = img ? img : input;
 				const msg = { content: s, senderId: me?.username };
 				if (status.current.status != "BLOCKED"){
@@ -223,7 +224,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				{User?.name && msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 				<section>
 					{
-						(msg?.content as string).includes("https://res.cloudinary.com") ? <Image src={msg?.content} alt='img' width={100} height={100} style={{width: "fit-content" , height : "fit-content"}}/> : <p>{msg?.content}</p>
+						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{width: "fit-content" , height : "fit-content"}}/> : <p>{msg?.content}</p>
 					}
 				</section>
 				{/* <span >{msg?.createdAt}</span> */}
@@ -243,7 +244,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				<h1 onClick={() => { User?.username ? router.push("/users/" + User?.username) : null }}>{User?.username ? User?.username : User?.name}</h1>
 				<span>{User?.username ? User?.status : null}</span>
 				<div className="line"></div>
-				{User?.status == "ONLINE" && <div className="status"></div>}
+				{User?.status == "ONLINE" && <div className='status'></div>}
 
 				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 					<div className='point'></div><div className='point'></div><div className='point'></div>

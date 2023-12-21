@@ -189,7 +189,51 @@
 	position: relative;
 }
 
+.gameSettings{
+	padding: 50px 30px;
+	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
+	width:50%;
+	height : 800px;
+	margin:100px auto;
+	border-radius: 50px;
 
+
+}
+
+.gameSettings h1{
+	font : 700 22px "Inter", sans-serif;
+	margin:15px 0px;
+}
+
+.gameSettings .Maps{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	& .mapblack{background-color: #011627;}
+	& .mapshark{background-color: #20A4F3;
+		& .mapImg{width:110px;}
+	}
+	& .mapdragon{background-color: #FA4D4D;}
+	
+}
+
+.gameSettings .Maps .mapPicker{
+	width:30%;
+	height : 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	& .mapImg{
+		margin: auto;
+	}
+	& :hover{
+		cursor: pointer;
+		border: 3px solid #fff;
+		translate: scale(1.1);
+	}
+
+}
 
 
 

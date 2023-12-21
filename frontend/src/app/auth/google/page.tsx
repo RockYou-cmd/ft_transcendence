@@ -6,19 +6,15 @@ import { Get, Post } from "../../Components/Fetch/Fetch";
 import Loading from "../../loading";
 import { useRouter } from "next/navigation";
 import { useLogContext, useSocket } from "../../Components/Log/LogContext";
-import { io } from "socket.io-client";
 import Form from "@/app/profile/form";
 import SettingPage from "@/app/setting/page";
 
 export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
 
 	const { online, setOnline } = useLogContext();
-	const { socket, setSocket } = useSocket();
 	const [TwoEA, setTwoEA] = useState(false);
 	const [User, setUser] = useState("");
 
-	const host = "http://localhost:3001";
-	// const host = "http://10.12.11.1:3001";
 	const [code, setValue] = useState(null) as any;
 	const [value, setCode] = useState(false);
 
@@ -39,12 +35,10 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
-						router.push("/settingPage");
+						router.push("/setting");
 					else
 						router.push("/");
-					// setSocket(io(host + "/events", {
-					// 	withCredentials: true,
-					// }));
+
 				}
 			}
 			else if (res?.status == 425){
@@ -59,7 +53,6 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 			fetchToken();
 	}, [value]);
 
-	console.log("user", User);
 	return (
 		<>
 			{!TwoEA ? <Loading />
