@@ -73,8 +73,8 @@ export class EventGateway {
     if (userData.status == "MUTED") {
       const now = new Date();
       if (userData.mutedTime > now) {
-        client.emit("muted");
-        return;
+        client.emit('muted', {roomId: payload.chatId})
+        return
       } else
         this.roomService.unMuteMember({
           id: userData.roomId,
@@ -93,9 +93,9 @@ export class EventGateway {
 
   @SubscribeMessage('update')
   handleBlock(client: Socket, payload: any) {
-    if (payload.option === "block")
-      this.server.to(payload.receiver).to(payload.sender).emit('update', payload)
-    else
-      this.server.to(payload.receiver).emit("update", payload); 
+	if (payload.option === "block" || payload.option === "unblock")
+    	this.server.to(payload.receiver).to(payload.sender).emit('update', payload)
+	else
+		this.server.to(payload.receiver).emit('update', payload)
   }
 }

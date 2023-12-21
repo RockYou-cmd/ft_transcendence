@@ -2,7 +2,7 @@
 import React from 'react';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLogContext } from './LogContext';
+import { useLogContext, useSocket } from './LogContext';
 import { Get } from '../Fetch/Fetch';
 import { APIs } from '@/app/Props/APIs';
 
@@ -10,6 +10,7 @@ import { APIs } from '@/app/Props/APIs';
 export default function Logout() {
 	const router = useRouter();
 	const { online, setOnline } = useLogContext();
+	const { socket , setSocket} = useSocket();
 	async function logout(e: MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		const res = await fetch(APIs.Logout, {
@@ -21,6 +22,7 @@ export default function Logout() {
 		});
 		if (res?.status == 200) {
 			setOnline("OFF");
+			socket?.disconnect();
 			router.push("/");
 		}
 	}

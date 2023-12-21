@@ -1,19 +1,34 @@
 
 import Canvas from "./canvas"
 import '../assest/game.css';
-import { useMe } from "../Components/Log/LogContext";
+import { useMe, useSocket } from "../Components/Log/LogContext";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { APIs } from "../Props/APIs";
 import avatar from '../../../public/avatar.png';
+import { MouseEvent } from "react";
 
 
 export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	
 	const { me, setMe } = useMe() as any;
+	const [map, setMap] = useState("black");
+	const { socket } = useSocket();
 
 	function MatchMaking(){
 		
+		async function startgame(e : MouseEvent){
+			e.preventDefault();
+			socket?.emit("matchmaking", {});
+		}
+
+		useEffect(() => {
+			socket?.on("start", () => {
+				alert("start");
+			})
+			return () => {socket?.off("start"), ()=>{}}
+		},[socket])
+
 		
 		return(
 			<>
@@ -25,6 +40,7 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 						<h1>VS</h1>
 						<Image className="g_img" src={avatar} priority={true} alt="img" width={60} height={60}/>					
 					</section>
+					<button onClick={startgame} className='bg-green-500 text-white p-2 rounded m-5'> PLAY</button>
 				</div>
 			</>
 		)
@@ -37,8 +53,10 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 			<div className="GamePage">
 
 
-				{Mode == "computer" && <Canvas COM={true} />}
+				{Mode == "computer" && <Canvas COM={true} Map={map}/>}
 				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => setMode("")}> BACK</button>
+				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMap("dragon")}> dragon</button>
+				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMap("shark")}> shark</button>
 				{Mode == "rank" && <MatchMaking />}
 		
 			</div>

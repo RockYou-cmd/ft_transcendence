@@ -9,7 +9,7 @@ import '../../assest/chatComponents.css';
 import Image from 'next/image';
 import avatar from '../../../../public/avatar.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeLowVision, faEye , faLock , faLockOpen} from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -90,10 +90,12 @@ export default function ExploreRooms({ close }: { close: any }) {
 
 	function Print(users: any) {
 		const user = users?.users;
+	
 		const print = <>
 			<div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45} />
 				<h3>{user?.name}</h3>
+				{user?.privacy == "PROTECTED" ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faLockOpen} />}
 				<button className='UseraddBtn' onClick={() => setRoomSelected(user)}>JOIN</button>
 			</div>
 		</>

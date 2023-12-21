@@ -26,16 +26,13 @@ import Loading from '../loading';
 // import Lottie from "lottie-react";
 // import chatAnimation from "../../../public/chatAnimation.json"
 
-async function Leave(GroupId: any) {
-	await Post({ id: GroupId?.id }, APIs.LeaveRoom);
-}
 
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
 
 
 export default function Chat() {
-
+	
 	const { me } = useMe() as any;
 	const { socket } = useSocket();
 	const { online } = useLogContext();
@@ -51,7 +48,7 @@ export default function Chat() {
 	const [User, setUser] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
-
+	
 	// hooks for login
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
@@ -60,9 +57,9 @@ export default function Chat() {
 		dataHook: { state: data, setState: setData },
 		waitHook: { state: wait, setState: checkwait },
 	}
-
+	
 	/************************************************** */
-
+	
 	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
@@ -79,16 +76,16 @@ export default function Chat() {
 	const [leave, setLeave] = useState(false);
 	const [settings, setSettings] = useState(false);
 	const [seeMem, setSeeMem] = useState(false);
-
-
-
+	
 	const [Style, setStyle] = useState({} as any);
-
 	
-	
+	async function Leave(GroupId: any) {
+		await Post({ id: GroupId?.id }, APIs.LeaveRoom);
+		setUser({});
+	}
 	function OptionsHandler(option: string) {
 		if (option == "CreateG")
-			setCreateG(true);
+		setCreateG(true);
 		else if (option == "ExploreG")
 			setExplore(true);
 		else if (option == "NewChat")
@@ -115,7 +112,7 @@ export default function Chat() {
 				setUser({});
 			}
 		});
-		return () => {socket?.off("update");}
+		return () => {socket?.off("update", ()=>{});}
 	},[socket])
 
 	useEffect(() => {

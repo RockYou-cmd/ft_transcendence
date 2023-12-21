@@ -77,7 +77,7 @@ export class AuthController {
     const data = await this.authService.OAuthValidation(req.user);
     if (!data.token) res.status(425).json({message:"2faEnabled", username: req.user});
     res.cookie("access_token", data.token, { httpOnly: true });
-    res.send("User signedIn succesfully");
+    res.send({message:"User signedIn succesfully", new: data.new});
   }
 
   @Get("logout")

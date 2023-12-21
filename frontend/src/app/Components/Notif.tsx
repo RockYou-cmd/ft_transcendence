@@ -41,10 +41,12 @@ export default function Notif({content} : {content?: string}) {
 					e.preventDefault();
 					setShow(false);
 					if (msg?.type == "friendship"){
-						router.push("http://localhost:3000/users/" + msg?.sender);
+						// router.push("http://localhost:3000/users/" + msg?.sender);
+						window.open("http://localhost:3000/users/" + msg?.sender);
 					}
 					else{
-						router.push("http://localhost:3000/chat/?user=" + msg?.sender);
+						// router.push("http://localhost:3000/chat/?user=" + msg?.sender);
+						window.open("http://localhost:3000/chat/?user=" + msg?.sender);
 					}
 				}
 			}
@@ -58,7 +60,7 @@ export default function Notif({content} : {content?: string}) {
 
 	useEffect(() => {
 		if (socket) {
-			console.log("socket on");
+			// console.log("socket on");
 			socket.on("message" , (data: any) => {
 				setMsg(data);
 				if (!silence)

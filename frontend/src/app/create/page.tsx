@@ -62,8 +62,7 @@ export default function Create() {
 				
 				if (res.status == 201) {
 					alert('user created');
-					route.refresh();
-					route.push('/');
+					route.push('/setting');
 				}
 				else{
 					const msg = await res?.json();

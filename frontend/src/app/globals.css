@@ -27,7 +27,7 @@ input:focus, textarea:focus, select:focus{
 }
 
 #Parent{
-	filter: blur(8px);
+	filter: blur(0px);
 }
 
 #child{

@@ -44,7 +44,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	
 	async function fetchData() {
 		const data = await GetData({Api : "User", user : name}) as any;
-
 		if (data == undefined){
 			Logout();
 		}
@@ -57,18 +56,18 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 
 		UsersetData(data);
 		
-		if (data?.status == "PENDING" && data?.sender == data?.username)
+		if (data?.friendShipstatus == "PENDING" && data?.sender == data?.username)
 		Fstatus.current = "accept request";
-		else if (data?.status == "PENDING")
+		else if (data?.friendShipstatus == "PENDING")
 		Fstatus.current = "cancel request";
-		else if (data?.status == "ACCEPTED")
+		else if (data?.friendShipstatus == "ACCEPTED")
 			Fstatus.current = "remove friend";
-		else if (data?.status == "BLOCKED")
+		else if (data?.friendShipstatus == "BLOCKED")
 			Fstatus.current = "unblock";
 		else
 			Fstatus.current = "request friend";
-		if (data?.status)
-			friend.current = data?.status;
+		if (data?.friendShipstatus)
+			friend.current = data?.friendShipstatus;
 		else
 			friend.current = "not friend";
 	}
@@ -101,7 +100,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			if (option == "block")
 			res = await SendFriendRequest({username: Userdata?.username, status: "block", socket: socket, me: me}) || undefined;
 		else 
-		res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current, socket: socket, me: me}) || undefined;
+			res = await SendFriendRequest({username: Userdata?.username, status: Fstatus.current, socket: socket, me: me}) || undefined;
 		if (res == undefined){
 					Logout();
 				}

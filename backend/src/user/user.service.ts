@@ -72,7 +72,8 @@ export class UserService {
 			})
 			if (!ret)
 				throw new NotFoundException("User Not Found");
-			return {...userData, status:ret.friends[0]?.status, sender: ret.friends[0]?.sender?.username, blocked: ret.friends[0]?.blocked?.username};
+			console.log(userData)
+			return {...userData, friendShipstatus:ret.friends[0]?.status, sender: ret.friends[0]?.sender?.username, blocked: ret.friends[0]?.blocked?.username};
 			
 		}
 		catch(err) {
