@@ -15,13 +15,13 @@ const ParticleBackground: React.FC = () => {
     let mouseY = 0;
 
     function createParticle() {
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < 400; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           radius: Math.random() * 3 + 1,
-          vx: Math.random() * 2 - 1,
-          vy: Math.random() * 2 - 1,
+          vx: Math.random() * 1 - 0.5,
+          vy: Math.random() * 1 - 0.5,
         });
       }
     }
@@ -40,21 +40,23 @@ const ParticleBackground: React.FC = () => {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < 100) {
-          particle.vx = dx * 0.04;
-          particle.vy = dy * 0.04;
-        } else {
-          particle.vx *= 0.99;
-          particle.vy *= 0.99;
+          particle.vx += (dx * 0.1 - particle.vx) * 0.05;
+          particle.vy += (dy * 0.1 - particle.vy) * 0.05;
         }
 
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        if (particle.x > canvas.width || particle.x < 0) {
-          particle.vx *= -1;
+        if (particle.x > canvas.width + particle.radius) {
+          particle.x = -particle.radius;
+        } else if (particle.x < -particle.radius) {
+          particle.x = canvas.width + particle.radius;
         }
-        if (particle.y > canvas.height || particle.y < 0) {
-          particle.vy *= -1;
+
+        if (particle.y > canvas.height + particle.radius) {
+          particle.y = -particle.radius;
+        } else if (particle.y < -particle.radius) {
+          particle.y = canvas.height + particle.radius;
         }
       });
 
