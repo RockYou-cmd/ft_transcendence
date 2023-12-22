@@ -15,7 +15,7 @@ const ParticleBackground: React.FC = () => {
     let mouseY = 0;
 
     function createParticle() {
-      for (let i = 0; i < 400; i++) {
+      for (let i = 0; i < 450; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
