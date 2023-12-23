@@ -15,7 +15,7 @@ const ParticleBackground: React.FC = () => {
     let mouseY = 0;
 
     function createParticle() {
-      for (let i = 0; i < 450; i++) {
+      for (let i = 0; i < 600; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
@@ -89,7 +89,7 @@ const ParticleBackground: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1 }} />;
+  return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1 }} className=' relative bg-gradient-to-br from-blue-300 to-blue-800'/>;
 };
 
 export default ParticleBackground;

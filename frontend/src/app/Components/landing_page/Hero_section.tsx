@@ -1,6 +1,6 @@
 import { Brygada_1918 } from "next/font/google";
 import Image from "next/image";
-import BG1 from "../../../../public/image_processing20210831-17741-n4ldfo.gif"
+import BG1 from "../../../../public/pingpong.gif"
 import { useEffect } from "react";
 // #4660A4, #0C0B38
 
@@ -17,7 +17,7 @@ export default function Hero_section() {
                 <h1>Challenge opponents, showcase your skills, and chat in real-time. </h1>
                 <h1>It's PONGY time – let the games and conversations begin!</h1>
             </div>
-            <div className=" w-[50%]" >
+            <div className="w-[50%]" >
                 <button className="w-[250px] h-[50px] bg-gradient-to-b from-red-800 to-red-400 rounded-lg hover:">PLAY NOW</button>
             </div>
             </div>
