@@ -2,13 +2,13 @@
 import Canvas from "./canvas"
 import '../assest/game.css';
 import { useMe, useSocket } from "../Components/Log/LogContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useRef } from "react";
 import Image from 'next/image';
 import { APIs } from "../Props/APIs";
 import avatar from '../../../public/avatar.png';
 import { MouseEvent } from "react";
 import GameSettings from "./Components/gameSettings";
-
+import PingPong from "./Components/PingPong";
 
 export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	
@@ -18,6 +18,9 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	const [setting, setSetting] = useState(true);
 	const [ballColor, setBallColor] = useState("white");
 	const [paddleColor, setPaddleColor] = useState("white");
+	const [startGame, setStart] = useState(false);
+	const player1 = useRef("");
+	const player2 = useRef("");
 
 	function MatchMaking(){
 		
@@ -27,8 +30,11 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 		}
 
 		useEffect(() => {
-			socket?.on("start", () => {
-				alert("start");
+			socket?.on("start", (data: any) => {
+				setStart(true);
+				player1.current = data.player1?.username;
+				player2.current = data.player2?.username;
+
 			})
 			return () => {socket?.off("start"), ()=>{}}
 		},[socket])
@@ -61,8 +67,9 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 
 				{Mode == "computer" && <Canvas COM={true} Map={map} ballColor={ballColor} paddleColor={paddleColor} />}
 				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => setMode("")}> BACK</button>
-				{Mode == "rank" && <MatchMaking />}
-		
+				{Mode == "rank" && !startGame && <MatchMaking />}
+				{/* {startGame && <Canvas COM={false} Map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} />} */}
+				{startGame && <PingPong map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} />}
 			</div>
 		}
 		</>
