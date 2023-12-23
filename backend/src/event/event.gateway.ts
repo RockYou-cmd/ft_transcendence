@@ -12,6 +12,7 @@ import { RoomService } from "src/room/room.service";
 import { UserService } from "src/user/user.service";
 import { messageGuard } from "./event.guard/message.guard";
 import { gameGuard } from "./event.guard/game.guard";
+import { GameService } from "src/game/game.service";
 
 @WebSocketGateway({
   cors: { credentials: true, origin: "http://localhost:3000" },
@@ -23,6 +24,7 @@ export class EventGateway {
     private chatService: ChatService,
     private roomService: RoomService,
     private userService: UserService,
+    private gameService: GameService
   ) {}
 
   @WebSocketServer()
@@ -127,11 +129,12 @@ export class EventGateway {
     if (t.length)
     {
       t[0].set(user.username, client.id);
-      var roomName = Array.from(t[0].keys())[0] + Array.from(t[0].keys())[1];
-      console.log(roomName);
-      this.server.in(Array.from(t[0].keys())[0] + "room").socketsJoin(roomName);
+      const player1 = Array.from(t[0].keys())[0];
+      const player2 = Array.from(t[0].keys())[1];
+      var roomName = player1 + player2;
+      this.server.in(player1 + "room").socketsJoin(roomName);
       client.join(roomName);
-      this.server.to(roomName).emit("start", {roomName});
+      this.server.to(roomName).emit("start", { roomName, player1, player2});
     }
     else {
       const player = new Map<string, string>();
@@ -139,5 +142,22 @@ export class EventGateway {
       this.matches.push(player);
       client.join(user.username + "room");
     }
+  }
+
+  @SubscribeMessage("move")
+  async movePaddle(client: Socket) {
+
+  }
+
+  @SubscribeMessage("start")
+  async startGame(client: Socket, payload: {player1, player2, roomName}) {
+    setInterval(() => {
+      this.gameService.updateCOM();
+      // this.gameService.
+      const player1 = this.gameService.player1;
+      const player2 = this.gameService.player2;
+      const ball = this.gameService.ball;
+      this.server.to(payload.roomName).emit("frame", {player1, player2, ball});
+    }, 1000/60)
   }
 }
