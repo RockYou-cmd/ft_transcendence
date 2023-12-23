@@ -95,7 +95,7 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 	},[])
 	return (
 		<>
-		<div className=' relative'>
+		<div className=' relative mt-[30vh] '>
 			<ParticleBackground />
 
 			{/* <Link href="/" >back to Home</Link> */}
