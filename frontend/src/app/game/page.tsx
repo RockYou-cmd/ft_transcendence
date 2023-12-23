@@ -60,7 +60,7 @@ export default function GamePage() {
 					</div>
 					}
 					{Mode != "Settings" && Mode != "" && <Game Mode={Mode} setMode={setMode}/> }
-					{Mode == "Settings" && <GameSettings setMode={setMode}/>}
+					{/* {Mode == "Settings" && <GameSettings setMode={setMode} />} */}
 				</>)}
 		</>
 	)

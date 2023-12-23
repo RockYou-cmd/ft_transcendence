@@ -14,6 +14,8 @@ import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
 import Logout from "@/app/Components/Log/Logout";
 import Loading from "@/app/loading";
+import { FaUserPlus, FaUserFriends, FaUserTimes, FaUserMinus, FaUserLock } from 'react-icons/fa';
+
 
 export default function UserProfile({ param }: { param: { id: string } }) {
 
@@ -110,6 +112,43 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		}
 	}
 
+	function renderFriendStatusButton() {
+		let buttonContent;
+		let icon;
+	  
+		switch (Fstatus.current) {
+		  case "accept request":
+			buttonContent = "Accept Request";
+			icon = <FaUserPlus className="mr-2" />;
+			break;
+		  case "cancel request":
+			buttonContent = "Cancel Request";
+			icon = <FaUserTimes className="mr-2" />;
+			break;
+		  case "remove friend":
+			buttonContent = "Remove Friend";
+			icon = <FaUserMinus className="mr-2" />;
+			break;
+		  case "unblock":
+			buttonContent = "Unblock";
+			icon = <FaUserLock className="mr-2" />;
+			break;
+		  default:
+			buttonContent = "Add Friend";
+			icon = <FaUserFriends className="mr-2" />;
+		}
+	  
+		return (
+		  <button onClick={(e: MouseEvent) => friendEvent(e, Fstatus.current)} className="m-4 bg-green-600 p-2 rounded-md flex items-center">
+			{icon}
+			{buttonContent}
+		  </button>
+		);
+	  }
+	  
+	  
+
+
 	if (name == "not-found")
 		return (<NotFound />);
 
@@ -122,12 +161,15 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 					<div className=" flex flex-col rounded-lg  items-center bg-teal-500 h-full min-w-[400px]  bg-gradient-to-r from-blue-700 to-blue-900" >profile info
 						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
 						<h1 className='text-3xl pt-3 ' > {Userdata?.username} </h1>
+						
+						<div className="flex flex-col  h-auto rounded-lg items-center bg-teal-500  min-w-[400px] bg-gradient-to-r from-blue-700 to-blue-900">
+							{renderFriendStatusButton()}
+						</div>
 
-						<button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
+						{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
 						<button onClick={(e: MouseEvent) => friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
-						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>
+						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span> */}
 
-						<button className='ml-auto  w-[100px] h-[40px] flex justify-center p-3  bg-yellow-500 rounded-lg hover:bg-yellow-600 items-center gap-2 font-semibold'><span className='text-2xl'><FaCog /></span> EDIT</button>
 						<div className='w-auto h-auto mt-[50px] m-2 p-3 bg-teal-200/30 rounded-lg hover:bg-white/30 '> this thebio place bla bbab alblab abla blablb lab lab lab lab lab </div>
 						<div className='grid grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit '>
 							<div className='bg-red-500 col-span-2 flex justify-center'>Achievment</div>

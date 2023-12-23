@@ -7,13 +7,17 @@ import Image from 'next/image';
 import { APIs } from "../Props/APIs";
 import avatar from '../../../public/avatar.png';
 import { MouseEvent } from "react";
+import GameSettings from "./Components/gameSettings";
 
 
 export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	
 	const { me, setMe } = useMe() as any;
-	const [map, setMap] = useState("black");
+	const [map, setMap] = useState("shark");
 	const { socket } = useSocket();
+	const [setting, setSetting] = useState(true);
+	const [ballColor, setBallColor] = useState("white");
+	const [paddleColor, setPaddleColor] = useState("white");
 
 	function MatchMaking(){
 		
@@ -50,16 +54,17 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	
 	return(
 		<>
+		{ setting ? <GameSettings Map={setMap} Ball={setBallColor} Paddle={setPaddleColor} close={setSetting}/> :
+
 			<div className="GamePage">
 
 
-				{Mode == "computer" && <Canvas COM={true} Map={map}/>}
+				{Mode == "computer" && <Canvas COM={true} Map={map} ballColor={ballColor} paddleColor={paddleColor} />}
 				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => setMode("")}> BACK</button>
-				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMap("dragon")}> dragon</button>
-				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMap("shark")}> shark</button>
 				{Mode == "rank" && <MatchMaking />}
 		
 			</div>
+		}
 		</>
 	)
 }

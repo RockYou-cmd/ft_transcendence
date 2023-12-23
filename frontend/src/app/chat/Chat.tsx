@@ -16,7 +16,6 @@ import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
-import { stat } from 'fs';
 
 
 const chatSettings: ChatOptions = { Option: ["invite", "block", "view"], desc: ["invite for a game", "Block user", "View profile"] };
@@ -95,7 +94,6 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			else{
 				setChat(data);
 				ChatID.current = channel?.id;
-				
 			}
 		}
 
@@ -137,11 +135,13 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		) {
 			if ((input !== "" || msgImg.current?.files[0] != undefined)) {
 				let img : string = "";
-				if (msgImg.current?.files[0] != undefined)
+				if (msgImg.current?.files[0] != undefined){
 					alert("Uploading image");
 					img = await fileUploadFunction(msgImg.current.files[0]);
 					alert("Image uploaded");
-					const s = img ? img : input;
+				}
+
+				const s = img != "" ? img : input;
 				const msg = { content: s, senderId: me?.username };
 				if (status.current.status != "BLOCKED"){
 					setChat((chat: { messages: any }) => ({

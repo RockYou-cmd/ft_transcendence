@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Post } from '../Components/Fetch/Fetch';
 import { APIs } from '../Props/APIs';
+import ParticleBackground from '../Components/Log/particles';
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string } = {
 	firstname: '',
@@ -59,12 +60,12 @@ export default function Create() {
 
 				const res = await Post(data, APIs.SignUp);
 
-				
+
 				if (res.status == 201) {
 					alert('user created');
 					route.push('/setting');
 				}
-				else{
+				else {
 					const msg = await res?.json();
 					alert(msg.message);
 				}
@@ -86,51 +87,54 @@ export default function Create() {
 	}
 	return (
 		<>
-			<form className="create" onSubmit={sumbitHandler}>
-				<h1>Create Account</h1>
+			<div>
+				<ParticleBackground />
+				<form className="create" onSubmit={sumbitHandler}>
+					<h1>Create Account</h1>
 
-				<div className="col1">
-					<label htmlFor="firstname" className="label">
-						<span>First Name </span>
-						<input ref={first_nameRef} type="text" value={Fname} onChange={(e) => checkFname(e.target.value)} placeholder="Your name.."></input>
-					</label>
+					<div className="col1">
+						<label htmlFor="firstname" className="label">
+							<span>First Name </span>
+							<input ref={first_nameRef} type="text" value={Fname} onChange={(e) => checkFname(e.target.value)} placeholder="Your name.."></input>
+						</label>
 
-					<label htmlFor="lastname" className="label">
-						<span>Last Name </span>
-						<input ref={last_nameRef} type="text" value={Lname} onChange={(e) => checkLname(e.target.value)} placeholder="Your last name.."></input>
-					</label>
+						<label htmlFor="lastname" className="label">
+							<span>Last Name </span>
+							<input ref={last_nameRef} type="text" value={Lname} onChange={(e) => checkLname(e.target.value)} placeholder="Your last name.."></input>
+						</label>
 
-					<label htmlFor="email" className="label">
-						<span>Email </span>
-						<input ref={emailRef} type="email" value={Email} onChange={(e) => checkEmail(e.target.value)} placeholder="Your email.."></input>
-					</label>
+						<label htmlFor="email" className="label">
+							<span>Email </span>
+							<input ref={emailRef} type="email" value={Email} onChange={(e) => checkEmail(e.target.value)} placeholder="Your email.."></input>
+						</label>
 
-				</div>
-				<div className="col2">
-					<label htmlFor="username" className="label">
-						<span>Username </span>
-						<input ref={user_nameRef} type="text" value={Uname} onChange={(e) => checkUsername(e.target.value)} placeholder="Your username.."></input>
-					</label>
+					</div>
+					<div className="col2">
+						<label htmlFor="username" className="label">
+							<span>Username </span>
+							<input ref={user_nameRef} type="text" value={Uname} onChange={(e) => checkUsername(e.target.value)} placeholder="Your username.."></input>
+						</label>
 
-					<label htmlFor="password" className="label">
-						<span>Password </span>
-						<input ref={passwordRef} type="password" value={Pword} onChange={(e) => checkPassword(e.target.value)} placeholder="Your password.."></input>
-					</label>
+						<label htmlFor="password" className="label">
+							<span>Password </span>
+							<input ref={passwordRef} type="password" value={Pword} onChange={(e) => checkPassword(e.target.value)} placeholder="Your password.."></input>
+						</label>
 
-					<label htmlFor="repeat_password" className="label">
-						<span>Repeat Password </span>
-						<input ref={repeat_passwordRef} type="password" value={Rpassword} onChange={(e) => checkRpassword(e.target.value)} placeholder="Repeat your password.."></input>
-					</label>
-				</div>
-
-
+						<label htmlFor="repeat_password" className="label">
+							<span>Repeat Password </span>
+							<input ref={repeat_passwordRef} type="password" value={Rpassword} onChange={(e) => checkRpassword(e.target.value)} placeholder="Repeat your password.."></input>
+						</label>
+					</div>
 
 
-				<button type="submit">Create</button>
 
-				<p>you already have account ? <Link href="/"><span>Sing IN</span></Link> </p>
 
-			</form>
+					<button type="submit">Create</button>
+
+					<p>you already have account ? <Link href="/"><span>Sing IN</span></Link> </p>
+
+				</form>
+			</div>
 		</>
 	)
 }

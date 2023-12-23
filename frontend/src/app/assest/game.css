@@ -51,13 +51,17 @@
 .shark{
 	background: url("../../../public/Frame_1.png") no-repeat center center;
 	background-color: #20A4F3;
-	/* background-size: 60vh; */
+	background-size: 60vh;
 }
 
 .dragon{
 	background: url("../../../public/dragon.png") no-repeat center center;
-	background-color: #FA4D4D;
-	/* background-size: 60vh; */
+	background-color: #e65757 ;
+	background-size: 35vh;
+}
+
+.black{
+	background-color: #000000;
 }
 
 #canvas{
@@ -190,14 +194,12 @@
 }
 
 .gameSettings{
-	padding: 50px 30px;
+	padding: 40px 30px;
 	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
-	width:50%;
-	height : 800px;
-	margin:100px auto;
+	width:600px;
+	height : 760px;
+	margin:80px auto;
 	border-radius: 50px;
-
-
 }
 
 .gameSettings h1{
@@ -206,35 +208,96 @@
 }
 
 .gameSettings .Maps{
+	margin:20px 0px 50px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 
 	& .mapblack{background-color: #011627;}
 	& .mapshark{background-color: #20A4F3;
-		& .mapImg{width:110px;}
+		& .mapImg{width:100px;
+		padding-top:20px;
+		}
 	}
 	& .mapdragon{background-color: #FA4D4D;}
 	
 }
 
-.gameSettings .Maps .mapPicker{
+.mapPicker{
 	width:30%;
-	height : 120px;
+	height : 110px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
 	& .mapImg{
 		margin: auto;
 	}
-	& :hover{
-		cursor: pointer;
-		border: 3px solid #fff;
-		translate: scale(1.1);
+
+	& select {
+		all:initial;
 	}
+}
+.mapPicker:hover{
+	cursor: pointer;
+	border: 3px solid #fff;
+	translate: 10s ease-in-out;
+}
+
+.gameSettings .ballcolor , .gameSettings .paddlecolor{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 60px;
+}
+
+.paddlecolor{
+	padding:10px 17px;
+}
+
+.gameSettings .paddle{
+	width: 15px;
+	height: 140px;
+	border-radius: 7px;
+}
+
+.ballcolor .ball{
+	width:45px;
+	height: 45px;
+	border-radius: 50%;
 
 }
 
+.ballcolor .ball:hover, .paddlecolor .paddle:hover{
+	cursor: pointer;
+	border: 3px solid #fff;
+	transform: scale(1.18);
+}
 
+.gameSettings footer{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	margin:0px 100px;
+
+	& button{
+		padding: 8px 35px;
+		margin: 10px 10px 0px;
+		border-radius: 10px;
+		font: 600 20px 'Inter', sans-serif;
+		&:hover{
+			transform: scale(1.1);
+		}
+	}
+
+	& button:first-of-type{
+		background-color: rgba(49, 132, 191, 1);
+	}
+
+	& button:last-child{
+		background-color: #FA4D4D;
+		padding:8px 45px;
+	}
+}
 
 
