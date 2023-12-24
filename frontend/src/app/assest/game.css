@@ -151,11 +151,13 @@
 
 .Leaderboard , .online{
 	border-radius: 50px;
-	width:35%;
 	background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%);
 	box-shadow: 2px 2px 20px 3px rgba(26, 213, 255, 0.25);
-
 }
+
+.Leaderboard{width: 35%;}
+
+.online{width: 30%;}
 
 .online{
 

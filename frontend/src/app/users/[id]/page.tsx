@@ -180,7 +180,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 
 							{/* Show the profile menu when isMenuOpen is true */}
 							<div className="relative mb-10">
-								<ProfileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+								{isMenuOpen && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} />}
 							</div>
 						</div>
 

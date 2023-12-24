@@ -50,9 +50,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	const [group, setGroup] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
-
-
-
+	
+	
+	
 	async function getChat(channel: any) {
 		let name = "";
 		let Api = "";
@@ -105,10 +105,10 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			}
 		}	
 	}
-
+	
 	// console.log("block", status.current.status);
 	
-
+	
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
 			getChat(User);
