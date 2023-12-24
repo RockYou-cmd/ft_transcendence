@@ -17,11 +17,17 @@ export interface Player {
 	level: number;
 }
 
-
+interface Param{
+	COM : boolean,
+	OPP? : Player,
+	Map : string,
+	ballColor : string,
+	paddleColor : string,
+}
 
 // var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
 
-export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Map?: string}){
+export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 	
 	const game = useRef<HTMLCanvasElement>(null);
 	// const [pause, setPause] = useState(false);
@@ -39,7 +45,6 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 	// const [gameWidth, setGameWidth] = useState(0);
 	// const [gameHeight, setGameHeight] = useState(0);
 	// let score = useRef<HTMLInputElement>(null);
-	
 
 
 	useEffect(() => {
@@ -47,10 +52,10 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			return;
 		}
 		
-		const FPS = 60;
+		const FPS = 50;
 		const BALL_SPEED = 1.2;
 		const COM_LVL = 0.15;
-		var ball_acc = 0.18;
+		var ball_acc = 0.12;
 		
 		const context = game.current?.getContext('2d');
 		let parent = game.current?.parentElement;
@@ -76,7 +81,7 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			width: 12,
 			height: 140,
 			score: 0,
-			color: "rgba(217, 217, 217)"
+			color: paddleColor,
 		}
 	
 		var player2 = {
@@ -85,7 +90,7 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			width: 12,
 			height: 140,
 			score: 0,
-			color: "rgba(217, 217, 217)",
+			color: paddleColor,
 		}
 	
 		var ball = {
@@ -95,7 +100,7 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			speed: BALL_SPEED,
 			velocityX: 5,
 			velocityY: 5,
-			color: "WHITE",
+			color: ballColor,
 		}
 
 
@@ -198,7 +203,6 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			ball.velocityX = -ball.velocityX;
 			player1.y = gameHeight / 2;
 			player2.y = gameHeight / 2;
-			
 		}
 		
 		function updateCOM(){
@@ -206,8 +210,19 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			if (pause.current == true || startGame == true){
 				return;
 			}
-			ball.x += ball.velocityX * ball.speed;
-			ball.y += ball.velocityY * ball.speed;
+
+			if (ball.velocityX == 10 || ball.velocityX == -10){
+				ball.y += (ball.velocityY * ball.speed) / 2;
+				ball.x += (ball.velocityX * ball.speed) / 2;
+				
+			}
+			else{
+
+				ball.y += ball.velocityY * ball.speed;
+				ball.x += ball.velocityX * ball.speed;
+			}
+			
+			
 			
 			
 			if (ball.y + ball.radius >= gameHeight || ball.y - ball.radius <= 0){
@@ -216,8 +231,53 @@ export default function Canvas({COM, OPP, Map} : {COM: boolean, OPP?: Player, Ma
 			
 			var touch_player = (ball.x < gameWidth / 2) ? player1 : player2;
 			if (collision(ball, touch_player)){
-				ball.velocityX = -ball.velocityX;
+				const playerPos = {
+					top: touch_player.y,
+					buttom: touch_player.y + touch_player.height,
+					middle: touch_player.height / 2 + touch_player.y,
+				}
+				// console.log("ball.x ", ball.x, "ball.y ", ball.y);
+		
+				// if (ball.velocityX < 0)
+				// 	ball.velocityX = 5;
+				// else
+				// 	ball.velocityX = -5;
 				ball.speed += ball_acc;
+
+				// console.log("player Pos", playerPos);
+				// console.log("ball Pos", ball.y + ball.radius / 2);
+
+				if (playerPos.top <= (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) < playerPos.middle){
+					// console.log("velocity ", ball.velocityY);
+					if (ball.velocityY > 0){
+						// ball.velocityY = -10;
+						ball.velocityX = 10;
+					}
+					else{
+						// ball.velocityY = 5;
+						ball.velocityX = 5;
+					}
+					
+				}
+				else if (playerPos.buttom > (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) >= playerPos.middle){
+					// console.log("velocity ", ball.velocityY);
+					if (ball.velocityY < 0){
+						// ball.velocityY = -5;
+						ball.velocityX = 10;
+					}
+					else{
+						// ball.velocityY = 10;
+						ball.velocityX = 5;
+					}
+					
+			
+				}
+				// else
+				// 	ball.velocityX = 100;
+				if (touch_player == player2)
+					ball.velocityX = -ball.velocityX;
+
+			
 			}
 			
 			// Computer

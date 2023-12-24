@@ -194,7 +194,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			<div className={user.role == "ADMIN" ? "user admin" : user.role == "OWNER" ? "user owner" : "user"} ref={visible}>
 				<Image className="g_img" src={user?.user?.photo ? user?.user?.photo : avatar} priority={true} alt="img" width={45} height={45} />
 				<h3>{user?.user.username}</h3>
-				{(user.role != "OWNER" || role != "OWNER") && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
+				{(user.role != "OWNER" || role != "OWNER" ) && user?.user?.username != me?.username && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
 			</div>
 		</>
 		return <div>{print}</div>

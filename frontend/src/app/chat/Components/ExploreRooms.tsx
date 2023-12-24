@@ -31,6 +31,8 @@ export default function ExploreRooms({ close }: { close: any }) {
 		const [password, setPassword] = useState("");
 
 		async function SubmitHandler(e: any) {
+			if (e.type == "keydown" && e.key != "Enter")
+				return;
 			e.preventDefault();
 			res = await Post({ id: Room?.id, password: password }, APIs.JoinProtectedRoom);
 			if (res?.status == 201) {
@@ -61,7 +63,7 @@ export default function ExploreRooms({ close }: { close: any }) {
 					<button onClick={() => setRoomSelected({})} className='closeBtn'><div></div></button>
 					<label>Enter Password To Join {Room?.name} group</label>
 					<div className="input">
-						<input type={view ? "text" : "password"} value={password} placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+						<input type={view ? "text" : "password"} value={password} placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} onKeyDown={SubmitHandler}/>
 						{!view ? <FontAwesomeIcon icon={faEyeLowVision} onClick={() => setView(!view)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} onClick={() => setView(!view)} style={{ cursor: "pointer" }} />}
 					</div>
 					<button type="submit">Join</button>
@@ -86,6 +88,8 @@ export default function ExploreRooms({ close }: { close: any }) {
 	useEffect(() => {
 		getRooms();
 	}, [refresh, search]);
+
+
 
 
 	function Print(users: any) {
