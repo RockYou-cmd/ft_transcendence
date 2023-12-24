@@ -164,7 +164,10 @@ export class EventGateway {
   }
 
   @SubscribeMessage("move")
-  async movePaddle(client: Socket) {}
+  async movePaddle(client: Socket, payload:any) {
+    this.gameService[payload.player].y = payload.y;
+    console.log(payload);
+  }
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
@@ -178,14 +181,15 @@ export class EventGateway {
       { username: payload.player2 },
       { status: "INGAME" },
     );
-    setInterval(() => {
+    const test = setInterval(() => {
       this.gameService.updateCOM();
       const player1 = this.gameService.player1;
       const player2 = this.gameService.player2;
       const ball = this.gameService.ball;
       this.server
         .to(payload.roomName)
-        .emit("frame", { player1, player2, ball });
+        .emit("frame", { player1, player2, ball, roomName:payload.roomName });
     }, 1000 / 60);
+    console.log(test);
   }
 }
