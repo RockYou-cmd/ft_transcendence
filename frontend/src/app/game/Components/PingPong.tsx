@@ -10,7 +10,7 @@ import { useSocket , useMe } from '../../Components/Log/LogContext';
 
 
 
-export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2} : {PLAYER1 : string, PLAYER2 : string , map : string, ballColor : string, paddleColor : string}){
+export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2, close} : {PLAYER1 : string, PLAYER2 : string , map : string, ballColor : string, paddleColor : string, close : any	}){
 
 	const {me} = useMe() as any;
 	const {socket} = useSocket();
@@ -50,6 +50,10 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2}
 				setOppScore(data.player2.score);
 			render();
 		})
+
+		socket?.on("endGame", (data : any) => {
+			close("");
+		});
 
 		function drawRect(x: number, y: number, w: number, h: number, color: string) {
 			if (context){
@@ -116,19 +120,19 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2}
 	},[socket])
 
 
-
+	
 
 	return(
 		<>
-			<div className="GamePage" className={map}>
+			<div id="container" className={map}>
 				<section>
-					<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={70} height={70}/>
+					{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
 					<h1>{PLAYER1}</h1>
 					<h2>{myScore} | {oppScore}</h2>
 					<h1>{PLAYER2}</h1>
-					<FontAwesomeIcon id='icon' icon={faRobot} />
+					{/* <FontAwesomeIcon id='icon' icon={faRobot} /> */}
 				</section>
-					<canvas id="game" ref={game} width={1500} height={900} />
+					<canvas id="canvas" ref={game} width={1500} height={900} />
 			</div>	
 
 		</>

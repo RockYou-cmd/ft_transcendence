@@ -31,7 +31,7 @@ export class GameService {
     radius: 16,
     speed: this.ball_SPEED,
     velocityX: 5,
-    velocityY: 5,
+    velocityY: 0,
   };
 
   collision(b: any, p: any) {
@@ -53,9 +53,7 @@ export class GameService {
     );
   }
 
-  ler(a: number, b: number, n: number) {
-    return a + (b - a) * n;
-  }
+
 
   reset() {
     this.ball.x = this.gameWidth / 2;
@@ -132,11 +130,7 @@ export class GameService {
       if (touch_player == this.player2)
         this.ball.velocityX = -this.ball.velocityX;
     }
-
-    // Computer
-    var pos_player2 = this.ball.y - this.player2.height / 2;
-    var cur_pos = this.player2.y;
-    this.player2.y = this.ler(cur_pos, pos_player2, this.COM_LVL);
+    // Compute
 
     if (this.ball.x + this.ball.radius <= 0) {
       this.player2.score++;

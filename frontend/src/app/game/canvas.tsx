@@ -9,7 +9,6 @@ import Image from 'next/image';
 import avatar from '../../../public/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot } from '@fortawesome/free-solid-svg-icons';
-import { useSocket } from '../Components/Log/LogContext';
 export interface Player {
 	x: number;
 	y: number;
@@ -21,8 +20,6 @@ export interface Player {
 interface Param{
 	COM : boolean,
 	OPP? : Player,
-	PLAYER1? : string,
-	PLAYER2? : string,
 	Map : string,
 	ballColor : string,
 	paddleColor : string,
@@ -30,7 +27,7 @@ interface Param{
 
 // var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
 
-export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, PLAYER2} : Param){
+export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 	
 	const game = useRef<HTMLCanvasElement>(null);
 	// const [pause, setPause] = useState(false);
@@ -38,9 +35,12 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 	const [startGame, setStart] = useState(true);
 	const [myScore, setMyScore] = useState(0);
 	const [oppScore, setOppScore] = useState(0);
-	const {me} = useMe() as any;
-	const {socket} = useSocket();
-
+	const {me, setMe} = useMe();
+	var pos = useRef({
+		x: 0,
+		y: 0,
+		score: 0,
+	});
 
 	// const [gameWidth, setGameWidth] = useState(0);
 	// const [gameHeight, setGameHeight] = useState(0);
@@ -82,7 +82,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			height: 140,
 			score: 0,
 			color: paddleColor,
-			username: PLAYER1
 		}
 	
 		var player2 = {
@@ -92,7 +91,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			height: 140,
 			score: 0,
 			color: paddleColor,
-			username: PLAYER2
 		}
 	
 		var ball = {
@@ -104,26 +102,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			velocityY: 0,
 			color: ballColor,
 		}
-
-
-		socket?.on("frame", (data : any) => {
-			player1.x = data.player1.x;
-			player1.y = data.player1.y;
-			player1.score = data.player1.score;
-			player2.x = data.player2.x;
-			player2.y = data.player2.y;
-			player2.score = data.player2.score;
-			ball.x = data.ball.x;
-			ball.y = data.ball.y;
-			// ball.speed = data.ball.speed;
-			// ball.velocityX = data.ball.velocityX;
-			// ball.velocityY = data.ball.velocityY;
-			if (myScore != player1.score)
-				setMyScore(player1.score);
-			if (oppScore != player2.score)
-				setOppScore(player2.score);
-			render();
-		})
 
 
 		function drawRect(x: number, y: number, w: number, h: number, color: string){
@@ -158,15 +136,23 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 		}
 		
 		function render(){
+
+			// clear the map
+			// drawRect(0, 0, gameWidth, gameHeight, 'black');
 			
 			context?.clearRect(0, 0, gameWidth, gameHeight);
-
+			// draw the net
+			
 			drawRect(0, 0, gameWidth, 6, "white");
 			drawRect(0, 0, 6, gameHeight, "white");
 			drawRect(0, gameHeight - 6 , gameWidth, 6, "white");
 			drawRect(gameWidth - 6, 0, 6,gameHeight, "white");
 			
 			drawNet();
+			// draw the score
+			// drawText(player1.score as any, gameWidth / 4, gameHeight / 5, "WHITE");
+			// drawText(player2.score as any, 3 * gameWidth / 4, gameHeight / 5, "WHITE");
+			//draw the padels
 			drawRect(player1.x, player1.y, player1.width, player1.height, player1.color);
 			drawRect(player2.x, player2.y, player2.width, player2.height, player2.color);
 			//draw the ball
@@ -219,11 +205,9 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 				return;
 			}
 
-
 			if (ball.velocityX == 10 || ball.velocityX == -10){
 				ball.y += (ball.velocityY * ball.speed) / 2;
 				ball.x += (ball.velocityX * ball.speed) / 2;
-				
 			}
 			else{
 
@@ -240,8 +224,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			
 			var touch_player = (ball.x < gameWidth / 2) ? player1 : player2;
 			if (collision(ball, touch_player)){
-				if (ball.velocityY == 0)
-					ball.velocityY = 5;
 				const playerPos = {
 					top: touch_player.y,
 					buttom: touch_player.y + touch_player.height,
@@ -249,20 +231,22 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 				}
 	
 				ball.speed += ball_acc;
+				if (ball.velocityY == 0)
+					ball.velocityY = 5;
+
 
 				if (playerPos.top <= (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) < playerPos.middle){
+					// console.log("velocity ", ball.velocityY);
 					if (ball.velocityY > 0){
-						// ball.velocityY = -10;
 						ball.velocityX = 10;
 					}
 					else{
-						// ball.velocityY = 5;
 						ball.velocityX = 5;
 					}
 					
 				}
-				else if (playerPos.buttom > (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) > playerPos.middle){
-					// console.log("velocity ", ball.velocityY);
+				else if (playerPos.buttom > (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) >= playerPos.middle){
+
 					if (ball.velocityY < 0){
 						ball.velocityX = 10;
 					}
@@ -272,10 +256,8 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 					
 			
 				}
-				else{
-					ball.velocityY = 0;
-					console.log("yesss");
-				}
+				// else
+				// 	ball.velocityX = 100;
 				if (touch_player == player2)
 					ball.velocityX = -ball.velocityX;
 
@@ -283,12 +265,9 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			}
 			
 			// Computer
-			if (COM){
-
-				var pos_player2 = ball.y - player2.height / 2;
-				var cur_pos = player2.y;
-				player2.y = ler(cur_pos, pos_player2, COM_LVL);
-			}
+			var pos_player2 = ball.y - player2.height / 2;
+			var cur_pos = player2.y;
+			player2.y = ler(cur_pos, pos_player2, COM_LVL);
 			
 			if (ball.x + ball.radius <= 0){
 				player2.score++;
@@ -307,38 +286,23 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			render();
 			if (COM)
 				updateCOM();
-			// else
-			// 	socket?.emit("game", {player1, player2, ball, gameHeight, gameWidth});
-			// 	update();
 		}
 		
 		document.body.addEventListener("keydown", function(key){
 			if (key.code == "ArrowUp" && !pause.current && !startGame){
-				if (player1.username == me?.username){
-					if (player1.y > 0)
-						socket?.emit("move", {y : player1.y - 20});
-				}
-				else{
-					if (player2.y > 0)
-						socket?.emit("move", {y : player2.y - 20});
-				}
+				if (player1.y > 0)
+					player1.y -= 20;
 			}
 			else if(key.code == "ArrowDown" && !pause.current && !startGame){
-				if (player2.username == me?.username){
-					if (player2.y + player2.height < gameHeight)
-						socket?.emit("move", {y : player2.y + 20});
-				}
-				else{
-					if (player1.y + player1.height < gameHeight)
-						socket?.emit("move", {y : player1.y + 20});
-				}
+				if (player1.y < gameHeight - player1.height)
+					player1.y += 20;
 			}
 		});
 
 		const start = setInterval(gameLoop, 1000 / FPS);
 		
-		return (() => {socket?.off("frame", ()=>{})});
-}, [startGame, socket]);
+		return () => clearInterval(start);
+}, [startGame]);
 	
 	const [btn, setBtn] = useState("Pause");
 	const [restart, setRestart] = useState("Start");
@@ -369,7 +333,7 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor, PLAYER1, 
 			<div id="container" className={Map}  >
 
 			<section>
-				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={70} height={70}/>
+				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
 				<h1>{(me as {username : string})?.username}</h1>
 				{/* <h1>hewa</h1> */}
 				<h2>{myScore} | {oppScore}</h2>
