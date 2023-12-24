@@ -201,7 +201,7 @@ export class EventGateway {
         player1,
         player2,
         ball,
-        roomName: payload.roomName,
+        payload,
       });
     }, 1000 / 60);
     match.set("loop", loop);

@@ -36,9 +36,11 @@ export default function Game({Mode, setMode, setGame} : {Mode : string, setMode 
 				setStart(true);
 				player1.current = data.player1;
 				player2.current = data.player2;
+				console.log(" in play Rank player1", data.player1, "player2", data.player2);
 				roomName.current = data.roomName;
 				if (data.player1 == me.username){
 					socket?.emit("start", data);
+					console.log("start game", me.username);
 				}
 			})
 
@@ -62,6 +64,10 @@ export default function Game({Mode, setMode, setGame} : {Mode : string, setMode 
 		)
 	}
 
+	useEffect(() => {
+		if (!setting)
+			setGame(true);
+	},[setting])
 	
 	return(
 		<>

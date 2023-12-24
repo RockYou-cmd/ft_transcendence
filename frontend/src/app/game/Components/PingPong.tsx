@@ -18,6 +18,7 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
 	const [oppScore, setOppScore] = useState(0);
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
+	const first = useRef(false);
 
   useEffect(() => {
     if (game.current === null) return;
@@ -64,8 +65,17 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       player2.score = data.player2.score;
       ball.x = data.ball.x;
       ball.y = data.ball.y;
-      roomName.current = data?.roomName;
-	  console.log("in data player1", player1.username, "player2", player2.username)
+
+	//   if (!first.current){
+		  player1.username = data.payload.player1;
+		  player2.username = data.payload.player2;
+		  roomName.current = data?.roomName;
+		//   first.current = true;
+	//   }
+	//   console.log("data", data);
+	//   console.log("data player1", data?.player1);
+	//   console.log("data player2", data?.player2);
+	//   console.log("in data player1", player1.username, "player2", player2.username)
       if (myScore != data.player1.score) setMyScore(data.player1.score);
       if (oppScore != data.player2.score) setOppScore(data.player2.score);
       render();
@@ -141,7 +151,6 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               player: "player1",
             });
         } else {
-			console.log("player1", player1.username, "player2", player2.username);
           if (player2.y > 0)
             socket?.emit("move", {
               y: player2.y - 20,

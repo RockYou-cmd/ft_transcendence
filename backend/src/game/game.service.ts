@@ -89,44 +89,32 @@ export class GameService {
         buttom: touch_player.y + touch_player.height,
         middle: touch_player.height / 2 + touch_player.y,
       };
-      // console.log("this.ball.x ", this.ball.x, "this.ball.y ", this.ball.y);
+	  if (this.ball.velocityY == 0)
+	  	this.ball.velocityY = 5;
 
-      // if (this.ball.velocityX < 0)
-      // 	this.ball.velocityX = 5;
-      // else
-      // 	this.ball.velocityX = -5;
       this.ball.speed += this.ball_acc;
 
-      // console.log("player Pos", playerPos);
-      // console.log("this.ball Pos", this.ball.y + this.ball.radius / 2);
 
       if (
         playerPos.top <= this.ball.y + this.ball.radius / 2 &&
         this.ball.y + this.ball.radius / 2 < playerPos.middle
       ) {
-        // console.log("velocity ", this.ball.velocityY);
+
         if (this.ball.velocityY > 0) {
-          // this.ball.velocityY = -10;
           this.ball.velocityX = 10;
         } else {
-          // this.ball.velocityY = 5;
           this.ball.velocityX = 5;
         }
       } else if (
         playerPos.buttom > this.ball.y + this.ball.radius / 2 &&
         this.ball.y + this.ball.radius / 2 >= playerPos.middle
       ) {
-        // console.log("velocity ", this.ball.velocityY);
         if (this.ball.velocityY < 0) {
-          // this.ball.velocityY = -5;
           this.ball.velocityX = 10;
         } else {
-          // this.ball.velocityY = 10;
           this.ball.velocityX = 5;
         }
       }
-      // else
-      // 	this.ball.velocityX = 100;
       if (touch_player == this.player2)
         this.ball.velocityX = -this.ball.velocityX;
     }
