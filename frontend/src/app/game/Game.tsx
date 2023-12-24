@@ -36,9 +36,9 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 				player1.current = data.player1;
 				player2.current = data.player2;
 				roomName.current = data.roomName;
-				console.log("data", data);
-				if (data.player1 == me.username)
+				if (data.player1 == me.username){
 					socket?.emit("start", data);
+				}
 			})
 
 			return () => {socket?.off("start"), ()=>{}}
@@ -71,7 +71,7 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 
 
 				{Mode == "computer" && <Canvas COM={true} Map={map} ballColor={ballColor} paddleColor={paddleColor} />}
-				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => {setMode("");socket?.emit("leaveMatch", roomName.current)}}> BACK</button>
+				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => {console.log("back to black", roomName.current);socket?.emit("leaveMatch", {roomName : roomName.current});setMode("");}}> BACK</button>
 				{Mode == "rank" && !startGame && <MatchMaking />}
 				{/* {startGame && <Canvas COM={false} Map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} />} */}
 				{startGame && <PingPong map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} close={setMode}/>}

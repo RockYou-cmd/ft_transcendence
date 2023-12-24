@@ -57,7 +57,7 @@ export class EventGateway {
       var { username } =
         await this.authGuard.extractPayloadFromToken(access_token);
       client.leave(username);
-      const match = this.findMatch(username);
+      var match = this.findMatch(username);
       if (match) {
         this.userService.updateData({ username }, { status: "ONLINE" });
         const player1 = Array.from(match.keys())[0];
@@ -157,9 +157,9 @@ export class EventGateway {
   @UseGuards(gameGuard)
   async leaveMatch(client: Socket, payload:any) {
     const { user }: any = client;
-    const match = this.findMatch(user.username);
+    var match = this.findMatch(user.username);
     this.server.to(payload.roomName).emit("endGame", "the opponent left");
-    match.clear();
+    match?.clear();
     this.userService.updateData(user, { status: "ONLINE" });
   }
 
@@ -171,11 +171,11 @@ export class EventGateway {
   async startGame(client: Socket, payload) {
     const { user }: any = client;
     this.userService.updateData(
-      { user: payload.player1 },
+      { username: payload.player1 },
       { status: "INGAME" },
     );
     this.userService.updateData(
-      { user: payload.player2 },
+      { username: payload.player2 },
       { status: "INGAME" },
     );
     setInterval(() => {
