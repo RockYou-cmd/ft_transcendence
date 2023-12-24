@@ -17,6 +17,7 @@ import GameSettings from './Components/gameSettings';
 export default function GamePage() {
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
+	const [inGame, setInGame] = useState(false);
 	const [Mode, setMode] = useState("");
 	const { online } = useLogContext();
 
@@ -43,7 +44,7 @@ export default function GamePage() {
 		<>
 			{online == "OFF" ? render :
 				(<>
-					{Mode == "" && <div className='GameMain'>
+					{!inGame && <div className='GameMain'>
 						
 						<LeaderBoard />
 						<GameMode Mode={Mode} setMode={setMode} />
@@ -55,11 +56,12 @@ export default function GamePage() {
 						</div> */}
 						<div className='online'>
 						</div>
-
+					
 							
+
+						{Mode != "" && <Game setGame={setInGame} Mode={Mode} setMode={setMode}/> }
 					</div>
-					}
-					{Mode != "Settings" && Mode != "" && <Game Mode={Mode} setMode={setMode}/> }
+				}
 					{/* {Mode == "Settings" && <GameSettings setMode={setMode} />} */}
 				</>)}
 		</>

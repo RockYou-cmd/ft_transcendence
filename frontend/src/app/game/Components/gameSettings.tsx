@@ -40,7 +40,7 @@ const reset ={
 	paddleColor : "white",
 }
 
-export default function GameSettings({ Map, Ball, Paddle, close} : { Map : any, Ball : any, Paddle : any, close : any}){
+export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Map : any, Ball : any, Paddle : any, close : any, setMode : any}){
 
 	const [Style, setStyle] = useState({
 		map : {},
@@ -106,7 +106,6 @@ export default function GameSettings({ Map, Ball, Paddle, close} : { Map : any, 
 			</div>
 		)
 	}
-
 
 	return(
 		<>

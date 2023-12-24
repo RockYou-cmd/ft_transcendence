@@ -10,7 +10,7 @@ import { MouseEvent } from "react";
 import GameSettings from "./Components/gameSettings";
 import PingPong from "./Components/PingPong";
 
-export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
+export default function Game({Mode, setMode, setGame} : {Mode : string, setMode : any, setGame : any}){
 	
 	const { me, setMe } = useMe() as any;
 	const [map, setMap] = useState("shark");
@@ -22,6 +22,7 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	const player1 = useRef("");
 	const player2 = useRef("");
 	const roomName = useRef("");
+	
 
 	function MatchMaking(){
 		
@@ -62,10 +63,9 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 	}
 
 	
-	
 	return(
 		<>
-		{ setting ? <GameSettings Map={setMap} Ball={setBallColor} Paddle={setPaddleColor} close={setSetting}/> :
+		{ setting ? <GameSettings Map={setMap} Ball={setBallColor} Paddle={setPaddleColor} close={setSetting} setMode={setMode}/> :
 
 			<div className="GamePage">
 
@@ -73,7 +73,6 @@ export default function Game({Mode, setMode} : {Mode : string, setMode : any}){
 				{Mode == "computer" && <Canvas COM={true} Map={map} ballColor={ballColor} paddleColor={paddleColor} />}
 				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => {console.log("back to black", roomName.current);socket?.emit("leaveMatch", {roomName : roomName.current});setMode("");}}> BACK</button>
 				{Mode == "rank" && !startGame && <MatchMaking />}
-				{/* {startGame && <Canvas COM={false} Map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} />} */}
 				{startGame && <PingPong map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} close={setMode}/>}
 			</div>
 		}

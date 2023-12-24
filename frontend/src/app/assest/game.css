@@ -80,6 +80,7 @@
 	flex-direction: row;
 	justify-content: space-between;
 	padding: 1% 3%;
+	position: relative;
 }
 
 .Leaderboard{
@@ -159,14 +160,33 @@
 
 .online{width: 30%;}
 
-.online{
-
-}
 
 .GameMode{
 	width: 27%;
-	padding: 2vh;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	 
+	& button{
+		width: 100%;
+		padding: 20px 40px;
+		margin: 25px 0px;
+		border-radius: 58px;
+		letter-spacing: 1.32px;
+		border: 2px solid #60E2FF;
+		box-shadow: 0px 0px 5px 2px #00E0FF, 0px 0px 11px 5px rgba(77, 212, 255, 0.80) inset;
+		background-color: #004757;
+		font: 600 20px 'Bebas', 'Neue', sans-serif;
+		&:hover{
+			transform: scale(1.09);
+			box-shadow: 3px 3px 15px 4px #00E0FF, 0px 0px 11px 5px rgba(77, 212, 255, 0.80) inset;
+		}
+	}
 }
+
+
 
 .MatchMaking{
 	padding:10px 50px;
@@ -201,7 +221,11 @@
 	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
 	width:600px;
 	height : 760px;
-	margin:80px auto;
+	/* margin: auto; */
+	position: absolute;
+	left:50%;
+	top:30%;
+	transform: translate(-50%,-50%);
 	border-radius: 50px;
 }
 

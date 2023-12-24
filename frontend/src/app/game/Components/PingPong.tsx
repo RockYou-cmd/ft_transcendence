@@ -65,9 +65,9 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       ball.x = data.ball.x;
       ball.y = data.ball.y;
       roomName.current = data?.roomName;
+	  console.log("in data player1", player1.username, "player2", player2.username)
       if (myScore != data.player1.score) setMyScore(data.player1.score);
       if (oppScore != data.player2.score) setOppScore(data.player2.score);
-      console.log("data", data);
       render();
     });
 
@@ -142,6 +142,7 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               player1: player1.username,
             });
         } else {
+			console.log("player1", player1.username, "player2", player2.username);
           if (player2.y > 0)
             socket?.emit("move", {
               y: player2.y - 20,
