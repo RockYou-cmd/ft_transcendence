@@ -139,7 +139,6 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               y: player1.y - 20,
               roomName: roomName.current,
               player: "player1",
-              player1: player1.username,
             });
         } else {
 			console.log("player1", player1.username, "player2", player2.username);
@@ -148,7 +147,6 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               y: player2.y - 20,
               roomName: roomName.current,
               player: "player2",
-              player2: player2.username,
             });
         }
       } else if (key.code == "ArrowDown") {
@@ -158,7 +156,6 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               y: player2.y + 20,
               roomName: roomName.current,
               player: "player2",
-              player2: player2.username,
             });
         } else {
           if (player1.y + player1.height < gameHeight)
@@ -166,7 +163,6 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               y: player1.y + 20,
               roomName: roomName.current,
               player: "player1",
-              player1: player1.username,
             });
         }
       }

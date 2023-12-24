@@ -30,7 +30,7 @@ export class EventGateway {
   @WebSocketServer()
   server: Server;
 
-  matches: Map<string, string>[] = [];
+  matches: Map<string, any>[] = [];
 
   async handleConnection(client: Socket) {
     const cookie = client.handshake.headers.cookie;
@@ -62,7 +62,12 @@ export class EventGateway {
         this.userService.updateData({ username }, { status: "ONLINE" });
         const player1 = Array.from(match.keys())[0];
         const player2 = Array.from(match.keys())[1];
-        this.server.to(player1).to(player2).emit("endGame", "the opponent left");
+        this.server
+          .to(player1)
+          .to(player2)
+          .emit("endGame", "the opponent left");
+        clearInterval(match.get("loop").get);
+        match.get("game").reset();
         match.clear();
       }
       const userTabs = await this.server.in(username).fetchSockets();
@@ -155,23 +160,26 @@ export class EventGateway {
 
   @SubscribeMessage("leaveMatch")
   @UseGuards(gameGuard)
-  async leaveMatch(client: Socket, payload:any) {
-    const { user }: any = client;
+	async leaveMatch(client: Socket, payload: any) {
+		const { user }: any = client;
     var match = this.findMatch(user.username);
-    this.server.to(payload.roomName).emit("endGame", "the opponent left");
+    clearInterval(match?.get("loop"));
+		match.get("game").reset();
     match?.clear();
+    this.server.to(payload.roomName).emit("endGame", "the opponent left");
     this.userService.updateData(user, { status: "ONLINE" });
   }
-
+	
   @SubscribeMessage("move")
-  async movePaddle(client: Socket, payload:any) {
-    this.gameService[payload.player].y = payload.y;
-    console.log(payload);
+  async movePaddle(client: Socket, payload: any) {
+		const { user }: any = client;
+		var match = this.findMatch(user.username);
+    match.get("game")[payload.player].y = payload.y;
   }
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
-  async startGame(client: Socket, payload) {
+	async startGame(client: Socket, payload) {
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },
@@ -181,15 +189,21 @@ export class EventGateway {
       { username: payload.player2 },
       { status: "INGAME" },
     );
-    const test = setInterval(() => {
-      this.gameService.updateCOM();
-      const player1 = this.gameService.player1;
-      const player2 = this.gameService.player2;
-      const ball = this.gameService.ball;
-      this.server
-        .to(payload.roomName)
-        .emit("frame", { player1, player2, ball, roomName:payload.roomName });
+		var match = this.findMatch(payload.player1);
+		match.set("game", new GameService());
+		const game = match.get("game");
+		const loop = setInterval(() => {
+      game.updateCOM();
+      const player1 = game.player1;
+      const player2 = game.player2;
+      const ball = game.ball;
+      this.server.to(payload.roomName).emit("frame", {
+        player1,
+        player2,
+        ball,
+        roomName: payload.roomName,
+      });
     }, 1000 / 60);
-    console.log(test);
+    match.set("loop", loop);
   }
 }
