@@ -14,7 +14,10 @@ import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
 import Logout from "@/app/Components/Log/Logout";
 import Loading from "@/app/loading";
-import { FaUserPlus, FaUserFriends, FaUserTimes, FaUserMinus, FaUserLock } from 'react-icons/fa';
+import { FaUserClock, FaUserPlus, FaUserTimes, FaUserMinus, FaUserLock } from 'react-icons/fa';
+import { CgMoreVerticalR } from "react-icons/cg";
+import { SlClose } from "react-icons/sl";
+import ProfileMenu from "@/app/Components/profile/userMenu";
 
 
 export default function UserProfile({ param }: { param: { id: string } }) {
@@ -112,46 +115,53 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 		}
 	}
 
+
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	const toggleMenu = () => {
+	  setIsMenuOpen(!isMenuOpen);
+	};
+
 	function renderFriendStatusButton() {
 		let buttonContent;
 		let icon;
-	  
+		
 		switch (Fstatus.current) {
-		  case "accept request":
+			case "accept request":
 			buttonContent = "Accept Request";
-			icon = <FaUserPlus className="mr-2" />;
+			icon = <FaUserClock className="mr-2" />;
 			break;
-		  case "cancel request":
-			buttonContent = "Cancel Request";
-			icon = <FaUserTimes className="mr-2" />;
-			break;
-		  case "remove friend":
-			buttonContent = "Remove Friend";
-			icon = <FaUserMinus className="mr-2" />;
-			break;
-		  case "unblock":
-			buttonContent = "Unblock";
-			icon = <FaUserLock className="mr-2" />;
-			break;
-		  default:
-			buttonContent = "Add Friend";
-			icon = <FaUserFriends className="mr-2" />;
-		}
-	  
-		return (
-		  <button onClick={(e: MouseEvent) => friendEvent(e, Fstatus.current)} className="m-4 bg-green-600 p-2 rounded-md flex items-center">
+			case "cancel request":
+				buttonContent = "Cancel Request";
+				icon = <FaUserTimes className="mr-2" />;
+				break;
+				case "remove friend":
+					buttonContent = "Remove Friend";
+					icon = <FaUserMinus className="mr-2" />;
+					break;
+					case "unblock":
+						buttonContent = "Unblock";
+						icon = <FaUserLock className="mr-2" />;
+						break;
+						default:
+							buttonContent = "Add Friend";
+							icon = <FaUserPlus className="mr-2" />;
+						}		
+						return (
+							
+							<button onClick={(e: MouseEvent) => friendEvent(e, Fstatus.current)} className="m-4 bg-green-600 p-2 rounded-md flex items-center">
 			{icon}
 			{buttonContent}
 		  </button>
 		);
-	  }
-	  
-	  
-
-
+	}
+	
+	
+	
+	
 	if (name == "not-found")
-		return (<NotFound />);
-
+	return (<NotFound />);
+	
 	if (!show) { return <Loading /> }
 	return (
 		<>
@@ -162,8 +172,16 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
 						<h1 className='text-3xl pt-3 ' > {Userdata?.username} </h1>
 						
-						<div className="flex flex-col  h-auto rounded-lg items-center bg-teal-500  min-w-[400px] bg-gradient-to-r from-blue-700 to-blue-900">
+						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center bg-teal-500  min-w-[400px] bg-gradient-to-r from-blue-700 to-blue-900">
 							{renderFriendStatusButton()}
+							{isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-600 rounded-full top-0 left-0 cursor-pointer" />
+								: <CgMoreVerticalR size={25} onClick={toggleMenu} className="hover:bg-gray-200/20 cursor-pointer" />
+							}
+
+							{/* Show the profile menu when isMenuOpen is true */}
+							<div className="relative mb-10">
+								<ProfileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+							</div>
 						</div>
 
 						{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>

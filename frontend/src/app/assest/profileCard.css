@@ -1,6 +1,6 @@
 .container {
     width: 350px;
-    height: 94px;
+    height: 430px;
     perspective: 900px;
 }
 
@@ -27,7 +27,7 @@
     box-shadow: 0 0 10px 2px rgba(50, 50, 50, 2.5);
     backface-visibility: hidden;
     color: aliceblue;
-    background: blue;
+    background: rgb(22, 22, 41);
 }
 
 .front, .back {

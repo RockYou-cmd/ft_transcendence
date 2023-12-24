@@ -64,11 +64,13 @@ export default function Navbar() {
 					<Link href="/game"><li><FontAwesomeIcon icon={faTableTennisPaddleBall} className="NavbarIcons"  /> Game</li></Link>
 				</nav>
 				 
-				<button className="NotifBtn" onClick={()=>setSilence(!silence)}>
+				<button className="NotifBtn absolute right-40 top-10" onClick={()=>setSilence(!silence)}>
 				{silence == false ? <FontAwesomeIcon icon={faBell} className="icon" /> : <FontAwesomeIcon icon={faBellSlash} className="icon" style={{color : "#ff2638"}}/>}
 				</button>
-				
+				<div className="absolute right-8 top-7 ">
+
 				<Logout />
+				</div>
 			</header>
 
 		</>
