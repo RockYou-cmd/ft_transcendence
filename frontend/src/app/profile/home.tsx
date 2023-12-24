@@ -6,6 +6,9 @@ import Hero_section from '../Components/landing_page/Hero_section';
 import Landing_navbar from '../Components/landing_page/Landing_navbar';
 import ProfileCard from "../../app/Components/landing_page/profile_card"
 import Slider from '../Components/landing_page/slider';
+import bboulhan  from "../../../public/bboulhan.jpg"
+import yelqabl  from "../../../public/yel-qabl.jpg"
+import aelkorc  from "../../../public/ael-korc.jpg"
 
 export default function Home({setSignIn} : {setSignIn : any}) {
 
@@ -18,9 +21,9 @@ export default function Home({setSignIn} : {setSignIn : any}) {
 			<Landing_navbar/>
 			<Hero_section/>
       <div className='flex justify-between mr-10 ml-10' >
-        <ProfileCard imageurl={""} text={""} ></ProfileCard>
-        <ProfileCard imageurl={""} text={""} ></ProfileCard>
-        <ProfileCard imageurl={""} text={""} ></ProfileCard>
+        <ProfileCard imageurl={bboulhan} name={"BRAHIM"} title={"FULL-STACK DEV"} discription={"this the disc"} ></ProfileCard>
+        <ProfileCard imageurl={yelqabl} name={"YOUSSEF"} title={"FRONTEND UX/UI"} ></ProfileCard>
+        <ProfileCard imageurl={aelkorc} name={"alae"} title={"BACKEND DEVOPS"} ></ProfileCard>
       </div>
       <div>
         {/* <Slider /> */}
