@@ -38,7 +38,7 @@ export class AuthController {
     else {
       console.log('toksi')
       res.cookie("access_token", token, { httpOnly: true });
-      res.send("User signedIn succesfully");
+      res.status(201).json({message: "User signed successfully"});
     }
   }
 
