@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MouseEvent } from 'react';
+import Invite from '../chat/Components/Invite';
 
 // interface Msg{
 // 	content : string,
@@ -21,6 +22,7 @@ export default function Notif({content} : {content?: string}) {
 	const { socket, setSocket } = useSocket();
 	const [msg, setMsg] = useState<any>();
 	const { silence, setSilence } = useSilence();
+	const [invite, setInvite] = useState(false);
 	const router = useRouter();
 	// const [Reply, setReply] = useState(false);
 	const { me, setMe } = useMe() as any;
@@ -64,16 +66,23 @@ export default function Notif({content} : {content?: string}) {
 				if (!silence)
 					setShow(true);
 			})
+			socket.on("invite", (data :any)=>{
+				setMsg(data);
+				if (!silence)
+					setShow(true);
+			})
+
 			socket.on("update" , (data: any) => {
 				if (data?.option == "request friend" || data?.option == "accept request"){
 					setMsg(data);
-					if (!silence)
-						setShow(true);
+					
+					// if (!silence)
+						setInvite(true);
 				}
 			})
 		}
 		return () => {socket?.off("message");
-		socket?.off("update");
+			socket?.off("update");
 		}
 	}, [socket, silence, show]);
 
@@ -88,6 +97,9 @@ export default function Notif({content} : {content?: string}) {
 			router.push("/chat/?user=" + msg?.sender);
 		}
 	}
+
+	if (invite)
+		return <Invite User={{username : msg.sender}} close={setInvite} />
 
 	return (
 		<>

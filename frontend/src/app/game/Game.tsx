@@ -10,42 +10,33 @@ import { MouseEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
-export default function MatchMaking({GameInfo, close, setMode, startGame} : {setMode :any ,GameInfo : any, close : any, startGame : any}){
+export default function MatchMaking({GameInfo, close, setMode, startGame, friend} : {setMode :any ,GameInfo : any, close : any, startGame : any, friend? : boolean}){
 	
 	const { me, setMe } = useMe() as any;
 	const { socket } = useSocket();
 	
-	// const [startGame, setStart] = useState(false);
-	
-		
-		// async function startgame(e : MouseEvent){
-		// 	e.preventDefault();
-		// }
-		let n = 0;
+
+		const n = useRef(false);
 		useEffect(() => {
-			if (n == 0)
+			if (n.current == false)
 				socket?.emit("matchmaking", {});
-			n++;
+			n.current = true;
 		},[]);
 
 		
 		useEffect(() => {
-			// let n = 0;
-			// if (n == 0)
-			// 	socket?.emit("matchmaking", {});
+		
 
 			socket?.on("start", (data: any) => {
 		
-				console.log(" in play Rank player1", data.player1, "player2", data.player2);
 				GameInfo(data);
 				if (data.player1 == me.username){
 					socket?.emit("start", data);
-					console.log("start game", me.username);
+					// console.log("start game", me.username);
 				}
 				close(false);
 				startGame(true);
 			})
-			// n++;
 			return () => {socket?.off("start"), ()=>{}}
 		},[socket])
 

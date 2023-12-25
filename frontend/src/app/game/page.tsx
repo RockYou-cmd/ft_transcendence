@@ -5,13 +5,14 @@ import Canvas from "./canvas";
 import { MouseEvent, use } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import LoG from '../Components/Log/Log';
-import { useLogContext } from '../Components/Log/LogContext';
+import { useLogContext, useSocket } from '../Components/Log/LogContext';
 import Loading from '../loading';
 import LeaderBoard from './Components/LeaderBoard';
 import MatchMaking from './Game';
 import GameMode from './Components/GameMode';
 import GameSettings from './Components/gameSettings';
 import PingPong from './Components/PingPong';
+import { useSearchParams } from 'next/navigation';
 
 
 interface GameInfo {
@@ -31,7 +32,20 @@ export default function GamePage() {
 	const [matchMake, setMatchMake] = useState(false);
 	const [gameInfo, setGameInfo] = useState<GameInfo>();
 	const [Style, setStyle] = useState<any>({});
-	
+	const friendGame = useRef(false);
+	const param = useSearchParams();
+	const { socket } = useSocket();
+
+	useEffect(() => {
+		// if (param.get("friend") == "true"){
+		// 	friendGame.current = true;
+		// }
+		if (param.get("Mode") != null){
+			setMode(param.get("Mode") as string);
+		}
+	},[])
+
+
 	const [gameSettings, setGameSettings] = useState({
 		map : "shark",
 		ballColor : "white",
@@ -49,6 +63,21 @@ export default function GamePage() {
 			ballColor : ballColor,
 			paddleColor : paddleColor,
 		})
+	}
+
+	function FriendlyMatch(){
+		const n = useRef(false);
+		useEffect(() => {
+			if (n.current == false)
+				socket?.emit("accept", {});
+			socket?.on("start", (data: any) => {
+				setGameInfo(data);
+				setInGame(true);
+			})
+			n.current = true;
+			return () => {socket?.off("start"), ()=>{}}
+		},[])
+		return null;
 	}
 
 	useEffect(() => {
@@ -107,11 +136,12 @@ export default function GamePage() {
 					}
 
 					{!inGame && Mode != "" && gameSet && <GameSettings setMode={setMode} save={setMatchMake} close={setGameSet} Options={setOptions} />}		
-					{!inGame &&  Mode == "rank" && matchMake && <MatchMaking GameInfo={setGameInfo} close={setMatchMake} setMode={setMode} startGame={setInGame}/>}
+					{!inGame && Mode == "rank" && matchMake && <MatchMaking GameInfo={setGameInfo} close={setMatchMake} setMode={setMode} startGame={setInGame} />}
+					{!inGame && Mode == "friend" && matchMake &&  <FriendlyMatch/>}
 					</div>
 
 					{inGame && Mode == "computer" && <Canvas setMode={setMode} close={setInGame} gameSettings={gameSettings}/>}
-					{inGame && Mode == "rank" && <PingPong gameSettings={gameSettings} gameInfo={gameInfo} close={setInGame} setMode={setMode}/>}
+					{inGame && (Mode == "rank" || Mode == "friend") && <PingPong gameSettings={gameSettings} gameInfo={gameInfo} close={setInGame} setMode={setMode}/>}
 				</>)}
 		</>
 	)

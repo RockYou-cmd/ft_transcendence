@@ -51,7 +51,6 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
 	
-	console.log("user", User);
 	
 	async function getChat(channel: any) {
 		let name = "";
@@ -71,7 +70,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-		console.log("data", data);
+	
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
@@ -154,7 +153,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 					}));
 				}
 				
-				console.log("Muted", Muted.current);
+
 				const message: Message = {
 					type : "message",
 					content: s,
@@ -167,7 +166,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
 				}
 				else{
-					console.log("blocked", status.current.status, "sender", status.current.sender);
+					
 					if (status.current.status == "BLOCKED"){
 						if (status.current.sender == me?.username)
 							alert("You blocked this user");

@@ -26,11 +26,6 @@ import Loading from '../loading';
 // import Lottie from "lottie-react";
 // import chatAnimation from "../../../public/chatAnimation.json"
 
-function InviteToGame(User : any){
-	const {socket} = useSocket();
-	const {me} = useMe() as any;
-	socket?.emit("invite", {receiver : User?.username, sender : me?.username});
-}
 
 
 
@@ -49,6 +44,11 @@ export default function Chat() {
 		if (res.ok) {
 			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
 		}
+	}
+
+
+	function InviteToGame(User : any){
+		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
 	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
@@ -129,7 +129,7 @@ export default function Chat() {
 		}
 		if (param.get("user") != null)
 			fetchData(param.get("user") as string);
-	},	[]);
+	},	[e]);
 
 	useEffect(() => {
 		setRefresh(!refresh);
