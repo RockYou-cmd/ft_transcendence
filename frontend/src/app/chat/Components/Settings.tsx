@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
-import { Get } from '../../Components/Fetch/Fetch';
+import { Get , Post , Put } from '../../Components/Fetch/Fetch';
 import { APIs } from '../../Props/APIs'
 import Image from "next/image";
 import avatar from '../../../../public/avatar.png';
@@ -16,12 +16,11 @@ import { Make } from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Gruppo } from "next/font/google";
+import { useMe, useSocket } from "@/app/Components/Log/LogContext";
 
-
-const UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
-const AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute"] };
-const SuperAdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban", "Mute", "MakeAdmin", "removeAdmin"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban", "Mute", "Make Admin", "Remove Admin"] };
+let UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
+let AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban"] };
+let SuperAdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban"] };
 
 
 export default function OwnerSettings({ group, close, role, DirectMsg }: { group: any, close: any, role: string, DirectMsg: any }) {
@@ -30,7 +29,9 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	const [search, setSearch] = useState<string>("");
 	const [data, setData] = useState({} as any);
 	const [origin, setOrigin] = useState({} as any);
-
+	const { socket } = useSocket();
+	const { me } = useMe() as any;
+	const [options, setOptions] = useState({} as any);
 
 	async function getMembers() {
 		const data = await Get(APIs.members + group?.id);
@@ -51,7 +52,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	}, [refresh]);
 
 
-	const [Style, setStyle] = useState<Object>({});
 	const [option, setOption] = useState(false);
 	const [invite, setInvite] = useState(false);
 	const [sendMsg, setSendMsg] = useState(false);
@@ -62,6 +62,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	const [makeAdmin, setMakeAdmin] = useState(false);
 	const [removeAdmin, setRemoveAdmin] = useState(false);
 	const [add, setAdd] = useState(false);
+	const [unMute, setUnMute] = useState(false);
 	const [make, setMake] = useState("");
 	const router = useRouter();
 	const [User, setUser] = useState({} as any);
@@ -86,12 +87,14 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			setMakeAdmin(true);
 		else if (option == "removeAdmin")
 			setRemoveAdmin(true);
+		else if (option == "unMute")
+			setUnMute(true);
 	}
 
 	async function wait() {
 		try {
-			const res = await Make({ option: make, group: group, person: User.user.username });
-
+			const res =	await Make({ option: make, group: group, person: User.user.username , socket : socket , me : me});
+			setMake("");
 		} catch (err) {
 		}
 	}
@@ -100,7 +103,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		if (make !== "") {
 			wait()
 			setRefresh(!refresh);
-			setMake("");
 		}
 		if (!add)
 			setRefresh(!refresh);
@@ -110,7 +112,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		}
 		if (view)
 			router.push("/users/" + User?.user?.username);
-
+		// console.log("make ", make);
 	}, [make, add, sendMsg, view]);
 
 
@@ -119,29 +121,72 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			setMake("Kick");
 		else if (ban)
 			setMake("Ban");
-		else if (mute)
-			setMake("Mute");
 		else if (makeAdmin)
 			setMake("MakeAdmin");
 		else if (removeAdmin)
 			setMake("removeAdmin");
+		else if (unMute)
+			setMake("unMute");
 		setKick(false);
 		setBan(false);
-		setMute(false);
+		setUnMute(false);
 		setMakeAdmin(false);
 		setRemoveAdmin(false);
-	}, [sendMsg, kick, ban, mute, makeAdmin, removeAdmin]);
+	}, [kick, ban, makeAdmin, removeAdmin, unMute]);
 
 	function showOptions(e: MouseEvent, user: any) {
 		setOption(!option);
 		setUser(user);
-		const { x, y } = e as any;
-		setStyle({
-			top: y + "px",
-			right: x + "px",
-		});
 	}
 
+	function MuteOption() {
+		const [time, setTime] = useState("1");
+		const visible = useRef(null) as any;
+
+		useEffect(() => {
+			const handleOutsideClick = (event: any) => {
+				if (!visible.current.contains(event.target as Node)) {
+					setMute(false);
+				}
+			};
+
+			document.addEventListener('mousedown', handleOutsideClick);
+
+			return () => {
+				document.removeEventListener('mousedown', handleOutsideClick);
+			};
+		},[]);
+
+		async function Mute(e : MouseEvent){
+			e.preventDefault();
+			try{
+				const res = await Put({id : group.id , username : User?.user?.username, duration : time}, APIs.Mute);
+				if (res.ok){
+					socket?.emit("update", {option : "Mute" , groupId : group?.id , receiver : User?.user?.username, sender : me?.username});
+				}
+				setMute(false);
+			}catch(err){
+			}
+			
+		}
+
+
+		return (
+			<>
+				<div ref={visible} className="muteOption" >
+					<label>Mute {User?.username} for</label>
+					<select name="time"  onChange={(e)=>setTime(e.target.value)}>
+						{Array.from({ length: 23 }, (_, i) => (
+							<option key={i} value={i + 1}>
+								{i + 1} Hours
+							</option>
+						))}
+					</select>
+					<button onClick={Mute}> Mute</button>
+				</div>
+			</>
+		);
+	}
 
 	function Print(users: any) {
 		const user = users?.users;
@@ -149,12 +194,44 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			<div className={user.role == "ADMIN" ? "user admin" : user.role == "OWNER" ? "user owner" : "user"} ref={visible}>
 				<Image className="g_img" src={user?.user?.photo ? user?.user?.photo : avatar} priority={true} alt="img" width={45} height={45} />
 				<h3>{user?.user.username}</h3>
-				{(user.role != "OWNER" || role != "OWNER") && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
+				{(user.role != "OWNER" || role != "OWNER" ) && user?.user?.username != me?.username && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
 			</div>
 		</>
-
 		return <div>{print}</div>
 	}
+
+
+	useEffect(() => {
+		if (option){
+			let content : ChatOptions = {Option : [], desc : []};
+			if (role == "OWNER"){
+				if (User.role == "ADMIN")
+					content = {...SuperAdminSettings, Option : [...SuperAdminSettings.Option, "removeAdmin"], desc : [...SuperAdminSettings.desc, "Remove Admin"]}
+				else
+					content = {...SuperAdminSettings, Option : [...SuperAdminSettings.Option, "MakeAdmin"], desc : [...SuperAdminSettings.desc, "Make Admin"]};
+			}
+			else if (role == "ADMIN" && User.role == "MEMBER")
+				content = AdminSettings;
+			else
+				content = UserSettings;
+
+			if(role == "OWNER" || role == "ADMIN"){
+				if (User.status == "MUTED"){
+					if (role == "OWNER" || (role == "ADMIN" && User.role == "MEMBER"))
+						content = {...content, Option : [...content.Option, "unMute"], desc : [...content.desc, "UnMute"]};
+				}
+				else{
+					if (role == "OWNER" || (role == "ADMIN" && User.role == "MEMBER"))
+						content = {...content, Option : [...content.Option, "Mute"], desc : [...content.desc, "Mute"]};
+				}
+				
+			} 
+			setOptions(content);
+			console.log("content ", content);
+		}
+	}, [option]);
+
+
 	return (
 		<>
 			<div className="Add" >
@@ -164,10 +241,11 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				<div className="content">
 					{data?.members?.map((user: any, index: number) => (<Print key={index} users={user} />))}
 				</div>
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={role == "OWNER" ? SuperAdminSettings : (role == "ADMIN" && User.role == "MEMBER") ? AdminSettings : UserSettings} />}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}				
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
 				{invite && <Invite User={data} close={setInvite} />}
 				{add && <AddMembers group={group} close={setAdd} />}
+				{mute && <MuteOption User={User}/>}
 				{/* {view && router.push("/users/" + User?.user?.username)} */}
 			</div>
 		</>

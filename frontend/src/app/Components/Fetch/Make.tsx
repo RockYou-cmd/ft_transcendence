@@ -3,38 +3,38 @@
 import { APIs } from "@/app/Props/APIs";
 import { Post } from "./Fetch";
 import { Put } from "./Fetch";
+import { useMe, useSocket } from "../Log/LogContext";
 
 
 
 
-export async function Make({ option, group, person }: { option: string, group: any, person: string }) {
-
+export  async function  Make({ option, group, person , socket , me}: { option: string, group: any, person: string, socket? : any , me? : any}) {
+	
 	const data = { id: group?.id, username: person };
 	let Api = "";
 	let put = false;
 
-
-	if (option == "Kick") {
-		put = false;
+	if (option == "Kick") 
 		Api = APIs.Kick;
-	}
-	else if (option == "Ban") {
-		put = true;
+	
+	else if (option == "Ban") 
 		Api = APIs.Ban;
-	}
-	else if (option == "Mute") {
-		put = true;
-		Api = APIs.Mute;
-	}
-	else if (option == "MakeAdmin") {
-		put = true;
+	
+	else if (option == "MakeAdmin") 
 		Api = APIs.MakeAdmin;
-	}
-	else if (option == "removeAdmin") {
-		put = true;
+	
+	else if (option == "removeAdmin") 
 		Api = APIs.RemoveAdmin;
-	}
+	
+	else if (option == "unMute") 
+		Api = APIs.unMute;
+	
+	if (option == "Kick")
+		put = false;
+	else
+		put = true;
 
+	
 
 	let res: any;
 	if (put == false)
@@ -42,6 +42,9 @@ export async function Make({ option, group, person }: { option: string, group: a
 	else
 		res = await Put(data, Api);
 
+	if (res.ok){
+		socket?.emit("update", {type : "friendship",  option : option , groupId : group?.id , receiver : person, sender : me?.username});
+	}
 	return res;
 }
 

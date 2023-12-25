@@ -22,7 +22,7 @@ export class AuthGuard {
 
 	async extractPayloadFromToken(token) {
 		try{
-			return await this.jwtServive.verifyAsync(token, {secret:"hard"});
+			return await this.jwtServive.verifyAsync(token, {secret:"doIwannaKnow"});
 		}
 		catch(err) {
 			throw err;

@@ -67,21 +67,32 @@ export class FriendService {
 		try {
 			const chats = await prisma.chat.findMany({
 				where: {
-					members: {
-						some: {
-							username: account.username,
-							
+					AND: [
+						{
+							members: {
+								some: {
+									username: account.username,	
+								},
+							}
 						},
-					}
+						{
+							messages: {
+								some :{}
+							}
+						}
+					]
 				},
 				select: {
 					members: {
 						where: {
-							NOT: {
-								username: account.username,
-							},
-							
-						}
+							AND: [
+								{
+									NOT: {
+										username: account.username,
+									},
+								},
+							]							
+						},
 					},
 				}
 			});

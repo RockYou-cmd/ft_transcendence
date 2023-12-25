@@ -9,7 +9,7 @@ import '../../assest/chatComponents.css';
 import Image from 'next/image';
 import avatar from '../../../../public/avatar.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeLowVision, faEye , faLock , faLockOpen} from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -31,6 +31,8 @@ export default function ExploreRooms({ close }: { close: any }) {
 		const [password, setPassword] = useState("");
 
 		async function SubmitHandler(e: any) {
+			if (e.type == "keydown" && e.key != "Enter")
+				return;
 			e.preventDefault();
 			res = await Post({ id: Room?.id, password: password }, APIs.JoinProtectedRoom);
 			if (res?.status == 201) {
@@ -61,7 +63,7 @@ export default function ExploreRooms({ close }: { close: any }) {
 					<button onClick={() => setRoomSelected({})} className='closeBtn'><div></div></button>
 					<label>Enter Password To Join {Room?.name} group</label>
 					<div className="input">
-						<input type={view ? "text" : "password"} value={password} placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+						<input type={view ? "text" : "password"} value={password} placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} onKeyDown={SubmitHandler}/>
 						{!view ? <FontAwesomeIcon icon={faEyeLowVision} onClick={() => setView(!view)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} onClick={() => setView(!view)} style={{ cursor: "pointer" }} />}
 					</div>
 					<button type="submit">Join</button>
@@ -88,12 +90,16 @@ export default function ExploreRooms({ close }: { close: any }) {
 	}, [refresh, search]);
 
 
+
+
 	function Print(users: any) {
 		const user = users?.users;
+	
 		const print = <>
 			<div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45} />
 				<h3>{user?.name}</h3>
+				{user?.privacy == "PROTECTED" ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faLockOpen} />}
 				<button className='UseraddBtn' onClick={() => setRoomSelected(user)}>JOIN</button>
 			</div>
 		</>

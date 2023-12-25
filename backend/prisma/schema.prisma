@@ -17,6 +17,7 @@ model User {
   password                      String?
   photo                         String?
   bio                           String?
+  status                        UserStatus @default(ONLINE)
   is2faEnabled                  Boolean? @default(false)
   twoFactorAuthenticationSecret String?
   temp2fa                       String?
@@ -29,11 +30,41 @@ model User {
 
   rooms    RoomMembership[]
   rooomsMessages  RoomMessage[]
+
+  gameProfile                   GameProfile?
+}
+
+model GameProfile {
+  profileId       String @id @default(uuid())
+  user            User @relation(fields: [userId], references: [id])
+  userId          String @unique
+  gamesPlayed     Int @default(0)
+  level           Int @default(0)
+  wins            Int @default(0)
+  losses          Int @default(0)
+  games           GameParticipation[]
+}
+
+
+model GameParticipation {
+  game       Game   @relation(fields: [gameId], references: [id])
+  gameId     Int
+  profile    GameProfile   @relation(fields: [userId], references: [profileId])
+  userId     String
+  score      Int
+
+  @@id([gameId, userId])
+}
+
+model Game {
+  id            Int                 @id @default(autoincrement())
+  participants  GameParticipation[]
 }
 
 model Room {
   id        String      @id @default(uuid())
   name      String
+  photo	 	String?
   description String?
   privacy   RoomPrivacy @default(PUBLIC)
   password  String?
@@ -97,6 +128,7 @@ model FriendShip {
 }
 
 
+
 enum RoomRole {
   MEMBER
   ADMIN
@@ -119,4 +151,10 @@ enum Status {
   PENDING
   ACCEPTED
   BLOCKED
+}
+
+enum UserStatus {
+  ONLINE
+  OFFLINE
+  INGAME
 }

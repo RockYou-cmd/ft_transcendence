@@ -1,63 +1,56 @@
 import { Brygada_1918 } from "next/font/google";
 import Image from "next/image";
-import BG1 from "../../../../public/bg1.png"
-import { useEffect } from "react";
-// #4660A4, #0C0B38
+import BG1 from "../../../../public/pingpong.gif"
+import { useRef, useEffect } from "react";
+import Typed from "typed.js";
+
 
 export default function Hero_section() {
-    const words = ["Dive into PONGY Arena – the ultimate online Pong experience with seamless chat.",
-                    "Challenge opponents, showcase your skills, and chat in real-time.",
-                    "It's PONGY time – let the games and conversations begin!"];
-    let i: number =  0;
-    let j: number =  0;
-    let currentWord : string = "";
-    let isDeleting: boolean = false;
-    
-    const typing = function type() {
-        currentWord = words[i];
-        if (isDeleting) {
-            const typewriterElement = document.getElementById("typewriter");
-            if (typewriterElement) {
-                typewriterElement.textContent = currentWord.substring(0, j - 1);
-            }
-            j--;
-            if (j === 0) {
-                isDeleting = false;
-                i++;
-                if (i === words.length) {
-                    i = 0;
-                }
-            }
-        }
-        else {
-            const typewriterElement = document.getElementById("typewriter");
-            if (typewriterElement) {
-                typewriterElement.textContent = currentWord.substring(0, j + 1);
-            }
-            j++;
-            if (j === currentWord.length) {
-                isDeleting = true;
-            }
-        }
-        setTimeout(type, 1000); // Call the `type` function after a delay of 1000 milliseconds (1 second)
-    }
 
+    function typing() {
+        const el = useRef(null);
+        useEffect(() => {
+            const typed = new Typed(el.current, {
+                strings: ['Dive into PONGY Arena – the ultimate online Pong experience with seamless chat.',
+                    'Challenge opponents, showcase your skills, and chat in real-time.',
+                    "It's PONGY time – let the games and conversations begin!"],
+                typeSpeed: 30,
+                loop: true,
+                backDelay: 2000,
+            });
+            return () => {
+                typed.destroy();
+            };
+        }, []);
+
+        return (
+            <div>
+                <span ref={el} />
+            </div>
+        );
+    }
     return (
         <>
-        <div className="flex w-full h-screen bg-gradient-to-b from-blue-700 to-indigo-60">
-            <div className="typewriter felx flex-row h-[100vh]">
+            <div className="flex w-full h-[40rem] ">
+                <div className="w-full h-full">
 
-            <div className="font-bold text-xl w-[60%] items-center m-24">
+                    <div className="relative w-[40%] h-[20%] mt-40 overflow-y-auto left-20 justify-center text-3xl font-bold bg-gradient-to-r from-purple-700 via-indigo-700 to-pink-700 inline-block text-transparent bg-clip-text">
+                        {typing()}
+                    </div>
+                    <div className="absolute  mt-40   h-fit">
+                        <div className=" relative left-20  items-center" >
+                            <button className="w-[250px] h-[50px] bg-gradient-to-b from-red-800 to-red-400 rounded-lg ">PLAY NOW</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex h-[30rem] w-[50%] absolute right-10 rounded-lg overflow-hidden ">
+                    <Image className="mix-blend-multiply " id="bg1" alt="bg1" src={BG1}  ></Image>
+                    <div className="flex-row ">
+                    </div>
+                </div>
 
             </div>
-            <div className=" w-[50%]" >
-                <button className="w-[250px] h-[50px] bg-gradient-to-b from-red-800 to-red-400 rounded-lg hover:">PLAY NOW</button>
-            </div>
-            </div>
-            <div className="flex h-[40rem] w-[40rem] rounded-lg overflow-hidden  duration-700 blur-sm hover:blur-none hover:skew-y-6 skew-y-0 ease-in-out">
-                <Image id="bg1" alt="bg1" src={BG1}  ></Image>
-            </div>
-        </div>
         </>
     );
 }

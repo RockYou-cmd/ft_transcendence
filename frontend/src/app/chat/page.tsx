@@ -5,7 +5,6 @@ import Groups from './Groups';
 import Friends from "./Friends";
 import Cnvs from "./Chat";
 import { useEffect, useState, useRef } from "react";
-import Cookies from "js-cookie";
 import LoG from "../Components/Log/Log";
 import Options from "./Components/Options";
 import CreateGroup from './Components/Create_group';
@@ -17,40 +16,39 @@ import { APIs } from '../Props/APIs';
 import ExploreRooms from './Components/ExploreRooms';
 import Invite from './Components/Invite';
 import Confirm from './Components/Confirm';
-import GroupSettings from './Components/Group_settings';
 import OwnerSettings from './Components/Settings';
 import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLogContext, useMe } from '../Components/Log/LogContext';
-import Loading from '../loading';
-import Lottie from "lottie-react";
-import chatAnimation from "../../../public/chatAnimation.json"
+import { useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
 import { useSearchParams } from 'next/navigation';
+import Loading from '../loading';
+// import Lottie from "lottie-react";
+// import chatAnimation from "../../../public/chatAnimation.json"
 
-function Leave(GroupId: any) {
-	const res = Post({ id: GroupId?.id }, APIs.LeaveRoom);
 
-}
-
-function Block(User: any) {
-	const res = Put({ username: User?.username }, APIs.Block);
-}
 
 let chatOptions: ChatOptions = { Option: ["CreateG", "ExploreG", "NewChat"], desc: ["Create Group", "Explore Groups", "Start Chat"] };
 
 
 export default function Chat() {
-
-	const { me, setMe } = useMe();
-	const { online, setOnline } = useLogContext();
+	
+	const { me } = useMe() as any;
+	const { socket } = useSocket();
+	const { online } = useLogContext();
 	const param = useSearchParams();
 	
+	async function Block(User: any) {
+		const res = await Put({ username: User?.username }, APIs.Block);
+		if (res.ok) {
+			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
+		}
+	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
-
+	
 	// hooks for login
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
@@ -59,9 +57,9 @@ export default function Chat() {
 		dataHook: { state: data, setState: setData },
 		waitHook: { state: wait, setState: checkwait },
 	}
-
+	
 	/************************************************** */
-
+	
 	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
@@ -78,16 +76,16 @@ export default function Chat() {
 	const [leave, setLeave] = useState(false);
 	const [settings, setSettings] = useState(false);
 	const [seeMem, setSeeMem] = useState(false);
-
-
-
+	
 	const [Style, setStyle] = useState({} as any);
-
 	
-	
+	async function Leave(GroupId: any) {
+		await Post({ id: GroupId?.id }, APIs.LeaveRoom);
+		setUser({});
+	}
 	function OptionsHandler(option: string) {
 		if (option == "CreateG")
-			setCreateG(true);
+		setCreateG(true);
 		else if (option == "ExploreG")
 			setExplore(true);
 		else if (option == "NewChat")
@@ -108,6 +106,14 @@ export default function Chat() {
 			setBlock(true);
 	}
 
+	useEffect(() => {
+		socket?.on("update", (data: any) => {
+			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
+				setUser({});
+			}
+		});
+		return () => {socket?.off("update", ()=>{});}
+	},[socket])
 
 	useEffect(() => {
 		async function fetchData(user : string) {
@@ -118,6 +124,9 @@ export default function Chat() {
 			fetchData(param.get("user") as string);
 	},	[]);
 
+	useEffect(() => {
+		setRefresh(!refresh);
+	}, [User]);
 
 	useEffect(() => {
 		if (createG || explore || newChat || invite || leave || settings || seeMem || block) {
@@ -163,10 +172,11 @@ export default function Chat() {
 							</section>
 							<div className='Chat'>
 								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
-									: < >
-										<Lottie className='w-[40%] flex m-auto justify-center items-center'  animationData={chatAnimation} loop={true}  />
+									: <div className='openChat'>
+										{/* <Lottie className='w-[50%]'  animationData={chatAnimation} loop={true}  /> */}
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
-									</>}
+									</div>
+								}
 							</div>
 						</div>
 

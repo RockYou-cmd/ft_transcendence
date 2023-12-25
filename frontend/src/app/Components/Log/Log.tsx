@@ -9,19 +9,23 @@ import Form from "../../profile/form";
 export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 	const host = "http://localhost:3001";
-	// const host = "http://10.12.11.1:3001";
+
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
 
 	useEffect(() => {
 		async function fetchData() {
+			// console.log("yo");
+			// console.log("online", online);
 			const data = await GetData({ Api: page, user: "" }) as any;
+			// console.log("yo 2");
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {
-				setOnline("OFF");
+				console.log("salam");
 			}
 			else {
 					if (online == "ON"){
+						socket?.disconnect();
 						setSocket(io(host + "/events", {
 							withCredentials: true,
 						}));
@@ -32,7 +36,7 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 		}
 		fetchData();
-		return () => {socket?.disconnect()};
+	
 	}, [online]);
 
 	if (LogIn.waitHook.state == false)

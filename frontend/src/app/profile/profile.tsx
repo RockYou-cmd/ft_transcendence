@@ -13,9 +13,6 @@ export default function Profile({User} : {User : string}) {
 
 	const [wait, checkwait] = useState(false);
 
-
-
-
 	useEffect(() => {
 		checkwait(true);
 	}, []);
@@ -23,15 +20,10 @@ export default function Profile({User} : {User : string}) {
 	if (!wait) {
 		return (<div>loading...</div>)
 	}
-	
-
-
 
 	return (
 		<>
 			<Profile_info />
-			
-			
 		</>
 	)
 }

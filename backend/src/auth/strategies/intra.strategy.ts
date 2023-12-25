@@ -8,10 +8,12 @@ import { Injectable } from "@nestjs/common";
 export class intraStrategy extends PassportStrategy(Strategy) {
 	constructor () {
 		super({
-			clientID:"u-s4t2ud-9347b4d60fd03c0cefa4f67eb8f98d77fc60c768e034dbe9d95dbd9f72555fa6",
-			clientSecret: "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",
-			callbackURL: "http://localhost:3000/auth/intra",
-		})
+      clientID:
+        "u-s4t2ud-5023299b300ab5240b76edd245e84997d96d9e8b3718f2b327a776a10156f6d0",
+      clientSecret:
+        "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",
+      callbackURL: "http://localhost:3000/auth/intra",
+    });
 	}
 	validate(iDontNeed, iDontNeedAgain, profile, done) {
 		const {username, emails} = profile;

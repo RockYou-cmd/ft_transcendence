@@ -1,14 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { googleStrategy } from './strategies/google.strategy';
 import { intraStrategy } from './strategies/intra.strategy';
+import { AuthGuard } from './auth.guard/auth.guard';
 import { TwoFactorAuthenticationModule } from './2fa/2fa.module';
 
 @Module({
-  providers: [AuthService, googleStrategy, intraStrategy],
+  providers: [
+    AuthService,
+    googleStrategy,
+    intraStrategy,
+    AuthGuard,
+    JwtService,
+  ],
   controllers: [AuthController],
-  imports: [JwtModule.register({secret:"hard", signOptions:{expiresIn:"24h"}}), TwoFactorAuthenticationModule]
+  exports: [AuthService, AuthGuard, JwtService],
+  imports: [TwoFactorAuthenticationModule],
 })
 export class AuthModule {}

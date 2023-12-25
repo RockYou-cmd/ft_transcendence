@@ -22,7 +22,7 @@ export default function SearchBar({ title }: { title: string }) {
 
 
 	useEffect(() => {
-		function handleOutsideClick(event: MouseEvent) {
+		function handleOutsideClick(event: any) {
 			if (!visible.current.contains(event.target as Node)) {
 				setInput("");
 			}
@@ -66,7 +66,7 @@ export default function SearchBar({ title }: { title: string }) {
 		if (user.username == me.username)
 			router.push("/");
 		else
-		router.push("/users/" + user.username);
+			router.push("/users/" + user.username);
 
 	}
 
@@ -75,7 +75,7 @@ export default function SearchBar({ title }: { title: string }) {
 	return (
 		<>
 			<div id="SearchComponent" ref={visible} style={Style}>
-				<input className='searchInput' onChange={(e) => { setInput(e.target.value) }} type="text" placeholder="Search" />
+				<input className='searchInput' value={input} onChange={(e) => { setInput(e.target.value) }} type="text" placeholder="Search" />
 				{input != "" && <>
 					<div className='line'></div>
 					<div className='resBar'  >

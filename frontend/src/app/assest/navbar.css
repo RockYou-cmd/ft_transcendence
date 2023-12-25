@@ -46,17 +46,17 @@
 }
 
 #logout{
-	background-color: rgba(34, 40, 49, 1);
+	/* background-color: rgba(34, 40, 49, 1);
 	border-radius: 30px;
 	border: 1px solid rgb(107, 108, 111);
 	padding: 0px 20px;
-	margin: 30px 50px 30px 0px; 
+	margin: 30px 50px 30px 0px;  */
 }
 
 #logout:hover{
-	background-color: #ff2638;
-	border-color: #ff2638;
-	box-shadow: 0px 0px 12px 1px #ff2638;
+	/* background-color: #ff2638;
+	border-color: #ff2638; */
+	box-shadow: 0px 0px 10px 2px #ff2638;
 }
 
 #header #SearchComponent{

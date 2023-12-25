@@ -10,14 +10,17 @@ import Loading from '../loading';
 import LeaderBoard from './Components/LeaderBoard';
 import Game from './Game';
 import GameMode from './Components/GameMode';
+import GameSettings from './Components/gameSettings';
 
 
 
 export default function GamePage() {
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
+	const [inGame, setInGame] = useState(false);
 	const [Mode, setMode] = useState("");
-	const { online, setOnline } = useLogContext();
+	const { online } = useLogContext();
+	const [gameSetings, setGameSettings] = useState({})
 
 	const hooks = {
 		dataHook: { state: data, setState: setData },
@@ -42,8 +45,8 @@ export default function GamePage() {
 		<>
 			{online == "OFF" ? render :
 				(<>
-					{Mode == "" ? <div className='GameMain'>
-						
+					{Mode == "" && <div className='GameMain'>
+					
 						<LeaderBoard />
 						<GameMode Mode={Mode} setMode={setMode} />
 						{/* <div className='gameMode'>
@@ -54,12 +57,12 @@ export default function GamePage() {
 						</div> */}
 						<div className='online'>
 						</div>
-
+					
 							
 					</div>
-					
-					: <Game Mode={Mode} setMode={setMode}/> }
-
+					}
+					{Mode != "" && <Game setGame={setInGame} Mode={Mode} setMode={setMode}/> }
+					{/* {Mode == "Settings" && <GameSettings setMode={setMode} />} */}
 				</>)}
 		</>
 	)

@@ -9,7 +9,6 @@ import Image from 'next/image';
 import avatar from '../../../public/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot } from '@fortawesome/free-solid-svg-icons';
-
 export interface Player {
 	x: number;
 	y: number;
@@ -18,11 +17,17 @@ export interface Player {
 	level: number;
 }
 
-
+interface Param{
+	COM : boolean,
+	OPP? : Player,
+	Map : string,
+	ballColor : string,
+	paddleColor : string,
+}
 
 // var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
 
-export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
+export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 	
 	const game = useRef<HTMLCanvasElement>(null);
 	// const [pause, setPause] = useState(false);
@@ -37,13 +42,9 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		score: 0,
 	});
 
-	let xValue = useRef<HTMLInputElement>(null);
-	let yValue = useRef<HTMLInputElement>(null);
+	// const [gameWidth, setGameWidth] = useState(0);
+	// const [gameHeight, setGameHeight] = useState(0);
 	// let score = useRef<HTMLInputElement>(null);
-	
-	const [Xv, setX] = useState('');
-	const [Yv, setY] = useState('');
-	const [Sc, setSc] = useState('');
 
 
 	useEffect(() => {
@@ -51,20 +52,19 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			return;
 		}
 		
-		const FPS = 60;
+		const FPS = 50;
 		const BALL_SPEED = 1.2;
 		const COM_LVL = 0.15;
-		var ball_acc = 0.18;
+		var ball_acc = 0.12;
 		
 		const context = game.current?.getContext('2d');
-		const parent = game.current?.parentElement;
+		let parent = game.current?.parentElement;
 		game.current.width = parent?.clientWidth || 0;
 		game.current.height = parent?.clientHeight || 0;
-		// const gameWidth = game.current.offsetWidth || 0;
-		// const gameHeight = game.current.offsetHeight || 0;
-
-		const gameWidth = game.current.width || 0;
-		const gameHeight = game.current.height || 0;
+		let gameWidth = game.current.width || 0;
+		let gameHeight = game.current.height || 0;
+		// setGameHeight(game.current.height);
+		// setGameWidth(game.current.width);
 
 
 		var net={
@@ -81,7 +81,7 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			width: 12,
 			height: 140,
 			score: 0,
-			color: "rgba(217, 217, 217)"
+			color: paddleColor,
 		}
 	
 		var player2 = {
@@ -90,7 +90,7 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			width: 12,
 			height: 140,
 			score: 0,
-			color: "rgba(217, 217, 217)",
+			color: paddleColor,
 		}
 	
 		var ball = {
@@ -99,8 +99,8 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			radius: 16,
 			speed: BALL_SPEED,
 			velocityX: 5,
-			velocityY: 5,
-			color: "WHITE",
+			velocityY: 0,
+			color: ballColor,
 		}
 
 
@@ -136,7 +136,7 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		}
 		
 		function render(){
-			
+
 			// clear the map
 			// drawRect(0, 0, gameWidth, gameHeight, 'black');
 			
@@ -197,7 +197,6 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			ball.velocityX = -ball.velocityX;
 			player1.y = gameHeight / 2;
 			player2.y = gameHeight / 2;
-			
 		}
 		
 		function updateCOM(){
@@ -205,8 +204,18 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			if (pause.current == true || startGame == true){
 				return;
 			}
-			ball.x += ball.velocityX * ball.speed;
-			ball.y += ball.velocityY * ball.speed;
+
+			if (ball.velocityX == 10 || ball.velocityX == -10){
+				ball.y += (ball.velocityY * ball.speed) / 2;
+				ball.x += (ball.velocityX * ball.speed) / 2;
+			}
+			else{
+
+				ball.y += ball.velocityY * ball.speed;
+				ball.x += ball.velocityX * ball.speed;
+			}
+			
+			
 			
 			
 			if (ball.y + ball.radius >= gameHeight || ball.y - ball.radius <= 0){
@@ -215,8 +224,44 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			
 			var touch_player = (ball.x < gameWidth / 2) ? player1 : player2;
 			if (collision(ball, touch_player)){
-				ball.velocityX = -ball.velocityX;
+				const playerPos = {
+					top: touch_player.y,
+					buttom: touch_player.y + touch_player.height,
+					middle: touch_player.height / 2 + touch_player.y,
+				}
+	
 				ball.speed += ball_acc;
+				if (ball.velocityY == 0)
+					ball.velocityY = 5;
+
+
+				if (playerPos.top <= (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) < playerPos.middle){
+					// console.log("velocity ", ball.velocityY);
+					if (ball.velocityY > 0){
+						ball.velocityX = 10;
+					}
+					else{
+						ball.velocityX = 5;
+					}
+					
+				}
+				else if (playerPos.buttom > (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) >= playerPos.middle){
+
+					if (ball.velocityY < 0){
+						ball.velocityX = 10;
+					}
+					else{
+						ball.velocityX = 5;
+					}
+					
+			
+				}
+				// else
+				// 	ball.velocityX = 100;
+				if (touch_player == player2)
+					ball.velocityX = -ball.velocityX;
+
+			
 			}
 			
 			// Computer
@@ -235,16 +280,12 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 			}
 		}
 
-		function updateOPP(OPP : Player){
 
-		}
 
 		function gameLoop(){
 			render();
 			if (COM)
 				updateCOM();
-			else
-				updateOPP(OPP!);
 		}
 		
 		document.body.addEventListener("keydown", function(key){
@@ -287,14 +328,12 @@ export default function Canvas({COM, OPP} : {COM: boolean, OPP?: Player}){
 		setOppScore(0);
 	}
 
-
-
 	return (
 		<>
-			<div id="container">
+			<div id="container" className={Map}  >
 
 			<section>
-				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={70} height={70}/>
+				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
 				<h1>{(me as {username : string})?.username}</h1>
 				{/* <h1>hewa</h1> */}
 				<h2>{myScore} | {oppScore}</h2>

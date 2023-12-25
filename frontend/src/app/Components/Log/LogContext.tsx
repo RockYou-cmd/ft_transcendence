@@ -59,7 +59,6 @@ export default function LogContextProvider({ children }: { children: React.React
 			</SocketPrivider>
 		</LogContext.Provider>
 	)
-
 }
 
 export function useLogContext() {

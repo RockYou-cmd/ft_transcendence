@@ -1,12 +1,14 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, PrismaClient, User } from "@prisma/client";
 import * as argon from "argon2"
+import { AuthService } from "src/auth/auth.service";
 
 const prisma = new PrismaClient();
 
 @Injectable()
 
 export class UserService {
+	constructor(private authService: AuthService) {};
 	async getProfile(user) {
 		try{
 			const ret = await prisma.user.findUnique({
@@ -70,8 +72,8 @@ export class UserService {
 			})
 			if (!ret)
 				throw new NotFoundException("User Not Found");
-			console.log(ret);
-			return {...userData, status:ret.friends[0]?.status, sender: ret.friends[0]?.sender?.username, blocked: ret.friends[0]?.blocked?.username};
+			console.log(userData)
+			return {...userData, friendShipstatus:ret.friends[0]?.status, sender: ret.friends[0]?.sender?.username, blocked: ret.friends[0]?.blocked?.username};
 			
 		}
 		catch(err) {
@@ -129,13 +131,13 @@ export class UserService {
 
 	async updateData(account, data) {
 		try {
-			console.log(account.username);
 			const user = await prisma.user.update({
 				where: {
 					username: account.username
 				},
 				data
 			})
+			return this.authService.generateJwt(user);
 		}
 		catch (err) {
 			throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
