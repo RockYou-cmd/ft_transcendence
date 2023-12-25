@@ -50,9 +50,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	const [group, setGroup] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
-
-
-
+	
+	
+	
 	async function getChat(channel: any) {
 		let name = "";
 		let Api = "";
@@ -105,10 +105,10 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			}
 		}	
 	}
-
+	
 	// console.log("block", status.current.status);
 	
-
+	
 	useEffect(() => {
 		if (Object.keys(User).length != 0)
 			getChat(User);
@@ -178,9 +178,6 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	// console.log("");
 	
 	useEffect(() => {
-		if (scroll.current) {
-			scroll.current.scrollTop = scroll.current.scrollHeight;
-		}
 		socket?.on("update", (data: any) => {
 			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: true, id: data?.groupId };
@@ -209,6 +206,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				setChat((chat: { messages: any; }) => ({ ...chat, messages: [...chat.messages, msg] }));
 			}
 		})
+		if (scroll.current) {
+			scroll.current.scrollTop = scroll.current.scrollHeight;
+		}
 		return () => {
 			socket?.off(Room.current);
 			socket?.off("update", ()=>{});
@@ -244,7 +244,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				<h1 onClick={() => { User?.username ? router.push("/users/" + User?.username) : null }}>{User?.username ? User?.username : User?.name}</h1>
 				<span>{User?.username ? User?.status : null}</span>
 				<div className="line"></div>
-				{User?.status == "ONLINE" && <div className='status'></div>}
+				{(User?.status == "ONLINE" || User?.status == "INGAME") && <div className='status'></div>}
 
 				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 					<div className='point'></div><div className='point'></div><div className='point'></div>

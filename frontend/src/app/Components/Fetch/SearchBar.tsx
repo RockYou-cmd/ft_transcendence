@@ -75,7 +75,7 @@ export default function SearchBar({ title }: { title: string }) {
 	return (
 		<>
 			<div id="SearchComponent" ref={visible} style={Style}>
-				<input className='searchInput' onChange={(e) => { setInput(e.target.value) }} type="text" placeholder="Search" />
+				<input className='searchInput' value={input} onChange={(e) => { setInput(e.target.value) }} type="text" placeholder="Search" />
 				{input != "" && <>
 					<div className='line'></div>
 					<div className='resBar'  >

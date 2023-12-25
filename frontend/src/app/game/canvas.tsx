@@ -99,7 +99,7 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			radius: 16,
 			speed: BALL_SPEED,
 			velocityX: 5,
-			velocityY: 5,
+			velocityY: 0,
 			color: ballColor,
 		}
 
@@ -137,12 +137,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 		
 		function render(){
 
-			// if (game.current?.width && game.current?.height){
-			// 	game.current.width = parent?.clientWidth || 0;
-			// 	game.current.height = parent?.clientHeight || 0;
-			// 	setGameHeight(game?.current?.height || 0);
-			// 	setGameWidth(game?.current?.width || 0);
-			// }
 			// clear the map
 			// drawRect(0, 0, gameWidth, gameHeight, 'black');
 			
@@ -214,7 +208,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			if (ball.velocityX == 10 || ball.velocityX == -10){
 				ball.y += (ball.velocityY * ball.speed) / 2;
 				ball.x += (ball.velocityX * ball.speed) / 2;
-				
 			}
 			else{
 
@@ -236,37 +229,28 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 					buttom: touch_player.y + touch_player.height,
 					middle: touch_player.height / 2 + touch_player.y,
 				}
-				// console.log("ball.x ", ball.x, "ball.y ", ball.y);
-		
-				// if (ball.velocityX < 0)
-				// 	ball.velocityX = 5;
-				// else
-				// 	ball.velocityX = -5;
+	
 				ball.speed += ball_acc;
+				if (ball.velocityY == 0)
+					ball.velocityY = 5;
 
-				// console.log("player Pos", playerPos);
-				// console.log("ball Pos", ball.y + ball.radius / 2);
 
 				if (playerPos.top <= (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) < playerPos.middle){
 					// console.log("velocity ", ball.velocityY);
 					if (ball.velocityY > 0){
-						// ball.velocityY = -10;
 						ball.velocityX = 10;
 					}
 					else{
-						// ball.velocityY = 5;
 						ball.velocityX = 5;
 					}
 					
 				}
 				else if (playerPos.buttom > (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) >= playerPos.middle){
-					// console.log("velocity ", ball.velocityY);
+
 					if (ball.velocityY < 0){
-						// ball.velocityY = -5;
 						ball.velocityX = 10;
 					}
 					else{
-						// ball.velocityY = 10;
 						ball.velocityX = 5;
 					}
 					
@@ -296,16 +280,12 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			}
 		}
 
-		function updateOPP(OPP : Player){
 
-		}
 
 		function gameLoop(){
 			render();
 			if (COM)
 				updateCOM();
-			else
-				updateOPP(OPP!);
 		}
 		
 		document.body.addEventListener("keydown", function(key){
@@ -353,7 +333,7 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			<div id="container" className={Map}  >
 
 			<section>
-				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={70} height={70}/>
+				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
 				<h1>{(me as {username : string})?.username}</h1>
 				{/* <h1>hewa</h1> */}
 				<h2>{myScore} | {oppScore}</h2>

@@ -19,9 +19,9 @@ export default function GameMode({Mode , setMode} : {Mode : string, setMode : an
 		<>
 			<div className="GameMode">
 				{/* <h1>GameMode</h1> */}
-				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMode("computer")}> play with the computer</button>
-				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMode("friend")}> play with the friend</button>
-				<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMode("rank")}> play rank</button>
+				<button onClick={()=>setMode("computer")}> PLAY VS COMPUTER</button>
+				<button onClick={()=>setMode("friend")}> PLAY VS FRIEND</button>
+				<button onClick={()=>setMode("rank")}> PLAY RANK</button>
 				{/* <button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMode("Settings")}> Settings <FontAwesomeIcon icon={faGear} /></button> */}
 			</div>
 		</>

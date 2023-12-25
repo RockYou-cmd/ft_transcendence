@@ -15,7 +15,7 @@ body{
 	color:#FFFFFF;
 	font-family: 'Inter', sans-serif;
 	background-color: rgba(34, 40, 49, 1);
-	min-width: 810px;
+	/* min-width: 810px; */
 }
 
 input:focus, textarea:focus, select:focus{
