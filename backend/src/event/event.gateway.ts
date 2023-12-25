@@ -66,7 +66,7 @@ export class EventGateway {
           .to(player1)
           .to(player2)
           .emit("endGame", "the opponent left");
-        clearInterval(match.get("loop").get);
+        clearInterval(match.get("loop"));
         match.get("game").reset();
         match.clear();
       }
