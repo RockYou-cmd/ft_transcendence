@@ -82,7 +82,6 @@ export class ChatService {
         },
       });
       return chat;
-
     } catch (err) {
       throw err;
     }

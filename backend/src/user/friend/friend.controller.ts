@@ -24,15 +24,16 @@ export class FriendController {
 	@Get("/chats")
 	@UseGuards(AuthGuard)
 	async getFriendsChats(@Req() account) {
+		console.log("chats hehe");
 		return this.friendService.getFriendsChats(account.user);
 	}
-
+	
 	@Get("all")
 	@UseGuards(AuthGuard)
 	async getFriends(@Req() account) {
 		return this.friendService.getFriends(account.user);
 	}
-
+	
 	@Post("remove")
 	@UseGuards(AuthGuard)
 	async removeUserFromFriends(@Req() account, @Body() friend) {

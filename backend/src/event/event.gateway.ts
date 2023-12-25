@@ -158,6 +158,8 @@ export class EventGateway {
     }
   }
 
+  
+
   @SubscribeMessage("leaveMatch")
   @UseGuards(gameGuard)
   async leaveMatch(client: Socket, payload: any) {
