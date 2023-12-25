@@ -20,11 +20,17 @@ import OwnerSettings from './Components/Settings';
 import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
+import { SocketPrivider, useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
 import { useSearchParams } from 'next/navigation';
 import Loading from '../loading';
 // import Lottie from "lottie-react";
 // import chatAnimation from "../../../public/chatAnimation.json"
+
+function InviteToGame(User : any){
+	const {socket} = useSocket();
+	const {me} = useMe() as any;
+	socket?.emit("invite", {receiver : User?.username, sender : me?.username});
+}
 
 
 
@@ -76,6 +82,7 @@ export default function Chat() {
 	const [leave, setLeave] = useState(false);
 	const [settings, setSettings] = useState(false);
 	const [seeMem, setSeeMem] = useState(false);
+	const [unBlock, setUnBlock] = useState(false);
 	
 	const [Style, setStyle] = useState({} as any);
 	
@@ -183,7 +190,8 @@ export default function Chat() {
 						{createG && <CreateGroup close={setCreateG} change={false} />}
 						{explore && <ExploreRooms close={setExplore} />}
 						{newChat && <StartChat close={setNewChat} User={setUser} />}
-						{invite && <Invite User={User} close={setInvite} />}
+						{/* {invite && <Invite User={User} close={setInvite} />} */}
+						{invite && <Confirm Make={InviteToGame} title='Invite This User To A Game' close={setInvite} user={User} />}
 						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
 						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
 						{settings && <CreateGroup close={setSettings} change={true} info={User}/>}

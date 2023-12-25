@@ -9,6 +9,7 @@ import logo from '../../../../public/4268225 1.png'
 export default function Invite({User, close} : {User: any, close: any}){
 
 	// console.log("close Invite ",close);
+	
 
 	return (
 		<>

@@ -41,11 +41,9 @@ export default function Notif({content} : {content?: string}) {
 					e.preventDefault();
 					setShow(false);
 					if (msg?.type == "friendship"){
-						// router.push("http://localhost:3000/users/" + msg?.sender);
 						window.open("http://localhost:3000/users/" + msg?.sender);
 					}
 					else{
-						// router.push("http://localhost:3000/chat/?user=" + msg?.sender);
 						window.open("http://localhost:3000/chat/?user=" + msg?.sender);
 					}
 				}
