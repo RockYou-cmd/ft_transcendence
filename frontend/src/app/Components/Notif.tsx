@@ -68,16 +68,18 @@ export default function Notif({content} : {content?: string}) {
 			})
 			socket.on("invite", (data :any)=>{
 				setMsg(data);
-				if (!silence)
-					setShow(true);
+				// if (!silence)
+					setInvite(true);
 			})
-
+			socket.on("start", (data :any)=>{
+				console.log("start game in notify", data)
+				router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend");
+			})
 			socket.on("update" , (data: any) => {
 				if (data?.option == "request friend" || data?.option == "accept request"){
 					setMsg(data);
-					
-					// if (!silence)
-						setInvite(true);
+					if (!silence)
+						setShow(true);
 				}
 			})
 		}
@@ -99,7 +101,7 @@ export default function Notif({content} : {content?: string}) {
 	}
 
 	if (invite)
-		return <Invite User={{username : msg.sender}} close={setInvite} />
+		return <Invite User={{username : msg.sender}} close={setInvite} data={msg}/>
 
 	return (
 		<>

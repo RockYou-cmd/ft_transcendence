@@ -43,12 +43,14 @@ export default function Chat() {
 		const res = await Put({ username: User?.username }, APIs.Block);
 		if (res.ok) {
 			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
+			router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend");
 		}
 	}
 
 
 	function InviteToGame(User : any){
 		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
+		
 	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
@@ -129,7 +131,7 @@ export default function Chat() {
 		}
 		if (param.get("user") != null)
 			fetchData(param.get("user") as string);
-	},	[e]);
+	},	[]);
 
 	useEffect(() => {
 		setRefresh(!refresh);

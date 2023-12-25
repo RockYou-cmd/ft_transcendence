@@ -5,7 +5,7 @@ import Canvas from "./canvas";
 import { MouseEvent, use } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import LoG from '../Components/Log/Log';
-import { useLogContext, useSocket } from '../Components/Log/LogContext';
+import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
 import LeaderBoard from './Components/LeaderBoard';
 import MatchMaking from './Game';
@@ -32,19 +32,23 @@ export default function GamePage() {
 	const [matchMake, setMatchMake] = useState(false);
 	const [gameInfo, setGameInfo] = useState<GameInfo>();
 	const [Style, setStyle] = useState<any>({});
-	const friendGame = useRef(false);
+	const { me } = useMe() as any;
+
 	const param = useSearchParams();
 	const { socket } = useSocket();
 
 	useEffect(() => {
-		// if (param.get("friend") == "true"){
-		// 	friendGame.current = true;
-		// }
-		if (param.get("Mode") != null){
-			setMode(param.get("Mode") as string);
+		
+		if (param.get("mode") != null){
+			setMode(param.get("mode") as string);
+		}
+
+		if (param.get("roomName") != null && param.get("player1") != null && param.get("player2") != null){
+			setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
 		}
 	},[])
 
+	console.log("gameInfo", gameInfo);
 
 	const [gameSettings, setGameSettings] = useState({
 		map : "shark",
@@ -67,14 +71,25 @@ export default function GamePage() {
 
 	function FriendlyMatch(){
 		const n = useRef(false);
+		console.log("whatttttttt");
 		useEffect(() => {
-			if (n.current == false)
-				socket?.emit("accept", {});
+			if (gameInfo?.player2 == me?.username && !n.current){
+				console.log("accept", gameInfo);
+				socket?.emit("accept", gameInfo);
+				n.current = true;
+			}
+			if (gameInfo?.player1 == me?.username){
+				console.log("start player1", gameInfo);
+				socket?.emit("start", gameInfo);
+				setInGame(true);
+			}
 			socket?.on("start", (data: any) => {
+				console.log("start data", data);
 				setGameInfo(data);
 				setInGame(true);
 			})
 			n.current = true;
+
 			return () => {socket?.off("start"), ()=>{}}
 		},[])
 		return null;

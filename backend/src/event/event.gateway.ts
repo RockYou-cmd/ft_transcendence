@@ -67,7 +67,7 @@ export class EventGateway {
           .to(player2)
           .emit("endGame", "the opponent left");
         clearInterval(match.get("loop"));
-        match.get("game").reset();
+        match?.get("game")?.reset();
         match.clear();
       }
       const userTabs = await this.server.in(username).fetchSockets();
@@ -194,7 +194,9 @@ export class EventGateway {
   @UseGuards(gameGuard)
   async accept(client: Socket, payload:any) {
     const { user }: any = client;
-    const match = this.findMatch(user.username);
+    const match = this.findMatch(payload.player1);
+	console.log(payload);
+	console.log("match : ", match)
     match.set(user.username, client.id);
     client.join(payload.roomName);
     this.server.to(payload.roomName).emit("start", payload);
@@ -214,6 +216,7 @@ export class EventGateway {
       { status: "INGAME" },
     );
     var match = this.findMatch(payload.player1);
+	console.log(payload.player1);
     match.set("game", new GameService());
     const game = match.get("game");
     const loop = setInterval(() => {
