@@ -66,36 +66,43 @@ export class FriendService {
 	async getFriendsChats(account) {
 		try {
 			const chats = await prisma.chat.findMany({
-				where: {
-					AND: [
-						{
-							members: {
-								some: {
-									username: account.username,	
-								},
-							}
+        where: {
+          AND: [
+            {
+              members: {
+                some: {
+                  username: account.username,
+                },
+              },
+            },
+            {
+              messages: {
+                some: {},
+              },
+            },
+          ],
+        },
+        select: {
+          members: {
+            where: {
+              NOT: {
+                username: account.username,
+              },
 						},
-						{
-							messages: {
-								some :{}
+						include: {
+							friends: {
+								where: {
+									users: {
+										some: {
+											username: account.username
+										}
+									}
+								}
 							}
 						}
-					]
-				},
-				select: {
-					members: {
-						where: {
-							AND: [
-								{
-									NOT: {
-										username: account.username,
-									},
-								},
-							]							
-						},
-					},
-				}
-			});
+          },
+        },
+      });
 			return {chats}
 		} catch (err) {
 			return err;
