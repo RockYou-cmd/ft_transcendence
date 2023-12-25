@@ -72,7 +72,11 @@ export class ChatService {
             },
             select: {
               status: true,
-              blocked: true
+              blocked: {
+                select: {
+                  username: true
+                }
+              }
             }
           },
         },
