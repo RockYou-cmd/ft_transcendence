@@ -158,8 +158,6 @@ export class EventGateway {
     }
   }
 
-  
-
   @SubscribeMessage("leaveMatch")
   @UseGuards(gameGuard)
   async leaveMatch(client: Socket, payload: any) {
@@ -178,6 +176,30 @@ export class EventGateway {
     var match = this.findMatch(user.username);
     match.get("game")[payload.player].y = payload.y;
   }
+
+  @SubscribeMessage("invite")
+  @UseGuards(gameGuard)
+  async invite(client: Socket, payload:any) {
+    const { user }: any = client;
+    const player = new Map<string, any>();
+    player.set(user.username, client.id);
+    player.set("friend", true);
+    this.matches.push(player);
+    const roomName = payload.player1 + payload.player2;
+    client.join(roomName);
+    this.server.to(payload.player2).emit("invite", {...payload, roomName});
+  }
+
+  @SubscribeMessage("accept")
+  @UseGuards(gameGuard)
+  async accept(client: Socket, payload:any) {
+    const { user }: any = client;
+    const match = this.findMatch(user.username);
+    match.set(user.username, client.id);
+    client.join(payload.roomName);
+    this.server.to(payload.roomName).emit("start", payload);
+  }
+  
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
