@@ -85,7 +85,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
 			setRefresh(!refresh);
-			console.log("update", data);
 		});
 		return () => { socket?.off("update"); }
 	}, [socket, refresh]);

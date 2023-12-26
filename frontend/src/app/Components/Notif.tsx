@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import '../assest/navbar.css';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { MouseEvent } from 'react';
 import Invite from '../chat/Components/Invite';
 
@@ -24,13 +24,13 @@ export default function Notif({content} : {content?: string}) {
 	const { silence, setSilence } = useSilence();
 	const [invite, setInvite] = useState(false);
 	const router = useRouter();
+	const pathname = usePathname();
 	// const [Reply, setReply] = useState(false);
 	const { me, setMe } = useMe() as any;
 
 	useEffect(() => {
 		Notification.requestPermission();
 	},[]);
-
 	useEffect(() => {
 		if (show){
 			if ('Notification' in window && Notification.permission == 'granted'){
@@ -61,20 +61,26 @@ export default function Notif({content} : {content?: string}) {
 	useEffect(() => {
 		if (socket) {
 			// console.log("socket on");
-			socket.on("message" , (data: any) => {
-				setMsg(data);
-				if (!silence)
+			if (pathname == "/chat"){
+				socket.on("message" , (data: any) => {
+					setMsg(data);
+					if (!silence && pathname != "/chat")
 					setShow(true);
-			})
-			socket.on("invite", (data :any)=>{
-				setMsg(data);
-				// if (!silence)
-					setInvite(true);
-			})
-			socket.on("start", (data :any)=>{
-				console.log("start game in notify", data)
-				router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend");
-			})
+				})
+			}
+			if (pathname == "/game"){
+				socket.on("invite", (data :any)=>{
+					setMsg(data);
+					// if (!silence)
+						setInvite(true);
+				})
+			}
+			if(pathname != "/game"){
+				socket.on("start", (data :any)=>{
+					console.log("start game in notify", data)
+					router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend");
+				})
+			}
 			socket.on("update" , (data: any) => {
 				if (data?.option == "request friend" || data?.option == "accept request"){
 					setMsg(data);
@@ -113,7 +119,7 @@ export default function Notif({content} : {content?: string}) {
 				<h1>{msg?.sender} : {msg?.content}</h1>
 				<section>
 					<button className="accept" onClick={(e :MouseEvent) => NotifEvent(e)} >{msg?.type == "message" ? "Reply" : "Open"}</button>
-					<button className="reject" onClick={()=>setShow(false)} >Close</button>
+					<button className="reject" onClick={()=>setShow(false)} >Close</button>9
 				</section>
 
 

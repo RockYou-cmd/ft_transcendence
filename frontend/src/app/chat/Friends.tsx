@@ -15,7 +15,6 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 	async function getFriends() {
 		const data = await Get(APIs.FriendsChat);
 		setData(data);
-		console.log("data", data);
 	}
 
 	useEffect(() => {

@@ -83,7 +83,8 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
     });
 
     socket?.on("endGame", (data: any) => {
-      close("");
+		close(false);
+		setMode("")
     });
 
     function drawRect(
@@ -189,7 +190,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	return(
 		<>
 			<div id="container" className={gameSettings.map}>
-				<button id="backBtn" onClick={()=>{close(false);setMode("")}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+				<button id="backBtn" onClick={()=>{close(false);setMode("");socket?.emit("leaveMatch", gameInfo)}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<section>
 					{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
 					<h1>{gameInfo.player1}</h1>

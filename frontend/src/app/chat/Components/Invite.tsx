@@ -12,11 +12,9 @@ export default function Invite({User, close, data} : {User: any, close: any, dat
 
 	const router = useRouter();
 	// console.log("close Invite ",close);
-	console.log("data Invite ",data);
+
 	function accept(e : MouseEvent){
 		e.preventDefault();
-		console.log("accept Invite ",data);
-		console.log("user invited", User);
 		router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend");
 		close(false);
 	}	

@@ -9,10 +9,12 @@ import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
 import LeaderBoard from './Components/LeaderBoard';
 import MatchMaking from './Game';
-import GameMode from './Components/GameMode';
 import GameSettings from './Components/gameSettings';
 import PingPong from './Components/PingPong';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import Add from '../chat/Components/Add';
+import SelectFriend from './Components/FriendlyGame';
 
 
 interface GameInfo {
@@ -24,15 +26,18 @@ interface GameInfo {
 
 export default function GamePage() {
 	const [data, setData] = useState({} as any);
-	const [wait, checkwait] = useState(false);
-	const [inGame, setInGame] = useState(false);
-	const [Mode, setMode] = useState("");
+	const [wait, checkwait] = useState<boolean>(false);
+	const [inGame, setInGame] = useState<boolean>(false);
+	const [Mode, setMode] = useState<string>("");
 	const { online } = useLogContext();
-	const [gameSet, setGameSet] = useState(true);
-	const [matchMake, setMatchMake] = useState(false);
+	const [gameSet, setGameSet] = useState<boolean>(true);
+	const [matchMake, setMatchMake] = useState<boolean>(false);
 	const [gameInfo, setGameInfo] = useState<GameInfo>();
 	const [Style, setStyle] = useState<any>({});
 	const { me } = useMe() as any;
+	const d = useRef(false);
+	const router = useRouter();
+	const [selectedFriend, setSelectedFriend] = useState("");
 
 	const param = useSearchParams();
 	const { socket } = useSocket();
@@ -46,9 +51,9 @@ export default function GamePage() {
 		if (param.get("roomName") != null && param.get("player1") != null && param.get("player2") != null){
 			setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
 		}
+		router.replace("/game");
 	},[])
 
-	console.log("gameInfo", gameInfo);
 
 	const [gameSettings, setGameSettings] = useState({
 		map : "shark",
@@ -70,13 +75,11 @@ export default function GamePage() {
 	}
 
 	function FriendlyMatch(){
-		const n = useRef(false);
 		console.log("whatttttttt");
 		useEffect(() => {
-			if (gameInfo?.player2 == me?.username && !n.current){
+			if (gameInfo?.player2 == me?.username && !d.current){
 				console.log("accept", gameInfo);
 				socket?.emit("accept", gameInfo);
-				n.current = true;
 			}
 			if (gameInfo?.player1 == me?.username){
 				console.log("start player1", gameInfo);
@@ -88,7 +91,10 @@ export default function GamePage() {
 				setGameInfo(data);
 				setInGame(true);
 			})
-			n.current = true;
+			d.current = true;
+	
+			console.log("d", d);
+
 
 			return () => {socket?.off("start"), ()=>{}}
 		},[])
@@ -120,8 +126,7 @@ export default function GamePage() {
 	
 
 
-	// console.log("gameInfo", gameInfo);
-	// console.log("gameSet", gameSet, "Mode", Mode, "matchMake", matchMake, "inGame", inGame);
+	
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 	
 	if (!hooks.waitHook.state) {
@@ -150,9 +155,11 @@ export default function GamePage() {
 					</div>
 					}
 
-					{!inGame && Mode != "" && gameSet && <GameSettings setMode={setMode} save={setMatchMake} close={setGameSet} Options={setOptions} />}		
+					{!inGame && Mode != "" && (Mode == "friend" && selectedFriend == "" ? false : true) && gameSet && <GameSettings setMode={setMode} save={setMatchMake} close={setGameSet} Options={setOptions} />}		
 					{!inGame && Mode == "rank" && matchMake && <MatchMaking GameInfo={setGameInfo} close={setMatchMake} setMode={setMode} startGame={setInGame} />}
 					{!inGame && Mode == "friend" && matchMake &&  <FriendlyMatch/>}
+					{!inGame && Mode == "friend" && selectedFriend == "" && !matchMake && <SelectFriend close={setMatchMake} setMode={setMode} select={setSelectedFriend}/>}
+					
 					</div>
 
 					{inGame && Mode == "computer" && <Canvas setMode={setMode} close={setInGame} gameSettings={gameSettings}/>}

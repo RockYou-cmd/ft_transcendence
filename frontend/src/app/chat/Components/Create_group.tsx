@@ -56,7 +56,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 	async function changeSettings(e: any) {
 		e.preventDefault();
 		const image =  await fileUploadFunction(gPic.current.files[0]);
-		console.log("pic", image);
+	
 		const res = await Put({
 			name : gName.current.value,
 			description : gDesc.current.value,
@@ -69,14 +69,14 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			alert("Group settings changed");
 		else
 			alert("failed to change settings");
-		console.log(res);
+	
 	}
 
 	async function submitForm(e: any) {
 		e.preventDefault();
 		if (gName.current.value && privacy != ""){
 			const image =  await fileUploadFunction(gPic.current.files[0]);
-			console.log("pic", gPic.current.value);
+			
 			if (privacy == "PROTECTED" && !gPass.current.value){
 				alert("Please enter a password");
 			}

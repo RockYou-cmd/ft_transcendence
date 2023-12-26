@@ -15,13 +15,11 @@ export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
 
 	useEffect(() => {
 		async function fetchData() {
-			// console.log("yo");
-			// console.log("online", online);
 			const data = await GetData({ Api: page, user: "" }) as any;
-			// console.log("yo 2");
+
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {
-				console.log("salam");
+				setOnline("OFF");
 			}
 			else {
 					if (online == "ON"){

@@ -14,12 +14,15 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 	
 	const { me, setMe } = useMe() as any;
 	const { socket } = useSocket();
+	const matchData = useRef({} as any);
 	
 
 		const n = useRef(false);
 		useEffect(() => {
-			if (n.current == false)
+			if (n.current == false){
+				console.log("matchmaking");
 				socket?.emit("matchmaking", {});
+			}
 			n.current = true;
 		},[]);
 
@@ -30,9 +33,9 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 			socket?.on("start", (data: any) => {
 		
 				GameInfo(data);
+				matchData.current = data;
 				if (data.player1 == me.username){
 					socket?.emit("start", data);
-					// console.log("start game", me.username);
 				}
 				close(false);
 				startGame(true);
@@ -44,7 +47,9 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 	return(
 		<>
 			<div className="MatchMaking">
-				<button id='backBtn' onClick={()=>{setMode("");close(true);}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+				<button id='backBtn' onClick={()=>{setMode("");close(true);
+				socket?.disconnect();
+				socket?.connect()}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<h1>FINDING PLAYER</h1>
 
 				<section>
