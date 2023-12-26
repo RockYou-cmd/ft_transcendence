@@ -24,7 +24,6 @@ export class FriendController {
 	@Get("/chats")
 	@UseGuards(AuthGuard)
 	async getFriendsChats(@Req() account) {
-		console.log("chats hehe");
 		return this.friendService.getFriendsChats(account.user);
 	}
 	

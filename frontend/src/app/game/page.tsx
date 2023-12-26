@@ -33,6 +33,7 @@ export default function GamePage() {
 	const [gameInfo, setGameInfo] = useState<GameInfo>();
 	const [Style, setStyle] = useState<any>({});
 	const { me } = useMe() as any;
+	const n = useRef(false);
 
 	const param = useSearchParams();
 	const { socket } = useSocket();
@@ -70,13 +71,11 @@ export default function GamePage() {
 	}
 
 	function FriendlyMatch(){
-		const n = useRef(false);
 		console.log("whatttttttt");
 		useEffect(() => {
 			if (gameInfo?.player2 == me?.username && !n.current){
 				console.log("accept", gameInfo);
 				socket?.emit("accept", gameInfo);
-				n.current = true;
 			}
 			if (gameInfo?.player1 == me?.username){
 				console.log("start player1", gameInfo);
