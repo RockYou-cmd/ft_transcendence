@@ -18,7 +18,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
 
 
-const chatSettings: ChatOptions = { Option: ["invite", "block", "view"], desc: ["invite for a game", "Block user", "View profile"] };
+const chatSettings: ChatOptions = { Option: ["invite", "view"], desc: ["invite for a game", "View profile"] };
 
 const AdminSettings: ChatOptions = {
 	Option: ["leave", "see"],
@@ -52,7 +52,6 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
 	
 	
-	
 	async function getChat(channel: any) {
 		let name = "";
 		let Api = "";
@@ -71,14 +70,15 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
+	
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
 				
 				const datas = await res.json();
 				status.current.status = datas?.friends[0]?.status;
-				if (datas?.friends && datas?.friends[0]?.blocked?.username == me?.username){
-					status.current.sender = me?.username;
+				if (datas?.friends && datas?.friends[0]?.status == "BLOCKED"){
+					status.current.sender = datas?.friends[0]?.blocked?.username;
 				}
 				ChatID.current = datas?.chats[0]?.id;
 				setChat(datas?.chats[0]);
@@ -90,6 +90,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				setChat(data?.chats[0]);
 				ChatID.current = data?.chats[0]?.id;
 				status.current.status = data?.friends[0]?.status;
+				if (data?.friends && data?.friends[0]?.status == "BLOCKED"){
+					status.current.sender = data?.friends[0]?.blocked?.username;
+				}
 			}
 			else{
 				setChat(data);
@@ -150,7 +153,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 					}));
 				}
 				
-				console.log("Muted", Muted.current);
+
 				const message: Message = {
 					type : "message",
 					content: s,
@@ -163,6 +166,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
 				}
 				else{
+					
 					if (status.current.status == "BLOCKED"){
 						if (status.current.sender == me?.username)
 							alert("You blocked this user");
@@ -185,6 +189,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			else if (data?.option == "block" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 				status.current.status = "BLOCKED";
 				status.current.sender = data?.sender;
+				
 			}
 			else if (data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)){
 				status.current.status = "";
@@ -242,9 +247,9 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 
 				<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
 				<h1 onClick={() => { User?.username ? router.push("/users/" + User?.username) : null }}>{User?.username ? User?.username : User?.name}</h1>
-				<span>{User?.username ? User?.status : null}</span>
+				<span>{User?.username && status.current?.status != "BLOCKED" ? User?.status : null}</span>
 				<div className="line"></div>
-				{(User?.status == "ONLINE" || User?.status == "INGAME") && <div className='status'></div>}
+				{(User?.status == "ONLINE" || User?.status == "INGAME") && status.current.status != "BLOCKED" && <div className='status'></div>}
 
 				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 					<div className='point'></div><div className='point'></div><div className='point'></div>

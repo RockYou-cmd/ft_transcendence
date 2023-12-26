@@ -4,8 +4,10 @@ import Canvas from '../canvas';
 import Image from 'next/image';
 import shark from '../../../../public/Frame_1.png';
 import dragon from '../../../../public/dragon.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleLeft , faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
 interface Map{
 	name : string,
@@ -40,34 +42,36 @@ const reset ={
 	paddleColor : "white",
 }
 
-export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Map : any, Ball : any, Paddle : any, close : any, setMode : any}){
+export default function GameSettings({Options , close, setMode, save} : { Options : any, close : any, setMode : any, save : any}){
 
 	const [Style, setStyle] = useState({
 		map : {},
 		ball : {},
 		Paddle: {},
-		mapName : "",
-		ballColor : "",
-		paddleColor : "",
+		mapName : "shark",
+		ballColor : "white",
+		paddleColor : "white",
 	});
 
-	function Chose(style : string, type : string, color : string){
-		console.log("chose", style, type);
+	useEffect(() => {
+		Options(Style.mapName, Style.ballColor, Style.paddleColor);
+	},[Style]);
+
+	function Chose(style : string, type : string){
 		if (type == "map"){
-			Map(color);
 			setStyle((prevState) => ({
-					...prevState,
-					map: {
-						border: "3px solid #fff",
-					},
-					ball: prevState.ball,
-					Paddle: prevState.Paddle,
-					mapName: style,
-					ballColor: prevState.ballColor,
-					paddleColor: prevState.paddleColor,
-				}));
+				...prevState,
+				map: {
+					border: "3px solid #fff",
+				},
+				ball: prevState.ball,
+				Paddle: prevState.Paddle,
+				mapName: style,
+				ballColor: prevState.ballColor,
+				paddleColor: prevState.paddleColor,
+			}));
 		}else if (type == "ball"){
-			Ball(color);
+			
 			setStyle((prevState) => ({
 				...prevState,
 				map: prevState.map,
@@ -80,7 +84,7 @@ export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Ma
 				paddleColor: prevState.paddleColor,
 			}));
 		} else if (type == "paddle"){
-			Paddle(color);
+			
 			setStyle((prevState) => ({
 				...prevState,
 				map: prevState.map,
@@ -93,7 +97,7 @@ export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Ma
 				paddleColor: style,
 			}));
 		}
-
+		
 	}
 
 
@@ -106,10 +110,11 @@ export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Ma
 			</div>
 		)
 	}
-
+{/* <FontAwesomeIcon icon={faArrowLeft} id="icon"/> */}
 	return(
 		<>
 			<div className='gameSettings'>
+				<button id='backBtn' onClick={()=>{setMode("");close(true);}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<h1>CHOSE A MAP</h1>	
 				<div className="Maps">
 					{maps.map((map : Map, index : number)=>(<MapPicker map={map} key={index}/>))}
@@ -125,16 +130,14 @@ export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Ma
 					, border : Style.paddleColor == ball.name ? "3px solid #fff" : ""}} key={ball.name} />))}
 				</div>
 				<footer>
-					<button onClick={()=>close(false)} >SAVE</button>
+					<button onClick={()=>{close(false);save(true);}} >SAVE</button>
 					<button onClick={()=>{
-						Map(reset.Map);
-						Ball(reset.ballColor);
-						Paddle(reset.paddleColor);
-						close(false)}
+						Options(reset.Map, reset.ballColor, reset.paddleColor);
+						close(false);
+						save(true)}
 					}>NO</button>
 				</footer>
 			</div>
-			<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMode("")}> Back</button>
 		</>
 	)
 }

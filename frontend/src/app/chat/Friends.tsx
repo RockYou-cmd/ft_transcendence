@@ -15,6 +15,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 	async function getFriends() {
 		const data = await Get(APIs.FriendsChat);
 		setData(data);
+		console.log("data", data);
 	}
 
 	useEffect(() => {
@@ -37,7 +38,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 				<h4>{info?.username}</h4>
 				{/* <p>{info?.messagesReceived.reduce()}</p> */}
 				<span>{info?.lastMsgTime}</span>
-				{(info?.status == "ONLINE" || info?.status == "INGAME") ? <div className="status"></div> : <></>}
+				{((info?.status == "ONLINE" || info?.status == "INGAME") && info?.friends[0] == undefined )? <div className="status"></div> : <></>}
 				<div className="line"></div>
 			</div>
 		</>

@@ -8,7 +8,7 @@ import { useMe } from '../Components/Log/LogContext'
 import Image from 'next/image';
 import avatar from '../../../public/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRobot } from '@fortawesome/free-solid-svg-icons';
+import { faRobot ,faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 export interface Player {
 	x: number;
 	y: number;
@@ -18,19 +18,16 @@ export interface Player {
 }
 
 interface Param{
-	COM : boolean,
-	OPP? : Player,
-	Map : string,
-	ballColor : string,
-	paddleColor : string,
+	gameSettings : any,
+	close : any,
+	setMode : any,
 }
 
 // var Me: Player = {x: 0, y: 0, score: 0, username: "", level: 0};
 
-export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
+export default function Canvas({gameSettings, close, setMode} : Param){
 	
 	const game = useRef<HTMLCanvasElement>(null);
-	// const [pause, setPause] = useState(false);
 	var pause = useRef(false);
 	const [startGame, setStart] = useState(true);
 	const [myScore, setMyScore] = useState(0);
@@ -41,6 +38,8 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 		y: 0,
 		score: 0,
 	});
+
+
 
 	// const [gameWidth, setGameWidth] = useState(0);
 	// const [gameHeight, setGameHeight] = useState(0);
@@ -81,7 +80,7 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			width: 12,
 			height: 140,
 			score: 0,
-			color: paddleColor,
+			color: gameSettings?.paddleColor,
 		}
 	
 		var player2 = {
@@ -90,7 +89,7 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			width: 12,
 			height: 140,
 			score: 0,
-			color: paddleColor,
+			color: gameSettings?.paddleColor,
 		}
 	
 		var ball = {
@@ -100,7 +99,7 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			speed: BALL_SPEED,
 			velocityX: 5,
 			velocityY: 0,
-			color: ballColor,
+			color: gameSettings?.ballColor,
 		}
 
 
@@ -150,8 +149,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 			
 			drawNet();
 			// draw the score
-			// drawText(player1.score as any, gameWidth / 4, gameHeight / 5, "WHITE");
-			// drawText(player2.score as any, 3 * gameWidth / 4, gameHeight / 5, "WHITE");
 			//draw the padels
 			drawRect(player1.x, player1.y, player1.width, player1.height, player1.color);
 			drawRect(player2.x, player2.y, player2.width, player2.height, player2.color);
@@ -175,19 +172,6 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 
 		function ler(a: number, b: number, n: number){
 			return a + (b - a) * n;
-		}
-
-		function getStart(color: string){
-			var n = 3;
-			if (context) {
-				context.fillStyle = color;
-				context.font = "500 150px sans-serif";
-				context.fillText(n.toString(), gameWidth / 2 - 100, gameHeight / 2 - 100);
-			}
-			n--;
-			if (n == 0)
-				n = 3;
-			
 		}
 
 		function reset(){
@@ -284,16 +268,15 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 
 		function gameLoop(){
 			render();
-			if (COM)
-				updateCOM();
+			updateCOM();
 		}
 		
-		document.body.addEventListener("keydown", function(key){
-			if (key.code == "ArrowUp" && !pause.current && !startGame){
+		window.addEventListener("keydown", function(key){
+			if (key.code == "KeyW" && !pause.current && !startGame){
 				if (player1.y > 0)
 					player1.y -= 20;
 			}
-			else if(key.code == "ArrowDown" && !pause.current && !startGame){
+			else if(key.code == "KeyS" && !pause.current && !startGame){
 				if (player1.y < gameHeight - player1.height)
 					player1.y += 20;
 			}
@@ -330,23 +313,25 @@ export default function Canvas({COM, OPP, Map, ballColor, paddleColor} : Param){
 
 	return (
 		<>
-			<div id="container" className={Map}  >
+			<div id="container" className={gameSettings?.map}  >
+				<button id='backBtn' onClick={()=>{close(false);setMode("")}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 
 			<section>
 				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
 				<h1>{(me as {username : string})?.username}</h1>
-				{/* <h1>hewa</h1> */}
 				<h2>{myScore} | {oppScore}</h2>
 				<h1>Computer</h1>
 				<FontAwesomeIcon id='icon' icon={faRobot} />
 			</section>				
 
 				<canvas id="canvas" ref={game} />
+			<footer>
+
+				<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
+				<button className='bg-black text-white p-2 rounded m-5' onClick={Restart}>{restart}</button>
+			
+			</footer>
 			</div>
-			{ COM ? (<>
-			<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
-			<button className='bg-black text-white p-2 rounded m-5' onClick={Restart}>{restart}</button> </>)
-		: null	}
 		</>
 	)
 }

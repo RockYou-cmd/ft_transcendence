@@ -6,14 +6,19 @@
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	position: relative;
 	width: 100%;
-	height:87vh;
+	height: 92.8vh;
+	/* height:87vh; */
 	padding:30px auto;
 	align-items: center;
 	
 	/* transform: scale(1); */
 	
-	
+	&footer{
+		display:  flex;
+		flex-direction: row;
+	}
 
 	& section {
 		display: flex;
@@ -66,12 +71,13 @@
 }
 
 #canvas{
-	width: 90%;
-	height: 90%;
-
+	width: 85%;
+	height: 85%;
 }
 
-
+#gameRootDir{
+	position: relative;
+}
 
 .GameMain{
 	background-color: #1F295E;
@@ -181,6 +187,7 @@
 		font: 600 20px 'Bebas', 'Neue', sans-serif;
 		&:hover{
 			transform: scale(1.09);
+			transition-duration: 0.4s;
 			box-shadow: 3px 3px 15px 4px #00E0FF, 0px 0px 11px 5px rgba(77, 212, 255, 0.80) inset;
 		}
 	}
@@ -189,11 +196,25 @@
 
 
 .MatchMaking{
-	padding:10px 50px;
+	padding:15px 50px 30px;
 	width: 30vh;
 	background-color: #011627;
 	position: absolute;
+	left:50%;
+	top:35%;
+	border-radius: 30px;
+	transform: translate(-50%,-50%);
 	
+	& #backBtn{
+		left:10px;
+		top:10px;
+	}
+
+	& #icon{
+		width: 20px;
+		height: 20px;
+	}
+
 	& h1{
 		font : 700 24px "Inter", sans-serif;
 		text-align: center;
@@ -217,16 +238,35 @@
 }
 
 .gameSettings{
-	padding: 40px 30px;
+	padding:50px 35px 40px;
 	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
 	width:600px;
 	height : 760px;
 	/* margin: auto; */
 	position: absolute;
 	left:50%;
-	top:30%;
+	top:40%;
 	transform: translate(-50%,-50%);
 	border-radius: 50px;
+
+}
+
+#backBtn{
+
+	position: absolute;
+	left:25px;
+	top:20px;
+	border-radius: 50%;
+	padding:4px 5px 0px;
+	& #icon{
+		width:30px;
+		height:30px;
+	}
+
+	&:hover{transform: scale(1.25);
+		transition-duration: 0.5s;
+		background-color: #ffffff3e;
+	}
 }
 
 .gameSettings h1{
@@ -299,6 +339,7 @@
 	cursor: pointer;
 	border: 3px solid #fff;
 	transform: scale(1.18);
+	transition : 0.25s;
 }
 
 .gameSettings footer{
@@ -314,6 +355,7 @@
 		font: 600 20px 'Inter', sans-serif;
 		&:hover{
 			transform: scale(1.1);
+			transition-duration: 0.25s;
 		}
 	}
 

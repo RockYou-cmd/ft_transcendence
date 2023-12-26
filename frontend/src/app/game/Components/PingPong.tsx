@@ -6,11 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot } from '@fortawesome/free-solid-svg-icons';
 import avatar from '../../../../public/avatar.png';
 import { useSocket , useMe } from '../../Components/Log/LogContext';
+import { faCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 
 
 
-export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2, close} : {PLAYER1 : string, PLAYER2 : string , map : string, ballColor : string, paddleColor : string, close : any	}){
+export default function PingPong({gameSettings, gameInfo, close, setMode} : { gameSettings : any , gameInfo : any ,close : any, setMode: any }){
 
 	const {me} = useMe() as any;
 	const {socket} = useSocket();
@@ -18,7 +20,6 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
 	const [oppScore, setOppScore] = useState(0);
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
-	const first = useRef(false);
 
   useEffect(() => {
     if (game.current === null) return;
@@ -32,21 +33,21 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       x: 20,
       y: gameHeight / 2 - 120 / 2,
       score: 0,
-      username: PLAYER1,
+      username: gameInfo?.player1,
       width: 12,
       height: 140,
-      color: paddleColor,
+      color: gameSettings?.paddleColor,
     };
     let player2 = {
       x: gameWidth - 32,
       y: gameHeight / 2 - 120 / 2,
       score: 0,
-      username: PLAYER2,
+      username: gameInfo?.player2,
       width: 12,
       height: 140,
-      color: paddleColor,
+      color: gameSettings?.paddleColor,
     };
-    let ball = { x: 0, y: 0, color: ballColor, radius: 16 };
+    let ball = { x: 0, y: 0, color: gameSettings?.ballColor, radius: 16 };
     let net = {
       x: gameWidth / 2 - 2 / 1,
       y: 0,
@@ -67,9 +68,9 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       ball.y = data.ball.y;
 
 	//   if (!first.current){
-		  player1.username = data.payload.player1;
-		  player2.username = data.payload.player2;
-		  roomName.current = data?.roomName;
+		//   player1.username = data.payload.player1;
+		//   player2.username = data.payload.player2;
+		//   roomName.current = data?.roomName;
 		//   first.current = true;
 	//   }
 	//   console.log("data", data);
@@ -141,8 +142,8 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       drawCircle(ball.x, ball.y, ball.radius, ball.color);
     }
 
-    document.body.addEventListener("keydown", function (key) {
-      if (key.code == "ArrowUp") {
+    window.addEventListener("keydown", function (key) {
+      if (key.code == "KeyW") {
         if (player1.username == me?.username) {
           if (player1.y > 0)
             socket?.emit("move", {
@@ -158,7 +159,7 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
               player: "player2",
             });
         }
-      } else if (key.code == "ArrowDown") {
+      } else if (key.code == "KeyS") {
         if (player2.username == me?.username) {
           if (player2.y + player2.height < gameHeight)
             socket?.emit("move", {
@@ -187,17 +188,17 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
 
 	return(
 		<>
-			<div id="container" className={map}>
+			<div id="container" className={gameSettings.map}>
+				<button id="backBtn" onClick={()=>{close(false);setMode("")}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<section>
 					{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
-					<h1>{PLAYER1}</h1>
+					<h1>{gameInfo.player1}</h1>
 					<h2>{myScore} | {oppScore}</h2>
-					<h1>{PLAYER2}</h1>
+					<h1>{gameInfo.player2}</h1>
 					{/* <FontAwesomeIcon id='icon' icon={faRobot} /> */}
 				</section>
 					<canvas id="canvas" ref={game} width={1500} height={900} />
 			</div>	
-
 		</>
 	)
 }

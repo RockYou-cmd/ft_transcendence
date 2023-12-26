@@ -17,6 +17,7 @@ import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMe, useSocket } from "@/app/Components/Log/LogContext";
+import Confirm from "./Confirm";
 
 let UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
 let AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban"] };
@@ -32,6 +33,10 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	const { socket } = useSocket();
 	const { me } = useMe() as any;
 	const [options, setOptions] = useState({} as any);
+
+	function InviteToGame(User : any){
+		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
+	}
 
 	async function getMembers() {
 		const data = await Get(APIs.members + group?.id);
@@ -231,7 +236,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		}
 	}, [option]);
 
-
 	return (
 		<>
 			<div className="Add" >
@@ -243,10 +247,9 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				</div>
 				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}				
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
-				{invite && <Invite User={data} close={setInvite} />}
+				{invite && <Confirm Make={InviteToGame} title='Invite This User To A Game' close={setInvite} user={User?.user} />}
 				{add && <AddMembers group={group} close={setAdd} />}
-				{mute && <MuteOption User={User}/>}
-				{/* {view && router.push("/users/" + User?.user?.username)} */}
+				{mute && <MuteOption />}
 			</div>
 		</>
 	)
