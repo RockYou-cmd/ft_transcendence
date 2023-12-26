@@ -179,29 +179,24 @@ export class EventGateway {
 
   @SubscribeMessage("invite")
   @UseGuards(gameGuard)
-  async invite(client: Socket, payload:any) {
-    const { user }: any = client;
-    const player = new Map<string, any>();
-    player.set(user.username, client.id);
-    player.set("friend", true);
-    this.matches.push(player);
-    const roomName = payload.player1 + payload.player2;
-    client.join(roomName);
-    this.server.to(payload.player2).emit("invite", {...payload, roomName});
+  async invite(client: Socket, payload: any) {
+    this.server.to(payload.player2).emit("invite",  payload);
   }
 
   @SubscribeMessage("accept")
   @UseGuards(gameGuard)
-  async accept(client: Socket, payload:any) {
+  async accept(client: Socket, payload: any) {
     const { user }: any = client;
-    const match = this.findMatch(payload.player1);
-	console.log(payload);
-	console.log("match : ", match)
-    match.set(user.username, client.id);
+     const players = new Map<string, any>();
+    //  players.set(payload.player1, client.id);
+     players.set(user.username, client.id);
+     players.set("friend", true);
+     this.matches.push(players);
+     const roomName = payload.player1 + payload.player2;
+    console.log("match d : ");
     client.join(payload.roomName);
-    this.server.to(payload.roomName).emit("start", payload);
+    this.server.to(payload.player1).to(payload.player2).emit("start", payload);
   }
-  
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
@@ -215,8 +210,9 @@ export class EventGateway {
       { username: payload.player2 },
       { status: "INGAME" },
     );
-    var match = this.findMatch(payload.player1);
-	console.log(payload.player1);
+    var match = this.findMatch(payload.player2);
+    match.set(user.username, client.id);
+    client.join(payload.roomName);
     match.set("game", new GameService());
     const game = match.get("game");
     const loop = setInterval(() => {
