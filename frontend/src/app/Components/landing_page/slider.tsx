@@ -24,11 +24,12 @@ const ImageSlider = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    arrows: false,
   };
 
   return (
     <div className=' w-full items-center justify-center'>
-      <Slider {...settings}>
+      <Slider {...settings} className='flex justify-center items-center '>
         <div>
           <img src={Pong.src} alt="Image 1" />
         </div>

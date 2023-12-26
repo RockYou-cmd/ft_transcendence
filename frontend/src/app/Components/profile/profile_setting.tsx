@@ -153,12 +153,12 @@ const Setting: FC<Props> = ({ handleClick , User} ) => {
             </div>
           </label>
           <div className=" focus:ring mb-6 mt-5">
-            <label className=" text-white font-bold " htmlFor="username">Username:<br/></label>
-            <input type="text" id="username"  name="username"  onChange={handleChange} className="  w-[100%] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+            <label className=" text-white font-bold rounded-lg focus:outline-none focus:ring focus:border-blue-300" htmlFor="username">Username:<br/></label>
+            <input type="text" id="username"  name="username"  onChange={handleChange} className=" text-white w-[100%] px-3 py-2 bg-gray-800 border rounded-md focus:outline-none focus:border-blue-500"/>
           </div>
           <div className="mb-6 font-bold">
             <label className="text-white" htmlFor="bio">Bio:</label>
-            <textarea className="w-[100%] h-[6rem]" id="bio" name="bio" onChange={handleChange}></textarea>
+            <textarea className="w-[100%] h-[6rem] bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-300" id="bio" name="bio" onChange={handleChange}></textarea>
           </div>
           <div>
           <TwoAuth User={User} />

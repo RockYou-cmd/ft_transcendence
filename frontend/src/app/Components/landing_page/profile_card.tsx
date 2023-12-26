@@ -19,9 +19,9 @@ const ProfileCard = ({imageurl, name, title, discription}: CardProps) => {
                     <h1 className="text-xl font-bold h-1 "> {name}</h1> 
                     <h1 className="mb-3 font-light"> {title}</h1>
                 </div>
-                <div className="back">
+                <div className="back p-4 text-lg">
                     <p className="back-head"> </p>
-                    <h1>Bio:</h1> <br/>
+                    <h1 className="mb-4 font-bold text-2xl text-center">Bio:</h1> 
                     <p> {discription} </p>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { Brygada_1918 } from "next/font/google";
 import Image from "next/image";
-import BG1 from "../../../../public/pingpong.gif"
+import Paddle from "../../../../public/paddle.png"
 import { useRef, useEffect } from "react";
 import Typed from "typed.js";
 
@@ -14,7 +14,7 @@ export default function Hero_section() {
                 strings: ['Dive into PONGY Arena – the ultimate online Pong experience with seamless chat.',
                     'Challenge opponents, showcase your skills, and chat in real-time.',
                     "It's PONGY time – let the games and conversations begin!"],
-                typeSpeed: 30,
+                typeSpeed: 80,
                 loop: true,
                 backDelay: 2000,
             });
@@ -31,10 +31,10 @@ export default function Hero_section() {
     }
     return (
         <>
-            <div className="flex w-full h-[40rem] ">
+            <div className=" flex w-full h-[40rem]  ">
                 <div className="w-full h-full">
 
-                    <div className="relative w-[40%] h-[20%] mt-40 overflow-y-auto left-20 justify-center text-3xl font-bold bg-gradient-to-r from-purple-700 via-indigo-700 to-pink-700 inline-block text-transparent bg-clip-text">
+                    <div className="relative w-[40%] h-[30%] mt-40 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
                         {typing()}
                     </div>
                     <div className="absolute  mt-40   h-fit">
@@ -44,10 +44,13 @@ export default function Hero_section() {
                     </div>
                 </div>
 
-                <div className="flex h-[30rem] w-[50%] absolute right-10 rounded-lg overflow-hidden ">
-                    <Image className="mix-blend-multiply " id="bg1" alt="bg1" src={BG1}  ></Image>
-                    <div className="flex-row ">
+                <div className="  flex h-[30rem] w-[50%] absolute right-24 rounded-lg  ">
+
+                    <div className="animate-bounce ml-32 mt-18">
+                        <div className="absolute  w-11 h-11  animate-spin duration-75 shadow-2xl ml-64 mt-36  rounded-full bg-gradient-to-r from-slate-100 to-gray-700">
+                        </div>
                     </div>
+                    <Image className="w-[20rem] h-[20rem] m-auto mt-32 " id="bg1" alt="bg1" src={Paddle}  ></Image>
                 </div>
 
             </div>
