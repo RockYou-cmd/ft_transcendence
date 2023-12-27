@@ -68,8 +68,9 @@ export default function Notif({content} : {content?: string}) {
 					setShow(true);
 				})
 			}
-			if (pathname == "/game"){
+			if (pathname != "/game"){
 				socket.on("invite", (data :any)=>{
+					console.log("oppp");
 					setMsg(data);
 					// if (!silence)
 						setInvite(true);
@@ -78,7 +79,7 @@ export default function Notif({content} : {content?: string}) {
 			if(pathname != "/game"){
 				socket.on("start", (data :any)=>{
 					console.log("start game in notify", data)
-					router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend");
+					router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend"+ "&invite=true");
 				})
 			}
 			socket.on("update" , (data: any) => {

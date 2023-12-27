@@ -2,7 +2,7 @@
 import '../../assest/chatComponents.css'
 import Image from 'next/image'
 import logo from '../../../../public/4268225 1.png'
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { MouseEvent } from 'react';
 
 
@@ -11,11 +11,13 @@ import { MouseEvent } from 'react';
 export default function Invite({User, close, data} : {User: any, close: any, data : any}){
 
 	const router = useRouter();
+	const pathname = usePathname();
 	// console.log("close Invite ",close);
 
 	function accept(e : MouseEvent){
 		e.preventDefault();
-		router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend");
+		if (pathname != "/game")
+			router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend"+ "&invite=true");
 		close(false);
 	}	
 

@@ -67,7 +67,6 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 	}, [Users, search]);
 
 
-	console.log("data in add ", Users);
 
 	function Print(users : any){
 		let user = users?.users;

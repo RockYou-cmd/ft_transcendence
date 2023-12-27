@@ -36,6 +36,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 
 	function InviteToGame(User : any){
 		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
+		router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend" + "&invite=true");
 	}
 
 	async function getMembers() {
