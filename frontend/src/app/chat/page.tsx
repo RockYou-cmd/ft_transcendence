@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SocketPrivider, useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
 import { useSearchParams } from 'next/navigation';
 import Loading from '../loading';
+import { SendFriendRequest } from '../Components/Settings/ChatSettings';
 // import Lottie from "lottie-react";
 // import chatAnimation from "../../../public/chatAnimation.json"
 
@@ -43,14 +44,13 @@ export default function Chat() {
 		const res = await Put({ username: User?.username }, APIs.Block);
 		if (res.ok) {
 			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
-			router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend");
 		}
 	}
-
-
+	
+	
 	function InviteToGame(User : any){
 		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
-		
+		// router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend" + "&invite=true");
 	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
@@ -113,12 +113,18 @@ export default function Chat() {
 			setSeeMem(true);
 		else if (option == "block")
 			setBlock(true);
+		else if (option == "unblock")
+			setUnBlock(true);
 	}
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
+			}
+			else if (data?.option == "unblock" || data?.option == "block"){
+				// setUser(User);
+			
 			}
 		});
 		return () => {socket?.off("update", ()=>{});}
@@ -131,6 +137,7 @@ export default function Chat() {
 		}
 		if (param.get("user") != null)
 			fetchData(param.get("user") as string);
+		router.replace("/chat");
 	},	[]);
 
 	useEffect(() => {
@@ -148,12 +155,16 @@ export default function Chat() {
 		else
 			setStyle({});
 
-		if (!createG || !explore || !newChat || !invite || !leave || !settings || !seeMem || !block) {
+		if (!createG || !explore || !newChat || !invite || !leave || !settings || !seeMem || !block || !unBlock) {
 			setRefresh(!refresh);
 		}
 		if (view)
 			router.push("/users/" + User?.username);
-	}, [createG, explore, newChat, invite, leave, settings, seeMem, block, view]);
+		if (unBlock){
+			SendFriendRequest({ username: User?.username, status: "unblock", socket: socket, me: me});
+			setUnBlock(false);
+		}
+	}, [createG, explore, newChat, invite, leave, settings, seeMem, block, view, unBlock]);
 
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
@@ -172,7 +183,7 @@ export default function Chat() {
 									<button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 										<div className="straight"></div><div className="straight"></div><div className="straight"></div>
 									</button>
-									{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionsHandler} content={chatOptions} />}
+									{option &&  <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionsHandler} content={chatOptions} />}
 								</div>
 
 								<Groups Group={setUser} refresh={refresh} />
@@ -192,12 +203,12 @@ export default function Chat() {
 						{createG && <CreateGroup close={setCreateG} change={false} />}
 						{explore && <ExploreRooms close={setExplore} />}
 						{newChat && <StartChat close={setNewChat} User={setUser} />}
-						{/* {invite && <Invite User={User} close={setInvite} />} */}
 						{invite && <Confirm Make={InviteToGame} title='Invite This User To A Game' close={setInvite} user={User} />}
 						{leave && <Confirm Make={Leave} title={"Leave this group"} close={setLeave} user={User} />}
 						{block && <Confirm Make={Block} title={`Block ${User.username}`} close={setBlock} user={User} />}
 						{settings && <CreateGroup close={setSettings} change={true} info={User}/>}
 						{seeMem && <OwnerSettings group={User} close={setSeeMem} role={role} DirectMsg={setUser} />}
+						
 					</div>
 				</>)
 			}

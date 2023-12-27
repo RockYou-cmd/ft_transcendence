@@ -9,10 +9,12 @@ import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import Loading from '../loading';
 import LeaderBoard from './Components/LeaderBoard';
 import MatchMaking from './Game';
-import GameMode from './Components/GameMode';
 import GameSettings from './Components/gameSettings';
 import PingPong from './Components/PingPong';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import SelectFriend from './Components/FriendlyGame';
+import Invite from '../chat/Components/Invite';
 
 
 interface GameInfo {
@@ -24,15 +26,20 @@ interface GameInfo {
 
 export default function GamePage() {
 	const [data, setData] = useState({} as any);
-	const [wait, checkwait] = useState(false);
-	const [inGame, setInGame] = useState(false);
-	const [Mode, setMode] = useState("");
+	const [wait, checkwait] = useState<boolean>(false);
+	const [inGame, setInGame] = useState<boolean>(false);
+	const [Mode, setMode] = useState<string>("");
 	const { online } = useLogContext();
-	const [gameSet, setGameSet] = useState(true);
-	const [matchMake, setMatchMake] = useState(false);
+	const [gameSet, setGameSet] = useState<boolean>(true);
+	const [matchMake, setMatchMake] = useState<boolean>(false);
 	const [gameInfo, setGameInfo] = useState<GameInfo>();
 	const [Style, setStyle] = useState<any>({});
 	const { me } = useMe() as any;
+	const d = useRef(false);
+	const router = useRouter();
+	const [selectedFriend, setSelectedFriend] = useState("");
+	const invite = useRef(false);
+	const [inviteComp, setInviteComp] = useState(false);
 
 	const param = useSearchParams();
 	const { socket } = useSocket();
@@ -41,14 +48,19 @@ export default function GamePage() {
 		
 		if (param.get("mode") != null){
 			setMode(param.get("mode") as string);
+
 		}
 
-		if (param.get("roomName") != null && param.get("player1") != null && param.get("player2") != null){
+		if (param.get("player1") != null && param.get("player2") != null){
 			setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
+			setSelectedFriend(param.get("player2") as string);
+			if (param.get("invite") == "true")
+				invite.current = true;
+			// console.log("invite", invite.current, "param", param.get("invite"));
 		}
+		router.replace("/game");
 	},[])
 
-	console.log("gameInfo", gameInfo);
 
 	const [gameSettings, setGameSettings] = useState({
 		map : "shark",
@@ -69,15 +81,48 @@ export default function GamePage() {
 		})
 	}
 
-	function FriendlyMatch(){
-		const n = useRef(false);
-		console.log("whatttttttt");
-		useEffect(() => {
-			if (gameInfo?.player2 == me?.username && !n.current){
-				console.log("accept", gameInfo);
+	useEffect(() => {
+		let datas : any = null;
+		// if (param.get("player1") != null && param.get("player2") != null){
+		// 	setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
+		// 	setSelectedFriend(param.get("player2") as string);
+		// 	if (param.get("invite") == "true")
+		// 		invite.current = true;
+		// 	router.replace("/game");
+		// 	data = {roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string};
+		// }
+		if(datas == null){
+			socket?.on("invite", (data: any) => {
+				console.log("invite", data);
+				datas = data;
+				setSelectedFriend(data?.player1);
+				setInviteComp(true);
+			});
+		}
+		
+
+		if ((datas != null || gameInfo != undefined) && (gameInfo?.player2 == me?.username || datas?.player2 == me?.username) && !d.current){
+			console.log("accept", gameInfo, datas);
+			if (gameInfo)
 				socket?.emit("accept", gameInfo);
-				n.current = true;
-			}
+			else if (datas)
+				socket?.emit("accept", datas);
+			d.current = true;
+
+		}
+
+		return () => {socket?.off("accept"), ()=>{}
+			socket?.off("invite"), ()=>{}	
+	}
+	},[socket]);
+
+	function FriendlyMatch(){
+		console.log("whatttttttt");
+		if (invite.current === false && selectedFriend != "" ){
+			console.log("invite", selectedFriend);
+			socket?.emit("invite", {player2 : selectedFriend, player1 : me?.username});
+		}
+		useEffect(() => {
 			if (gameInfo?.player1 == me?.username){
 				console.log("start player1", gameInfo);
 				socket?.emit("start", gameInfo);
@@ -86,13 +131,18 @@ export default function GamePage() {
 			socket?.on("start", (data: any) => {
 				console.log("start data", data);
 				setGameInfo(data);
+				if (data?.player1 == me?.username){
+					console.log("start player1 in data", data);	
+					socket?.emit("start", data);
+				}
 				setInGame(true);
 			})
-			n.current = true;
+	
+			
 
 			return () => {socket?.off("start"), ()=>{}}
 		},[])
-		return null;
+		return (<Loading />)
 	}
 
 	useEffect(() => {
@@ -102,8 +152,12 @@ export default function GamePage() {
 		if (!gameSet && Mode == "computer") {
 			setInGame(true);
 		}
-		if (!inGame && Mode == "")
+		if (!inGame && Mode == ""){
+			invite.current = false;
+			setGameInfo(undefined);
+			setSelectedFriend("");
 			setGameSet(true);
+		}
 
 		if (matchMake || (Mode != "" && gameSet) ) {
 			setStyle({
@@ -115,15 +169,17 @@ export default function GamePage() {
 		else{
 			setStyle({});
 		}
-
+		if (inGame)
+			invite.current = false;
 	}, [gameSet, Mode, inGame, matchMake])
 	
 
 
-	// console.log("gameInfo", gameInfo);
-	// console.log("gameSet", gameSet, "Mode", Mode, "matchMake", matchMake, "inGame", inGame);
+	
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 	
+	// console.log("invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
+
 	if (!hooks.waitHook.state) {
 		return (<Loading />)
 	}
@@ -150,9 +206,11 @@ export default function GamePage() {
 					</div>
 					}
 
-					{!inGame && Mode != "" && gameSet && <GameSettings setMode={setMode} save={setMatchMake} close={setGameSet} Options={setOptions} />}		
+					{!inGame && Mode != "" && (Mode == "friend" && selectedFriend == "" ? false : true) && gameSet && <GameSettings setMode={setMode} save={setMatchMake} close={setGameSet} Options={setOptions} />}		
 					{!inGame && Mode == "rank" && matchMake && <MatchMaking GameInfo={setGameInfo} close={setMatchMake} setMode={setMode} startGame={setInGame} />}
 					{!inGame && Mode == "friend" && matchMake &&  <FriendlyMatch/>}
+					{!inGame && Mode == "friend" && !invite.current && selectedFriend == "" && !matchMake && <SelectFriend close={setMatchMake} setMode={setMode} select={setSelectedFriend}/>}
+					{!inGame && inviteComp && <Invite User={selectedFriend} close={setInviteComp} data={gameInfo}/>}
 					</div>
 
 					{inGame && Mode == "computer" && <Canvas setMode={setMode} close={setInGame} gameSettings={gameSettings}/>}

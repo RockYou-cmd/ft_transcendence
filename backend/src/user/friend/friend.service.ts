@@ -97,12 +97,20 @@ export class FriendService {
 											username: account.username
 										}
 									}
+								},
+								include: {
+									blocked: {
+										select: {
+											username:true
+										}
+									}
 								}
 							}
 						}
           },
         },
       });
+	  		// console.log(chats[0].members[0].friends)
 			return {chats}
 		} catch (err) {
 			return err;

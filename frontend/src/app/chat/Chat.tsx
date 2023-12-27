@@ -16,9 +16,12 @@ import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
+import { Anybody } from 'next/font/google';
 
 
-const chatSettings: ChatOptions = { Option: ["invite", "view"], desc: ["invite for a game", "View profile"] };
+const chatSettings: ChatOptions = { Option: ["invite","block" ,"view"], desc: ["Invite For A Game", "Block","View Profile"] };
+
+const blockSettings: ChatOptions = { Option: ["unblock", "view"], desc: ["Unblock", "View Profile"] };
 
 const AdminSettings: ChatOptions = {
 	Option: ["leave", "see"],
@@ -29,15 +32,17 @@ const SuperSettings: ChatOptions = {
 	desc: ["Leave Group", "See Members", "Group Settings"]
 };
 
+const noSettings: ChatOptions = { Option: [], desc: [] };
 
 
-export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any, Role: any, OptionHandler: any , refresh : boolean}) {
+
+export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any, Role: any, OptionHandler: any, refresh: boolean }) {
 
 	const { socket, setSocket } = useSocket();
 	const ChatID = useRef("");
 	const Room = useRef("");
 	const { me, setMe } = useMe() as any;
-	const status = useRef({ status : "", sender : ""});
+	const status = useRef({ status: "", sender: "" });
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
 	const router = useRouter();
@@ -45,13 +50,16 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 	const [input, setInput] = useState("");
 	const [option, setOption] = useState(false);
 	const Muted = useRef({ mute: false, id: "" });
+	const [refreshChat, setRefreshChat] = useState(false);
 
 	//hooks for chat settings
+
 	const [group, setGroup] = useState(false);
 	const [role, setRole] = useState("ADMIN" || "OWNER" || "MEMBER" || "");
-	const content: ChatOptions = (group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings);
-	
-	
+
+	const content = useRef<ChatOptions> ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : 
+	(User?.friends && User?.friends[0]?.status == "BLOCKED" ? (User?.blocked?.username != me?.username ? blockSettings: noSettings) : chatSettings)));
+
 	async function getChat(channel: any) {
 		let name = "";
 		let Api = "";
@@ -70,31 +78,30 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-	
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
-				
+
 				const datas = await res.json();
 				status.current.status = datas?.friends[0]?.status;
-				if (datas?.friends && datas?.friends[0]?.status == "BLOCKED"){
+				if (datas?.friends && datas?.friends[0]?.status == "BLOCKED") {
 					status.current.sender = datas?.friends[0]?.blocked?.username;
 				}
 				ChatID.current = datas?.chats[0]?.id;
 				setChat(datas?.chats[0]);
-				
+
 			}
 		}
-		else{
-			if (channel?.username != undefined){
+		else {
+			if (channel?.username != undefined) {
 				setChat(data?.chats[0]);
 				ChatID.current = data?.chats[0]?.id;
 				status.current.status = data?.friends[0]?.status;
-				if (data?.friends && data?.friends[0]?.status == "BLOCKED"){
+				if (data?.friends && data?.friends[0]?.status == "BLOCKED") {
 					status.current.sender = data?.friends[0]?.blocked?.username;
 				}
 			}
-			else{
+			else {
 				setChat(data);
 				ChatID.current = channel?.id;
 			}
@@ -104,31 +111,34 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			Role(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
 			setRole(data?.members.filter((member: any) => member?.userId == me?.username)[0]?.role);
 			if (data?.members.filter((member: any) => member?.userId == me?.username)[0]?.status == "MUTED") {
-				Muted.current = { mute: true, id: channel?.id };	
+				Muted.current = { mute: true, id: channel?.id };
 			}
-		}	
+		}
+
+		content.current = ((channel?.name ? (data?.members?.filter((member: any) => member?.userId == me?.username)[0]?.role == "OWNER" ? SuperSettings : AdminSettings) : 
+		(User?.friends && User?.friends[0]?.status == "BLOCKED" ? (User?.friends[0]?.blocked?.username != me?.username ? blockSettings: noSettings) : chatSettings)));
 	}
-	
-	// console.log("block", status.current.status);
-	
-	
+
+
 	useEffect(() => {
-		if (Object.keys(User).length != 0)
+		if (Object.keys(User).length != 0){
 			getChat(User);
+		}
 	}, [User])
 
 	useEffect(() => {
 		async function fetchData() {
 			const data = await Get(APIs.getChat + User?.username);
-			// setChat(data?.chats[0]);
+		
 			status.current.status = data?.friends[0]?.status;
+			
 		}
 		if (chat && Object.keys(chat).length != 0) {
 			fetchData();
 		}
 	}, [refresh])
-	
-	
+
+
 	const visible = useRef(null) as any;
 
 	async function send(e: MouseEvent | KeyboardEvent) {
@@ -137,8 +147,8 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
 		) {
 			if ((input !== "" || msgImg.current?.files[0] != undefined)) {
-				let img : string = "";
-				if (msgImg.current?.files[0] != undefined){
+				let img: string = "";
+				if (msgImg.current?.files[0] != undefined) {
 					alert("Uploading image");
 					img = await fileUploadFunction(msgImg.current.files[0]);
 					alert("Image uploaded");
@@ -146,32 +156,32 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 
 				const s = img != "" ? img : input;
 				const msg = { content: s, senderId: me?.username };
-				if (status.current.status != "BLOCKED"){
+				if (status.current.status != "BLOCKED") {
 					setChat((chat: { messages: any }) => ({
 						...chat,
 						messages: [...chat.messages, msg],
 					}));
 				}
-				
+
 
 				const message: Message = {
-					type : "message",
+					type: "message",
 					content: s,
 					sender: me?.username,
 					chatId: ChatID.current,
 				};
 				if (!group && status.current.status != "BLOCKED") {
 					socket.emit(Room.current, { ...message, receiver: User?.username });
-				} else if (group){
+				} else if (group) {
 					socket.emit(Room.current, { ...message, receivers: chat?.members });
 				}
-				else{
-					
-					if (status.current.status == "BLOCKED"){
+				else {
+
+					if (status.current.status == "BLOCKED") {
 						if (status.current.sender == me?.username)
 							alert("You blocked this user");
 						else
-							alert("You are blocked by this user");	
+							alert("You are blocked by this user");
 					}
 				}
 			}
@@ -180,27 +190,32 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		}
 	}
 	// console.log("");
-	
+
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
+		
 			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: true, id: data?.groupId };
 			}
 			else if (data?.option == "block" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 				status.current.status = "BLOCKED";
 				status.current.sender = data?.sender;
-				
+
+				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : 
+				(status.current.status == "BLOCKED" ? (status.current.sender == me?.username ? blockSettings: noSettings) : chatSettings)));
 			}
-			else if (data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)){
+			else if (data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)) {
+	
 				status.current.status = "";
 				status.current.sender = "";
+				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings));
 			}
 			else if (data?.option == "unMute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: false, id: data?.groupId };
 			}
 		});
-		socket?.on("muted",(data : any) =>{
-			if (data?.roomId == ChatID.current){
+		socket?.on("muted", (data: any) => {
+			if (data?.roomId == ChatID.current) {
 				alert("You are muted in this group");
 				Muted.current = { mute: true, id: data?.roomId };
 			}
@@ -216,7 +231,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 		}
 		return () => {
 			socket?.off(Room.current);
-			socket?.off("update", ()=>{});
+			socket?.off("update", () => { });
 			socket?.off("muted");
 		};
 	}, [socket, chat]);
@@ -229,7 +244,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				{User?.name && msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
 				<section>
 					{
-						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{width: "fit-content" , height : "fit-content"}}/> : <p>{msg?.content}</p>
+						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{ width: "fit-content", height: "fit-content" }} /> : <p>{msg?.content}</p>
 					}
 				</section>
 				{/* <span >{msg?.createdAt}</span> */}
@@ -242,7 +257,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 
 	return (
 		<>
-		
+
 			<section className='User'>
 
 				<Image className='g_img' src={User?.photo ? User?.photo : avatar} priority={true} alt="img" width={75} height={75} />
@@ -254,7 +269,7 @@ export default function Cnvs({ User, Role, OptionHandler ,refresh }: { User: any
 				{Object.keys(User).length != 0 && <button ref={visible} onClick={() => { setOption(!option) }} className="Options">
 					<div className='point'></div><div className='point'></div><div className='point'></div>
 				</button>}
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content} />}
+				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content.current} />}
 			</section>
 			<div className="Msg" ref={scroll}>
 				{chat?.messages?.map((msg: any, index: number) => (<PrintMsg key={index} msgs={msg} />))}

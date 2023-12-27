@@ -36,7 +36,6 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 		e.preventDefault();
 
 		const verify2FAResponse = await GetRes(`http://localhost:3001/auth/verifyToken/?username=${user}&token=${token}`)
-		console.log("verify", verify2FAResponse);
 		if (verify2FAResponse.ok) {
 			if (online != "ON") {
 				setOnline("ON");
@@ -58,16 +57,12 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 			setUser(data.username);
 			try {
 				const res = await Post(data, APIs.SignIn);
-				console.log("salam ", res);
 				const resData = await res?.json();
-				console.log("data", resData);
 				if (res.status == 201) {
 					if (resData?.status == 425){
 						setshow2FA(true);
-						console.log("heeer");
 					}
 					else{
-						console.log("hey");
 						if (online != "ON") {
 							setOnline("ON");
 						}
