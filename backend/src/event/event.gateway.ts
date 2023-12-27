@@ -59,6 +59,7 @@ export class EventGateway {
       client.leave(username);
       var match = this.findMatch(username);
       if (match) {
+		console.log(match);
         this.userService.updateData({ username }, { status: "ONLINE" });
         const player1 = Array.from(match.keys())[0];
         const player2 = Array.from(match.keys())[1];
@@ -114,7 +115,6 @@ export class EventGateway {
   }
 
   @SubscribeMessage("update")
-  @UseGuards(messageGuard)
   handleBlock(client: Socket, payload: any) {
     if (payload.option === "block" || payload.option === "unblock")
       this.server
@@ -193,14 +193,15 @@ export class EventGateway {
      players.set("friend", true);
      this.matches.push(players);
      const roomName = payload.player1 + payload.player2;
-    console.log("match d : ");
-    client.join(payload.roomName);
-    this.server.to(payload.player1).to(payload.player2).emit("start", payload);
+    client.join(roomName);
+    this.server.to(payload.player1).to(roomName).emit("start", {...payload, roomName});
   }
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
   async startGame(client: Socket, payload) {
+	console.log(payload);
+	console.log('start');
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },

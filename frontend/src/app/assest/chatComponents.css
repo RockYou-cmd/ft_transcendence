@@ -6,8 +6,9 @@
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	width: 40vh;
 	/* height: 35vh; */
-	top: 200px;
-	left: 34.5%;
+	left:60%;
+	top:40%;
+	transform: translate(-50%,-50%);
 	margin: auto;
 	/* width: fit-content; */
 	/* background-color: #1A66FF; */
@@ -192,8 +193,9 @@ input[type=file]::file-selector-button:hover {
 	justify-content: center;
 	position: absolute;
 	padding: 30px 55px;
-	top: 15vh;
-	left: 34.5%;
+	left:60%;
+	top:50%;
+	transform: translate(-50%,-50%);
 	width: 40vh;
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);

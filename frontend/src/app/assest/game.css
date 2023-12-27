@@ -269,6 +269,37 @@
 	}
 }
 
+.FiendlyGame .Add{
+	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
+
+	& .searchInput{
+		background-color: #ffffff96;
+		color: #000000;
+	}
+}
+
+.Waiting{
+	padding: 40px;
+	color: #000000;
+	position: absolute;
+	left:50%;
+	top:50%;
+	transform: translate(-50%,-50%);
+	background-color: #ffffff96;
+	& button{
+		padding:20px;
+		background-color: #3184BF;
+	}
+}
+
+.FiendlyGame .Add .content .user{
+	background-color: #ffffff76;
+	&:hover{
+		background-color: #ffffff34;
+	}
+	
+}
+
 .gameSettings h1{
 	font : 700 22px "Inter", sans-serif;
 	margin:15px 0px;

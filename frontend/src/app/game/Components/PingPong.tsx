@@ -8,6 +8,7 @@ import avatar from '../../../../public/avatar.png';
 import { useSocket , useMe } from '../../Components/Log/LogContext';
 import { faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { MouseEvent } from 'react';
 
 
 
@@ -20,6 +21,15 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	const [oppScore, setOppScore] = useState(0);
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
+
+	console.log("gameInfo in PingPong", gameInfo);
+	function leaveMatch(e? : MouseEvent){
+		e?.preventDefault();
+		socket?.disconnect();
+		close(false);
+		setMode("");
+		socket?.connect();
+	}
 
   useEffect(() => {
     if (game.current === null) return;
@@ -83,8 +93,8 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
     });
 
     socket?.on("endGame", (data: any) => {
-		close(false);
-		setMode("")
+		console.log("endGame", data);
+		leaveMatch();
     });
 
     function drawRect(
@@ -179,6 +189,9 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
       }
     });
 
+	if (gameInfo?.player2 == me?.username && gameInfo?.roomName){
+		socket?.on("start", (data: any) => {});
+	}
     return () => {
       socket?.off("frame", () => {});
     };
@@ -190,7 +203,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	return(
 		<>
 			<div id="container" className={gameSettings.map}>
-				<button id="backBtn" onClick={()=>{close(false);setMode("");socket?.emit("leaveMatch", gameInfo)}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+				<button id="backBtn" onClick={(e : MouseEvent)=>leaveMatch(e)}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<section>
 					{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
 					<h1>{gameInfo.player1}</h1>
