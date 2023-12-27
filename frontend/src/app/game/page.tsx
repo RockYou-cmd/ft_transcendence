@@ -2,7 +2,7 @@
 
 import '../assest/game.css';
 import Canvas from "./canvas";
-import { MouseEvent, use } from 'react';
+import { MouseEvent } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import LoG from '../Components/Log/Log';
 import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
@@ -92,6 +92,7 @@ export default function GamePage() {
 			setSelectedFriend("");
 			setGameInfo(undefined);
 			setMode("");
+			setAccept("");
 			invite.current = false;
 		}
 		else if (!inviteComp && accept == "accepted")
@@ -121,10 +122,10 @@ export default function GamePage() {
 			socket?.on("start", (data: any) => {
 				setGameInfo(data);
 			});
-		// }
 	
 		return () => {socket?.off("invite"), ()=>{}}
 	},[socket, accept]);
+
 // console.log("invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 
 	const [gameSettings, setGameSettings] = useState({
@@ -147,9 +148,9 @@ export default function GamePage() {
 
 
 	function FriendlyMatch(){
+		const [refuse, setRefuse] = useState(false);
 		if (send && gameInfo?.player1 == me?.username){
 			socket?.emit("invite", gameInfo);
-			setSend(false);
 		}
 		useEffect(() => {
 			if (gameInfo?.player2 == me?.username && !d.current){
@@ -170,9 +171,42 @@ export default function GamePage() {
 					setAccept("");
 				}
 			})
-			return () => {socket?.off("start"), ()=>{}}
+			socket?.on("update", (data: any) => {
+				if (data?.option == "refuse"){
+					setAccept("");
+					setRefuse(true);
+					setGameSet(true);
+					setMode("");
+					setMatchMake(false);
+					setSelectedFriend("");
+					setGameInfo(undefined);
+					setSend(false);
+				}
+			})
+			return () => {socket?.off("start"), ()=>{}
+				socket?.off("update"), ()=>{}
+			}
 		},[])
-		return (<Loading />)
+
+		// function Cancel(e : MouseEvent){
+		// 	e.preventDefault();
+		// 	setAccept("");
+		// 	setGameSet(true);
+		// 	setMode("");
+		// 	setMatchMake(false);
+		// 	setSelectedFriend("");
+		// 	setGameInfo(undefined);
+		// 	setSend(false);
+		// }
+
+		if (refuse)
+			return (<div className="refuseMsg">{gameInfo?.player2} has refused your invitation game</div>)
+		return (<>
+			<div className="Waiting">
+				<h1>Waiting for {gameInfo?.player2}</h1>
+				{/* <button onClick={(e : MouseEvent)=>Cancel(e)}>Cancel</button> */}
+			</div>
+		</>)
 	}
 	
 
