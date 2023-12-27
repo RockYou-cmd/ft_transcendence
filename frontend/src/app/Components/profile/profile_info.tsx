@@ -8,8 +8,8 @@ import { GetData } from "../Log/CheckLogin";
 import { useLogContext } from "../Log/LogContext";
 import { Get, Post } from "../Fetch/Fetch";
 import Setting from "./profile_setting";
-import FriendListComponent from "./friendList";
 import { APIs } from "@/app/Props/APIs";
+import FriendListComponent from "./friendList";
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
@@ -41,26 +41,6 @@ export default function Profile_info() {
 		setShowSetting(val);
 
 
-		// fetching friend lis o fthe current user
-		const [friendList, setFriendList] = useState<any[]>([]);
-		const fetchFriendList = async () => {
-		  try {
-			const response = await Get(APIs.Friends);
-			if (response.ok) {
-			  const data = await response.json();
-			  setFriendList(data); 
-			} else {
-			  throw new Error('Failed to fetch friend list');
-			}
-		  } catch (error) {
-			console.error('Error fetching friend list:', error);
-		  }
-		  
-		  useEffect(() => {
-			  fetchFriendList();
-			}, []); 
-		};
-
 	};
 
 	return (
@@ -87,7 +67,6 @@ export default function Profile_info() {
 					
 				>
 					3
-					{/* <FriendListComponent {friendList} /> */}
 					<div className=" relative w-full h-full m-[50%] rounded-full bg-green-500 blur-3xl"></div>
 				</div>
 
@@ -107,10 +86,11 @@ export default function Profile_info() {
 					<Image src={img} width={100} height={100} alt="img" />
 				</div>
 				<div
-					className="rounded-lg bg-gray-800 hover:ease-in-out row-span-3 hover:scale-105 duration-700 shadow-sm shadow-cyan-500/50 "
+					className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3 hover:scale-105 duration-700 shadow-sm shadow-cyan-500/50 "
 					
 				>
 					6
+					<FriendListComponent />
 				</div>
 				<div
 					className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out hover:scale-105 duration-700 shadow-sm shadow-cyan-500/50 "
