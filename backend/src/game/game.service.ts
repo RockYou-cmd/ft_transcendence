@@ -4,7 +4,6 @@ import { Injectable } from "@nestjs/common";
 export class GameService {
   FPS = 50;
   ball_SPEED = 1.2;
-  COM_LVL = 0.15;
   ball_acc = 0.12;
   gameHeight = 900;
   gameWidth = 1500;
@@ -60,6 +59,7 @@ export class GameService {
     this.ball.y = this.gameHeight / 2;
     this.ball.speed = this.ball_SPEED;
     this.ball.velocityX = -this.ball.velocityX;
+	this.ball.velocityY = 0;
     this.player1.y = this.gameHeight / 2;
     this.player2.y = this.gameHeight / 2;
   }

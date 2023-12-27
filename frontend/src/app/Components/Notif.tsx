@@ -70,7 +70,7 @@ export default function Notif({content} : {content?: string}) {
 			}
 			if (pathname != "/game"){
 				socket.on("invite", (data :any)=>{
-					console.log("oppp");
+					// console.log("oppp");
 					setMsg(data);
 					// if (!silence)
 						setInvite(true);

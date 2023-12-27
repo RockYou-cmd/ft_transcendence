@@ -193,14 +193,15 @@ export class EventGateway {
      players.set("friend", true);
      this.matches.push(players);
      const roomName = payload.player1 + payload.player2;
-    console.log("match d : ");
-    client.join(payload.roomName);
-    this.server.to(payload.player1).to(payload.player2).emit("start", payload);
+    client.join(roomName);
+    this.server.to(payload.player1).to(roomName).emit("start", {...payload, roomName});
   }
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
   async startGame(client: Socket, payload) {
+	console.log(payload);
+	console.log('start');
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },
