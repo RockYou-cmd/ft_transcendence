@@ -93,6 +93,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
     });
 
     socket?.on("endGame", (data: any) => {
+		console.log("endGame", data);
 		leaveMatch();
     });
 

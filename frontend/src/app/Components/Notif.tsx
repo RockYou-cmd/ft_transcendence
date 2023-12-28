@@ -61,7 +61,7 @@ export default function Notif({content} : {content?: string}) {
 	useEffect(() => {
 		if (socket) {
 			// console.log("socket on");
-			if (pathname == "/chat"){
+			if (pathname != "/chat"){
 				socket.on("message" , (data: any) => {
 					setMsg(data);
 					if (!silence && pathname != "/chat")
@@ -82,13 +82,16 @@ export default function Notif({content} : {content?: string}) {
 					router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend"+ "&invite=true");
 				})
 			}
-			socket.on("update" , (data: any) => {
-				if (data?.option == "request friend" || data?.option == "accept request"){
-					setMsg(data);
-					if (!silence)
+			if (pathname != "/game"){
+
+				socket.on("update" , (data: any) => {
+					if (data?.option == "request friend" || data?.option == "accept request"){
+						setMsg(data);
+						if (!silence)
 						setShow(true);
 				}
 			})
+			}
 		}
 		return () => {socket?.off("message");
 			socket?.off("update");

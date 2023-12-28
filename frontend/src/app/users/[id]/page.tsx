@@ -18,6 +18,7 @@ import { FaUserClock, FaUserPlus, FaUserTimes, FaUserMinus, FaUserLock } from 'r
 import { CgMoreVerticalR } from "react-icons/cg";
 import { SlClose } from "react-icons/sl";
 import ProfileMenu from "@/app/Components/profile/userMenu";
+import FriendListComponent from "@/app/Components/profile/friendList";
 
 
 export default function UserProfile({ param }: { param: { id: string } }) {
@@ -118,93 +119,143 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const toggleMenu = () => {
-	  setIsMenuOpen(!isMenuOpen);
+		setIsMenuOpen(!isMenuOpen);
 	};
 
 	function renderFriendStatusButton() {
 		let buttonContent;
 		let icon;
-		
+
 		switch (Fstatus.current) {
 			case "accept request":
-			buttonContent = "Accept Request";
-			icon = <FaUserClock className="mr-2" />;
-			break;
+				buttonContent = "Accept Request";
+				icon = <FaUserClock className="mr-2" />;
+				break;
 			case "cancel request":
 				buttonContent = "Cancel Request";
 				icon = <FaUserTimes className="mr-2" />;
 				break;
-				case "remove friend":
-					buttonContent = "Remove Friend";
-					icon = <FaUserMinus className="mr-2" />;
-					break;
-					case "unblock":
-						buttonContent = "Unblock";
-						icon = <FaUserLock className="mr-2" />;
-						break;
-						default:
-							buttonContent = "Add Friend";
-							icon = <FaUserPlus className="mr-2" />;
-						}		
-						return (
-							
-							<button onClick={(e: MouseEvent) => friendEvent(e, Fstatus.current)} className="m-4 bg-green-600 p-2 rounded-md flex items-center">
-			{icon}
-			{buttonContent}
-		  </button>
+			case "remove friend":
+				buttonContent = "Remove Friend";
+				icon = <FaUserMinus className="mr-2" />;
+				break;
+			case "unblock":
+				buttonContent = "Unblock";
+				icon = <FaUserLock className="mr-2" />;
+				break;
+			default:
+				buttonContent = "Add Friend";
+				icon = <FaUserPlus className="mr-2" />;
+		}
+		return (
+
+			<button onClick={(e: MouseEvent) => friendEvent(e, Fstatus.current)} className="m-4 bg-green-600 p-2 rounded-md flex items-center">
+				{icon}
+				{buttonContent}
+			</button>
 		);
 	}
-	
-	
-	
-	
+	function checkStatus(status:string) {
+			
+		switch  (status) {
+			case "ONLINE":
+				return  "bg-green-500"
+			case "OFFLINE":
+				return "bg-red-500"
+			case "INGAME":
+				return "bg-yellow-500"
+			default:
+				return "bg-gray-500"
+
+	}
+}
+let statusColor:string  = checkStatus(Userdata?.status);
+
+
+
 	if (name == "not-found")
-	return (<NotFound />);
-	
+		return (<NotFound />);
+
 	if (!show) { return <Loading /> }
 	return (
 		<>
 			{online == "OFF" ? render :
 
-				(<><div className="m-8 flex flex-row gap-8 h-[85vh] ">
-					<div className=" flex flex-col rounded-lg  items-center bg-teal-500 h-full min-w-[400px]  bg-gradient-to-r from-blue-700 to-blue-900" >profile info
+				(<><div className="m-8 flex flex-row gap-8 h-[85vh]  ">
+					<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black" >
 						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
-						<h1 className='text-3xl pt-3 ' > {Userdata?.username} </h1>
-						
-						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center bg-teal-500  min-w-[400px] bg-gradient-to-r from-blue-700 to-blue-900">
+						<h1 className='text-3xl mt-8 font-bold pt-3 ' > {Userdata?.username.toUpperCase()} </h1>
+
+						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center   min-w-[450px] ">
 							{renderFriendStatusButton()}
-							{isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-600 rounded-full top-0 left-0 cursor-pointer" />
+							{/* {isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-600 rounded-full top-0 left-0 cursor-pointer" />
 								: <CgMoreVerticalR size={25} onClick={toggleMenu} className="hover:bg-gray-200/20 cursor-pointer" />
-							}
+							} */}
 
 							{/* Show the profile menu when isMenuOpen is true */}
-							<div className="relative mb-10">
+							{/* <div className="relative bg-red-500 mb-10">
 								{isMenuOpen && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} />}
-							</div>
+							</div> */}
 						</div>
+						<div className="flex w-full p-1 bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900  mt-8 items-center justify-center ">
+						<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
+							<h1 className="text-xl  font-bold  items-center"> {Userdata?.status}</h1>
+						</div>
+
 
 						{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
 						<button onClick={(e: MouseEvent) => friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
 						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span> */}
 
-						<div className='w-auto h-auto mt-[50px] m-2 p-3 bg-teal-200/30 rounded-lg hover:bg-white/30 '> this thebio place bla bbab alblab abla blablb lab lab lab lab lab </div>
-						<div className='grid grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit '>
-							<div className='bg-red-500 col-span-2 flex justify-center'>Achievment</div>
-							<div className='bg-red-500'>1</div>
-							<div className='bg-red-500'>2</div>
-							<div className='bg-red-500'>3</div>
-							<div className='bg-red-500'>4</div>
+						<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
+							{""}
+							{Userdata.bio}{""}
 						</div>
+						<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
+					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
+						{/* <Image src={achiev_pic} width={60} height={60} alt="achievment" />{" "} */}
+						Achievmnet
+					</div>
+					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">1</div>
+					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">2</div>
+					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">3</div>
+					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">4</div>
+				</div>
 
 					</div>
-					<div className='gap-8 w-full grid  grid-cols-3 grid-rows-4 '>
+					{/* <div className='gap-8 w-full grid  grid-cols-3 grid-rows-4 '>
 						<div className="rounded-lg  w-[350px]  bg-teal-500 min-w-full hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50 ">2</div>
 						<div className="rounded-lg  w-[350px] bg-teal-500 min-w-full hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">3</div>
 						<div className="rounded-lg  w-[350px] bg-teal-500 min-w-full hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">4</div>
 						<div className=" rounded-lg col-span-2 row-span-2 bg-teal-500 hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">5</div>
 						<div className="rounded-lg bg-teal-500 min-w-[350px] hover:ease-in-out row-span-3 hover:bg-teal-900 shadow-lg shadow-cyan-500/50">6</div>
 						<div className=" rounded-lg col-span-2 bg-teal-500 hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">7</div>
-					</div>
+					</div> */}
+
+<div className="gap-8 w-full grid  grid-cols-3 grid-rows-4 " >
+				<div className="  rounded-lg  w-[30%]  bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500  " >
+					2 is teh
+					<div className=" relative w-full h-full m-[50%] rounded-full bg-blue-400 blur-3xl"></div>
+				</div>
+
+				<div className="rounded-lg  w-[30%] bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500" 
+				> 3 <div className=" relative w-full h-full m-[50%] rounded-full bg-green-500 blur-3xl"></div>
+				</div>
+
+				<div className="rounded-lg  w-[30%] bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500" 
+				> 4 <div className=" relative w-full h-full m-[50%] rounded-full bg-red-400 blur-3xl"></div>
+				</div>
+
+				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " 
+				> 5
+				</div>
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
+				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
+				</div>
+				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " >
+					7
+				</div>
+			</div>
 				</div></>)}
 		</>
 	)

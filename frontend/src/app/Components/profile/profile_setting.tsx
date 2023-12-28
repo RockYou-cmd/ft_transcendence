@@ -84,10 +84,10 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
     }
   };
 
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-
     try {
       // const { username, bio, photo } = formData;
 
@@ -117,15 +117,15 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
       if (response.ok) {
         console.log('Profile updated successfully');
-        setIsModalOpen(true);
-
+        
       } else {
         console.error('Profile update failed');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
     }
-    // handleClick(false);
+    openModal();
+    handleClick(false);
   };
 
   return (
@@ -134,12 +134,12 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
         <h1> Your Profile is succefully updated</h1>
         <p>this is the message text </p>
       </Modal>
-      <div className="flex flex-col rounded-lg gap-8 items-center text-black h-full min-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black ">
+      <div className="flex flex-col overflow-auto rounded-lg gap-8 items-center text-black h-full min-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black ">
         <div className="fixed bg-rose-500 w-[15rem] h-[4rem] rounded-b-2xl z-[-1]"></div>
         <h1 className="text-white text-[1.3rem] mt-5 font-bold  ">PROFILE SETTING</h1>
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6  rounded-md ">
-          <label htmlFor="preview">
-            <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center text-white rounded border-2 border-dashed bg-black">
+          <label htmlFor="preview " >
+            <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black">
               <Image src={imagePreview} alt={"preview"} width={256} height={256} />
               <input
                 id="preview"
@@ -163,7 +163,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
             <TwoAuth User={User} />
           </div>
           <div className="flex gap-8 h-[30px] justify-center mt-7 text-white font-bold ">
-            <button type="submit" className="bg-[#4173c3]  rounded w-32 hover:scale-105 duration-500">Save</button>
+            <button type="submit" onClick={() => handleSubmit} className="bg-[#4173c3]  rounded w-32 hover:scale-105 duration-500">Save</button>
             <button className="bg-[#707070] rounded w-32 hover:scale-105 duration-500 " onClick={() => handleClick(false)}>Cancel</button>
           </div>
         </form>

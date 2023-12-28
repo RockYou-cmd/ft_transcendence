@@ -278,6 +278,20 @@
 	}
 }
 
+.Waiting{
+	padding: 40px;
+	color: #000000;
+	position: absolute;
+	left:50%;
+	top:50%;
+	transform: translate(-50%,-50%);
+	background-color: #ffffff96;
+	& button{
+		padding:20px;
+		background-color: #3184BF;
+	}
+}
+
 .FiendlyGame .Add .content .user{
 	background-color: #ffffff76;
 	&:hover{

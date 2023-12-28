@@ -59,6 +59,7 @@ export class EventGateway {
       client.leave(username);
       var match = this.findMatch(username);
       if (match) {
+		console.log(match);
         this.userService.updateData({ username }, { status: "ONLINE" });
         const player1 = Array.from(match.keys())[0];
         const player2 = Array.from(match.keys())[1];
@@ -114,7 +115,6 @@ export class EventGateway {
   }
 
   @SubscribeMessage("update")
-  @UseGuards(messageGuard)
   handleBlock(client: Socket, payload: any) {
     if (payload.option === "block" || payload.option === "unblock")
       this.server
