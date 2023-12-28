@@ -19,11 +19,18 @@ export class UserController{
 	getUser(@Req() account, @Query() user){
 		return this.UserService.getUser(account.user, user);
 	}
-
+	
 	@Get("all")
 	getUsers() {
 		return this.UserService.getUsers();
 	}
+	
+	@Get("friends")
+	@UseGuards(AuthGuard)
+	async getUserFriends(@Query("username") username) {
+		return this.getUserFriends(username);
+	}
+		
 
 	@Get("search")
 	@UseGuards(AuthGuard)
