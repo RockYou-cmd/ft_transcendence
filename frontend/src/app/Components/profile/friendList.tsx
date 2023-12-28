@@ -26,16 +26,16 @@ useEffect(() => {
     user = user?.user;
     user = user?.users[0];
     return (
-    <div className="flex mx-2 overflow-y-auto bg-gradient-to-bl from-slate-900 via-slate-700 to-slate-900 items-center rounded-xl my-3 p-1">
+      <div className="flex mx-2 overflow-y-auto bg-gradient-to-bl from-slate-900 via-slate-700 to-slate-900 items-center shadow-md rounded-xl my-3 p-2 cursor-pointer">
       <Image  className="rounded-full border " src={user?.photo ? user?.photo : avatar} alt="img"  width={60} height={60} />
       <span className=" pl-8 text-lg font-bold justify-center text-center items-center">{user?.username.toUpperCase()}</span>
     </div>
     )
   }
-
-console.log("here:",friendList);
-    return (
-        <div>
+  
+  console.log("here:",friendList);
+  return (
+    <div className="">
         <ul>
           {friendList?.friends?.map((friend : any , index : any) => (
            <Print key={index} user={friend}/>
