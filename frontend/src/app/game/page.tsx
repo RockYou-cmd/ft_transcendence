@@ -53,9 +53,10 @@ export default function GamePage() {
 	
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 	const f = useRef(false);
-
+	
 	useEffect(() => {
 		
+		// console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 
 		if (!gameSet && Mode != "rank" && Mode != "friend") {
 			setMatchMake(false);
@@ -64,6 +65,7 @@ export default function GamePage() {
 			setInGame(true);			
 		}
 		if (!inGame && Mode == "" && !f.current){
+			console.log("reset")
 			invite.current = false;
 			setGameInfo(undefined);
 			setSelectedFriend("");
@@ -72,8 +74,10 @@ export default function GamePage() {
 			f.current = true;
 			d.current = false;
 		}
+		if (Mode != "" && (matchMake || gameSet))
+			f.current = false;
 
-		if (matchMake || (Mode != "" && gameSet) ) {
+		if (matchMake || (Mode != "" && gameSet) || inviteComp) {
 			setStyle({
 				"filter": "blur(4px)",
 				"opacity": "0.5",
@@ -83,6 +87,7 @@ export default function GamePage() {
 		else{
 			setStyle({});
 		}
+	
 		if (inGame){
 			f.current = false;
 			invite.current = false;
@@ -112,6 +117,8 @@ export default function GamePage() {
 	},[])
 	
 	useEffect(() => {
+		// if (Mode != "friend" && Mode != "rank" && !inGame){
+
 			socket?.on("invite", (data: any) => {
 				invite.current = true;
 				setInviteComp(true);
@@ -119,6 +126,8 @@ export default function GamePage() {
 				setSelectedFriend(data.player1);
 				// setMode("friend");
 			});
+		// }
+			console.log("yes")
 			socket?.on("start", (data: any) => {
 				setGameInfo(data);
 			});
@@ -126,7 +135,6 @@ export default function GamePage() {
 		return () => {socket?.off("invite"), ()=>{}}
 	},[socket, accept]);
 
-// console.log("invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 
 	const [gameSettings, setGameSettings] = useState({
 		map : "shark",

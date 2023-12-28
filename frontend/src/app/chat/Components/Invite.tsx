@@ -33,7 +33,12 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 			ACCEPT("refused");
 		close(false);
 		console.log("refuse");
-		socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
+		try{
+			socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
+		}
+		catch(e){
+			console.log(e);
+		}
 	}
 
 	return (

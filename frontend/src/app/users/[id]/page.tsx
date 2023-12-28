@@ -23,7 +23,7 @@ import FriendListComponent from "@/app/Components/profile/friendList";
 
 export default function UserProfile({ param }: { param: { id: string } }) {
 
-	const [data, setData] = useState({} as any);
+	// const [data, setData] = useState({} as any);
 	const { socket } = useSocket();
 	const { me } = useMe() as any;
 	const [wait, checkwait] = useState(false);
@@ -37,7 +37,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 
 	const pathname = usePathname();
 	const hooks = {
-		dataHook: { state: data, setState: setData },
+		dataHook: { state: Userdata, setState: UsersetData },
 		waitHook: { state: wait, setState: checkwait },
 	}
 
@@ -61,7 +61,6 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			setShow(true);
 
 		UsersetData(data);
-
 		if (data?.friendShipstatus == "PENDING" && data?.sender == data?.username)
 			Fstatus.current = "accept request";
 		else if (data?.friendShipstatus == "PENDING")
@@ -81,7 +80,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
-	}, [online, refresh]);
+	}, [refresh]);
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
