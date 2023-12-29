@@ -187,14 +187,12 @@ let statusColor:string  = checkStatus(Userdata?.status);
 
 						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center   min-w-[450px] ">
 							{renderFriendStatusButton()}
-							{/* {isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-600 rounded-full top-0 left-0 cursor-pointer" />
-								: <CgMoreVerticalR size={25} onClick={toggleMenu} className="hover:bg-gray-200/20 cursor-pointer" />
-							} */}
+							 {isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-500 rounded-full top-0 left-0 cursor-pointer" />
+								: <CgMoreVerticalR size={25} onClick={toggleMenu} className=" cursor-pointer" />} 
 
-							{/* Show the profile menu when isMenuOpen is true */}
-							{/* <div className="relative bg-red-500 mb-10">
+							<div className="relative bg-red-500 mb-10">
 								{isMenuOpen && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} />}
-							</div> */}
+							</div> 
 						</div>
 						<div className="flex w-full p-1 bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900  mt-8 items-center justify-center ">
 						<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
@@ -202,13 +200,12 @@ let statusColor:string  = checkStatus(Userdata?.status);
 						</div>
 
 
-						{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
+					{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
 						<button onClick={(e: MouseEvent) => friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
-						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span> */}
+						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>  */}
 
 						<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
-							{""}
-							{Userdata.bio}{""}
+							{Userdata.bio}
 						</div>
 						<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
 					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">

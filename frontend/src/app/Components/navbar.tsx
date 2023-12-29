@@ -16,7 +16,6 @@ import { faUser ,faMessage , faTableTennisPaddleBall , faBell, faBellSlash} from
 
 export default function Navbar() {
 
-	
 	// const socket = useSocket();
 	const {me, setMe} = useMe();
 	const {silence, setSilence} = useSilence();
@@ -34,14 +33,12 @@ export default function Navbar() {
 		setMe(data);
 	}
 
-
 	useEffect(() => {
 		checkwait(true);
 		if (online == "ON") {
 			fetchData();
 		}
 	}, [online]);
-
 
 	if (data?.photo != null) {
 		photo = data.photo;

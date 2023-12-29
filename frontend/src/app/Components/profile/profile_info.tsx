@@ -11,6 +11,7 @@ import Setting from "./profile_setting";
 import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
+import MatchHistory from "./matchHistory";
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
@@ -45,7 +46,7 @@ export default function Profile_info() {
 	};
 
 	return (
-		<div className="m-8 flex flex-row gap-8 h-[85vh]  ">
+		<div className="m-8 flex flex-row gap-8 h-[85vh]">
 			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
 
 			<div
@@ -55,23 +56,36 @@ export default function Profile_info() {
 				onMouseEnter={() => setHover(true)}
 				onMouseLeave={() => setHover(false)}
 			>
-				<div
-					className="  rounded-lg  w-[30%]  bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500  " >
-					2 is teh
-					<div className=" relative w-full h-full m-[50%] rounded-full bg-blue-400 blur-3xl"></div>
-				</div>
+				<div className="  rounded-lg col-span-3 w-[30%] grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-4  bg-gray-800 min-w-full overflow-hidden  shadow-sm shadow-cyan-500  " >
+					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
+					<h1 className="text-white text-lg font-bold mb-2">Game Played</h1>
+					<p className="text-gray-300">Total games played: X</p>
+					<p className="text-gray-300">Total games played: X</p>
+					<p className="text-gray-300">Total games played: X</p>
+					</div> 
+					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
+					<h1 className="text-white text-lg font-bold mb-2">Game Stats</h1>
+					<p className="text-gray-300">Total goal scored: X</p>
+					<p className="text-gray-300">Total goal conced: X</p>
+					</div> 
+					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
+					<h1 className="text-white text-lg font-bold mb-2">Game Win Ratio</h1>
+					<p className="text-gray-300">60% WIN Rate</p>
 
-				<div className="rounded-lg  w-[30%] bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500" > 3 <div className=" relative w-full h-full m-[50%] rounded-full bg-green-500 blur-3xl"></div>
+					</div> 
+					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
+					<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
+					<p className="text-gray-300">Total games played: X</p>
+					<p className="text-gray-300">Total games played: X</p>
+					<p className="text-gray-300">Total games played: X</p>
+					</div>
 				</div>
-
-				<div className="rounded-lg  w-[30%] bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500" > 4 <div className=" relative w-full h-full m-[50%] rounded-full bg-red-400 blur-3xl"></div>
+				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" > 
+				<MatchHistory matches={[]}/>
 				</div>
-
-				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " > 5 <Image src={img} width={100} height={100} alt="img" />
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
-				</div>
-				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " > 7
+				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>
 			</div>
 		</div>
@@ -98,7 +112,7 @@ export default function Profile_info() {
 
 		
 		return (
-			<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[400px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black">
+			<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black">
 
 				<Image 
 					src={photo}
@@ -123,10 +137,11 @@ export default function Profile_info() {
 					<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div>
-				<UserLevel level={5.90}/>
-				<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
-					{""}
-					{data.bio}{""}
+				<div className=" w-full ">
+					<UserLevel level="6.15"/>
+				</div>
+				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
+					{data.bio}
 				</div>
 				<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
 					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
