@@ -10,6 +10,7 @@ import { Get, Post } from "../Fetch/Fetch";
 import Setting from "./profile_setting";
 import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
+import UserLevel from "./userLevel";
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
@@ -122,7 +123,7 @@ export default function Profile_info() {
 					<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div>
-				
+				<UserLevel level={5.90}/>
 				<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{""}
 					{data.bio}{""}
