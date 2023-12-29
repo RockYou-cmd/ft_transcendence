@@ -11,12 +11,15 @@ import Home from './profile/home';
 import LoG from './Components/Log/Log';
 import { useLogContext } from './Components/Log/LogContext';
 import Loading from './loading';
+import favicon from '/..favicon.ico';
+import Head from 'next/head';
+
+
 
 
 
 
 export default function App() {
-
 	const { online, setOnline } = useLogContext();
 	const [SignIn, setSignIn] = useState(false);
 	const [data, setData] = useState({} as any);
@@ -25,16 +28,21 @@ export default function App() {
 		dataHook: { state: data, setState: setData },
 		waitHook: { state: wait, setState: checkwait },
 	}
-
+	
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
-
+	
 	// console.log(online);
-
+	
 	if (!hooks.waitHook.state) {
 		return (<Loading />)
 	}
 	return (
 		<>
+			<Head>
+				<link rel="icon" type="image/x-icon" href="./favicon.ico"></link>
+
+			</Head>
+
 			<div>
 				{online == "OFF" ? (!SignIn && online == "OFF" ? <Home setSignIn={setSignIn} /> : render) : <Profile User={""} />}
 			</div>
