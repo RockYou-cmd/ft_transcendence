@@ -35,8 +35,6 @@
 	align-items: center;
 	aspect-ratio: 4/3;
 	
-	/* transform: scale(1); */
-	
 	&footer{
 		display:  flex;
 		flex-direction: row;
@@ -125,7 +123,6 @@
 	display: flex;
 	flex-direction: column;
 	padding: 20px 0px 40px 10px;
-
 }
 
 .rankTable{
@@ -178,15 +175,29 @@
 	}
 }
 
-.Leaderboard , .online{
+.Leaderboard , .matchHistory{
 	border-radius: 50px;
 	background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%);
 	box-shadow: 2px 2px 20px 3px rgba(26, 213, 255, 0.25);
 }
 
-.Leaderboard{width: 35%;}
+.Leaderboard{width: 34%;}
 
-.online{width: 30%;}
+.matchHistory{width: 33%;
+	padding:2.5% 2%;
+	& h1{
+		font : 700 28px "Inter", sans-serif;
+		text-align: center;
+		margin-bottom:20px;
+	}
+
+	& .content{
+		overflow-y: auto;
+		height: 80%;
+		background-color: #002932;
+	}	
+
+}
 
 
 .GameMode{
@@ -273,24 +284,6 @@
 
 }
 
-#backBtn{
-
-	position: absolute;
-	left:25px;
-	top:20px;
-	border-radius: 50%;
-	padding:4px 5px 0px;
-	& #icon{
-		width:30px;
-		height:30px;
-	}
-
-	&:hover{transform: scale(1.25);
-		transition-duration: 0.5s;
-		background-color: #ffffff3e;
-	}
-}
-
 .FiendlyGame .Add{
 	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
 
@@ -319,7 +312,6 @@
 	&:hover{
 		background-color: #ffffff34;
 	}
-	
 }
 
 .gameSettings h1{

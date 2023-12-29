@@ -27,7 +27,7 @@ export default function Options({ visible , option, btnRef, setOptions, content}
 	}, []);
 
 
-	if (Object.keys(content.Option).length == 0)
+	if (content?.Option && Object?.keys(content?.Option)?.length == 0)
 		return <></>
 	return (
 		<>

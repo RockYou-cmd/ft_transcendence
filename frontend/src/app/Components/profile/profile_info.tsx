@@ -25,28 +25,26 @@ export default function Profile_info() {
 	const [hover, setHover] = useState(false);
 	const mousehover = useRef(null) as any;
 	const [data, setData] = useState({} as any);
-	const [refresh, setRef] = useState<boolean>(false);
+	const [refresh, setRefresh] = useState<boolean>(false);
+	const [showSetting, setShowSetting] = useState<boolean>(false);
 	useEffect(() => {
-		if (online) fetchData();
+		if (online && !showSetting) fetchData();
 		// TODO
-	}, []);
+	}, [showSetting, online]);
 
 	// useEffect(()=>{setRef(!refresh)},[refresh])
 
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
 
-	const [showSetting, setShowSetting] = useState<boolean>(false);
 
 	const handleClick = (val: boolean) => {
 		setShowSetting(val);
-
-
 	};
 
 	return (
 		<div className="m-8 flex flex-row gap-8 h-[85vh]  ">
-			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
+			{showSetting ? <Setting handleClick={handleClick} User={data}/> : <Info />}
 
 			<div
 				ref={mousehover}
@@ -123,7 +121,7 @@ export default function Profile_info() {
 					<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div>
-				<UserLevel level={5.90}/>
+				<UserLevel level={5.10}/>
 				<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{""}
 					{data.bio}{""}

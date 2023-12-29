@@ -8,7 +8,7 @@ import { APIs } from '../Props/APIs';
 import { useLogContext, useSocket } from '../Components/Log/LogContext';
 import { io } from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEyeLowVision, faEye , faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import ParticleBackground from '../Components/Log/particles';
 
@@ -18,7 +18,7 @@ var data: { username: string, password: string } = {
 	password: '',
 };
 
-export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string}) {
+export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : string, back? : any}) {
 	
 	const host = "http://localhost:3001";
 	// const host = "http://10.12.11.1:3001";
@@ -96,6 +96,7 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 			{/* <Link href="/" >back to Home</Link> */}
 			<div id="main" className='' >
 				{!show2FA ?  <>
+					{back && <button id='backBtn' onClick={()=>{back(false);}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>}
 				<h2 className="title">Login</h2>
 				<div className="Fline"></div>
 				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />

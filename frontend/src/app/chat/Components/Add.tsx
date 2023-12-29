@@ -31,9 +31,10 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 		Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
 	else if (join == "Start Chat")
 		Style = {"backgroundColor": "#1A66FF"};
-	else
+	else if (join == "INVITE")
 		Style = {"background": "linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%)"}
-
+	else
+	Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
 	
 
 		
@@ -73,6 +74,9 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 		if (join == "Start Chat" || join == "INVITE"){
 			user = user.users[0];
 		}
+
+		if (join == "INVITE" && user?.status == "OFFLINE")
+			return <></>;
 		const print = <>
 			<Link href={"/users/" + user?.username} passHref={true} ><div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>

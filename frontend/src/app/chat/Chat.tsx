@@ -16,6 +16,7 @@ import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
+import { Disconnect } from '../Components/Log/Logout';
 
 
 
@@ -39,6 +40,7 @@ const noSettings: ChatOptions = { Option: [], desc: [] };
 export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any, Role: any, OptionHandler: any, refresh: boolean }) {
 
 	const { socket, setSocket } = useSocket();
+	const { setOnline } = useLogContext();
 	const ChatID = useRef("");
 	const Room = useRef("");
 	const { me, setMe } = useMe() as any;
@@ -78,6 +80,8 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
+		if (data == undefined) 
+			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
 			if (res.status == 201) {
@@ -129,9 +133,9 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 	useEffect(() => {
 		async function fetchData() {
 			const data = await Get(APIs.getChat + User?.username);
-		
+			if (data == undefined) 
+				Disconnect({setOnline : setOnline, socket : socket, router : router});
 			status.current.status = data?.friends[0]?.status;
-			
 		}
 		if (chat && Object.keys(chat).length != 0) {
 			fetchData();

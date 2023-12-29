@@ -33,9 +33,7 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 		put = false;
 	else
 		put = true;
-
 	
-
 	let res: any;
 	if (put == false)
 		res = await Post(data, Api);

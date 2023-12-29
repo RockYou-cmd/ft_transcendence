@@ -3,6 +3,7 @@ import Setting from "../Components/profile/profile_setting";
 import {useEffect, useState } from "react";
 import {Get } from '../Components/Fetch/Fetch'
 import { APIs } from "../Props/APIs";
+import { useRouter } from "next/navigation";
 
 
 // create asimole page setting 
@@ -20,6 +21,9 @@ interface Props {
 
 export default function SettingPage() {
 
+	const [save, setSave] = useState<boolean>(true);
+	const router = useRouter();
+
       const [data, setData] = useState<FormData>({} as FormData);
       async function fetchData() {
         const res = await Get(APIs.Profile);
@@ -28,15 +32,17 @@ export default function SettingPage() {
       }
       useEffect(() => {
         fetchData();
-     
-      }, []);
+		if (!save)
+			router.push("/"); 
+      }, [save]);
 
+	  
 
     return (
 
         <div className="flex w-full justify-center mt-[20%]">
 
-            <Setting handleClick={()=>{}} User={data} />
+            <Setting handleClick={setSave} User={data} />
         </div>
 
     )

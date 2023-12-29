@@ -58,7 +58,7 @@ export default function SelectFriend({close , setMode, select, gameInfo, send} :
 	return (
 		<>
 			<div className="FiendlyGame">
-				<Add Users={data?.friends} Make={SELECT} title='INVITE A FRIEND' join="INVITE" close={Back} />
+				<Add Users={data?.friends} Make={SELECT} title='ONLINE FRIENDS' join="INVITE" close={Back} />
 			</div>
 		</>
 	)

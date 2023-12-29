@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, FormEvent, useState } from "react";
+import React, { FC, ChangeEvent, FormEvent, useState } from "react";
 import Cookies from "js-cookie";
 import Modal from "./popup";
 import TwoAuth from "./2fa";
@@ -113,7 +113,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
         },
         body: JSON.stringify({ updatedData }),
       });
-      console.log(updatedData);
+    //   console.log(updatedData);
 
       if (response.ok) {
         console.log('Profile updated successfully');
