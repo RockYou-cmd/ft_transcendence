@@ -59,14 +59,14 @@ export class EventGateway {
       client.leave(username);
       var match = this.findMatch(username);
       if (match) {
-		console.log(match);
-        this.userService.updateData({ username }, { status: "ONLINE" });
-        const player1 = Array.from(match.keys())[0];
-        const player2 = Array.from(match.keys())[1];
-        this.server
+		  this.userService.updateData({ username }, { status: "ONLINE" });
+		  const player1 = Array.from(match.keys())[0];
+		  const player2 = Array.from(match.keys())[1];
+		  this.server
           .to(player1)
           .to(player2)
           .emit("endGame", "the opponent left");
+		  console.log(match);
         clearInterval(match.get("loop"));
         match?.get("game")?.reset();
         match.clear();
@@ -75,7 +75,7 @@ export class EventGateway {
       if (!userTabs.length)
         this.userService.updateData({ username }, { status: "OFFLINE" });
     }
-    console.log(username, " DISCONNECT");
+    console.log(username, " DISCONNECT : ", client.id);
   }
 
   @SubscribeMessage("message")

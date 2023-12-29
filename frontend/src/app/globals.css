@@ -26,15 +26,6 @@ input:focus, textarea:focus, select:focus{
 	background-color: "red";
 }
 
-#Parent{
-	filter: blur(0px);
-}
-
-#child{
-	/* filter: none; */
-	filter: blur(0px);
-}
-
 /* #Parent:active {
 	filter: blur(8px);
 } */

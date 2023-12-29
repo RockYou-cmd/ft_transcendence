@@ -12,7 +12,7 @@ export class GameService {
     x: 20,
     y: this.gameHeight / 2 - 120 / 2,
     width: 12,
-    height: 140,
+    height: this.gameHeight / 6.5,
     score: 0,
   };
 
@@ -20,7 +20,7 @@ export class GameService {
     x: this.gameWidth - 32,
     y: this.gameHeight / 2 - 120 / 2,
     width: 12,
-    height: 140,
+    height: this.gameHeight / 6.5,
     score: 0,
   };
 

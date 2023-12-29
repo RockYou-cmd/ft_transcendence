@@ -16,7 +16,7 @@ import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
-import { Anybody } from 'next/font/google';
+
 
 
 const chatSettings: ChatOptions = { Option: ["invite","block" ,"view"], desc: ["Invite For A Game", "Block","View Profile"] };
@@ -247,7 +247,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{ width: "fit-content", height: "fit-content" }} /> : <p>{msg?.content}</p>
 					}
 				</section>
-				{/* <span >{msg?.createdAt}</span> */}
+			
 				<div className='triangle'></div>
 			</div>
 		</>

@@ -22,7 +22,6 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
 
-	console.log("gameInfo in PingPong", gameInfo);
 	function leaveMatch(e? : MouseEvent){
 		e?.preventDefault();
 		socket?.disconnect();
@@ -45,7 +44,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
       score: 0,
       username: gameInfo?.player1,
       width: 12,
-      height: 140,
+      height: gameHeight / 6.5,
       color: gameSettings?.paddleColor,
     };
     let player2 = {
@@ -54,7 +53,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
       score: 0,
       username: gameInfo?.player2,
       width: 12,
-      height: 140,
+      height: gameHeight / 6.5,
       color: gameSettings?.paddleColor,
     };
     let ball = { x: 0, y: 0, color: gameSettings?.ballColor, radius: 16 };
@@ -202,17 +201,23 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 
 	return(
 		<>
-			<div id="container" className={gameSettings.map}>
-				<button id="backBtn" onClick={(e : MouseEvent)=>leaveMatch(e)}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
-				<section>
-					{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
-					<h1>{gameInfo.player1}</h1>
-					<h2>{myScore} | {oppScore}</h2>
-					<h1>{gameInfo.player2}</h1>
-					{/* <FontAwesomeIcon id='icon' icon={faRobot} /> */}
-				</section>
-					<canvas id="canvas" ref={game} width={1500} height={900} />
-			</div>	
+			<div className={"PingPong"} style={
+				gameSettings?.map == "black" ? {backgroundColor : "black"} : gameSettings?.map == "shark" ? 
+				{backgroundColor : "#20A4F3"} : {backgroundColor : "#e65757"}
+			}>
+
+				<div id="container" className={gameSettings.map}>
+					<button id="backBtn" onClick={(e : MouseEvent)=>leaveMatch(e)}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+					<section>
+						{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
+						<h1>{gameInfo.player1}</h1>
+						<h2>{myScore} | {oppScore}</h2>
+						<h1>{gameInfo.player2}</h1>
+						{/* <FontAwesomeIcon id='icon' icon={faRobot} /> */}
+					</section>
+						<canvas id="canvas" ref={game} width={1500} height={900} />
+				</div>	
+			</div>
 		</>
 	)
 }

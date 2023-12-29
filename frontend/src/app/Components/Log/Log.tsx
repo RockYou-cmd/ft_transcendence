@@ -6,16 +6,17 @@ import Form from "../../profile/form";
 
 
 
-export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
+export default function LoG({ page, LogIn, User }: { page: string, LogIn: any , User? : string}) {
 
 	const host = "http://localhost:3001";
 
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
-
+	
 	useEffect(() => {
+		const UserProfile = User ? User : "";
 		async function fetchData() {
-			const data = await GetData({ Api: page, user: "" }) as any;
+			const data = await GetData({ Api: page, user: UserProfile }) as any;
 
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {

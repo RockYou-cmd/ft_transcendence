@@ -32,13 +32,7 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 	const [startGame, setStart] = useState(true);
 	const [myScore, setMyScore] = useState(0);
 	const [oppScore, setOppScore] = useState(0);
-	const {me, setMe} = useMe();
-	var pos = useRef({
-		x: 0,
-		y: 0,
-		score: 0,
-	});
-
+	const {me} = useMe();
 
 
 	// const [gameWidth, setGameWidth] = useState(0);
@@ -75,19 +69,19 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		}
 	
 		var player1 = {
-			x: 20,
+			x: 10,
 			y: gameHeight / 2 - 120 / 2,
 			width: 12,
-			height: 140,
+			height: gameHeight / 6.5,
 			score: 0,
 			color: gameSettings?.paddleColor,
 		}
 	
 		var player2 = {
-			x: gameWidth - 32,
+			x: gameWidth - 22,
 			y: gameHeight / 2 - 120 / 2,
 			width: 12,
-			height: 140,
+			height: gameHeight / 6.5,
 			score: 0,
 			color: gameSettings?.paddleColor,
 		}
@@ -181,6 +175,7 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 			ball.velocityX = -ball.velocityX;
 			player1.y = gameHeight / 2;
 			player2.y = gameHeight / 2;
+			ball.velocityY = 0;
 		}
 		
 		function updateCOM(){
@@ -310,27 +305,32 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		setMyScore(0);
 		setOppScore(0);
 	}
-
 	return (
 		<>
-			<div id="container" className={gameSettings?.map}  >
-				<button id='backBtn' onClick={()=>{close(false);setMode("")}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+			<div className={"PingPong"} style={
+				gameSettings?.map == "black" ? {backgroundColor : "black"} : gameSettings?.map == "shark" ? 
+				{backgroundColor : "#20A4F3"} : {backgroundColor : "#e65757"}
+			}>
 
-			<section>
-				<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
-				<h1>{(me as {username : string})?.username}</h1>
-				<h2>{myScore} | {oppScore}</h2>
-				<h1>Computer</h1>
-				<FontAwesomeIcon id='icon' icon={faRobot} />
-			</section>				
+				<div id="container" className={gameSettings?.map}  >
+					<button id='backBtn' onClick={()=>{close(false);setMode("")}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 
-				<canvas id="canvas" ref={game} />
-			<footer>
+				<section>
+					<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
+					<h1>{(me as {username : string})?.username}</h1>
+					<h2>{myScore} | {oppScore}</h2>
+					<h1>Computer</h1>
+					<FontAwesomeIcon id='icon' icon={faRobot} />
+				</section>				
 
-				<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
-				<button className='bg-black text-white p-2 rounded m-5' onClick={Restart}>{restart}</button>
-			
-			</footer>
+					<canvas id="canvas" ref={game} />
+				<footer>
+
+					<button className='bg-black text-white p-2 rounded m-5' onClick={PauseResume}>{btn}</button>
+					<button className='bg-black text-white p-2 rounded m-5' onClick={Restart}>{restart}</button>
+				
+				</footer>
+				</div>
 			</div>
 		</>
 	)
