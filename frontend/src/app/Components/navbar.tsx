@@ -40,7 +40,6 @@ export default function Navbar() {
 		setMe(data);
 	}
 
-
 	useEffect(() => {
 		checkwait(true);
 		if (online == "ON") {
@@ -48,8 +47,6 @@ export default function Navbar() {
 			fetchData();
 		}
 	}, [online]);
-	
-	console.log("in navabar");
 
 	if (data?.photo != null) {
 		photo = data.photo;

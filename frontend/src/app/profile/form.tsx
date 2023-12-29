@@ -111,7 +111,6 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 				<Link href="/create" className="createbtn">Create an account</Link>
 			</> : 
 				<>
-
 				<form onSubmit={handle2fa} className='flex bg-red-500 items-center justify-center'>
 					<input className='text-black p-3'
 					type='text'

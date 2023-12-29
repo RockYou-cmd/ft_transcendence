@@ -226,13 +226,12 @@ let statusColor:string  = checkStatus(Userdata?.status);
 						</div>
 
 
-						{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
+					{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
 						<button onClick={(e: MouseEvent) => friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
-						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span> */}
+						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>  */}
 
 						<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
-							{""}
-							{Userdata.bio}{""}
+							{Userdata.bio}
 						</div>
 						<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
 					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">

@@ -134,7 +134,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
         <h1> Your Profile is succefully updated</h1>
         <p>this is the message text </p>
       </Modal>
-      <div className="flex flex-col overflow-auto rounded-lg gap-8 items-center text-black h-full min-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black ">
+      <div className="flex flex-col overflow-auto rounded-lg gap-8 items-center text-black h-full w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black ">
         <div className="fixed bg-rose-500 w-[15rem] h-[4rem] rounded-b-2xl z-[-1]"></div>
         <h1 className="text-white text-[1.3rem] mt-5 font-bold  ">PROFILE SETTING</h1>
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6  rounded-md ">
