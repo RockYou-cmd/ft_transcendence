@@ -3,6 +3,8 @@ import Image from "next/image";
 import Paddle from "../../../../public/paddle.png"
 import { useRef, useEffect } from "react";
 import Typed from "typed.js";
+import cover from "../../../../public/pingpong.gif"
+import "../../assest/corner.css"
 
 
 export default function Hero_section() {
@@ -31,29 +33,28 @@ export default function Hero_section() {
     }
     return (
         <>
-            <div className=" flex w-full h-[40rem]  ">
+        <div className="flex relative ">
+
+            <div className=" flex w-[50%] h-[35rem] bg-[#e7ebf4] rounded-b-3xl  ">
                 <div className="w-full h-full">
 
-                    <div className="relative w-[40%] h-[30%] mt-40 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
+                    <div className="relative w-[90%] h-[30%] mt-40 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
                         {typing()}
                     </div>
-                    <div className="absolute  mt-40   h-fit">
+                    <div className="absolute  mt-30   h-fit">
                         <div className=" relative left-20  items-center" >
-                            <button className="w-[250px] h-[50px] bg-gradient-to-b from-red-800 to-red-400 rounded-lg ">PLAY NOW</button>
+                            <button className="w-[250px] h-[50px] bg-[#000000] rounded-lg font-bold text-xl ">PLAY NOW</button>
                         </div>
                     </div>
                 </div>
 
-                <div className="  flex h-[30rem] w-[50%] absolute right-24 rounded-lg  ">
-
-                    <div className="animate-bounce ml-32 mt-18">
-                        <div className="absolute  w-11 h-11  animate-spin duration-75 shadow-2xl ml-64 mt-36  rounded-full bg-gradient-to-r from-slate-100 to-gray-700">
-                        </div>
-                    </div>
-                    <Image className="w-[20rem] h-[20rem] m-auto mt-32 " id="bg1" alt="bg1" src={Paddle}  ></Image>
-                </div>
 
             </div>
+                <div className="  flex  h-[30rem] w-[50%] m-7 items-center justify-center  overflow-hidden rounded-3xl ">
+                    <Image className=" rounded-2xl  " id="bg1" alt="bg1" src={cover}  ></Image>
+                    <div className=" corner absolute top-0 left-[47%] "></div>
+                </div>
+        </div>
         </>
     );
 }

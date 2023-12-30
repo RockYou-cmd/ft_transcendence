@@ -38,7 +38,9 @@ const TwoAuth = ({ User }: { User: any }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({}),
+          body: JSON.stringify({
+          }),
+          
         });
         if (response.ok) {
             console.log("succeful disable");
@@ -58,17 +60,17 @@ const TwoAuth = ({ User }: { User: any }) => {
        const verifyResponse = await fetch(`http://localhost:3001/2fa/enable`, {
          method: 'POST',
          credentials: 'include' as RequestCredentials,
+
          headers: {
            'Content-Type': 'application/json',
          },
          body: JSON.stringify({
-           // userId,
            token: verificationCode,
-      
          }),
        });
 
       const { message } = await verifyResponse.json();
+      console.log("message",message);
       setVerificationResult(message);
     } catch (error) {
       console.error('Error verifying code:', error);

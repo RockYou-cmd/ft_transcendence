@@ -1,0 +1,5 @@
+.corner {
+  width: 150px;
+  height: 75px;
+  background: radial-gradient(180% 180% at right -65% bottom -65%, transparent 99%, #e7ebf4)
+}

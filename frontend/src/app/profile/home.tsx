@@ -13,6 +13,9 @@ import Features from "../Components/landing_page/features"
 import ContactForm from "../Components/landing_page/contactForm"
 import Footer from '../Components/landing_page/footer';
 import contact from "../../../public/contact.jpg"
+import screen1 from "../../../public/screen1.png"
+import screen2 from "../../../public/screen2.png"
+import screen3 from "../../../public/screen3.png"
 
 export default function Home({ setSignIn }: { setSignIn: any }) {
 
@@ -23,6 +26,28 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
         <Landing_navbar />
         <Hero_section />
         <button className=' cursor-pointer opacity-90 hover:opacity-100 transition-opacity w-[10rem] h-[4rem] p-[2px] bg-black rounded-[16px] bg-gradient-to-t from-[#8122b0] to-[#dc98fd] ">' onClick={() => setSignIn(true)}>Sing In</button>
+        
+        <div className='flex relative items-center justify-center'>
+          <div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px] mt-8'></div>
+          <div className='flex flex-col relative items-center  justify-between   overflow-hidden w-[90%] h-[25rem] bg-[#e7ebf4]  rounded-[50px] mt-8 '>
+            <div className='flex w-full relative items-center justify-center mt-4'>
+              <h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MOODS</h1>
+            </div>
+            <div className='flex'>
+              <div className='flex relative w-92 h-52 m-8 bg-black rounded-xl overflow-hidden'>
+              <h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MOODS</h1>
+                <img src={screen1.src} alt={"screen1"} className='w-full h-full'></img>
+              </div>
+              <div className='relative w-92 h-52 m-8  bg-black rounded-xl overflow-hidden'>
+                <img src={screen2.src} alt={"screen1"} className='w-full h-full'></img>
+              </div>
+              <div className=' flex relative w-92 h-52 m-8  bg-black rounded-xl overflow-hidden'>
+                <img src={screen3.src} alt={"screen1"} className='w-full h-full'></img>
+              </div>
+
+            </div>
+          </div>
+        </div>
         <div className='mt-12 mb-12'>
           <Features />
         </div>
