@@ -130,12 +130,8 @@ export default function GameSettings({Options , close, setMode, save} : { Option
 					, border : Style.paddleColor == ball.name ? "3px solid #fff" : ""}} key={ball.name} />))}
 				</div>
 				<footer>
-					<button onClick={()=>{close(false);save(true);}} >SAVE</button>
-					<button onClick={()=>{
-						Options(reset.Map, reset.ballColor, reset.paddleColor);
-						close(false);
-						save(true)}
-					}>NO</button>
+					<button onClick={()=>{close(false);save(true);}} >PLAY</button>
+					<button onClick={()=>{setMode("");close(true);}}>CANCEL</button>
 				</footer>
 			</div>
 		</>

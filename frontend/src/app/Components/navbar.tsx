@@ -19,7 +19,7 @@ export default function Navbar() {
 
 	
 	// const socket = useSocket();
-	const {me, setMe} = useMe();
+	const {me, setMe} = useMe() as any;
 	const {silence, setSilence} = useSilence();
 	const router  = useRouter();
 	const {socket} = useSocket();
@@ -37,7 +37,8 @@ export default function Navbar() {
 			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		}
 		setData(data);
-		setMe(data);
+		if (me?.username != data?.username || me?.photo != data?.photo)
+			setMe(data);
 	}
 
 	useEffect(() => {
@@ -46,7 +47,7 @@ export default function Navbar() {
 			console.log("fetching data");
 			fetchData();
 		}
-	}, [online]);
+	}, [online, me]);
 
 	if (data?.photo != null) {
 		photo = data.photo;

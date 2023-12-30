@@ -5,7 +5,7 @@ import avatar from "../../../../public/avatar.png";
 import img from "../../../../public/avatar.png";
 import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
-import { useLogContext } from "../Log/LogContext";
+import { useLogContext, useMe } from "../Log/LogContext";
 import { Get, Post } from "../Fetch/Fetch";
 import Setting from "./profile_setting";
 import { APIs } from "@/app/Props/APIs";
@@ -15,12 +15,15 @@ import MatchHistory from "./matchHistory";
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
+	const {me, setMe} =  useMe() as any;
 	const imgRef = useRef(null) as any;
 	let photo = avatar.src;
 
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
+		console.log("herr");
+		setMe(data);
 	}
 
 	const [hover, setHover] = useState(false);
@@ -32,8 +35,6 @@ export default function Profile_info() {
 		if (online && !showSetting) fetchData();
 		// TODO
 	}, [showSetting, online]);
-
-	// useEffect(()=>{setRef(!refresh)},[refresh])
 
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;

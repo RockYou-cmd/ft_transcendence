@@ -9,12 +9,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { MouseEvent } from 'react';
 import Invite from '../chat/Components/Invite';
 
-// interface Msg{
-// 	content : string,
-// 	sender : string,
-// 	chatId : string,
-
-// }
 
 export default function Notif({content} : {content?: string}) {
 
@@ -82,16 +76,17 @@ export default function Notif({content} : {content?: string}) {
 					router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend"+ "&invite=true");
 				})
 			}
-			if (pathname != "/game"){
-
-				socket.on("update" , (data: any) => {
-					if (data?.option == "request friend" || data?.option == "accept request"){
+			// if (pathname != "/game"){
+			
+			socket.on("update" , (data: any) => {
+				if (data?.option == "request friend" || data?.option == "accept request"){
 						setMsg(data);
 						if (!silence)
 						setShow(true);
 				}
+				
 			})
-			}
+			// }
 		}
 		return () => {socket?.off("message");
 			socket?.off("update");
