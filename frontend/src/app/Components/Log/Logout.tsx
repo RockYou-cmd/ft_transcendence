@@ -3,9 +3,20 @@ import React from 'react';
 import { MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLogContext, useSocket } from './LogContext';
-import { Get } from '../Fetch/Fetch';
+import { Get , GetRes} from '../Fetch/Fetch';
 import { APIs } from '@/app/Props/APIs';
 import   "../../assest/logout.css";
+import { Socket } from 'socket.io-client';
+
+export async function Disconnect({setOnline , socket, router} : {setOnline : React.Dispatch<React.SetStateAction<string>>, socket : Socket, router : any}){
+	
+	const res = await GetRes(APIs.Logout);
+	if (res?.ok) {
+		setOnline("OFF");
+		socket?.disconnect();
+		router.push("/");
+	}
+}
 
 export default function Logout() {
 	const router = useRouter();
@@ -13,18 +24,7 @@ export default function Logout() {
 	const { socket , setSocket} = useSocket();
 	async function logout(e: MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
-		const res = await fetch(APIs.Logout, {
-			credentials: 'include' as RequestCredentials,
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		if (res?.status == 200) {
-			setOnline("OFF");
-			socket?.disconnect();
-			router.push("/");
-		}
+		Disconnect({setOnline , socket, router});
 	}
 
 	return (
@@ -40,4 +40,5 @@ export default function Logout() {
 	);
 
 }
+
 

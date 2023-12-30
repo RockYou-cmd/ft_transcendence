@@ -15,6 +15,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import SelectFriend from './Components/FriendlyGame';
 import Invite from '../chat/Components/Invite';
+import MatchHistory from './Components/MatchHistory';
 
 
 interface GameInfo {
@@ -121,6 +122,8 @@ export default function GamePage() {
 
 			socket?.on("invite", (data: any) => {
 				invite.current = true;
+				// setGameSet(false);
+				setMode("");
 				setInviteComp(true);
 				setGameInfo(data);
 				setSelectedFriend(data.player1);
@@ -240,8 +243,7 @@ export default function GamePage() {
 							} 
 						</div>
 
-						<div className='online'>
-						</div>
+						<MatchHistory/>
 
 					</div>
 					}

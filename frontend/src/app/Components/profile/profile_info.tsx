@@ -26,28 +26,26 @@ export default function Profile_info() {
 	const [hover, setHover] = useState(false);
 	const mousehover = useRef(null) as any;
 	const [data, setData] = useState({} as any);
-	const [refresh, setRef] = useState<boolean>(false);
+	const [refresh, setRefresh] = useState<boolean>(false);
+	const [showSetting, setShowSetting] = useState<boolean>(false);
 	useEffect(() => {
-		if (online) fetchData();
+		if (online && !showSetting) fetchData();
 		// TODO
-	}, []);
+	}, [showSetting, online]);
 
 	// useEffect(()=>{setRef(!refresh)},[refresh])
 
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
 
-	const [showSetting, setShowSetting] = useState<boolean>(false);
 
 	const handleClick = (val: boolean) => {
 		setShowSetting(val);
-
-
 	};
 
 	return (
-		<div className="m-8 flex flex-row gap-8 h-[85vh]">
-			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
+		<div className="m-8 flex flex-row gap-8 h-[85vh]  ">
+			{showSetting ? <Setting handleClick={handleClick} User={data}/> : <Info />}
 
 			<div
 				ref={mousehover}
