@@ -47,7 +47,7 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 		}
 		setToken('');
 	}  
-
+	
 	
 	async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
 		event.preventDefault();
@@ -58,15 +58,14 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 			try {
 				const res = await Post(data, APIs.SignIn);
 				const resData = await res?.json();
+				console.log("res in form",res);
 				if (res.status == 201) {
-					if (resData?.status == 425){
-						setshow2FA(true);
+					if (online != "ON") {
+						setOnline("ON");
 					}
-					else{
-						if (online != "ON") {
-							setOnline("ON");
-						}
-					}
+				}
+				else if (res.status == 425) {
+					setshow2FA(true);
 				}
 				else {
 					alert(resData?.message);
@@ -81,15 +80,15 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 			alert('Please fill all fields');
 		};
 	};
-
+	
 	useEffect(()=>{
 		if (TwoEA)
-			setshow2FA(true);
-		if (User)
-			setUser(User);
-	},[])
-	return (
-		<>
+		setshow2FA(true);
+	if (User)
+	setUser(User);
+},[])
+return (
+	<>
 		<div className=' relative mt-[30vh] '>
 			<ParticleBackground />
 

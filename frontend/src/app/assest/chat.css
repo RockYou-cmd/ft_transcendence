@@ -2,6 +2,12 @@
 
 .Cover {
 	position: relative;
+	/* background-color:  rgb(2, 44, 78); */
+	/* background-color: #2176e5; */
+	/* background: linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%); */
+	/* background: #1F295E; */
+
+
 }
 
 
@@ -63,6 +69,7 @@
 /********************************* Groups *********************************/
 
 .sec1 .Groups {
+	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
 
 	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
 	width: auto;
@@ -158,6 +165,8 @@
 /***************************************** Friends ************************************/
 
 .Friends {
+	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
+
 	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
 	width: auto;
 	margin: 30px 20px 20px;
@@ -201,6 +210,7 @@
 
 .Chat {
 	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
 
 	margin: 25px 18px 10px 6px;
 	border: 1px solid black;

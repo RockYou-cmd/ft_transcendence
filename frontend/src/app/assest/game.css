@@ -1,4 +1,4 @@
-/* body{aspect-ratio: 4/3.23;} */
+
 
 .PingPong{
 	display: flex;
@@ -8,10 +8,10 @@
 	justify-content: center;
 	justify-self: center;
 	justify-items: center;
-	height: 92.8vh;
+	/* height: 100%; */
 	/* margin: auto; */
 	width: 100%;
-	/* height: 100%; */
+	height: 92.7vh;
 	/* height: max-content; */
 	/* height: 100vh; */
 	/* padding: auto 0px; */
@@ -26,7 +26,6 @@
 	flex-direction: column;
 	position: relative;
 	width: 100%;
-	/* height: 100%; */
 	max-width: 1800px;
 	margin:auto 0px;
 	/* height: 92.8vh; */
@@ -100,7 +99,8 @@
 }
 
 .GameMain{
-	background-color: #1F295E;
+	/* background-color: #1F295E; */
+	background-color:  rgb(2, 44, 78);
 	height: 92.8vh;
 	display: flex;
 	flex-direction: row;
@@ -177,8 +177,11 @@
 
 .Leaderboard , .matchHistory{
 	border-radius: 50px;
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
+
 	background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%);
 	box-shadow: 2px 2px 20px 3px rgba(26, 213, 255, 0.25);
+	/* box-shadow: 2px 2px 20px 3px #4E4E4E; */
 }
 
 .Leaderboard{width: 34%;}
@@ -410,7 +413,7 @@
 
 	& button:last-child{
 		background-color: #FA4D4D;
-		padding:8px 45px;
+		padding:8px 20px;
 	}
 }
 

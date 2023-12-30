@@ -22,7 +22,6 @@ const TwoAuth = ({ User }: { User: any }) => {
           },
         });
         const tmp = await qrCodeResponse.json();
-        console.log(tmp);
         setQRCodeBase64(tmp.qr);
         setShowQRCode(true);
       } catch (error) {
@@ -86,7 +85,8 @@ const TwoAuth = ({ User }: { User: any }) => {
           <input
             className='ml-[40%] mb-7 sr-only peer'
             type="checkbox"
-            checked={is2FAEnabled}
+            checked={is2FAEnabled ? true : false}
+			value={is2FAEnabled ? "true" : "false"}
             onChange={handleToggle2FA}
           />
           <div className="group relative ml-16 peer ring-0 bg-rose-400 rounded-full outline-none duration-300 after:duration-300 w-20 h-8  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-8 after:w-8 after:top1 after:left1 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95 peer-checked:after:rotate-0">

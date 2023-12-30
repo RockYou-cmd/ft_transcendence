@@ -1,11 +1,11 @@
 
 import '../../assest/chatComponents.css'
 import Image from 'next/image'
-import logo from '../../../../public/4268225 1.png'
+import logo from '../../../../public/puddles.png'
 import { usePathname, useRouter } from 'next/navigation';
 import { MouseEvent } from 'react';
 import { useSocket } from '@/app/Components/Log/LogContext';
-
+import { useEffect , useState} from 'react';
 
 
 
@@ -14,7 +14,6 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 	const router = useRouter();
 	const pathname = usePathname();
 	const {socket} = useSocket();
-	// console.log("close Invite ",close);
 
 	function accept(e : MouseEvent){
 		e.preventDefault();
@@ -27,8 +26,8 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 		close(false);
 	}	
 
-	function refuse(e : MouseEvent){
-		e.preventDefault();
+	function refuse(e? : MouseEvent){
+		e?.preventDefault();
 		if (ACCEPT)
 			ACCEPT("refused");
 		close(false);
@@ -41,15 +40,24 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 		}
 	}
 
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			refuse();
+		}, 5000);
+		return () => clearTimeout(timer);
+	},[]);
+
 	return (
 		<>
 			<div id='Invite' >
 				<div>
-					<Image className='logo' src={logo.src} alt="logo" width="150" height="150" />
+					<Image className='logo' src={logo.src} alt="logo" width="100" height="100" />
 					<h1>{User.username} Invited you for a game</h1>
 				</div>
+				<section>
 					<button onClick={(e : MouseEvent)=>refuse(e)}>IGNORE</button>
 					<button onClick={(e :MouseEvent)=>accept(e)}>ACCEPT</button>
+				</section>
 			</div>
 		</>
 	)

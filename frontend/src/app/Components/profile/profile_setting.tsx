@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import Modal from "./popup";
 import TwoAuth from "./2fa";
 import Image from "next/image";
+import avatar from "../../../../public/avatar.png";
 
 interface Props {
   handleClick: (val: boolean) => void;
@@ -21,6 +22,9 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
   ///// modal properties 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string>('')
+  const [username, setUsername] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
+  const [photo, setPhoto] = useState<any>();
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -44,13 +48,18 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
       if (files[0])
         setImagePreview(URL.createObjectURL(files[0]));
       else if(!files[0])
-        setImagePreview(URL.createObjectURL(User.photo[0]));
-      
+        setImagePreview(URL.createObjectURL(User.photo));
+      setPhoto(files[0]);
       uploadImage(files[0]);
     } else {
+		if (name === 'username')
+			setUsername(value);
+		else if (name === 'bio')
+			setBio(value);
       setFormData({
         ...formData,
         [name]: value,
+	
       });
     }
     return value;
@@ -66,66 +75,68 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
         method: 'POST',
         body: uploadData,
       });
-
       if (response.ok) {
-        const data = await response.json();
-        console.log(data.secure_url);
-        setFormData({
-          ...formData,
-          photo: data.secure_url,
-        });
-        console.log("success");
-
-      } else {
-        console.error('Failed to upload image to Cloudinary');
-      }
+		  const data = await response.json();
+		  console.log(data.secure_url);
+		  setFormData({
+			  ...formData,
+			  photo: data.secure_url,
+			});
+			console.log("success");
+			
+		} else {
+			console.error('Failed to upload image to Cloudinary');
+		}
     } catch (error) {
-      console.error('Error uploading image:', error);
+		console.error('Error uploading image:', error);
     }
-  };
+};
 
 
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      // const { username, bio, photo } = formData;
-
-      const { username, bio, photo } = formData;
-
-      // Filter out fields that are empty or unchanged
-      const updatedData: { [key: string]: string } = {};
-      if (username.trim() !== '') {
-        updatedData.username = username;
-      }
-      if (bio.trim() !== '') {
-        updatedData.bio = bio;
-      }
-      if (photo.trim() !== '') {
-        updatedData.photo = photo;
-      }
-
-      const response = await fetch('http://localhost:3001/user/update', {
-        method: 'PUT',
-        credentials: 'include' as RequestCredentials,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ updatedData }),
-      });
-    //   console.log(updatedData);
-
-      if (response.ok) {
-        console.log('Profile updated successfully');
-        
-      } else {
-        console.error('Profile update failed');
-      }
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	try {
+		e.preventDefault();
+		// const { username, bio, photo } = formData;
+		
+		const { username, bio, photo } = formData;
+		
+		// Filter out fields that are empty or unchanged
+		const updatedData: { [key: string]: string } = {};
+		if (username.trim() !== '') {
+			updatedData.username = username;
+		}
+		if (bio.trim() !== '') {
+			updatedData.bio = bio;
+		}
+		if (photo.trim() !== '') {
+			updatedData.photo = photo;
+		}
+		
+		const response = await fetch('http://localhost:3001/user/update', {
+			method: 'PUT',
+			credentials: 'include' as RequestCredentials,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ updatedData }),
+		});
+		//   console.log(updatedData);
+		
+		console.log("res ", response);
+		if (response.ok) {
+			console.log('Profile updated successfully');
+			// openModal();
+			
+		} else {
+			console.error('Profile update failed');
+		}
+	handleClick(false);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
-    openModal();
-    handleClick(false);
+	setBio('');
+	setUsername('');
   };
 
   return (
@@ -140,7 +151,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6  rounded-md ">
           <label htmlFor="preview " >
             <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black">
-              <Image src={imagePreview} alt={"preview"} width={256} height={256} />
+              <Image src={imagePreview ? imagePreview : User?.photo ? User?.photo : avatar} alt={"preview"} width={256} height={256} />
               <input
                 id="preview"
                 className=" hidden "
@@ -148,16 +159,18 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
                 onChange={handleChange}
                 name="photo"
                 accept="image/*"
+				value={photo}
+				// value={}
               />
             </div>
           </label>
           <div className=" focus:ring mb-6 mt-5">
             <label className=" text-white font-bold rounded-lg focus:outline-none focus:ring focus:border-blue-300" htmlFor="username">Username:<br /></label>
-            <input type="text" id="username" name="username" onChange={handleChange} className=" text-white w-[100%] px-3 py-2  bg-gray-800 rounded-lg focus:outline-none focus:ring focus:border-blue-300" />
+            <input type="text" id="username" name="username" value={username} onChange={handleChange} className=" text-white w-[100%] px-3 py-2  bg-gray-800 rounded-lg focus:outline-none focus:ring focus:border-blue-300" />
           </div>
           <div className="mb-6 font-bold">
             <label className="text-white" htmlFor="bio">Bio:</label>
-            <textarea className="w-[100%] h-[6rem] bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-300" id="bio" name="bio" onChange={handleChange}></textarea>
+            <textarea className="w-[100%] h-[6rem] bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-300" id="bio" name="bio" value={bio} onChange={handleChange}></textarea>
           </div>
           <div>
             <TwoAuth User={User} />
