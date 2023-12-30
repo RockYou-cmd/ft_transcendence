@@ -28,20 +28,24 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
         <button className=' cursor-pointer opacity-90 hover:opacity-100 transition-opacity w-[10rem] h-[4rem] p-[2px] bg-black rounded-[16px] bg-gradient-to-t from-[#8122b0] to-[#dc98fd] ">' onClick={() => setSignIn(true)}>Sing In</button>
         
         <div className='flex relative items-center justify-center'>
-          <div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px] mt-8'></div>
+          <div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px] mt-8 '></div>
           <div className='flex flex-col relative items-center  justify-between   overflow-hidden w-[90%] h-[25rem] bg-[#e7ebf4]  rounded-[50px] mt-8 '>
             <div className='flex w-full relative items-center justify-center mt-4'>
-              <h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MOODS</h1>
+              <h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MAPS </h1>
             </div>
             <div className='flex'>
-              <div className='flex relative w-92 h-52 m-8 bg-black rounded-xl overflow-hidden'>
-              <h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MOODS</h1>
+
+              <div className='flex flex-col relative w-92 h-52 m-8 bg-slate-300 rounded-xl items-center overflow-hidden'>
+              <h1 className='text-black font-bold text-2xl m-1'>CLASSIC MAPS</h1>
                 <img src={screen1.src} alt={"screen1"} className='w-full h-full'></img>
               </div>
-              <div className='relative w-92 h-52 m-8  bg-black rounded-xl overflow-hidden'>
+
+              <div className='flex flex-col relative w-92 h-52 m-8 items-center bg-blue-300 rounded-xl overflow-hidden'>
+              <h1 className='text-white font-bold  text-2xl m-1'>SHARK MAPS</h1>
                 <img src={screen2.src} alt={"screen1"} className='w-full h-full'></img>
               </div>
-              <div className=' flex relative w-92 h-52 m-8  bg-black rounded-xl overflow-hidden'>
+              <div className=' flex flex-col items-center relative w-92 h-52 m-8  bg-red-300 rounded-xl overflow-hidden'>
+              <h1 className=' text-white font-bold text-2xl m-1'>SHARK MAPS</h1>
                 <img src={screen3.src} alt={"screen1"} className='w-full h-full'></img>
               </div>
 

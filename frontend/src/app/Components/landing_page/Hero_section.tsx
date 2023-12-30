@@ -52,7 +52,7 @@ export default function Hero_section() {
             </div>
                 <div className="  flex  h-[30rem] w-[50%] m-7 items-center justify-center  overflow-hidden rounded-3xl ">
                     <Image className=" rounded-2xl  " id="bg1" alt="bg1" src={cover}  ></Image>
-                    <div className=" corner absolute top-0 left-[47%] "></div>
+                    <div className=" corner absolute top-0 left-[48%] "></div>
                 </div>
         </div>
         </>
