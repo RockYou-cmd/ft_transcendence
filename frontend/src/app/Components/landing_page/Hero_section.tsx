@@ -38,10 +38,10 @@ export default function Hero_section() {
             <div className=" flex w-[50%] h-[35rem] bg-[#e7ebf4] rounded-b-3xl  ">
                 <div className="w-full h-full">
 
-                    <div className="relative w-[85%] h-[30%] mt-40 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
+                    <div className="relative w-[90%] h-[30%] mt-24 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
                         {typing()}
                     </div>
-                    <div className="absolute  mt-30   h-fit">
+                    <div className="absolute  mt-16   h-fit">
                         <div className=" relative left-20  items-center" >
                             <button className="w-[250px] h-[50px] bg-[#000000] rounded-lg font-bold text-xl ">PLAY NOW</button>
                         </div>
@@ -51,8 +51,10 @@ export default function Hero_section() {
 
             </div>
                 <div className="  flex  h-[30rem] w-[50%] m-7 items-center justify-center  overflow-hidden rounded-3xl ">
-                    <Image className=" rounded-2xl  " id="bg1" alt="bg1" src={cover}  ></Image>
-                    <div className=" corner absolute top-0 left-[48%] "></div>
+                    <Image className=" rounded-2xl  " id="bg1" alt="bg1" priority={true} src={cover}  ></Image>
+                    <div className="absolute bg-red-500 ">
+                        <div className="  relative left-64 -top-64  "></div>
+                    </div>
                 </div>
         </div>
         </>
