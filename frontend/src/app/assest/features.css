@@ -1,0 +1,19 @@
+
+.feature-container {
+  width: 100%;
+}
+.features-slider {
+  display: flex;
+  animation: slide-left 15s linear infinite; /* Adjust duration as needed */
+}
+
+.feature-item {
+  width: 350px; /* Adjust as needed */
+  margin-right: 50px; /* Adjust as needed */
+  transition: transform 0.5s ease-in-out; /* Smooth transition */
+}
+
+@keyframes slide-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Adjust offset as needed */
+}

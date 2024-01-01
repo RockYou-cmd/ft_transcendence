@@ -38,7 +38,7 @@ export default function Hero_section() {
             <div className=" flex w-[50%] h-[35rem] bg-[#e7ebf4] rounded-b-3xl  ">
                 <div className="w-full h-full">
 
-                    <div className="relative w-[90%] h-[30%] mt-40 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
+                    <div className="relative w-[85%] h-[30%] mt-40 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
                         {typing()}
                     </div>
                     <div className="absolute  mt-30   h-fit">

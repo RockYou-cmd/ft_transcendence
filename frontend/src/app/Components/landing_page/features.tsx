@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaGamepad, FaTrophy, FaCog, FaUsers, FaSyncAlt, FaHeadphones, FaQuestionCircle, FaShieldAlt, FaRocket } from 'react-icons/fa'; // Import icons from react-icons library
+import "../../assest/features.css"
+
 const PongPongSection = () => {
   const features = [
     {
@@ -49,19 +51,25 @@ const PongPongSection = () => {
     },
   ];
 
+
   return (
-        <div className="flex flex-wrap justify-center p-4 mx-4 ">
+    <div className='w-full text-slate-700'>
+      <div className="flex items-center  feature-container  overflow-x-hidden w-full ">
+        <div className="features-slider flex w-full ">
           {features.map((feature, index) => (
-            <div key={index} className="w-full sm:w-1/2 md:w-1/3   p-4 hover:bg-blue-500/10 ease-in-out  hover:shadow-xl rounded-lg hover:scale-105 delay-100 duration-700 hover:cursor-pointer">
-              <div className="mr-6 ">{feature.icon}</div>
-              <div>
-                <h3 className="text-2xl font-bold mb-2">{feature.title}</h3>
-                <p className="text-lg">{feature.description}</p>
+            <div key={index} className="feature-item  w-full">
+              <div className='flex items-center justify-center'>
+              {feature.icon}
               </div>
+              <h1 className='font-bold w-full  text-xl text-center'>{feature.title}</h1>
+              <p className='w-64 text-center'>{feature.description}</p>
             </div>
           ))}
         </div>
+      </div>
+    </div>
   );
 };
+
 
 export default PongPongSection;

@@ -5,13 +5,13 @@ import logo from "../../../../public/logo.png"
 
 const Footer = () => {
     return (
-      <footer className="bg-gray-900 text-white py-8">
+      <footer className="bg-gray-900 text-white py-8 rounded-b-3xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Column 1: Logo and About */}
             <div className="mb-8 md:mb-0">
-                <image src={logo} alt={"logo"} width={32} widths={32} />
-              <h2 className="text-xl font-bold mb-4">Company Logo</h2>
+            <img src={logo} alt={"logo"} width={32} height={32} />              
+            <h2 className="text-xl font-bold mb-4">Company Logo</h2>
               <p className="text-sm">
                 A brief description of the company or footer section.
               </p>
