@@ -89,7 +89,7 @@ const ParticleBackground: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1 }} className=' relative bg-gradient-to-br from-blue-300 to-blue-800'/>;
+  return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1 }} className=' relative bg-gradient-to-br from-slate-900 via-slate-700 to-black'/>;
 };
 
 export default ParticleBackground;

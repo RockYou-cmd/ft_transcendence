@@ -15,6 +15,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import SelectFriend from './Components/FriendlyGame';
 import Invite from '../chat/Components/Invite';
+import MatchHistory from './Components/MatchHistory';
 
 
 interface GameInfo {
@@ -55,9 +56,9 @@ export default function GamePage() {
 	const f = useRef(false);
 	
 	useEffect(() => {
+		let n = false;
+		console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 		
-		// console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
-
 		if (!gameSet && Mode != "rank" && Mode != "friend") {
 			setMatchMake(false);
 		}
@@ -73,10 +74,13 @@ export default function GamePage() {
 			setAccept("");
 			f.current = true;
 			d.current = false;
+			n = true;
+			socket?.emit("update", {option : "refuse", receiver : gameInfo?.player1, sender : gameInfo?.player2});
 		}
-		if (Mode != "" && (matchMake || gameSet))
+		if (Mode != "" && (matchMake || gameSet)){
 			f.current = false;
-
+		}
+	
 		if (matchMake || (Mode != "" && gameSet) || inviteComp) {
 			setStyle({
 				"filter": "blur(4px)",
@@ -100,34 +104,38 @@ export default function GamePage() {
 			setAccept("");
 			invite.current = false;
 		}
-		else if (!inviteComp && accept == "accepted")
+		else if (!inviteComp && accept == "accepted" && !n){
 			setMode("friend");
-	}, [gameSet, inGame, matchMake, Mode ,inviteComp, accept, endGame]);
-
-
-	useEffect(() => {	
-		if (param.get("player1") != null && param.get("player2") != null){
-			setMode(param.get("mode") as string);
-			setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
-			setSelectedFriend(param.get("player2") as string);
-			if (param.get("invite") == "true")
-				invite.current = true;
 		}
-		router.replace("/game");
-	},[])
+}, [gameSet, inGame, matchMake, Mode ,inviteComp, accept, endGame]);
+
+console.log("after  f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
+
+useEffect(() => {	
+	if (param.get("player1") != null && param.get("player2") != null){
+		setMode(param.get("mode") as string);
+		setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
+		setSelectedFriend(param.get("player2") as string);
+		if (param.get("invite") == "true")
+		invite.current = true;
+}
+router.replace("/game");
+},[])
 	
 	useEffect(() => {
 		// if (Mode != "friend" && Mode != "rank" && !inGame){
 
 			socket?.on("invite", (data: any) => {
 				invite.current = true;
+				// setGameSet(false);
+				setMode("");
 				setInviteComp(true);
 				setGameInfo(data);
 				setSelectedFriend(data.player1);
-				// setMode("friend");
+
 			});
 		// }
-			console.log("yes")
+		
 			socket?.on("start", (data: any) => {
 				setGameInfo(data);
 			});
@@ -196,6 +204,20 @@ export default function GamePage() {
 			}
 		},[])
 
+
+		// useEffect(() => {
+		// 	const timer = setTimeout(() => {
+		// 		setAccept("");
+		// 		setRefuse(true);
+		// 		setGameSet(true);
+		// 		setMode("");
+		// 		setMatchMake(false);
+		// 		setSelectedFriend("");
+		// 		setGameInfo(undefined);
+		// 		setSend(false);
+		// 	}, 5100);
+		// 	return () => clearTimeout(timer);
+		// },[])
 		// function Cancel(e : MouseEvent){
 		// 	e.preventDefault();
 		// 	setAccept("");
@@ -208,7 +230,7 @@ export default function GamePage() {
 		// }
 
 		if (refuse)
-			return (<div className="refuseMsg">{gameInfo?.player2} has refused your invitation game</div>)
+			return (null)
 		return (<>
 			<div className="Waiting">
 				<h1>Waiting for {gameInfo?.player2}</h1>
@@ -237,11 +259,11 @@ export default function GamePage() {
 								<button onClick={()=>setMode("friend")}> PLAY VS FRIEND</button>
 								<button onClick={()=>setMode("rank")}> PLAY RANK</button>
 								</>
-							} 
+							}
 						</div>
+							{/* <Invite User={{username : selectedFriend}} close={setInviteComp} data={gameInfo} ACCEPT={setAccept}/>  */}
 
-						<div className='online'>
-						</div>
+						<MatchHistory/>
 
 					</div>
 					}

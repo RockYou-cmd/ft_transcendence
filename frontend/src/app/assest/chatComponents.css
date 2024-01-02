@@ -6,7 +6,7 @@
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	width: 40vh;
 	/* height: 35vh; */
-	left:60%;
+	left:55%;
 	top:40%;
 	transform: translate(-50%,-50%);
 	margin: auto;
@@ -212,8 +212,13 @@ input[type=file]::file-selector-button:hover {
 }
 
 .Add .content {
-	overflow: auto;
+	overflow-y: auto;
+	/* overflow-x:visible; */
+
 	height: 43vh;
+	/* max-width: 100%; */
+	/* max-width: 35vh; */
+	position: relative;
 	&::-webkit-scrollbar {
 		display: none;
 	}
@@ -221,10 +226,11 @@ input[type=file]::file-selector-button:hover {
 
 .Add #optionsBar {
 	position: absolute;
-	top: 140px;
-	right: -120px;
+	top: -150px;
+	/* right: 200px; */
 	width: 200px;
-	
+	z-index: 100;
+	left: 268px;
 	& button {
 		padding: 13px 18px;
 		font-size: 15px;
@@ -401,45 +407,71 @@ input[type=file]::file-selector-button:hover {
 }
 
 #Invite {
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
+	background: linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%);
 	color: #ffff;
 	position: absolute;
+	font : 600 23px 'Inter', sans-serif;
 	top: 30%;
 	left: 35%;
 	width: 30vh;
 	border-radius: 16px;
-	box-shadow: 0px 0px 3px 0px #e0e0e0;
+	/* box-shadow: 0px 0px 3px 0px #e0e0e0; */
 	z-index: 10;
+	padding:5px 10px 15px 20px;
+	box-shadow: 0px 0px 3px 0px #ffff;
+	& :after{
+		content: '';
+		position: absolute;
+		left : 5px;
+		bottom: 0px;
+		width:98%;
+		height: 5px;
+		background-color: #ffff;
+		animation: showUp 5s linear forwards;
+		border-bottom-left-radius:  20px;
+		border-bottom-right-radius:  20px;
+	}
+}
+
+@keyframes showUp{
+	100%{
+		width: 0%;
+	}
 }
 
 #Invite div {
 	display: flex;
 	flex-direction: row;
-	margin: 15px 10px;
+	/* margin: 15px 10px; */
 }
 
 #Invite h1 {
-	text-align: center;
-	font-weight: 600;
-	font-size: 24px;
 	letter-spacing: 0.3px;
-	margin: 1vh;
+	
+	margin: 25px 0px 20px 20px;
+}
+
+#Invite section{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin:0px 45px;
 }
 
 #Invite button {
-	padding: 8px 35px;
-	width: 50%;
-	font-size: 25px;
+	padding: 10px 25px;
+	border-radius: 20px;
+	/* width: 50%; */
+	font-size: 20px;
 }
 
 #Invite button:first-of-type {
-	background-color: rgba(235, 28, 36, 1);
-	border-bottom-left-radius: 16px;
+	background-color: #FA4D4D;
 }
 
 #Invite button:last-child {
-	background-color: rgba(46, 81, 145, 1);
-	border-bottom-right-radius: 16px;
+	background-color: #3184BF;
 }
 
 .showMembers {

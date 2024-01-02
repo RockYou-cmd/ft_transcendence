@@ -110,7 +110,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			wait()
 			setRefresh(!refresh);
 		}
-		if (!add)
+		if (!add || !mute)
 			setRefresh(!refresh);
 		if (sendMsg) {
 			DirectMsg(User?.user);
@@ -118,8 +118,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		}
 		if (view)
 			router.push("/users/" + User?.user?.username);
-		// console.log("make ", make);
-	}, [make, add, sendMsg, view]);
+	}, [make, add, sendMsg, view, mute]);
 
 
 	useEffect(() => {
@@ -196,11 +195,13 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 
 	function Print(users: any) {
 		const user = users?.users;
+
 		const print = <>
 			<div className={user.role == "ADMIN" ? "user admin" : user.role == "OWNER" ? "user owner" : "user"} ref={visible}>
 				<Image className="g_img" src={user?.user?.photo ? user?.user?.photo : avatar} priority={true} alt="img" width={45} height={45} />
 				<h3>{user?.user.username}</h3>
 				{(user.role != "OWNER" || role != "OWNER" ) && user?.user?.username != me?.username && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
+				{user?.userId == User?.userId &&  option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}
 			</div>
 		</>
 		return <div>{print}</div>
@@ -233,7 +234,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				
 			} 
 			setOptions(content);
-			console.log("content ", content);
 		}
 	}, [option]);
 
@@ -246,7 +246,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				<div className="content">
 					{data?.members?.map((user: any, index: number) => (<Print key={index} users={user} />))}
 				</div>
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}				
+				{/* {option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}				 */}
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
 				{invite && <Confirm Make={InviteToGame} title='Invite This User To A Game' close={setInvite} user={User?.user} />}
 				{add && <AddMembers group={group} close={setAdd} />}

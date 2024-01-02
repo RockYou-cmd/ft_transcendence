@@ -6,7 +6,7 @@ import Form from "../../profile/form";
 
 
 
-export default function LoG({ page, LogIn, User }: { page: string, LogIn: any , User? : string}) {
+export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: any , User? : string, back? : any}) {
 
 	const host = "http://localhost:3001";
 
@@ -15,6 +15,7 @@ export default function LoG({ page, LogIn, User }: { page: string, LogIn: any , 
 	
 	useEffect(() => {
 		const UserProfile = User ? User : "";
+		console.log("user profile", UserProfile);
 		async function fetchData() {
 			const data = await GetData({ Api: page, user: UserProfile }) as any;
 
@@ -31,6 +32,7 @@ export default function LoG({ page, LogIn, User }: { page: string, LogIn: any , 
 						console.log("socket created");
 					}
 					setOnline("ON");
+					LogIn.dataHook.setState(data);
 			}
 
 		}
@@ -43,7 +45,7 @@ export default function LoG({ page, LogIn, User }: { page: string, LogIn: any , 
 
 	return (
 		<>
-			{online == "OFF" && LogIn.waitHook.state ? <Form /> : null}
+			{online == "OFF" && LogIn.waitHook.state ? <Form back={back}/> : null}
 		</>
 	)
 

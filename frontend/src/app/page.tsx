@@ -29,7 +29,7 @@ export default function App() {
 		waitHook: { state: wait, setState: checkwait },
 	}
 	
-	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
+	let render = LoG({ page: "Profile", LogIn: hooks, back : setSignIn }) as any;
 	
 	// console.log(online);
 	
@@ -46,7 +46,7 @@ export default function App() {
 			<div>
 				{online == "OFF" ? (!SignIn && online == "OFF" ? <Home setSignIn={setSignIn} /> : render) : <Profile User={""} />}
 			</div>
-			{SignIn && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={() => setSignIn(false)}>back</button>}
+			{/* {SignIn && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={() => setSignIn(false)}>back</button>} */}
 		</>
 	)
 }

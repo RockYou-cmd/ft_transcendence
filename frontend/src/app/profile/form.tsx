@@ -8,7 +8,7 @@ import { APIs } from '../Props/APIs';
 import { useLogContext, useSocket } from '../Components/Log/LogContext';
 import { io } from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEyeLowVision, faEye , faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import ParticleBackground from '../Components/Log/particles';
 
@@ -18,7 +18,7 @@ var data: { username: string, password: string } = {
 	password: '',
 };
 
-export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string}) {
+export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : string, back? : any}) {
 	
 	const host = "http://localhost:3001";
 	// const host = "http://10.12.11.1:3001";
@@ -47,7 +47,7 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 		}
 		setToken('');
 	}  
-
+	
 	
 	async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
 		event.preventDefault();
@@ -58,15 +58,14 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 			try {
 				const res = await Post(data, APIs.SignIn);
 				const resData = await res?.json();
+				console.log("res in form",res);
 				if (res.status == 201) {
-					if (resData?.status == 425){
-						setshow2FA(true);
+					if (online != "ON") {
+						setOnline("ON");
 					}
-					else{
-						if (online != "ON") {
-							setOnline("ON");
-						}
-					}
+				}
+				else if (res.status == 425) {
+					setshow2FA(true);
 				}
 				else {
 					alert(resData?.message);
@@ -81,21 +80,22 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 			alert('Please fill all fields');
 		};
 	};
-
+	
 	useEffect(()=>{
 		if (TwoEA)
-			setshow2FA(true);
-		if (User)
-			setUser(User);
-	},[])
-	return (
-		<>
+		setshow2FA(true);
+	if (User)
+	setUser(User);
+},[])
+return (
+	<>
 		<div className=' relative mt-[30vh] '>
 			<ParticleBackground />
 
 			{/* <Link href="/" >back to Home</Link> */}
 			<div id="main" className='' >
 				{!show2FA ?  <>
+					{back && <button id='backBtn' onClick={()=>{back(false);}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>}
 				<h2 className="title">Login</h2>
 				<div className="Fline"></div>
 				<input ref={emailRef} type="text" className="email" placeholder="Enter your Username" />
@@ -110,7 +110,6 @@ export default function Form({TwoEA, User} : {TwoEA? : boolean, User? : string})
 				<Link href="/create" className="createbtn">Create an account</Link>
 			</> : 
 				<>
-
 				<form onSubmit={handle2fa} className='flex bg-red-500 items-center justify-center'>
 					<input className='text-black p-3'
 					type='text'

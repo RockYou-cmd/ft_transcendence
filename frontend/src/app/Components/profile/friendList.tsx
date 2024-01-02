@@ -15,7 +15,6 @@ const fetchFriendList = async () => {
 } catch (error) {
     console.error('Error fetching friend list:', error);
 }
-console.log("here:",friendList);
 };
 
 useEffect(() => {
@@ -32,8 +31,7 @@ useEffect(() => {
     </div>
     )
   }
-  
-  console.log("here:",friendList);
+
   return (
     <div className="">
         <ul>
