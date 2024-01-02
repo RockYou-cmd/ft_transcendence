@@ -144,7 +144,7 @@ export default function Profile_info() {
 				</div>
 				<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
 					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
-						<Image src={achiev_pic} width={60} height={60} alt="achievment" />{" "}
+						<Image src={achiev_pic} width={60}  alt="achievment" />{" "}
 						Achievmnet
 					</div>
 					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">1</div>
