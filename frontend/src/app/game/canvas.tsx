@@ -54,7 +54,7 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		let gameHeight = game.current.height || 0;
 		// setGameHeight(game.current.height);
 		// setGameWidth(game.current.width);
-
+		console.log(gameWidth + " " + gameHeight);
 
 		var net={
 			x : gameWidth / 2 - 1,
@@ -66,18 +66,21 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 	
 		var player1 = {
 			x: 10,
-			y: gameHeight / 2 - 120 / 2,
+			y: (gameHeight / 2) -  gameHeight / 6.5 / 2,
 			width: 12,
 			height: gameHeight / 6.5,
+			// height: 140,
 			score: 0,
 			color: gameSettings?.paddleColor,
 		}
 	
 		var player2 = {
 			x: gameWidth - 22,
-			y: gameHeight / 2 - 120 / 2,
+			y: (gameHeight / 2) -  (gameHeight / 6.5)/ 2,
+			// y : (gameHeight / 2) -  140/2,
 			width: 12,
 			height: gameHeight / 6.5,
+			// height: 140,
 			score: 0,
 			color: gameSettings?.paddleColor,
 		}
@@ -208,38 +211,17 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 				}
 	
 				ball.speed += ball_acc;
-				// if (ball.velocityY == 0)
-				// 	ball.velocityY = 5;
 
-
-				if (playerPos.top <= (ball.y  + ball.radius) && (ball.y  + ball.radius) < playerPos.middle - ball.radius){
-					
-					// if (ball.velocityY > 0){
-					// 	ball.velocityX = 10;
-					// }
-					// else{
-					// 	ball.velocityX = 5;
-					// }
-
+				if ((playerPos.top <= (ball.y  + ball.radius)) && ((ball.y  + ball.radius) < playerPos.middle)){
 					ball.velocityY = -5;
-					
 				}
-				else if (playerPos.buttom > (ball.y  + ball.radius) && (ball.y  + ball.radius) >= playerPos.middle + ball.radius){
-
-					// if (ball.velocityY < 0){
-					// 	ball.velocityX = 10;
-					// }
-					// else{
-					// 	ball.velocityX = 5;
-					// }
+				else if (playerPos.buttom >= (ball.y  - ball.radius) && (ball.y  - ball.radius) > playerPos.middle){
 					ball.velocityY = 5;
-			
 				}
 				else
 					ball.velocityY= 0;
-				// if (touch_player == player2)
-					ball.velocityX = -ball.velocityX;
-
+				
+				ball.velocityX = -ball.velocityX;
 			}
 			
 			// Computer

@@ -49,22 +49,22 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
     let gameWidth = game.current.width || 0;
     let gameHeight = game.current.height || 0;
     let player1 = {
-      x: 20,
-      y: gameHeight / 2 - 120 / 2,
-      score: 0,
-      username: gameInfo?.player1,
-      width: 12,
-      height: gameHeight / 6.5,
-      color: gameSettings?.paddleColor,
+		height: gameHeight / 6.5,
+		width: 12,
+		x: 10,
+		y: (gameHeight / 2) -(gameHeight / 6.5) / 2,
+		score: 0,
+		username: gameInfo?.player1,
+		color: gameSettings?.paddleColor,
     };
     let player2 = {
-      x: gameWidth - 32,
-      y: gameHeight / 2 - 120 / 2,
-      score: 0,
-      username: gameInfo?.player2,
-      width: 12,
-      height: gameHeight / 6.5,
-      color: gameSettings?.paddleColor,
+		width: 12,
+		height: gameHeight / 6.5,
+		x: gameWidth - 22,
+		y: (gameHeight / 2) -  (gameHeight / 6.5)/ 2,
+		score: 0,
+		username: gameInfo?.player2,
+		color: gameSettings?.paddleColor,
     };
     let ball = { x: 0, y: 0, color: gameSettings?.ballColor, radius: 16 };
     let net = {
