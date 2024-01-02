@@ -4,9 +4,12 @@ import '../assest/create.css';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Post } from '../Components/Fetch/Fetch';
+import { Post, GetRes } from '../Components/Fetch/Fetch';
 import { APIs } from '../Props/APIs';
 import ParticleBackground from '../Components/Log/particles';
+import Loading from '../loading';
+import swal from 'sweetalert';
+
 
 var info: { firstname: string, lastname: string, email: string, password: string, username: string } = {
 	firstname: '',
@@ -38,6 +41,8 @@ export default function Create() {
 	const [Rpassword, checkRpassword] = useState('');
 
 
+
+
 	async function sumbitHandler(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		info.firstname = first_nameRef.current?.value || '';
@@ -48,11 +53,10 @@ export default function Create() {
 		rep_password = repeat_passwordRef.current?.value || '';
 
 
-
 		if (info.email && info.password && info.firstname && info.lastname && info.username && rep_password) {
 
 			if (rep_password != info.password) {
-				alert('passwords are not equal');
+				swal("passwords are not equal", "", "error");
 			}
 
 			else {
@@ -62,28 +66,35 @@ export default function Create() {
 
 
 				if (res.status == 201) {
-					alert('user created');
+					swal("Account Created", "", "success");
 					route.push('/setting');
 				}
 				else {
 					const msg = await res?.json();
-					alert(msg.message);
+					swal(msg?.message, "", "error");
 				}
 			}
 
 		}
 		else {
-			alert('Please fill all fields');
+			swal("please fill all fields", "", "info");
 		}
 	}
 
 
 	useEffect(() => {
-		checkwait(true);
+		async function fetchData() {
+			const res = await GetRes(APIs.Profile);
+			if (res.ok)
+				route.push("/");
+			else
+				checkwait(true);
+		}
+		fetchData();
 	}, []);
 
 	if (!wait) {
-		return <div>loading...</div>
+		return <Loading />
 	}
 	return (
 		<>

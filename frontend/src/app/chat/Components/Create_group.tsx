@@ -7,6 +7,7 @@ import { Get, Post , Put} from '@/app/Components/Fetch/Fetch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 import { fileUploadFunction } from '@/app/Components/Fetch/ImageCloudUpload';
+import swal from 'sweetalert';
 
 interface Data {
 	name?: string,
@@ -66,9 +67,9 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			id : info?.id,
 		}, APIs.roomModify);
 		if (res?.ok)
-			alert("Group settings changed");
+			swal("Group settings changed", "", "success");
 		else
-			alert("failed to change settings");
+			swal("failed", "", "error");
 	
 	}
 
@@ -78,7 +79,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			const image =  await fileUploadFunction(gPic.current.files[0]);
 			
 			if (privacy == "PROTECTED" && !gPass.current.value){
-				alert("Please enter a password");
+				swal("Please enter password", "", "info");
 			}
 			else{
 				const data = { name : gName.current.value,
@@ -89,11 +90,11 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 				}
 				const res = await Post(data, APIs.CreateRoom);
 				if (res?.status == 201){
-					alert("Group created");
+					swal("Group created", "", "success");
 					close(false);
 				}
 				else{
-					alert("Group name already exists");
+					swal("failed", "", "error");
 				}
 			}
 		}

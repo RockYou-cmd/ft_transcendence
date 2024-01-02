@@ -6,11 +6,11 @@ import Link from 'next/link';
 import React from 'react';
 import { APIs } from '../Props/APIs';
 import { useLogContext, useSocket } from '../Components/Log/LogContext';
-import { io } from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye , faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import ParticleBackground from '../Components/Log/particles';
+import swal from 'sweetalert';
 
 
 var data: { username: string, password: string } = {
@@ -43,7 +43,7 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 				
 			}
 		} else {
-			alert("2FA code not corerct");
+			swal("2FA code not corerct", "", "error")
 		}
 		setToken('');
 	}  
@@ -68,16 +68,16 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 					setshow2FA(true);
 				}
 				else {
-					alert(resData?.message);
+					swal(resData?.message, "", "error");
 				}
 			}
 			catch (err) {
-				alert(err);
+				swal(err as string, "", "error");
 				// return <Error error={err as Error} reset={LogIn.resetHooks} />
 			}
 		}
 		else {
-			alert('Please fill all fields');
+			swal("Please fill all the fields", "", "info");
 		};
 	};
 	

@@ -28,7 +28,6 @@ export default function SettingPage() {
       async function fetchData() {
         const res = await Get(APIs.Profile);
         setData(res);
-      
       }
       useEffect(() => {
         fetchData();
@@ -36,7 +35,6 @@ export default function SettingPage() {
 			router.push("/"); 
       }, [save]);
 
-	  
 
     return (
 

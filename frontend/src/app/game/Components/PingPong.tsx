@@ -9,6 +9,7 @@ import { useSocket , useMe } from '../../Components/Log/LogContext';
 import { faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { MouseEvent } from 'react';
+import swal from 'sweetalert';
 
 
 
@@ -21,6 +22,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	const [oppScore, setOppScore] = useState(0);
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
+	const lag = useRef(false);
 
 	function leaveMatch(e? : MouseEvent){
 		e?.preventDefault();
@@ -30,12 +32,20 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 		socket?.connect();
 	}
 
+	useEffect(() => {
+		const time = setTimeout(() => {
+			if (lag.current == false){
+				const player = gameInfo?.player1 == me?.username ? gameInfo.player2 : gameInfo.player1;
+				swal({title : "You Won", text : `${player} has left the game`,icon :  "info", button : "OK"});
+				leaveMatch();
+			}
+		}, 15000);
+		return	() => clearTimeout(time);
+	},[]);
+
   useEffect(() => {
     if (game.current === null) return;
 
-    // let parent = game.current?.parentElement;
-    // game.current.width = parent?.clientWidth || 0;
-    // game.current.height = parent?.clientHeight || 0;
     let gameWidth = game.current.width || 0;
     let gameHeight = game.current.height || 0;
     let player1 = {
@@ -75,17 +85,11 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
       player2.score = data.player2.score;
       ball.x = data.ball.x;
       ball.y = data.ball.y;
-
-	//   if (!first.current){
-		//   player1.username = data.payload.player1;
-		//   player2.username = data.payload.player2;
-		//   roomName.current = data?.roomName;
-		//   first.current = true;
-	//   }
-	//   console.log("data", data);
-	//   console.log("data player1", data?.player1);
-	//   console.log("data player2", data?.player2);
-	//   console.log("in data player1", player1.username, "player2", player2.username)
+	  if (lag.current == false){
+		lag.current =  true;
+	  }
+	  
+	
       if (myScore != data.player1.score) setMyScore(data.player1.score);
       if (oppScore != data.player2.score) setOppScore(data.player2.score);
       render();
@@ -93,6 +97,8 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 
     socket?.on("endGame", (data: any) => {
 		console.log("endGame", data);
+		const winner = data.winner == me?.username ? "You Win" : "You Lose";
+		swal(winner, "", "info");
 		leaveMatch();
     });
 
