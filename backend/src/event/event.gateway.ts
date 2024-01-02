@@ -59,14 +59,14 @@ export class EventGateway {
       client.leave(username);
       var match = this.findMatch(username);
       if (match) {
-		  this.userService.updateData({ username }, { status: "ONLINE" });
-		  const player1 = Array.from(match.keys())[0];
-		  const player2 = Array.from(match.keys())[1];
-		  this.server
+        this.userService.updateData({ username }, { status: "ONLINE" });
+        const player1 = Array.from(match.keys())[0];
+				if (match.size == 4) var player2 = Array.from(match.keys())[1];
+        else var player2 = Array.from(match.keys())[2];
+        this.server
           .to(player1)
           .to(player2)
           .emit("endGame", "the opponent left");
-		  console.log(match);
         clearInterval(match.get("loop"));
         match?.get("game")?.reset();
         match.clear();
@@ -92,7 +92,10 @@ export class EventGateway {
     const userData = await this.roomService.getMemberShip(
       payload.chatId,
       payload.sender,
-    );
+		);
+		
+		var blockedBy = userData.user.blockedBy.map(user => user?.users[0]?.username);
+		// console.log(userData.user);
     if (userData.status == "MUTED") {
       const now = new Date();
       if (userData.mutedTime > now) {
@@ -104,13 +107,18 @@ export class EventGateway {
           username: userData.userId,
         });
     }
-    payload.receivers.forEach((receiver) => {
-      this.server
-        .to(receiver.userId)
-        .except(payload.sender)
-        .emit("roomMessage", payload);
+		payload.receivers.forEach((receiver) => {
+			// console.log(receiver.userId)
+			// console.log(blockedBy.includes(receiver.userId));
+      if (!blockedBy.includes(receiver.userId)) {
+        console.log("receiver : ", receiver.userId);
+        this.server
+          .to(receiver.userId)
+          .except(payload.sender)
+          .emit("roomMessage", payload);
+			}
     });
-    console.log("message Sent!");
+    // console.log("message Sent!");
     this.roomService.sendMessage(payload);
   }
 
@@ -215,12 +223,20 @@ export class EventGateway {
     match.set(user.username, client.id);
     client.join(payload.roomName);
     match.set("game", new GameService());
-    const game = match.get("game");
+    const game: GameService = match.get("game");
     const loop = setInterval(() => {
       game.updateCOM();
       const player1 = game.player1;
       const player2 = game.player2;
       const ball = game.ball;
+      if (player1.score == 7 || player2.score == 7) {
+        const winner = player1.score == 7 ? payload.player1 : payload.player2;
+        clearInterval(match?.get("loop"));
+        this.server.to(payload.roomName).emit("endGame", {winner});
+        game.reset();
+        match.clear();
+        console.log("we got a goat here  : ", winner);
+      }
       this.server.to(payload.roomName).emit("frame", {
         player1,
         player2,

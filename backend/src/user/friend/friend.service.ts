@@ -188,6 +188,11 @@ export class FriendService {
 			if (!friendShipId) {
 				var blocked = await prisma.friendShip.create({
 					data: {
+						sender: {
+							connect: {
+								username: account.username
+							}
+						},
 						blocked: {
 							connect: {
 								username: user.username
@@ -203,7 +208,8 @@ export class FriendService {
 								}
 							]
 						},
-						status: "BLOCKED"
+						status: "BLOCKED",
+						userId: user.username
 					}
 				})
 			}
@@ -221,7 +227,7 @@ export class FriendService {
 						status: "BLOCKED"
 					}
 				})
-
+				console.log("blocked: ", blocked)
 			}
 			return "User blocked"
 		} catch (err) {
