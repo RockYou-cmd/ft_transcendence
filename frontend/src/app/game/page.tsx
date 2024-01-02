@@ -57,7 +57,7 @@ export default function GamePage() {
 	
 	useEffect(() => {
 		let n = false;
-		console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
+		// console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 		
 		if (!gameSet && Mode != "rank" && Mode != "friend") {
 			setMatchMake(false);
@@ -109,7 +109,7 @@ export default function GamePage() {
 		}
 }, [gameSet, inGame, matchMake, Mode ,inviteComp, accept, endGame]);
 
-console.log("after  f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
+// console.log("after  f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 
 useEffect(() => {	
 	if (param.get("player1") != null && param.get("player2") != null){

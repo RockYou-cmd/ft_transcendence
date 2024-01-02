@@ -19,6 +19,7 @@ import { CgMoreVerticalR } from "react-icons/cg";
 import { SlClose } from "react-icons/sl";
 import ProfileMenu from "@/app/Components/profile/userMenu";
 import FriendListComponent from "@/app/Components/profile/friendList";
+import swal from "sweetalert";
 
 
 export default function UserProfile({ param }: { param: { id: string } }) {
@@ -134,7 +135,7 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			}
 			setRefresh(!refresh);
 		} catch (err) {
-			alert(err);
+			swal(err as string, "", "error");
 		}
 	}
 

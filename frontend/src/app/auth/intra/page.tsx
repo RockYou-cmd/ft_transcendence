@@ -7,6 +7,7 @@ import Loading from "../../loading";
 import { useRouter } from "next/navigation";
 import { useLogContext, useSocket } from "../../Components/Log/LogContext";
 import Form from "@/app/profile/form";
+import swal from "sweetalert";
 
 
 
@@ -44,7 +45,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				setUser(data?.username?.username);
 			}
 			else {
-				alert(data?.message);
+				swal(data.message, "", "error");
 			}
 		}
 		if (value && code)
