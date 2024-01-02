@@ -223,12 +223,20 @@ export class EventGateway {
     match.set(user.username, client.id);
     client.join(payload.roomName);
     match.set("game", new GameService());
-    const game = match.get("game");
+    const game: GameService = match.get("game");
     const loop = setInterval(() => {
       game.updateCOM();
       const player1 = game.player1;
       const player2 = game.player2;
       const ball = game.ball;
+      if (player1.score == 7 || player2.score == 7) {
+        const winner = player1.score == 7 ? payload.player1 : payload.player2;
+        clearInterval(match?.get("loop"));
+        this.server.to(payload.roomName).emit("endGame", {winner});
+        game.reset();
+        match.clear();
+        console.log("we got a goat here  : ", winner);
+      }
       this.server.to(payload.roomName).emit("frame", {
         player1,
         player2,
