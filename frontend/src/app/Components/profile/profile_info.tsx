@@ -12,7 +12,7 @@ import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
-
+import WinRate from "./winRate"
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
 	const {me, setMe} =  useMe() as any;
@@ -67,10 +67,9 @@ export default function Profile_info() {
 					<p className="text-gray-300">Total goal scored: X</p>
 					<p className="text-gray-300">Total goal conced: X</p>
 					</div> 
-					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
+					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
 					<h1 className="text-white text-lg font-bold mb-2">Game Win Ratio</h1>
-					<p className="text-gray-300">60% WIN Rate</p>
-
+					<WinRate progress={35}/>
 					</div> 
 					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
 					<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
