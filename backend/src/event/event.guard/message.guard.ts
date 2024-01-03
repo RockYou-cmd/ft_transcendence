@@ -16,8 +16,7 @@ export class messageGuard {
     try {
       const payload = await this.verifyToken(cookie.access_token);
       const data = context.switchToWs().getData();
-      if (data.sender != payload.username)
-        throw new Error();
+      if (data.sender != payload.username) throw new Error();
     } catch (err) {
       throw new UnauthorizedException();
     }

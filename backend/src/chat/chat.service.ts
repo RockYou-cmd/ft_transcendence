@@ -40,7 +40,7 @@ export class ChatService {
     }
   }
 
-  async getChat(account, user) {
+  async   getChat(account, user) {
     try {
         // await prisma.message.deleteMany();
         // await prisma.chat.deleteMany();
@@ -59,7 +59,7 @@ export class ChatService {
               },
             },
             include: {
-              messages: true,
+              messages: true
             },
           },
           friends: {

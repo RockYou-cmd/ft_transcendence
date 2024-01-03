@@ -119,18 +119,15 @@ export default function Chat() {
 			setUnBlock(true);
 	}
 
-	useEffect(() => {
+	useEffect(() => {	
 		socket?.on("update", (data: any) => {
+			// console.log("update in page", data);
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
 			}
-			else if (data?.option == "unblock" || data?.option == "block"){
-				// setUser(User);
-			
-			}
 		});
 		return () => {socket?.off("update", ()=>{});}
-	},[socket])
+	},[socket, User])
 
 	useEffect(() => {
 		async function fetchData(user : string) {

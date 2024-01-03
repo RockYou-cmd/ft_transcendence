@@ -46,10 +46,39 @@ export class RoomService {
           id: roomId,
         },
         select: {
-          messages: true,
+          messages: {
+            where: {
+              sender: {
+                OR: [
+                  {
+                    username: account.username,
+                  },
+                  {
+                    friends: {
+                      none: {
+                        AND: [
+                          {
+                            status: "BLOCKED",
+                          },
+                          {
+                            users: {
+                              some: {
+                                username: account.username,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
           members: true,
         },
       });
+      console.log(chat);
       return chat;
     } catch (err) {
       throw err;
@@ -471,6 +500,23 @@ export class RoomService {
           userId_roomId: {
             userId: username,
             roomId: roomId,
+          },
+        },
+        include: {
+          user: {
+            select: {
+              blockedBy: {
+                select: {
+                  users: {
+                    where: {
+                      username: {
+                        not: username,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       });

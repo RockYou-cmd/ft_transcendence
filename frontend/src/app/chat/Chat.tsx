@@ -17,6 +17,7 @@ import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
 import { Disconnect } from '../Components/Log/Logout';
+import swal from 'sweetalert';
 
 
 
@@ -80,6 +81,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
+		console.log("chat", data);
 		if (data == undefined) 
 			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		if (channel?.username && data?.chats[0]?.id == undefined) {
@@ -153,10 +155,28 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			if ((input !== "" || msgImg.current?.files[0] != undefined)) {
 				let img: string = "";
 				if (msgImg.current?.files[0] != undefined) {
-					alert("Uploading image");
-					img = await fileUploadFunction(msgImg.current.files[0]);
-					alert("Image uploaded");
-				}
+					await swal({
+						title: "Uploading Image",
+						icon: "info",
+						timer: 1500,
+						buttons: { closeModal : false}
+					}).then(async () => {
+						img = await fileUploadFunction(msgImg.current.files[0]) as any;
+						console.log(img);
+						if (img != null && img != "") {
+							swal({
+								title: "Image Uploaded",
+								icon: "success",	
+							});
+						}
+						else{
+							swal({
+								title: "Image Not Uploaded",
+								icon: "error",	
+							});
+						}
+					});	
+			}
 
 				const s = img != "" ? img : input;
 				const msg = { content: s, senderId: me?.username };
@@ -183,9 +203,9 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 
 					if (status.current.status == "BLOCKED") {
 						if (status.current.sender == me?.username)
-							alert("You blocked this user");
+							swal("You are blocked by this user", "", "error");
 						else
-							alert("You are blocked by this user");
+							swal("You have blocked this user","" ,"error");
 					}
 				}
 			}
@@ -197,7 +217,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
-		
+			console.log("update", data)
 			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: true, id: data?.groupId };
 			}
@@ -220,7 +240,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 		});
 		socket?.on("muted", (data: any) => {
 			if (data?.roomId == ChatID.current) {
-				alert("You are muted in this group");
+				swal("You are muted in this group", "", "error");
 				Muted.current = { mute: true, id: data?.roomId };
 			}
 		});
@@ -235,8 +255,8 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 		}
 		return () => {
 			socket?.off(Room.current);
-			socket?.off("update", () => { });
-			socket?.off("muted");
+			socket?.off("update", () => {});
+			socket?.off("muted", ()=>{});
 		};
 	}, [socket, chat]);
 

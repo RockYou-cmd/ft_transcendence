@@ -35,20 +35,16 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 	const {me} = useMe();
 
 
-	// const [gameWidth, setGameWidth] = useState(0);
-	// const [gameHeight, setGameHeight] = useState(0);
-	// let score = useRef<HTMLInputElement>(null);
-
 
 	useEffect(() => {
 		if (game.current === null){
 			return;
 		}
 		
-		const FPS = 50;
+		const FPS = 60;
 		const BALL_SPEED = 1.2;
 		const COM_LVL = 0.15;
-		var ball_acc = 0.12;
+		var ball_acc = 0.1;
 		
 		const context = game.current?.getContext('2d');
 		let parent = game.current?.parentElement;
@@ -114,13 +110,6 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 			}
 		}
 
-		function drawText(text: string, x: number, y: number, color: string){
-			if (context) {
-				context.fillStyle = color;
-				context.font = "500 50px sans-serif";
-				context.fillText(text, x, y);
-			}
-		}
 
 		function drawNet(){
 			for (let i = 0; i <= gameHeight; i += 15){
@@ -151,11 +140,13 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		}
 		
 		function collision(b: any, p: any) {
+			//player
 			p.top = p.y;
 			p.bottom = p.y + p.height;
 			p.left = p.x;
 			p.right = p.x + p.width;
 		
+			//ball
 			b.top = b.y - b.radius;
 			b.bottom = b.y + b.radius;
 			b.left = b.x - b.radius;
@@ -184,21 +175,28 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 				return;
 			}
 
-			if (ball.velocityX == 10 || ball.velocityX == -10){
-				ball.y += (ball.velocityY * ball.speed) / 2;
-				ball.x += (ball.velocityX * ball.speed) / 2;
-			}
-			else{
+			// if (ball.velocityX == 10 || ball.velocityX == -10){
+			// 	ball.y += (ball.velocityY * ball.speed) / 2;
+			// 	ball.x += (ball.velocityX * ball.speed) / 2;
+			// }
+			// else{
 
 				ball.y += ball.velocityY * ball.speed;
 				ball.x += ball.velocityX * ball.speed;
-			}
+			// }
 			
 			
 			
 			
 			if (ball.y + ball.radius >= gameHeight || ball.y - ball.radius <= 0){
-				ball.velocityY = -ball.velocityY;
+				if (ball.y + ball.radius >= gameHeight){
+					if (ball.velocityY > 0)
+						ball.velocityY = -ball.velocityY;
+				}
+				else if (ball.y - ball.radius <= 0){
+					if (ball.velocityY < 0)
+						ball.velocityY = -ball.velocityY;
+				}
 			}
 			
 			var touch_player = (ball.x < gameWidth / 2) ? player1 : player2;
@@ -210,43 +208,55 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 				}
 	
 				ball.speed += ball_acc;
-				if (ball.velocityY == 0)
-					ball.velocityY = 5;
+				// if (ball.velocityY == 0)
+				// 	ball.velocityY = 5;
 
 
-				if (playerPos.top <= (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) < playerPos.middle){
-					// console.log("velocity ", ball.velocityY);
-					if (ball.velocityY > 0){
-						ball.velocityX = 10;
-					}
-					else{
-						ball.velocityX = 5;
-					}
+				if (playerPos.top <= (ball.y  + ball.radius) && (ball.y  + ball.radius) < playerPos.middle - ball.radius){
+					
+					// if (ball.velocityY > 0){
+					// 	ball.velocityX = 10;
+					// }
+					// else{
+					// 	ball.velocityX = 5;
+					// }
+
+					ball.velocityY = -5;
 					
 				}
-				else if (playerPos.buttom > (ball.y  + ball.radius / 2) && (ball.y  + ball.radius / 2) >= playerPos.middle){
+				else if (playerPos.buttom > (ball.y  + ball.radius) && (ball.y  + ball.radius) >= playerPos.middle + ball.radius){
 
-					if (ball.velocityY < 0){
-						ball.velocityX = 10;
-					}
-					else{
-						ball.velocityX = 5;
-					}
-					
+					// if (ball.velocityY < 0){
+					// 	ball.velocityX = 10;
+					// }
+					// else{
+					// 	ball.velocityX = 5;
+					// }
+					ball.velocityY = 5;
 			
 				}
-				// else
-				// 	ball.velocityX = 100;
-				if (touch_player == player2)
+				else
+					ball.velocityY= 0;
+				// if (touch_player == player2)
 					ball.velocityX = -ball.velocityX;
 
-			
 			}
 			
 			// Computer
-			var pos_player2 = ball.y - player2.height / 2;
-			var cur_pos = player2.y;
-			player2.y = ler(cur_pos, pos_player2, COM_LVL);
+			function COM(player : any){
+				var pos_player = ball.y - player.height / 2;
+				var cur_pos = player.y;
+				player.y = ler(cur_pos, pos_player, COM_LVL);
+			}
+
+			// COM(player1);
+			COM(player2);
+
+			// var pos_player2 = ball.y - player2.height / 2;
+			// var cur_pos = player2.y;
+			// player2.y = ler(cur_pos, pos_player2, COM_LVL);
+
+
 			
 			if (ball.x + ball.radius <= 0){
 				player2.score++;
@@ -269,11 +279,11 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		window.addEventListener("keydown", function(key){
 			if (key.code == "KeyW" && !pause.current && !startGame){
 				if (player1.y > 0)
-					player1.y -= 20;
+					player1.y -= 25;
 			}
 			else if(key.code == "KeyS" && !pause.current && !startGame){
 				if (player1.y < gameHeight - player1.height)
-					player1.y += 20;
+					player1.y += 25;
 			}
 		});
 

@@ -16,9 +16,10 @@ export class gameGuard {
     try {
       const payload = await this.verifyToken(cookie.access_token);
       const data = context.switchToHttp().getRequest();
-      data.user = payload
+      data.user = payload;
 			// console.log(data);
-			// data["user"] = payload;
+			
+      // data["user"] = payload;
     } catch (err) {
       throw new UnauthorizedException();
     }

@@ -35,7 +35,7 @@ export default function Channel({ selectChat, refresh }: { selectChat: any, refr
 			<div className="content" onClick={(e: MouseEvent) => SelecteEvent(e, info)}>
 				<Image className="g_img" src={info?.photo ? info?.photo : avatar} priority={true} alt="img" width={70} height={70} />
 				<h4>{info?.username}</h4>
-				{/* <p>{info?.messagesReceived.reduce()}</p> */}
+		
 				<span>{info?.lastMsgTime}</span>
 				{((info?.status == "ONLINE" || info?.status == "INGAME") && (info?.friends ? (info.friends[0]?.status != "BLOCKED" ? true : false) : true)) ? <div className="status"></div> : <></>}
 				<div className="line"></div>
