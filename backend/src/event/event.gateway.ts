@@ -75,7 +75,7 @@ export class EventGateway {
       if (!userTabs.length)
         this.userService.updateData({ username }, { status: "OFFLINE" });
     }
-    console.log(username, " DISCONNECT : ", client.id);
+    console.log(username, " DISCONNECT");
   }
 
   @SubscribeMessage("message")
@@ -94,8 +94,9 @@ export class EventGateway {
       payload.sender,
 		);
 		
-		var blockedBy = userData.user.blockedBy.map(user => user?.users[0]?.username);
-		// console.log(userData.user);
+		var blockedBy = userData.user.blockedBy.map(
+      (user) => user?.users[0]?.username,
+    );
     if (userData.status == "MUTED") {
       const now = new Date();
       if (userData.mutedTime > now) {
@@ -181,6 +182,7 @@ export class EventGateway {
   @SubscribeMessage("move")
   async movePaddle(client: Socket, payload: any) {
     const { user }: any = client;
+    // console.log(payload);
     var match = this.findMatch(user.username);
     match.get("game")[payload.player].y = payload.y;
   }
@@ -235,6 +237,12 @@ export class EventGateway {
         this.server.to(payload.roomName).emit("endGame", {winner});
         game.reset();
         match.clear();
+        this.gameService.updateGameProfile({
+          player1: payload.player1,
+          player2: payload.player2,
+          player1Score: player1.score,
+          player2Score: player2.score,
+        });
         console.log("we got a goat here  : ", winner);
       }
       this.server.to(payload.roomName).emit("frame", {

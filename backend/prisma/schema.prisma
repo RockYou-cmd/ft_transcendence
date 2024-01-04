@@ -36,7 +36,7 @@ model User {
 
 model GameProfile {
   profileId       String @id @default(uuid())
-  user            User @relation(fields: [userId], references: [id])
+  user            User @relation(fields: [userId], references: [username])
   userId          String @unique
   gamesPlayed     Int @default(0)
   level           Int @default(0)

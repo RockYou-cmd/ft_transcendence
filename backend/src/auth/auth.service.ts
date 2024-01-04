@@ -19,6 +19,9 @@ export class AuthService {
           username: user.username,
           email: user.email,
           password: hash,
+          gameProfile: {
+            create: {},
+          },
         },
       });
       return await this.generateJwt(ret);
@@ -72,6 +75,9 @@ export class AuthService {
             username: data.username,
             email: data.email,
             photo: data.photo,
+            gameProfile: {
+              create: {},
+            },
           },
         });
       }
