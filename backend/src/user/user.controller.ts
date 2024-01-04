@@ -10,8 +10,14 @@ export class UserController{
 
 	@Get("profile")
 	@UseGuards(AuthGuard)
-	getProfile(@Request() account){
+	getProfile(@Request() account) {
 		return this.UserService.getProfile(account.user);
+	}
+
+	@Get("delete")
+	delete() {
+		this.UserService.delete();
+		return "done";
 	}
 	
 	@Get()

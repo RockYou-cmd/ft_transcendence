@@ -12,9 +12,7 @@ export class ChatService {
 
   async sendMessage(payload) {
     try {
-      console.log(payload);
       const chatId = payload.chatId;
-      // console.log("chatId: ",chatId);
       var updatedChat = await prisma.message.create({
         data: {
           content: payload.content,
