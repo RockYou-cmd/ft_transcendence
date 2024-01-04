@@ -124,9 +124,13 @@ export default function Chat() {
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
 			}
+			else if (data?.option == "newChat"){
+				console.log("new chat");
+				setUser(User);
+			}
 		});
 		return () => {socket?.off("update", ()=>{});}
-	},[socket, User])
+	},[socket])
 
 	useEffect(() => {
 		async function fetchData(user : string) {
@@ -166,7 +170,6 @@ export default function Chat() {
 		}
 	}, [createG, explore, newChat, invite, leave, settings, seeMem, block, view, unBlock]);
 
-	console.log("online", online)
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 
 	if (!hooks.waitHook.state) {

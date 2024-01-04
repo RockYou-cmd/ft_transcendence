@@ -1,3 +1,10 @@
+
+#home{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+}
+
 .animated-border  {
     border: 2px solid #ffffff;
     animation: pulsate 4s ease-in-out infinite;

@@ -43,16 +43,16 @@ export default function Hero_section({ setSignIn }: { setSignIn: any }) {
                     </div>
                     <div className="absolute  mt-16   h-fit">
                         <div className=" relative left-20  items-center" >
-                            <button className="w-[250px] h-[50px] bg-[#000000] rounded-lg font-bold text-xl " onClick={() => setSignIn(true)}>PLAY NOW</button>
+                            <button className="w-[250px] h-[50px] bg-[#000000] rounded-lg font-bold text-xl " onClick={() => setSignIn(true)}>SIGN IN</button>
                         </div>
                     </div>
                 </div>
 
 
             </div>
-                <div className="  flex  h-[30rem] w-[50%] m-7 items-center justify-center  overflow-hidden rounded-3xl ">
+                <div className="  bg-red-500 flex  h-[30rem] w-[50%] m-7 items-center justify-center  overflow-hidden rounded-3xl ">
                     <Image className=" rounded-2xl  " id="bg1" alt="bg1" priority={true} src={cover}  ></Image>
-                    <div className="absolute bg-red-500 ">
+                    <div className="absolute  ">
                         <div className="  relative left-64 -top-64  "></div>
                     </div>
                 </div>

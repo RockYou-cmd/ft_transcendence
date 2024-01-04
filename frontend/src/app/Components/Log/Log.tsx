@@ -17,7 +17,7 @@ export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: 
 		const UserProfile = User ? User : "";
 		async function fetchData() {
 			const data = await GetData({ Api: page, user: UserProfile }) as any;
-			// console.log("user profile", data);
+			console.log("user profile", data);
 
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {

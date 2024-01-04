@@ -107,6 +107,6 @@ input:focus, textarea:focus, select:focus{
 	box-shadow: 0px 0px 3px 0px #ffffffa8;
 }
 
-*::-webkit-scrollbar{
+/* * ::-webkit-scrollbar{
 	display: none;
-}
+} */

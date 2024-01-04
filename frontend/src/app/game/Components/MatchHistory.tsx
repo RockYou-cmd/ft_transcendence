@@ -37,10 +37,10 @@ export default function MatchHistory() {
 	return(
 		<>
 			<div className="matchHistory">
-				{/* <h1>MATCH HISTORY</h1>
+				<h1>MATCH HISTORY</h1>
 				<div className="content">
 					{matchs.map((match, index) => <PrintHistory match={match} key={index}/>)}
-				</div> */}
+				</div>
 			</div>
 		</>
 	)

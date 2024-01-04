@@ -26,6 +26,7 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 		const n = useRef(false);
 		useEffect(() => {
 			if (n.current == false){
+				console.log("matchmaking");
 				socket?.emit("matchmaking", {});
 			}
 			n.current = true;
@@ -49,11 +50,13 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 		}
 		
 		useEffect(() => {
+			console.log("start event");
 			socket?.on("start", (data: any) => {
 				// GameInfo(data);
+				console.log("start", data);
 				matchInfo.current = data;
 				timer(data);
-				setCounter(5);
+				setCounter(4);
 				setSec(0);
 				setTime(true);
 			})

@@ -1,7 +1,7 @@
 
-
 .Cover {
 	position: relative;
+	min-width: 810px;
 	/* background-color:  rgb(2, 44, 78); */
 	/* background-color: #2176e5; */
 	/* background: linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%); */
@@ -105,6 +105,7 @@
 .g_img {
 	width: 70px;
 	height: 70px;
+	aspect-ratio: 1/1;
 	border-radius: 50%;
 }
 

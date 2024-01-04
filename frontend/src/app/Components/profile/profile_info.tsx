@@ -11,7 +11,6 @@ import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
-import WinRate from "./winRate"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -89,7 +88,7 @@ export default function Profile_info() {
 				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
 					<MatchHistory matches={[]} />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User=""/>
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>

@@ -23,15 +23,15 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 
 	return (
 		<>
-			<div className='felx h- bg-gradient-to-br from-black via-gray-800 to-black '>
+			<div className='felx h- bg-gradient-to-br from-black via-gray-800 to-black p-8'>
 				<div className='mx-8 w-[95%]'>
 					<div >
 						<Landing_navbar />
 					</div>
 					<Hero_section setSignIn={setSignIn}/>
-					{/* <div className='flex relative mt-32 bg-green-500'>
+					<div className='flex relative mt-32 bg-green-500'>
 						<div className='w-[48%] rounded-xl m-4 bg-red-500'>
-							<GameDemo gameSettings={{map : "black", ballColor : "white" , paddleColor : "white"}} />
+							<GameDemo gameSettings={{map : "shark", ballColor : "white" , paddleColor : "white"}} />
 						</div>
 						<div className='flex relative items-center w-[48%] justify-center'>
 							<div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px]  '></div>
@@ -58,14 +58,14 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 						</div>
 					</div>
 
-					<div className='flex flex-col items-center my-16 bg-[#e7ebf4]  w-full rounded-[30px] p-12 overflow-hidden'>
+					{/* <div className='flex flex-col items-center my-16 bg-[#e7ebf4]  w-full rounded-[30px] p-12 overflow-hidden'>
 						<h1 className='text-center top-0  font-bold text-white text-2xl mb-8 rounded-b-xl bg-black w-fit p-2'>PLATFORM FEATURES</h1>
 						<Features />
-					</div>
+					</div> */}
 
 					{/* <div className='flex justify-center items-center mt-16'>
           <Slider />
-        </div> */}
+        </div>
 
 					{/* <div className='flex justify-center'>
 					</div>

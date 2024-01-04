@@ -25,7 +25,7 @@ export default function GameDemo({gameSettings} : {gameSettings : any}){
 		
 		const FPS = 50;
 		const BALL_SPEED = 1.1;
-		const COM_LVL = 0.15;
+		const COM_LVL = 0.25;
 		
 		const context = game.current?.getContext('2d');
 		let parent = game.current?.parentElement;
@@ -47,17 +47,17 @@ export default function GameDemo({gameSettings} : {gameSettings : any}){
 		var player1 = {
 			x: 12,
 			y: (gameHeight / 2) -  gameHeight / 6.5 / 2,
-			width: 12,
+			width: 8,
 			height: gameHeight / 6.5,
 			// height: 140,
 			color: gameSettings?.paddleColor,
 		}
 	
 		var player2 = {
-			x: gameWidth - 24,
+			x: gameWidth - 20,
 			y: (gameHeight / 2) -  (gameHeight / 6.5)/ 2,
 			// y : (gameHeight / 2) -  140/2,
-			width: 12,
+			width: 8,
 			height: gameHeight / 6.5,
 			// height: 140,
 			color: gameSettings?.paddleColor,
