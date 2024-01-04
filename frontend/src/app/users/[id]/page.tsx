@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import { GetData } from "@/app/Components/Log/CheckLogin";
 import Image from "next/image";

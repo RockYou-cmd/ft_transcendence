@@ -10,6 +10,7 @@ import { faCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { MouseEvent } from 'react';
 import swal from 'sweetalert';
+import GameResult from './gameResult';
 
 
 
@@ -23,6 +24,8 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
 	const lag = useRef(false);
+	const [gameRes, setGameRes] = useState(false);
+	const msg = useRef("");
 
 	function leaveMatch(e? : MouseEvent){
 		e?.preventDefault();
@@ -96,10 +99,11 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
     });
 
     socket?.on("endGame", (data: any) => {
-		console.log("endGame", data);
-		const winner = data.winner == me?.username ? "You Win" : "You Lose";
-		swal(winner, "", "info");
-		leaveMatch();
+		const winner = data?.winner == me?.username ? "You Win" : "You Lose";
+		console.log(winner);
+		console.log(data);
+		msg.current = winner;
+		setGameRes(true);
     });
 
     function drawRect(
@@ -203,10 +207,12 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
   }, [socket]);
 
 
-	
+  	const photo = gameInfo?.player1 == me?.username ? me?.photo : gameInfo?.photo;
+	const oppPhoto = gameInfo?.player2 == me?.username ? me?.photo : gameInfo?.photo;
 
 	return(
 		<>
+			{gameRes && <GameResult msg={msg.current} close={setGameRes} make={()=>leaveMatch()}/>}
 			<div className={"PingPong"} style={
 				gameSettings?.map == "black" ? {backgroundColor : "black"} : gameSettings?.map == "shark" ? 
 				{backgroundColor : "#20A4F3"} : {backgroundColor : "#e65757"}
@@ -215,13 +221,13 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 				<div id="container" className={gameSettings.map}>
 					<button id="backBtn" onClick={(e : MouseEvent)=>leaveMatch(e)}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 					<section>
-						{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
+						<Image className="g_img" src={photo ? photo : avatar} priority={true} alt="img" width={60} height={60}/>
 						<h1>{gameInfo.player1}</h1>
 						<h2>{myScore} | {oppScore}</h2>
 						<h1>{gameInfo.player2}</h1>
-						{/* <FontAwesomeIcon id='icon' icon={faRobot} /> */}
+						<Image className="g_img" src={oppPhoto ? oppPhoto : avatar} priority={true} alt="img" width={60} height={60}/>
 					</section>
-						<canvas id="canvas" ref={game} width={1500} height={900} />
+					<canvas id="canvas" ref={game} width={1500} height={900} />
 				</div>	
 			</div>
 		</>

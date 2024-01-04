@@ -16,12 +16,16 @@ import { useRouter } from 'next/navigation';
 import SelectFriend from './Components/FriendlyGame';
 import Invite from '../chat/Components/Invite';
 import MatchHistory from './Components/MatchHistory';
+import React from 'react';
+import swal from 'sweetalert';
+import GameResult from './Components/gameResult';
 
 
 interface GameInfo {
 	roomName: string,
 	player1: string,
 	player2: string,
+	photo?: string,
 }
 
 
@@ -54,7 +58,7 @@ export default function GamePage() {
 	
 	let render = LoG({ page: "Profile", LogIn: hooks }) as any;
 	const f = useRef(false);
-	
+
 	useEffect(() => {
 		let n = false;
 		// console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
@@ -107,23 +111,22 @@ export default function GamePage() {
 		else if (!inviteComp && accept == "accepted" && !n){
 			setMode("friend");
 		}
-}, [gameSet, inGame, matchMake, Mode ,inviteComp, accept, endGame]);
+	}, [gameSet, inGame, matchMake, Mode ,inviteComp, accept, endGame]);
 
 // console.log("after  f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 
-useEffect(() => {	
-	if (param.get("player1") != null && param.get("player2") != null){
-		setMode(param.get("mode") as string);
-		setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
-		setSelectedFriend(param.get("player2") as string);
-		if (param.get("invite") == "true")
-		invite.current = true;
-}
-router.replace("/game");
-},[])
+	useEffect(() => {	
+		if (param.get("player1") != null && param.get("player2") != null){
+			setMode(param.get("mode") as string);
+			setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
+			setSelectedFriend(param.get("player2") as string);
+			if (param.get("invite") == "true")
+			invite.current = true;
+	}
+	router.replace("/game");
+	},[])
 	
 	useEffect(() => {
-		// if (Mode != "friend" && Mode != "rank" && !inGame){
 
 			socket?.on("invite", (data: any) => {
 				invite.current = true;
@@ -134,8 +137,6 @@ router.replace("/game");
 				setSelectedFriend(data.player1);
 
 			});
-		// }
-		
 			socket?.on("start", (data: any) => {
 				setGameInfo(data);
 			});
@@ -204,42 +205,15 @@ router.replace("/game");
 			}
 		},[])
 
-
-		// useEffect(() => {
-		// 	const timer = setTimeout(() => {
-		// 		setAccept("");
-		// 		setRefuse(true);
-		// 		setGameSet(true);
-		// 		setMode("");
-		// 		setMatchMake(false);
-		// 		setSelectedFriend("");
-		// 		setGameInfo(undefined);
-		// 		setSend(false);
-		// 	}, 5100);
-		// 	return () => clearTimeout(timer);
-		// },[])
-		// function Cancel(e : MouseEvent){
-		// 	e.preventDefault();
-		// 	setAccept("");
-		// 	setGameSet(true);
-		// 	setMode("");
-		// 	setMatchMake(false);
-		// 	setSelectedFriend("");
-		// 	setGameInfo(undefined);
-		// 	setSend(false);
-		// }
-
 		if (refuse)
 			return (null)
 		return (<>
 			<div className="Waiting">
 				<h1>Waiting for {gameInfo?.player2}</h1>
-				{/* <button onClick={(e : MouseEvent)=>Cancel(e)}>Cancel</button> */}
 			</div>
 		</>)
 	}
 	
-
 
 
 	if (!hooks.waitHook.state) {
@@ -249,8 +223,8 @@ router.replace("/game");
 		<>
 			{online == "OFF" ? render :
 				(<><div id="gameRootDir">
-
 					{!inGame && <div className='GameMain' style={Style}>
+					
 					
 						<LeaderBoard />
 						<div className="GameMode">

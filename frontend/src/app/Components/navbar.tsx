@@ -11,6 +11,7 @@ import SearchBar from "./Fetch/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser ,faMessage , faTableTennisPaddleBall , faBell, faBellSlash} from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import { copyFileSync } from "fs";
 
 // import { WebSocket } from "./Log/LogContext";
 // import { useContext } from "react";
@@ -37,14 +38,15 @@ export default function Navbar() {
 			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		}
 		setData(data);
-		if (me?.username != data?.username || me?.photo != data?.photo)
+		if (me?.username != data?.username || me?.photo != data?.photo){
 			setMe(data);
+		}
 	}
 
 	useEffect(() => {
 		checkwait(true);
 		if (online == "ON") {
-			console.log("fetching data");
+			// console.log("fetching data");
 			fetchData();
 		}
 	}, [online, me]);

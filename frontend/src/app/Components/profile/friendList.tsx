@@ -9,7 +9,7 @@ const FriendListComponent: any = ({}) => {
 const fetchFriendList = async () => {
   try {
     const response = await Get(APIs.Friends);
-    setFriendList(response); 
+    setFriendList(response);
    
 
 } catch (error) {

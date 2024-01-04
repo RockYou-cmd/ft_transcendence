@@ -54,7 +54,6 @@ export default function Notif({content} : {content?: string}) {
 
 	useEffect(() => {
 		if (socket) {
-			// console.log("socket on");
 			if (pathname != "/chat"){
 				socket.on("message" , (data: any) => {
 					setMsg(data);
@@ -64,19 +63,15 @@ export default function Notif({content} : {content?: string}) {
 			}
 			if (pathname != "/game"){
 				socket.on("invite", (data :any)=>{
-					// console.log("oppp");
 					setMsg(data);
-					// if (!silence)
-						setInvite(true);
+					setInvite(true);
 				})
 			}
 			if(pathname != "/game"){
 				socket.on("start", (data :any)=>{
-					console.log("start game in notify", data)
 					router.push("/game?roomName=" + data.roomName + "&player1=" + data.player1 + "&player2=" + data.player2 + "&mode=friend"+ "&invite=true");
 				})
 			}
-			// if (pathname != "/game"){
 			
 			socket.on("update" , (data: any) => {
 				if (data?.option == "request friend" || data?.option == "accept request"){
@@ -86,7 +81,6 @@ export default function Notif({content} : {content?: string}) {
 				}
 				
 			})
-			// }
 		}
 		return () => {socket?.off("message");
 			socket?.off("update");
@@ -118,7 +112,7 @@ export default function Notif({content} : {content?: string}) {
 				<h1>{msg?.sender} : {msg?.content}</h1>
 				<section>
 					<button className="accept" onClick={(e :MouseEvent) => NotifEvent(e)} >{msg?.type == "message" ? "Reply" : "Open"}</button>
-					<button className="reject" onClick={()=>setShow(false)} >Close</button>9
+					<button className="reject" onClick={()=>setShow(false)} >Close</button>
 				</section>
 
 

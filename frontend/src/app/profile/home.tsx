@@ -17,6 +17,7 @@ import screen1 from "../../../public/screen1.png"
 import screen2 from "../../../public/screen2.png"
 import screen3 from "../../../public/screen3.png"
 import "../assest/mapBorder.css"
+import GameDemo from  './gameDemo'
 
 export default function Home({ setSignIn }: { setSignIn: any }) {
 
@@ -32,7 +33,7 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 
 					<div className='flex relative mt-32 bg-green-500'>
 						<div className='w-[48%] rounded-xl m-4 bg-red-500'>
-							
+							<GameDemo gameSettings={{map : "black", ballColor : "white" , paddleColor : "white"}} />
 						</div>
 						<div className='flex relative items-center w-[48%] justify-center'>
 							<div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px]  '></div>

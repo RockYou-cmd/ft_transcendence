@@ -2,7 +2,6 @@ import Image from "next/image";
 import achiev_pic from '../../../../public/achievment.png';
 import { useEffect, useState, useRef } from 'react';
 import avatar from "../../../../public/avatar.png";
-import img from "../../../../public/avatar.png";
 import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
 import { useLogContext, useMe } from "../Log/LogContext";
@@ -22,19 +21,21 @@ export default function Profile_info() {
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
-		console.log("herr");
-		setMe(data);
+		console.log("profile data", data);
+		if (data?.username != me?.username || data?.photo != me?.photo){
+			setMe(data);
+		}
 	}
 
 	const [hover, setHover] = useState(false);
 	const mousehover = useRef(null) as any;
 	const [data, setData] = useState({} as any);
-	const [refresh, setRefresh] = useState<boolean>(false);
 	const [showSetting, setShowSetting] = useState<boolean>(false);
 	useEffect(() => {
+		console.log("show setting", showSetting);
 		if (online && !showSetting) fetchData();
 		// TODO
-	}, [showSetting, online]);
+	}, [showSetting]);
 
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;

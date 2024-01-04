@@ -4,7 +4,6 @@ import Image from 'next/image';
 import RootLayout from './layout';
 import './assest/login.css';
 import { MouseEvent } from 'react';
-import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import Profile from './profile/profile';
 import Home from './profile/home';
@@ -40,7 +39,6 @@ export default function App() {
 		<>
 			<Head>
 				<link rel="icon" type="image/x-icon" href="./favicon.ico"></link>
-
 			</Head>
 
 			<div>
