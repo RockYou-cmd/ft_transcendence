@@ -7,7 +7,16 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class UserService {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
+  async delete() {
+    await prisma.roomMessage.deleteMany()
+    await prisma.roomMembership.deleteMany()
+    await prisma.message.deleteMany()
+    // await prisma.friendShip.deleteMany()
+    await prisma.user.deleteMany();
+  }
+
+
   async getProfile(user) {
     try {
       const ret = await prisma.user.findUnique({
@@ -16,6 +25,7 @@ export class UserService {
         },
         include: {
           friends: true,
+          gameProfile: true
         },
       });
       if (!ret) throw new NotFoundException("User Not Found");

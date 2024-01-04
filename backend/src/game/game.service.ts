@@ -1,4 +1,7 @@
 import { Injectable } from "@nestjs/common";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 @Injectable()
 export class GameService {
@@ -52,14 +55,12 @@ export class GameService {
     );
   }
 
-
-
   reset() {
     this.ball.x = this.gameWidth / 2;
     this.ball.y = this.gameHeight / 2;
     this.ball.speed = this.ball_SPEED;
     this.ball.velocityX = -this.ball.velocityX;
-	this.ball.velocityY = 0;
+    this.ball.velocityY = 0;
     this.player1.y = this.gameHeight / 2;
     this.player2.y = this.gameHeight / 2;
   }
@@ -89,17 +90,14 @@ export class GameService {
         buttom: touch_player.y + touch_player.height,
         middle: touch_player.height / 2 + touch_player.y,
       };
-	  if (this.ball.velocityY == 0)
-	  	this.ball.velocityY = 5;
+      if (this.ball.velocityY == 0) this.ball.velocityY = 5;
 
       this.ball.speed += this.ball_acc;
-
 
       if (
         playerPos.top <= this.ball.y + this.ball.radius / 2 &&
         this.ball.y + this.ball.radius / 2 < playerPos.middle
       ) {
-
         if (this.ball.velocityY > 0) {
           this.ball.velocityX = 10;
         } else {
@@ -126,6 +124,87 @@ export class GameService {
     } else if (this.ball.x - this.ball.radius >= this.gameWidth) {
       this.player1.score++;
       this.reset();
+    }
+  }
+
+  async updateGameProfile(data) {
+    try {
+      // console.log(data);
+      await prisma.game.create({
+        data: {
+          participants: {
+            create: [
+              {
+                score: data.player1Score,
+                profile: {
+                  connect: {
+                    userId: data.player1,
+                  },
+                },
+              },
+              {
+                score: data.player2Score,
+                profile: {
+                  connect: {
+                    userId: data.player2,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      });
+      if (data.player1Score > data.player2Score) {
+        data["player1Stats"] = {
+          wins: {
+            increment:1
+          }
+        }
+        data["player2Stats"] = {
+          losses: {
+            increment:1
+          }
+        }
+      }
+      else {
+        data["player2Stats"] = {
+          wins: {
+            increment:1
+          }
+        }
+        data["player1Stats"] = {
+          losses: {
+            increment:1
+          }
+        }
+
+      }
+      await prisma.gameProfile.update({
+        where: {
+          userId: data.player1
+        },
+        data: {
+          gamesPlayed: {
+            increment:1
+          },
+          ...data.player1Stats,
+
+        }
+      })
+      await prisma.gameProfile.update({
+        where: {
+          userId: data.player2
+        },
+        data: {
+          gamesPlayed: {
+            increment:1
+          },
+          ...data.player2Stats,
+
+        }
+      })
+    } catch (err) {
+      throw err;
     }
   }
 }
