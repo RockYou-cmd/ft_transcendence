@@ -22,15 +22,13 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 
 	return (
 		<>
-			<div className='felx bg-gradient-to-br from-black via-gray-800 to-black '>
+			<div className='felx h- bg-gradient-to-br from-black via-gray-800 to-black '>
 				<div className='mx-8 w-[95%]'>
 					<div >
 						<Landing_navbar />
 					</div>
-					<Hero_section />
-					<button className=' cursor-pointer opacity-90 hover:opacity-100 transition-opacity w-[10rem] h-[4rem] p-[2px] bg-black rounded-[16px] bg-gradient-to-t from-[#8122b0] to-[#dc98fd] ">' onClick={() => setSignIn(true)}>Sing In</button>
-
-					<div className='flex relative mt-32 bg-green-500'>
+					<Hero_section setSignIn={setSignIn}/>
+					{/* <div className='flex relative mt-32 bg-green-500'>
 						<div className='w-[48%] rounded-xl m-4 bg-red-500'>
 							
 						</div>
@@ -68,7 +66,7 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
           <Slider />
         </div> */}
 
-					<div className='flex justify-center'>
+					{/* <div className='flex justify-center'>
 					</div>
 					<div className='flex  flex-col justify-between  bg-[#e7ebf4] rounded-3xl p-7 mt-16 mb-16 overflow-hidden' >
 						<h1 className='  items-center font-bold text-2xl bg-slate-400 w-fit rounded-[30px] text-center p-4 '>MEET THE TEAM</h1>
@@ -90,7 +88,8 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 					<div className='mt-32'>
 						<Footer />
 					</div>
-				</div>
+				</div>  */}
+			</div>
 			</div>
 		</>
 	)
