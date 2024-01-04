@@ -18,6 +18,7 @@ import Head from 'next/head';
 
 
 
+
 export default function App() {
 	const { online, setOnline } = useLogContext();
 	const [SignIn, setSignIn] = useState(false);
@@ -37,6 +38,7 @@ export default function App() {
 	}
 	return (
 		<>
+
 			<Head>
 				<link rel="icon" type="image/x-icon" href="./favicon.ico"></link>
 			</Head>

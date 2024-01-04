@@ -6,6 +6,8 @@ import React from 'react'
 import LogContextProvider from './Components/Log/LogContext'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import Notif from './Components/Notif'
+import NextNProgress from 'nextjs-progressbar';
+
 config.autoAddCss = false
 
 

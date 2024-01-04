@@ -11,10 +11,15 @@ import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
+import WinRate from "./winRate"
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
+
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
-	const {me, setMe} =  useMe() as any;
+	const { me, setMe } = useMe() as any;
 	const imgRef = useRef(null) as any;
 	let photo = avatar.src;
 
@@ -47,7 +52,7 @@ export default function Profile_info() {
 
 	return (
 		<div className="m-8 flex flex-row gap-8 h-[85vh]  ">
-			{showSetting ? <Setting handleClick={handleClick} User={data}/> : <Info />}
+			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
 
 			<div
 				ref={mousehover}
@@ -56,32 +61,33 @@ export default function Profile_info() {
 				onMouseEnter={() => setHover(true)}
 				onMouseLeave={() => setHover(false)}
 			>
-				<div className="  rounded-lg col-span-3 w-[30%] grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-4  bg-gray-800 min-w-full overflow-hidden  shadow-sm shadow-cyan-500  " >
-					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
-					<h1 className="text-white text-lg font-bold mb-2">Game Played</h1>
-					<p className="text-gray-300">Total games played: X</p>
-					<p className="text-gray-300">Total games played: X</p>
-					<p className="text-gray-300">Total games played: X</p>
-					</div> 
-					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
-					<h1 className="text-white text-lg font-bold mb-2">Game Stats</h1>
-					<p className="text-gray-300">Total goal scored: X</p>
-					<p className="text-gray-300">Total goal conced: X</p>
-					</div> 
-					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
-					<h1 className="text-white text-lg font-bold mb-2">Game Win Ratio</h1>
-					<p className="text-gray-300">60% WIN Rate</p>
-
-					</div> 
-					<div className="flex flex-col w-auto h-auto bg-red-400 felx justify-center items-center">
-					<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
-					<p className="text-gray-300">Total games played: X</p>
-					<p className="text-gray-300">Total games played: X</p>
-					<p className="text-gray-300">Total games played: X</p>
+				<div className="  rounded-lg col-span-3 ] grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-3  bg-gray-800 min-w-full overflow-hidden  shadow-sm shadow-cyan-500  " >
+					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
+						<h1 className="text-white text-lg font-bold mb-2">Game Played</h1>
+						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> games played: X</p>
+					</div>
+					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
+						<h1 className="text-white text-lg font-bold mb-2">Game Stats</h1>
+						<p className="text-gray-300"> goal scored: X</p>
+						<p className="text-gray-300"> goal conced: X</p>
+					</div>
+					<div className="flex flex-col   felx justify-center items-center">
+						<h1 className="text-white text-lg font-bold ">Win Rate</h1>
+						<div className="  w-[10vw] mb-4 ">
+							<CircularProgressbar  value={75} text={"75%"}  />
+						</div>
+					</div>
+					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
+						<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
+						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> games played: X</p>
 					</div>
 				</div>
-				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" > 
-				<MatchHistory matches={[]}/>
+				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
+					<MatchHistory matches={[]} />
 				</div>
 				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
 				</div>
@@ -93,11 +99,11 @@ export default function Profile_info() {
 
 	function Info() {
 
-		function checkStatus(status:string) {
-			
-			switch  (status) {
+		function checkStatus(status: string) {
+
+			switch (status) {
 				case "ONLINE":
-					return  "bg-green-500"
+					return "bg-green-500"
 				case "OFFLINE":
 					return "bg-red-500"
 				case "INGAME":
@@ -105,16 +111,16 @@ export default function Profile_info() {
 				default:
 					return "bg-gray-500"
 
+			}
 		}
-	}
-	let statusColor:string  = checkStatus(data?.status);
+		let statusColor: string = checkStatus(data?.status);
 
 
-		
+
 		return (
 			<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black">
 
-				<Image 
+				<Image
 					src={photo}
 					alt="user"
 					priority={true}
@@ -138,14 +144,14 @@ export default function Profile_info() {
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div> */}
 				<div className=" w-full ">
-					<UserLevel level="9.90"/>
+					<UserLevel level="9.90" />
 				</div>
 				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{data.bio}
 				</div>
 				<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
 					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
-						<Image src={achiev_pic} width={60}  alt="achievment" />{" "}
+						<Image src={achiev_pic} width={60} alt="achievment" />{" "}
 						Achievmnet
 					</div>
 					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">1</div>

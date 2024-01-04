@@ -159,7 +159,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
                 onChange={handleChange}
                 name="photo"
                 accept="image/*"
-				value={photo}
+                // value={photo}
 				// value={}
               />
             </div>

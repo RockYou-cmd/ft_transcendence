@@ -7,7 +7,7 @@ import cover from "../../../../public/pingpong.gif"
 import "../../assest/corner.css"
 
 
-export default function Hero_section() {
+export default function Hero_section({ setSignIn }: { setSignIn: any }) {
 
     function typing() {
         const el = useRef(null);
@@ -38,12 +38,12 @@ export default function Hero_section() {
             <div className=" flex w-[50%] h-[35rem] bg-[#e7ebf4] rounded-b-3xl  ">
                 <div className="w-full h-full">
 
-                    <div className="relative w-[90%] h-[30%] mt-24 overflow-y-auto left-20 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
+                    <div className="relative w-[90%] h-[30%] mt-24 overflow-y-auto left-5 justify-center text-4xl font-bold bg-gradient-to-r from-purple-900 via-purple-800 to-pink-700 inline-block text-pretty text-transparent bg-clip-text">
                         {typing()}
                     </div>
                     <div className="absolute  mt-16   h-fit">
                         <div className=" relative left-20  items-center" >
-                            <button className="w-[250px] h-[50px] bg-[#000000] rounded-lg font-bold text-xl ">PLAY NOW</button>
+                            <button className="w-[250px] h-[50px] bg-[#000000] rounded-lg font-bold text-xl " onClick={() => setSignIn(true)}>PLAY NOW</button>
                         </div>
                     </div>
                 </div>
