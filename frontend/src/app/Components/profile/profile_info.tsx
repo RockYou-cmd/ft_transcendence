@@ -13,6 +13,8 @@ import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { GiPingPongBat } from "react-icons/gi";
+
 
 
 
@@ -50,36 +52,44 @@ export default function Profile_info() {
 	};
 
 	return (
-		<div className="m-8 flex flex-row gap-8 h-[85vh]  ">
+		<div className="m-8 flex flex-row gap-8 h-[85vh]">
 			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
 
 			<div
-				ref={mousehover}
-				className="gap-8 w-full grid  grid-cols-3 grid-rows-4 "
-				id={hover ? "profile_grid_blur" : ""}
-				onMouseEnter={() => setHover(true)}
-				onMouseLeave={() => setHover(false)}
+				// ref={mousehover}
+				className="gap-5 w-full grid grid-cols-3 grid-rows-4 lg:grid-cols-subgrid "
+				// id={hover ? "profile_grid_blur" : ""}
+				// onMouseEnter={() => setHover(true)}
+				// onMouseLeave={() => setHover(false)}
 			>
-				<div className="  rounded-lg col-span-3 ] grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-3  bg-gray-800 min-w-full overflow-hidden  shadow-sm shadow-cyan-500  " >
-					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
-						<h1 className="text-white text-lg font-bold mb-2">Game Played</h1>
-						<p className="text-gray-300"> games played: X</p>
-						<p className="text-gray-300"> games played: X</p>
-						<p className="text-gray-300"> games played: X</p>
+				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
+					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+						<div className="flex  w-full  flex-row justify-center text-center ">
+							{/* <GiPingPongBat />  */}
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
+						</div>
+						<p className="text-gray-300"> Played: X</p>
+						<p className="text-gray-300"> Wins: X</p>
+						<p className="text-gray-300"> Losses : X</p>
 					</div>
-					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
-						<h1 className="text-white text-lg font-bold mb-2">Game Stats</h1>
+
+					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+						<div className=" flex  w-full  flex-row justify-center text-center">
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">Game Stats</h1>
+						</div>
 						<p className="text-gray-300"> goal scored: X</p>
 						<p className="text-gray-300"> goal conced: X</p>
-					</div>
-					<div className="flex flex-col   felx justify-center items-center">
-						<h1 className="text-white text-lg font-bold ">Win Rate</h1>
+					</div >
+					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+						<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
 						<div className="  w-[10vw] mb-4 ">
-							<CircularProgressbar  value={75} text={"75%"}  />
+							<CircularProgressbar value={75} text={"75%"} />
 						</div>
 					</div>
-					<div className="flex flex-col w-auto h-auto  felx justify-center items-center">
-						<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
+					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
+							<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
+						</div>
 						<p className="text-gray-300"> games played: X</p>
 						<p className="text-gray-300"> games played: X</p>
 						<p className="text-gray-300"> games played: X</p>
