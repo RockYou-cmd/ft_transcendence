@@ -26,6 +26,13 @@ input:focus, textarea:focus, select:focus{
 	background-color: "red";
 }
 
+.g_img {
+	width: 70px;
+	height: 70px;
+	aspect-ratio: 1/1;
+	border-radius: 50%;
+}
+
 #backBtn{
 
 	position: absolute;

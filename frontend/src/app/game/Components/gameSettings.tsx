@@ -104,7 +104,7 @@ export default function GameSettings({Options , close, setMode, save} : { Option
 	function MapPicker({map} : {map : Map}){
 		return(
 			<div style={Style.mapName == map.name ? Style.map : {}} className={"mapPicker hover:scale-110" +  "  map" + map.name}
-			onClick={()=>Chose(map.name, "map", map.name)}
+			onClick={()=>Chose(map.name, "map")}
 			>
 				{map?.img &&  <Image src={map?.img} className="mapImg"  alt="map" width={70} height={70} />}
 			</div>
@@ -121,12 +121,12 @@ export default function GameSettings({Options , close, setMode, save} : { Option
 				</div>
 				<h1>BALL COLOR</h1>
 				<div className="ballcolor">
-					{ball.map((ball : Ball)=>(<div className={"ball"} onClick={()=>Chose(ball.name, "ball", ball.color)} style={{backgroundColor : `${ball.color}`,
+					{ball.map((ball : Ball)=>(<div className={"ball"} onClick={()=>Chose(ball.name, "ball")} style={{backgroundColor : `${ball.color}`,
 					border : Style.ballColor == ball.name ? "3px solid #fff" : ""}} key={ball.name}/>))}
 				</div>
 				<h1>PADDLE COLOR</h1>
 				<div className="paddlecolor">
-					{ball.map((ball : Ball)=>(<div className={"paddle"} onClick={()=>Chose(ball.name, "paddle", ball.color)} style={{backgroundColor : `${ball.color}`
+					{ball.map((ball : Ball)=>(<div className={"paddle"} onClick={()=>Chose(ball.name, "paddle")} style={{backgroundColor : `${ball.color}`
 					, border : Style.paddleColor == ball.name ? "3px solid #fff" : ""}} key={ball.name} />))}
 				</div>
 				<footer>

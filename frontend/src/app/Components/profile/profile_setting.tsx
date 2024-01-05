@@ -1,9 +1,8 @@
 import React, { FC, ChangeEvent, FormEvent, useState } from "react";
-import Cookies from "js-cookie";
-import Modal from "./popup";
 import TwoAuth from "./2fa";
 import Image from "next/image";
 import avatar from "../../../../public/avatar.png";
+import swal from "sweetalert";
 
 interface Props {
   handleClick: (val: boolean) => void;
@@ -20,17 +19,11 @@ interface FormData {
 const Setting: FC<Props> = ({ handleClick, User }) => {
 
   ///// modal properties 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string>('')
-  const [username, setUsername] = useState<string>('');
-  const [bio, setBio] = useState<string>('');
+  const [username, setUsername] = useState<string>(User?.username);
+  const [bio, setBio] = useState<string>(User?.bio);
   const [photo, setPhoto] = useState<any>();
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+
   // object that will snet to backend
   const [formData, setFormData] = useState<FormData>({
     username: '',
@@ -88,7 +81,8 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 			console.error('Failed to upload image to Cloudinary');
 		}
     } catch (error) {
-		console.error('Error uploading image:', error);
+		// console.error('Error uploading image:', error);
+		swal("Error uploading image:","","error");
     }
 };
 
@@ -126,7 +120,6 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		console.log("res ", response);
 		if (response.ok) {
 			console.log('Profile updated successfully');
-			// openModal();
 			
 		} else {
 			console.error('Profile update failed');
@@ -141,10 +134,6 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 
   return (
     <div>
-      <Modal isOpen={isModalOpen} closeModal={closeModal}>
-        <h1> Your Profile is succefully updated</h1>
-        <p>this is the message text </p>
-      </Modal>
       <div className="flex flex-col overflow-auto rounded-lg gap-8 items-center text-black h-full w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black ">
         <div className="fixed bg-rose-500 w-[15rem] h-[4rem] rounded-b-2xl z-[-1]"></div>
         <h1 className="text-white text-[1.3rem] mt-5 font-bold  ">PROFILE SETTING</h1>
@@ -159,8 +148,6 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
                 onChange={handleChange}
                 name="photo"
                 accept="image/*"
-                // value={photo}
-				// value={}
               />
             </div>
           </label>

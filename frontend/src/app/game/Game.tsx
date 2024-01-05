@@ -26,7 +26,7 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 		const n = useRef(false);
 		useEffect(() => {
 			if (n.current == false){
-				console.log("matchmaking");
+				console.log("matchmaking", socket);
 				socket?.emit("matchmaking", {});
 			}
 			n.current = true;

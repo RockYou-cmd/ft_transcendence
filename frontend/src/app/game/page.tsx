@@ -223,7 +223,7 @@ export default function GamePage() {
 		<>
 			{online == "OFF" ? render :
 				(<><div id="gameRootDir">
-					{!inGame && <div className='GameMain' style={Style}>
+					{!inGame && <div className='GameMain bg-gradient-to-r from-black via-blue-900 to-black' style={Style}>
 					
 					
 						<LeaderBoard />
@@ -235,8 +235,6 @@ export default function GamePage() {
 								</>
 							}
 						</div>
-							{/* <Invite User={{username : selectedFriend}} close={setInviteComp} data={gameInfo} ACCEPT={setAccept}/>  */}
-
 						<MatchHistory/>
 
 					</div>

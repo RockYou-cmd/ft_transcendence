@@ -135,7 +135,7 @@
 
 .GameMain{
 	/* background-color: #1F295E; */
-	background-color:  rgb(2, 44, 78);
+	/* background-color:  rgb(2, 44, 78); */
 	height: 92.8vh;
 	display: flex;
 	flex-direction: row;
@@ -224,7 +224,7 @@
 
 .matchHistory{width: 33%;
 	padding:2.5% 2%;
-	& h1{
+	& .title{
 		font : 700 28px "Inter", sans-serif;
 		text-align: center;
 		margin-bottom:20px;
@@ -235,7 +235,20 @@
 		height: 80%;
 		background-color: #002932;
 	}	
+}
 
+.matchHistory .SingleMatch{
+	background-color: #60E2FF;
+	margin:10px 0px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	& h1{
+		font : 700 20px "Inter", sans-serif;
+		text-align: center;
+		margin:10px 0px;
+		display: block;
+	}
 }
 
 

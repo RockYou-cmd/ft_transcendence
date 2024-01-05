@@ -10,7 +10,7 @@ import Form from "@/app/profile/form";
 import swal from "sweetalert";
 
 
-export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
+export default function Auth() {
 
 	const { online, setOnline } = useLogContext();
 	const [TwoEA, setTwoEA] = useState(false);

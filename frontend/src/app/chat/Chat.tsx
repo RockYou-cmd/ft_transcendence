@@ -195,7 +195,9 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				};
 				if (!group && status.current.status != "BLOCKED") {
 					socket?.emit(Room.current, { ...message, receiver: User?.username });
-					if (Object.keys(chat).length == 0){
+					
+					if (Object.keys(chat.messages).length == 0){
+						console.log("new chat");
 						socket?.emit("update", { option: "newChat", receiver: User?.username , sender : me?.username });
 					}
 				} else if (group) {

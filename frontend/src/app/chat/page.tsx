@@ -120,17 +120,16 @@ export default function Chat() {
 
 	useEffect(() => {	
 		socket?.on("update", (data: any) => {
-			// console.log("update in page", data);
+			console.log("update in page", data);
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
 			}
 			else if (data?.option == "newChat"){
-				console.log("new chat");
-				setUser(User);
+				setRefresh(!refresh);
 			}
 		});
 		return () => {socket?.off("update", ()=>{});}
-	},[socket])
+	},[socket, refresh])
 
 	useEffect(() => {
 		async function fetchData(user : string) {

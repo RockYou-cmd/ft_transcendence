@@ -1,9 +1,38 @@
 
 #home{
 	display: flex;
+	flex-direction: column;
 	flex-wrap: wrap;
-	flex-direction: row;
+	position: relative;
+
 }
+
+#MapSelecter{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width : 45%;
+	position : absolute;
+	top:52%;
+	right:40px;
+	/* height: 40vh; */
+}
+
+#home #container{
+	border-radius: 20px;
+	margin-right:40px;
+}
+
+.maps{
+	margin:30px auto;
+	width:55%;
+	height:250px;
+}
+
+
+
 
 .animated-border  {
     border: 2px solid #ffffff;

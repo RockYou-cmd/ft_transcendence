@@ -21,6 +21,10 @@ export default function Profile_info() {
 	const { me, setMe } = useMe() as any;
 	const imgRef = useRef(null) as any;
 	let photo = avatar.src;
+	const [data, setData] = useState({} as any);
+	const [hover, setHover] = useState(false);
+	const mousehover = useRef(null) as any;
+	const [showSetting, setShowSetting] = useState<boolean>(false);
 
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
@@ -31,10 +35,6 @@ export default function Profile_info() {
 		}
 	}
 
-	const [hover, setHover] = useState(false);
-	const mousehover = useRef(null) as any;
-	const [data, setData] = useState({} as any);
-	const [showSetting, setShowSetting] = useState<boolean>(false);
 	useEffect(() => {
 		console.log("show setting", showSetting);
 		if (online && !showSetting) fetchData();

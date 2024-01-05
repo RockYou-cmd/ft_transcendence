@@ -2,6 +2,7 @@
 .Cover {
 	position: relative;
 	min-width: 810px;
+	
 	/* background-color:  rgb(2, 44, 78); */
 	/* background-color: #2176e5; */
 	/* background: linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%); */
@@ -70,8 +71,9 @@
 
 .sec1 .Groups {
 	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
 
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	width: auto;
 	margin: 20px;
 	border-radius: 20px;
@@ -99,14 +101,6 @@
 	font-weight: 600;
 	font-size: 20px;
 	line-height: 30px;
-}
-
-
-.g_img {
-	width: 70px;
-	height: 70px;
-	aspect-ratio: 1/1;
-	border-radius: 50%;
 }
 
 .sec1 .g_img {
@@ -167,8 +161,10 @@
 
 .Friends {
 	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
 
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	width: auto;
 	margin: 30px 20px 20px;
 	border-radius: 20px;
@@ -210,8 +206,10 @@
 /***************************************** Sec2 Chat ************************************/
 
 .Chat {
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
 
 	margin: 25px 18px 10px 6px;
 	border: 1px solid black;
@@ -518,7 +516,10 @@ input:focus {
 	position: absolute;
 	right: 20px;
 	top: 69px;
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	z-index: 1;
 	box-shadow: 0px 0px 3px 0px #ffff;
 }

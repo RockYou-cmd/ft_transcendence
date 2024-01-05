@@ -22,7 +22,7 @@ import FriendListComponent from "@/app/Components/profile/friendList";
 import swal from "sweetalert";
 
 
-export default function UserProfile({ param }: { param: { id: string } }) {
+export default function UserProfile() {
 
 	// const [data, setData] = useState({} as any);
 	const { socket } = useSocket();
@@ -272,9 +272,9 @@ let statusColor:string  = checkStatus(Userdata?.status);
 				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " 
 				> 5
 				</div>
-				{/* <div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
 				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User={Userdata?.username}/>
-				</div> */}
+				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " >
 					7
 				</div>

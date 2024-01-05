@@ -34,7 +34,7 @@ export class UserController{
 	@Get("friends")
 	@UseGuards(AuthGuard)
 	async getUserFriends(@Query("username") username) {
-		return this.getUserFriends(username);
+		return this.UserService.getUserFriends(username);
 	}
 		
 

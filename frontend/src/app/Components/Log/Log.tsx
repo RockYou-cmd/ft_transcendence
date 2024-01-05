@@ -24,14 +24,27 @@ export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: 
 				setOnline("OFF");
 			}
 			else {
-					if (online != "ON"){
-						socket?.disconnect();
+					console.log("online", online);
+					// if (online == "ON"){
+					// 	socket?.disconnect();
+					// 	setSocket(io(host + "/events", {
+					// 		withCredentials: true,
+					// 	}));
+					// 	console.log("socket created");
+					// }
+					// else{
+						// 	setOnline("ON");
+						// }
+						if (online != "ON"){
+							setOnline("ON");
+						}
+						
+							socket?.disconnect();
 						setSocket(io(host + "/events", {
 							withCredentials: true,
 						}));
 						console.log("socket created");
-						setOnline("ON");
-					}
+
 					LogIn.dataHook.setState(data);
 			}
 

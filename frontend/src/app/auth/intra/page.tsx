@@ -11,7 +11,7 @@ import swal from "sweetalert";
 
 
 
-export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
+export default function Auth() {
 
 	const { online, setOnline } = useLogContext();
 	const [code, setValue] = useState(null) as any;
