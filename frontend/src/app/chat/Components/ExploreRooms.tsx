@@ -41,7 +41,7 @@ export default function ExploreRooms({ close }: { close: any }) {
 				setRefresh(!refresh);
 			}
 			else {
-				swal({title : "Wrong Password",icon :  "error", button : "Try Again"});
+				swal("Wrong Password", "", "error");
 			}
 			setPassword("");
 		}

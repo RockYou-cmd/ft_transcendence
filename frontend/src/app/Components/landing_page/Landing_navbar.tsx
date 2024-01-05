@@ -13,11 +13,8 @@ export default function Landing_navbar() {
                 </div >
 
                 <div className="flex mr-20 text-black font-bold ">
-                    <Link href="#" className="mr-5 ">THE GAME</Link>
-                    <Link href="#" className="mr-5">MAPS</Link>
-                    <Link href="#" className="mr-5">FEATURES</Link>
-                    <Link href="#" className="mr-5">TEAM</Link>
-                    <Link href="#" className="mr-5">CONTACT US</Link>
+                    <Link href="/create" className="mr-5 ">SIGN UP</Link>
+                    
                 </div>
             </header>
         </>

@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import { GetData } from "@/app/Components/Log/CheckLogin";
 import Image from "next/image";
@@ -22,7 +22,7 @@ import FriendListComponent from "@/app/Components/profile/friendList";
 import swal from "sweetalert";
 
 
-export default function UserProfile({ param }: { param: { id: string } }) {
+export default function UserProfile() {
 
 	// const [data, setData] = useState({} as any);
 	const { socket } = useSocket();
@@ -206,7 +206,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 
 				(<><div className="m-8 flex flex-row gap-8 h-[85vh]  ">
 					<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black" >
-						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
+						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2 aspect-square bg-white '></Image>
 						<h1 className='text-3xl mt-8 font-bold pt-3 ' > {Userdata?.username?.toUpperCase()} </h1>
 
 						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center   min-w-[450px] ">
@@ -273,7 +273,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 				> 5
 				</div>
 				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
-				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
+				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User={Userdata?.username}/>
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " >
 					7

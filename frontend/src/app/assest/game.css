@@ -1,5 +1,36 @@
 
 
+/* body{
+	min-width: none;
+} */
+
+/* .swal-modal{
+	border-radius: 20px;
+	background: #232226;
+	
+}
+
+.swal-button--confirm{
+	background-color: #B32A2E;
+	padding: 10px 30px;
+	text-align: center;
+	margin:auto;
+}
+
+.swal-title{
+	font : 800 25px "Poppins", sans-serif;
+	color: #fff;	
+	background-color: #36343A;
+}
+
+.swal-text{
+	font : 600 18px "Poppins", sans-serif;
+	color: #fff;
+	text-align: center;
+} */
+
+
+
 .PingPong{
 	display: flex;
 	align-items: center;
@@ -20,7 +51,8 @@
 #container{
 	/* min-width: 1500px; */
 	/* margin-top:100px; */
-	display: flex;
+	
+ 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
@@ -44,13 +76,13 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		width: 50%;
+		width: 60%;
 		
 		& h1 , h2{
-			font : 700 30px "Inter", sans-serif;
+			font : 700 25px "Inter", sans-serif;
 			text-align: center;
 			margin-bottom: 20px;
-			width:33%;
+			width:35%;
 		}
 
 		& h2{
@@ -63,9 +95,12 @@
 		& h1:last-of-type{margin-left: auto;}
 		
 		& .g_img , #icon{
+			aspect-ratio: 1/1;
 			width: 60px;
 			height: 60px;
-			border: 3px solid #fff;
+			max-width: 60px;
+			max-height: 60px;
+			border: 3px solid #ffffff;
 			margin: 0px 10px 20px;
 		}
 
@@ -100,13 +135,14 @@
 
 .GameMain{
 	/* background-color: #1F295E; */
-	background-color:  rgb(2, 44, 78);
+	/* background-color:  rgb(2, 44, 78); */
 	height: 92.8vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	padding: 1% 3%;
 	position: relative;
+	min-width: 810px;
 }
 
 .Leaderboard{
@@ -188,7 +224,7 @@
 
 .matchHistory{width: 33%;
 	padding:2.5% 2%;
-	& h1{
+	& .title{
 		font : 700 28px "Inter", sans-serif;
 		text-align: center;
 		margin-bottom:20px;
@@ -199,7 +235,20 @@
 		height: 80%;
 		background-color: #002932;
 	}	
+}
 
+.matchHistory .SingleMatch{
+	background-color: #60E2FF;
+	margin:10px 0px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	& h1{
+		font : 700 20px "Inter", sans-serif;
+		text-align: center;
+		margin:10px 0px;
+		display: block;
+	}
 }
 
 
@@ -266,6 +315,15 @@
 		justify-content: space-between;
 		align-items: center;
 		margin:10px;
+	}
+
+	& h2{
+		display: block;
+		font : 500 18px "Poppins", sans-serif;
+		text-align: center;
+		margin-top:20px;
+		padding-right: 10px;
+		/* margin-bottom:15px; */
 	}
 }
 
@@ -416,6 +474,12 @@
 		padding:8px 20px;
 	}
 }
+
+
+
+
+
+/*****************************************************************************************************/
 
 @media (max-width : 800px){
 	#container{

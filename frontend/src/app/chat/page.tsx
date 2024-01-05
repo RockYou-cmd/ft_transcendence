@@ -52,7 +52,6 @@ export default function Chat() {
 	
 	function InviteToGame(User : any){
 		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
-		// router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend" + "&invite=true");
 	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
@@ -121,13 +120,16 @@ export default function Chat() {
 
 	useEffect(() => {	
 		socket?.on("update", (data: any) => {
-			// console.log("update in page", data);
+			console.log("update in page", data);
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
 			}
+			else if (data?.option == "newChat"){
+				setRefresh(!refresh);
+			}
 		});
 		return () => {socket?.off("update", ()=>{});}
-	},[socket, User])
+	},[socket, refresh])
 
 	useEffect(() => {
 		async function fetchData(user : string) {

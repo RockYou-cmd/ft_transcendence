@@ -125,7 +125,7 @@ export class EventGateway {
 
   @SubscribeMessage("update")
   handleBlock(client: Socket, payload: any) {
-    if (payload.option === "block" || payload.option === "unblock")
+    if (payload.option === "block" || payload.option === "unblock" || payload.option === "newChat")
       this.server
         .to(payload.receiver)
         .to(payload.sender)

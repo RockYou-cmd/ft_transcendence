@@ -15,6 +15,7 @@ const ParticleBackground: React.FC = () => {
     let mouseY = 0;
 
     function createParticle() {
+	if (canvas === null) return;
       for (let i = 0; i < 600; i++) {
         particles.push({
           x: Math.random() * canvas.width,
@@ -27,6 +28,7 @@ const ParticleBackground: React.FC = () => {
     }
 
     function drawParticles() {
+	if (canvas === null || ctx == null) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#ffffff';
 

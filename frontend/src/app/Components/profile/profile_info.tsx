@@ -2,7 +2,6 @@ import Image from "next/image";
 import achiev_pic from '../../../../public/achievment.png';
 import { useEffect, useState, useRef } from 'react';
 import avatar from "../../../../public/avatar.png";
-import img from "../../../../public/avatar.png";
 import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
 import { useLogContext, useMe } from "../Log/LogContext";
@@ -12,7 +11,6 @@ import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
-import WinRate from "./winRate"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -23,23 +21,25 @@ export default function Profile_info() {
 	const { me, setMe } = useMe() as any;
 	const imgRef = useRef(null) as any;
 	let photo = avatar.src;
+	const [data, setData] = useState({} as any);
+	const [hover, setHover] = useState(false);
+	const mousehover = useRef(null) as any;
+	const [showSetting, setShowSetting] = useState<boolean>(false);
 
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
-		console.log("herr", data);
-		setMe(data);
+		console.log("profile data", data);
+		if (data?.username != me?.username || data?.photo != me?.photo){
+			setMe(data);
+		}
 	}
 
-	const [hover, setHover] = useState(false);
-	const mousehover = useRef(null) as any;
-	const [data, setData] = useState({} as any);
-	const [refresh, setRefresh] = useState<boolean>(false);
-	const [showSetting, setShowSetting] = useState<boolean>(false);
 	useEffect(() => {
+		console.log("show setting", showSetting);
 		if (online && !showSetting) fetchData();
 		// TODO
-	}, [showSetting, online]);
+	}, [showSetting]);
 
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
@@ -105,7 +105,7 @@ export default function Profile_info() {
 				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
 					<MatchHistory matches={[]} />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User=""/>
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>

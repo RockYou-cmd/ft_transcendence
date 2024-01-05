@@ -4,20 +4,13 @@ import Image from 'next/image';
 import RootLayout from './layout';
 import './assest/login.css';
 import { MouseEvent } from 'react';
-import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import Profile from './profile/profile';
 import Home from './profile/home';
 import LoG from './Components/Log/Log';
 import { useLogContext } from './Components/Log/LogContext';
 import Loading from './loading';
-import favicon from '/..favicon.ico';
 import Head from 'next/head';
-
-
-
-
-
 
 
 export default function App() {
@@ -42,13 +35,11 @@ export default function App() {
 
 			<Head>
 				<link rel="icon" type="image/x-icon" href="./favicon.ico"></link>
-
 			</Head>
 
 			<div>
 				{online == "OFF" ? (!SignIn && online == "OFF" ? <Home setSignIn={setSignIn} /> : render) : <Profile User={""} />}
 			</div>
-			{/* {SignIn && <button className='bg-black text-white p-2 rounded mt-12 ml-96 flex justify-center items-center' onClick={() => setSignIn(false)}>back</button>} */}
 		</>
 	)
 }
