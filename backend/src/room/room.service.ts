@@ -310,11 +310,13 @@ export class RoomService {
 
   async joinProtected(account, data) {
     try {
+      console.log(data);
       const room = await prisma.room.findUnique({
         where: {
           id: data.id,
         },
       });
+      console.log(room.password);
       if (!(await argon.verify(room.password, data.password)))
         throw new Error("password incorrect");
       return this.joinRoom(account, data.id);
@@ -474,6 +476,9 @@ export class RoomService {
 
   async modifyRoom(data) {
     try {
+      if (data.privacy == "PROTECTED")
+        data.password = await argon.hash(data.password);
+      console.log(data);
       var newData = {
         name: data.name,
         description: data.description,
@@ -505,7 +510,8 @@ export class RoomService {
         include: {
           user: {
             select: {
-              blockedBy: {
+              friends: {
+                where: { status: "BLOCKED" },
                 select: {
                   users: {
                     where: {

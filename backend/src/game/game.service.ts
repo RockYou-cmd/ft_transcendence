@@ -158,6 +158,9 @@ export class GameService {
         data["player1Stats"] = {
           wins: {
             increment:1
+          },
+          level: {
+            increment: 10.26
           }
         }
         data["player2Stats"] = {
@@ -170,6 +173,9 @@ export class GameService {
         data["player2Stats"] = {
           wins: {
             increment:1
+          },
+          level: {
+            increment: 10.26
           }
         }
         data["player1Stats"] = {

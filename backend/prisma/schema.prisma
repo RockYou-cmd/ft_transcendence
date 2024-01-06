@@ -42,6 +42,7 @@ model GameProfile {
   level           Int @default(0)
   wins            Int @default(0)
   losses          Int @default(0)
+  xp              Int @default(0)
   games           GameParticipation[]
 }
 
