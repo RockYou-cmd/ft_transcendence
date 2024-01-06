@@ -80,7 +80,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-		console.log("chat", data);
 		if (data == undefined) 
 			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		if (channel?.username && data?.chats[0]?.id == undefined) {

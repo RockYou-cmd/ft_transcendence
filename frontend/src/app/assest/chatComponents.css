@@ -201,7 +201,7 @@ input[type=file]::file-selector-button:hover {
 	left:60%;
 	top:50%;
 	transform: translate(-50%,-50%);
-	width: 40vh;
+	width: 581px;
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
 	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
@@ -383,7 +383,8 @@ input[type=file]::file-selector-button:hover {
 	position: absolute;
 	top: 30%;
 	left: 40%;
-	width: 27vh;
+	/* width: 27vh; */
+	width:400px;
 	padding: 1.5vh 3vh;
 	border-radius: 16px;
 	box-shadow: 0px 0px 3px 0px #ffff;

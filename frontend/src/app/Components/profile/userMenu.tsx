@@ -6,7 +6,7 @@ import { useMe , useSocket} from '../Log/LogContext';
 import { useEffect , useRef } from 'react';
 import { on } from 'events';
 
-const ProfileMenu = ({ User, onClose } : {User : any, onClose : any }) => {
+const ProfileMenu = ({ User, onClose , setRefresh, refresh} : {User : any, onClose : any , setRefresh : any, refresh : boolean}) => {
   
 	const {socket} = useSocket();
 	const {me} = useMe() as any;
@@ -18,6 +18,8 @@ const ProfileMenu = ({ User, onClose } : {User : any, onClose : any }) => {
 	else if (type == "invite"){
 		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
 	}
+	setRefresh(!refresh);
+	onClose(false);
   };
 
   useEffect(() => {

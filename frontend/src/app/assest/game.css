@@ -1,9 +1,5 @@
 
 
-/* body{
-	min-width: none;
-} */
-
 /* .swal-modal{
 	border-radius: 20px;
 	background: #232226;
@@ -406,12 +402,14 @@
 
 	& .mapImg{
 		margin: auto;
+		aspect-ratio: 1/1;
 	}
 
 	& select {
 		all:initial;
 	}
 }
+
 .mapPicker:hover{
 	cursor: pointer;
 	border: 3px solid #fff;

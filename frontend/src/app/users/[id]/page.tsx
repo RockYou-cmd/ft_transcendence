@@ -49,17 +49,17 @@ export default function UserProfile() {
 	let render = LoG({ page: "User", LogIn: hooks , User :name}) as any;
 
 	async function fetchData() {
+		console.log("fetching data")
 		const data = await GetData({ Api: "User", user: name }) as any;
 		if (data == undefined) {
 			Logout();
 		}
 
-		if (data?.statusCode == 404 || (data?.blocked && data?.blocked !== data?.username)) {
-			router.push("/users/not-found");
-		}
+		// if (data?.statusCode == 404 || (data?.blocked && data?.blocked !== data?.username)) {
+		// 	router.push("/users/not-found");
+		// }
 
 		UsersetData(data);
-		console.log("herr");
 		if (data?.friendShipstatus == "PENDING" && data?.sender == data?.username)
 			Fstatus.current = "accept request";
 		else if (data?.friendShipstatus == "PENDING")
@@ -74,19 +74,20 @@ export default function UserProfile() {
 			friend.current = data?.friendShipstatus;
 		else
 			friend.current = "not friend";
-	
-		if (data?.statusCode == 404 || (data?.blocked && data?.blocked !== data?.username)) {
-			router.push("/users/not-found");
-		}
 	}
+	// console.log("userdata", Userdata, "hooks", hooks.dataHook.state)
 	
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
-		console.log("Userdata", Userdata);	
-	}, [refresh, isMenuOpen]);
+	}, [refresh]);
+
+	
 	
 	useEffect(() => {
+		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
+			router.push("/users/not-found");
+		}
 		if (Userdata?.friendShipstatus == "PENDING" && Userdata?.sender == Userdata?.username)
 			Fstatus.current = "accept request";
 		else if (Userdata?.friendShipstatus == "PENDING")
@@ -101,10 +102,10 @@ export default function UserProfile() {
 			friend.current = Userdata?.friendShipstatus;
 		else
 			friend.current = "not friend";
-	}, [Userdata]);
 
-	console.log("status", Fstatus.current)
-	
+		
+	}, [Userdata, hooks.dataHook.state]);
+
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
@@ -217,7 +218,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 							{/* Show the profile menu when isMenuOpen is true */}
 
 							<div className="relative bg-red-500 mb-10">
-								{isMenuOpen && Userdata?.friendShipstatus != "BLOCKED"  && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} />}
+								{isMenuOpen && Userdata?.friendShipstatus != "BLOCKED"  && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} refresh={refresh} setRefresh={setRefresh} />}
 							</div>
 						</div>
 						<div className="flex w-full p-1 bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900  mt-8 items-center justify-center ">
@@ -272,7 +273,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 				> 5
 				</div>
 				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
-				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User={Userdata?.username}/>
+				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User={Userdata?.username} refresh={refresh}/>
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " >
 					7

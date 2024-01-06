@@ -24,13 +24,17 @@ export default function SettingPage() {
 	const [save, setSave] = useState<boolean>(true);
 	const router = useRouter();
 
-      const [data, setData] = useState<FormData>({} as FormData);
+      const [data, setData] = useState<FormData | undefined>(undefined);
       async function fetchData() {
         const res = await Get(APIs.Profile);
-        setData(res);
+		if (res == undefined)
+			router.push("/");
+		else
+			setData(res);
+
       }
       useEffect(() => {
-        fetchData();
+		fetchData();
 		if (!save)
 			router.push("/"); 
       }, [save]);
@@ -39,8 +43,7 @@ export default function SettingPage() {
     return (
 
         <div className="flex w-full justify-center mt-[20%]">
-
-            <Setting handleClick={setSave} User={data} />
+			{data  && <Setting handleClick={setSave} User={data} />}
         </div>
 
     )
