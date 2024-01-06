@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const TwoAuth = ({ User }: { User: any }) => {
-  const [is2FAEnabled, setIs2FAEnabled] = useState(User.is2FAEnabled);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(User?.is2FAEnabled);
   const [showQRCode, setShowQRCode] = useState(false);
   const [qrCodeBase64, setQRCodeBase64] = useState('');
   const [verificationCode, setVerificationCode] = useState('');

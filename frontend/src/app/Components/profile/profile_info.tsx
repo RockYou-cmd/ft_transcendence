@@ -13,8 +13,6 @@ import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { GiPingPongBat } from "react-icons/gi";
-
 
 
 
@@ -46,6 +44,13 @@ export default function Profile_info() {
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
 
+	function CalculateWinRate(play: any, win: any ) { // calculate winrate
+		if (play === 0)
+			return 0;
+		const winrate = (win / play) * 100;
+		return winrate;
+	}
+
 
 	const handleClick = (val: boolean) => {
 		setShowSetting(val);
@@ -65,12 +70,11 @@ export default function Profile_info() {
 				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="flex  w-full  flex-row justify-center text-center ">
-							{/* <GiPingPongBat />  */}
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
 						</div>
-						<p className="text-gray-300"> Played: X</p>
-						<p className="text-gray-300"> Wins: X</p>
-						<p className="text-gray-300"> Losses : X</p>
+						<p className="text-gray-300"> Played: {data?.gameProfile?.gamesPlayed}</p>
+						<p className="text-gray-300"> Wins: {data?.gameProfile?.wins}</p>
+						<p className="text-gray-300"> Losses : {data?.gameProfile?.losses}</p>
 					</div>
 
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
@@ -81,14 +85,17 @@ export default function Profile_info() {
 						<p className="text-gray-300"> goal conced: X</p>
 					</div >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
-						<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
+						<div className="lex  w-full  flex-row justify-center text-center">
+
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
+						</div>
 						<div className="  w-[10vw] mb-4 ">
-							<CircularProgressbar value={75} text={"75%"} />
+							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win)} text={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win).toString()} />
 						</div>
 					</div>
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
-							<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
+							<h1 className="lex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
 						<p className="text-gray-300"> games played: X</p>
 						<p className="text-gray-300"> games played: X</p>
@@ -153,7 +160,7 @@ export default function Profile_info() {
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div> */}
 				<div className=" w-full ">
-					<UserLevel level="9.90" />
+					<UserLevel level={data?.gameProfile?.level?.toString()} />
 				</div>
 				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{data.bio}

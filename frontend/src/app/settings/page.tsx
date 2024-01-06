@@ -1,23 +1,24 @@
 "use client"
 import Setting from "../Components/profile/profile_setting";
-import {useEffect, useState } from "react";
-import {Get } from '../Components/Fetch/Fetch'
+import { useEffect, useState } from "react";
+import { Get } from '../Components/Fetch/Fetch'
 import { APIs } from "../Props/APIs";
 import { useRouter } from "next/navigation";
+import { ImProfile } from "react-icons/im";
 
 
 // create asimole page setting 
 interface Props {
-    handleClick: (val: boolean) => void;
-    User : any;
-  }
-  
-  interface FormData {
-    username: string;
-    bio: string;
-    photo_file: File | null;
-    photo: string;
-  }
+	handleClick: (val: boolean) => void;
+	User: any;
+}
+
+interface FormData {
+	username: string;
+	bio: string;
+	photo_file: File | null;
+	photo: string;
+}
 
 export default function SettingPage() {
 
@@ -36,15 +37,15 @@ export default function SettingPage() {
       useEffect(() => {
 		fetchData();
 		if (!save)
-			router.push("/"); 
-      }, [save]);
+			router.push("/");
+	}, [save]);
 
 
-    return (
+	return (
 
         <div className="flex w-full justify-center mt-[20%]">
 			{data  && <Setting handleClick={setSave} User={data} />}
         </div>
 
-    )
+	)
 }
