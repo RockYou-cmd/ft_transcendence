@@ -116,7 +116,7 @@
 		width:100%;
 		height: 5px;
 		background-color: green;
-		animation: showUp 5s linear forwards;
+		animation: showUp 5s;
 	}
 }
 

@@ -21,18 +21,25 @@ import GameDemo from  './gameDemo'
 
 export default function Home({ setSignIn }: { setSignIn: any }) {
 
+	const [Map, setMap] = useState("shark");
+
 	return (
 		<>
-			<div className='felx h- bg-gradient-to-br from-black via-gray-800 to-black p-8'>
-				<div className='mx-8 w-[95%]'>
+			<div id="home" className='felx h- bg-gradient-to-br from-black via-gray-800 to-black'>
+				{/* <div className='mx-8 w-[95%]'> */}
 					<div >
 						<Landing_navbar />
 					</div>
-					<Hero_section setSignIn={setSignIn}/>
-					<div className='flex relative mt-32 bg-green-500'>
-						<div className='w-[48%] rounded-xl m-4 bg-red-500'>
-							<GameDemo gameSettings={{map : "shark", ballColor : "white" , paddleColor : "white"}} />
+					<div className='section1'>
+						<Hero_section setSignIn={setSignIn}/>
+						<div className='w-[48%] max-w-[790px] rounded-xl m-auto'>
+							<GameDemo gameSettings={{map : Map, ballColor : "white" , paddleColor : "white"}} />
 						</div>
+					</div>
+					<div className='flex relative mt-32'>
+						{/* <div className='w-[48%] rounded-xl m-4 bg-red-500'>
+							<GameDemo gameSettings={{map : "shark", ballColor : "white" , paddleColor : "white"}} />
+						</div> */}
 						<div className='flex relative items-center w-[48%] justify-center'>
 							<div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px]  '></div>
 							<div className='flex flex-col relative items-center  justify-between my-8  overflow-hidden w-[90%] h-[25rem] bg-[#e7ebf4]  rounded-[50px]  '>
@@ -40,18 +47,18 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 									<h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MAPS </h1>
 								</div>
 								<div className='flex'>
-									<div className='  flex flex-col relative w-92 h-52 m-8 items-center bg-slate-300 rounded-xl overflow-hidden'>
+									<div onClick={()=>setMap("black")} className=' cursor-pointer flex flex-col relative w-92 h-52 m-8 items-center bg-slate-300 rounded-xl overflow-hidden'>
 										<h1 className='text-black font-bold text-2xl m-1'>CLASSIC MAP</h1>
-										<img src={screen1.src} alt={"screen1"} className='w-full h-full'></img>
+										<Image src={screen1.src} alt={"screen1"} className='w-full h-full' width={200} height={200}></Image>
 									</div>
 
-									<div className='flex flex-col relative w-92 h-52 m-8 items-center bg-blue-300 rounded-xl overflow-hidden'>
+									<div onClick={()=>setMap("shark")}  className='cursor-pointer flex flex-col relative w-92 h-52 m-8 items-center bg-blue-300 rounded-xl overflow-hidden'>
 										<h1 className='text-white font-bold  text-2xl m-1'>SHARK MAP</h1>
-										<img src={screen2.src} alt={"screen1"} className='w-full h-full'></img>
+										<Image src={screen2.src} alt={"screen1"} className='w-full h-full' width={200} height={200}></Image>
 									</div>
-									<div className=' flex flex-col items-center relative w-92 h-52 m-8  bg-red-300 rounded-xl overflow-hidden'>
+									<div onClick={()=>setMap("dragon")}  className='cursor-pointer flex flex-col items-center relative w-92 h-52 m-8  bg-red-300 rounded-xl overflow-hidden'>
 										<h1 className=' text-white font-bold text-2xl m-1'>DRAGON MAP</h1>
-										<img src={screen3.src} alt={"screen1"} className='w-full h-full'></img>
+										<Image src={screen3.src} alt={"screen1"} className='w-full h-full ' width={200} height={200}></Image>
 									</div>
 								</div>
 							</div>
@@ -90,7 +97,7 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 						<Footer />
 					</div>
 				</div>  */}
-			</div>
+			{/* </div> */}
 			</div>
 		</>
 	)

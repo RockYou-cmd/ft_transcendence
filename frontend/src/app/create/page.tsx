@@ -67,7 +67,7 @@ export default function Create() {
 
 				if (res.status == 201) {
 					swal("Account Created", "", "success");
-					route.push('/setting');
+					route.push('/settings');
 				}
 				else {
 					const msg = await res?.json();

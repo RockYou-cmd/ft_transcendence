@@ -1,10 +1,10 @@
-import React, { FC, ChangeEvent, FormEvent, useState } from "react";
+import React, { FC, useRef , FormEvent, useState } from "react";
 import TwoAuth from "./2fa";
 import Image from "next/image";
 import avatar from "../../../../public/avatar.png";
 import swal from "sweetalert";
-
-interface Props {
+import { faCircleChevronDown , faCircleChevronUp , faEyeLowVision , faEye} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";interface Props {
   handleClick: (val: boolean) => void;
   User: any;
 }
@@ -20,9 +20,15 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
   ///// modal properties 
   const [imagePreview, setImagePreview] = useState<string>('')
-  const [username, setUsername] = useState<string>(User?.username);
-  const [bio, setBio] = useState<string>(User?.bio);
+  const [username, setUsername] = useState<string>(User?.username || '');
+  const [bio, setBio] = useState<string>(User?.bio || '');
   const [photo, setPhoto] = useState<any>();
+  const [changePass, setChangePass] = useState<boolean>(false);
+  const oldPassRef = useRef<HTMLInputElement>(null);
+  const newPassRef = useRef<HTMLInputElement>(null);
+  const [oldPass, setOldPass] = useState<string>('');
+  const [newPass, setNewPass] = useState<string>('');
+  const [showPass, setShowPass] = useState<boolean>(false);
 
   // object that will snet to backend
   const [formData, setFormData] = useState<FormData>({
@@ -86,6 +92,14 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
     }
 };
 
+	function ChangePassword(e : any){
+		e?.preventDefault();
+		console.log("change password old", oldPassRef.current?.value);
+		console.log("change password new", newPassRef.current?.value);
+		swal("Password changed successfully","","success");
+		setChangePass(false);
+	}
+
 
 
 const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -119,17 +133,16 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		
 		console.log("res ", response);
 		if (response.ok) {
-			console.log('Profile updated successfully');
-			
+			swal("Profile updated successfully","","success");
+			handleClick(false);
 		} else {
 			console.error('Profile update failed');
 		}
-	handleClick(false);
+		setBio('');
+		setUsername('');
     } catch (error) {
       console.error('Error updating profile:', error);
     }
-	setBio('');
-	setUsername('');
   };
 
   return (
@@ -153,12 +166,13 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
           </label>
           <div className=" focus:ring mb-6 mt-5">
             <label className=" text-white font-bold rounded-lg focus:outline-none focus:ring focus:border-blue-300" htmlFor="username">Username:<br /></label>
-            <input type="text" id="username" name="username" value={username} onChange={handleChange} className=" text-white w-[100%] px-3 py-2  bg-gray-800 rounded-lg focus:outline-none focus:ring focus:border-blue-300" />
+            <input type="text"  name="username" value={username} onChange={handleChange} className=" text-white w-[100%] px-3 py-2  bg-gray-800 rounded-lg focus:outline-none focus:ring focus:border-blue-300" />
           </div>
           <div className="mb-6 font-bold">
             <label className="text-white" htmlFor="bio">Bio:</label>
-            <textarea className="w-[100%] h-[6rem] bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-300" id="bio" name="bio" value={bio} onChange={handleChange}></textarea>
+            <textarea className="w-[100%] h-[6rem] bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-300"  name="bio" value={bio} onChange={handleChange}></textarea>
           </div>
+
           <div>
             <TwoAuth User={User} />
           </div>
@@ -167,6 +181,30 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             <button className="bg-[#707070] rounded w-32 hover:scale-105 duration-500 " onClick={() => handleClick(false)}>Cancel</button>
           </div>
         </form>
+		{	// change password for no intra or google account
+			<div className="changePassword">
+				<button onClick={()=>setChangePass(!changePass)} >Change Password {!changePass ? <FontAwesomeIcon icon={faCircleChevronDown} className="ml-3"/>
+				: <FontAwesomeIcon icon={faCircleChevronUp} className="ml-3" />}
+				</button>
+				{changePass && 
+					<form className="bg-gradient-to-br from-[#2B3044]
+					via-[#636a87]to-[#2B3044]" onSubmit={ChangePassword}>
+						<label>Enter The current Password</label>
+						<section>
+							<input ref={oldPassRef} type={showPass ? "text" : "password"} name="password" ></input>
+							{!showPass ? <FontAwesomeIcon id="icon" icon={faEyeLowVision} onClick={() => setShowPass(!showPass)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} id="icon" onClick={() => setShowPass(!showPass)} style={{ cursor: "pointer" }} />}
+						</section>
+						<label>Enter The new Password</label>
+
+						<section>
+							<input ref={newPassRef} type={showPass ? "text" : "password"} name="password" ></input>
+							{!showPass ? <FontAwesomeIcon id="icon" icon={faEyeLowVision} onClick={() => setShowPass(!showPass)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} id="icon" onClick={() => setShowPass(!showPass)} style={{ cursor: "pointer" }} />}
+						</section>
+						<button type="submit">SAVE</button>
+					</form>
+				}
+		  </div>
+		}
       </div>
     </div>
   );

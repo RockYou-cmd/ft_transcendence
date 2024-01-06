@@ -24,8 +24,8 @@ export default function GameDemo({gameSettings} : {gameSettings : any}){
 		}
 		
 		const FPS = 50;
-		const BALL_SPEED = 1.1;
-		const COM_LVL = 0.25;
+		const BALL_SPEED = 1.2;
+		const COM_LVL = 0.20;
 		
 		const context = game.current?.getContext('2d');
 		let parent = game.current?.parentElement;
