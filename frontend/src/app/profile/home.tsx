@@ -25,7 +25,7 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 
 	return (
 		<>
-			<div id="home" className='felx h- bg-gradient-to-br from-black via-gray-800 to-black'>
+			<div id="home" className='felx h-screen bg-gradient-to-br from-black via-gray-800 to-black'>
 				{/* <div className='mx-8 w-[95%]'> */}
 					<div >
 						<Landing_navbar />
@@ -36,17 +36,17 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 							<GameDemo gameSettings={{map : Map, ballColor : "white" , paddleColor : "white"}} />
 						</div>
 					</div>
-					<div className='flex relative mt-32'>
+					<div className='flex relative mt-32 justify-center '>
 						{/* <div className='w-[48%] rounded-xl m-4 bg-red-500'>
 							<GameDemo gameSettings={{map : "shark", ballColor : "white" , paddleColor : "white"}} />
 						</div> */}
-						<div className='flex relative items-center w-[48%] justify-center'>
-							<div className='absolute w-[92%] h-[26rem] bg-[#e7ebf4]/65 rounded-[50px]  '></div>
-							<div className='flex flex-col relative items-center  justify-between my-8  overflow-hidden w-[90%] h-[25rem] bg-[#e7ebf4]  rounded-[50px]  '>
+						<div className='flex relative items-center  justify-center'>
+							<div className=' h-[26rem] bg-[#e7ebf4]/65 rounded-[50px]  '></div>
+							<div className='flex flex-col relative items-center  justify-center   overflow-hidden w-[90%] h-[25rem] bg-[#e7ebf4]  rounded-[50px]  '>
 								<div className='flex w-full relative items-center justify-center mt-4'>
-									<h1 className='text-black font-bold text-2xl'>PLAY IN DIFFRENT MAPS </h1>
+									<h1 className=' text-black font-bold text-2xl'>TRY DIFFERENT MAPS </h1>
 								</div>
-								<div className='flex'>
+								<div className='flex '>
 									<div onClick={()=>setMap("black")} className=' cursor-pointer flex flex-col relative w-92 h-52 m-8 items-center bg-slate-300 rounded-xl overflow-hidden'>
 										<h1 className='text-black font-bold text-2xl m-1'>CLASSIC MAP</h1>
 										<Image src={screen1.src} alt={"screen1"} className='w-full h-full' width={200} height={200}></Image>

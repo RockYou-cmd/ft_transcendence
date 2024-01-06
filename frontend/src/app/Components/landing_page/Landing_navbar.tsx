@@ -13,7 +13,7 @@ export default function Landing_navbar() {
                 </div >
 
                 <div className="flex mr-20 text-black font-bold ">
-                    <Link href="/create" className="mr-5 ">SIGN UP</Link>
+                    <Link href="/create" className="mr-5 bg-slate-900 text-white  font-bold p-3 rounded-lg ">SIGN UP</Link>
                     
                 </div>
             </header>
