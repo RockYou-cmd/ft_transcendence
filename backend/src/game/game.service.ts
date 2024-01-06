@@ -91,15 +91,17 @@ export class GameService {
         middle: touch_player.height / 2 + touch_player.y,
       };
 
-	if (this.ball_SPEED < 8){
+	console.log("game Speed", this.ball.speed, this.ball_acc);
+	if (this.ball.speed < 8){
 		this.ball.speed += this.ball_acc;
 	}
+	console.log("game Speed", this.ball.speed);
 
 
-     	if ((playerPos.top <= (this.ball.y  + this.ball.radius)) && ((this.ball.y  + this.ball.radius) < playerPos.middle)){
+     	if ((playerPos.top <= (this.ball.y  + this.ball.radius)) && ((this.ball.y  + this.ball.radius / 2) < playerPos.middle)){
 			this.ball.velocityY = -5;
 		}
-		else if (playerPos.buttom >= (this.ball.y  - this.ball.radius) && (this.ball.y  - this.ball.radius) > playerPos.middle){
+		else if (playerPos.buttom >= (this.ball.y  - this.ball.radius) && (this.ball.y  - this.ball.radius / 2) > playerPos.middle){
 			this.ball.velocityY = 5;
 		}
 		else

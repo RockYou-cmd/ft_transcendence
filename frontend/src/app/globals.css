@@ -33,6 +33,18 @@ input:focus, textarea:focus, select:focus{
 	border-radius: 50%;
 }
 
+.status {
+	display: flex;
+	background-color: rgba(0, 255, 117, 1);
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	position: absolute;
+	top: 51px;
+	left: 51px;
+	border: 2px solid #ffffff;
+}
+
 #backBtn{
 
 	position: absolute;

@@ -52,9 +52,6 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		game.current.height = parent?.clientHeight || 0;
 		let gameWidth = game.current.width || 0;
 		let gameHeight = game.current.height || 0;
-		// setGameHeight(game.current.height);
-		// setGameWidth(game.current.width);
-		console.log(gameWidth + " " + gameHeight);
 
 		var net={
 			x : gameWidth / 2 - 1,
@@ -88,7 +85,7 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		var ball = {
 			x: gameWidth / 2,
 			y: gameHeight / 2,
-			radius: gameHeight / 40,
+			radius: 16,
 			speed: BALL_SPEED,
 			velocityX: 5,
 			velocityY: 0,
@@ -202,7 +199,6 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 				}
 			}
 			
-			console.log("ball speed", ball.speed);
 			var touch_player = (ball.x < gameWidth / 2) ? player1 : player2;
 			if (collision(ball, touch_player)){
 				const playerPos = {
@@ -214,10 +210,10 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 				if (ball.speed < 8)
 					ball.speed += ball_acc;
 
-				if ((playerPos.top <= (ball.y  + ball.radius)) && ((ball.y  + ball.radius) < playerPos.middle)){
+				if ((playerPos.top <= (ball.y  + ball.radius)) && ((ball.y  + ball.radius / 2) < playerPos.middle)){
 					ball.velocityY = -5;
 				}
-				else if (playerPos.buttom >= (ball.y  - ball.radius) && (ball.y  - ball.radius) > playerPos.middle){
+				else if (playerPos.buttom >= (ball.y  - ball.radius) && (ball.y  - ball.radius / 2) > playerPos.middle){
 					ball.velocityY = 5;
 				}
 				else
@@ -263,11 +259,11 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 		window.addEventListener("keydown", function(key){
 			if (key.code == "KeyW" && !pause.current && !startGame){
 				if (player1.y > 0)
-					player1.y -= 25;
+					player1.y -= 28;
 			}
 			else if(key.code == "KeyS" && !pause.current && !startGame){
 				if (player1.y < gameHeight - player1.height)
-					player1.y += 25;
+					player1.y += 28;
 			}
 		});
 

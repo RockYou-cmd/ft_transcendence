@@ -24,7 +24,6 @@ import swal from "sweetalert";
 
 export default function UserProfile() {
 
-	// const [data, setData] = useState({} as any);
 	const { socket } = useSocket();
 	const { me } = useMe() as any;
 	const [wait, checkwait] = useState(false);

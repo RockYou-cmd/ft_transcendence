@@ -128,21 +128,32 @@ export default function GamePage() {
 	
 	useEffect(() => {
 
-			socket?.on("invite", (data: any) => {
-				invite.current = true;
-				// setGameSet(false);
-				setMode("");
-				setInviteComp(true);
-				setGameInfo(data);
-				setSelectedFriend(data.player1);
 
-			});
-			socket?.on("start", (data: any) => {
-				setGameInfo(data);
-			});
-	
+				socket?.on("invite", (data: any) => {
+					if (inGame){
+						socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
+						return;
+					}
+					else{
+
+						invite.current = true;
+
+						// setGameSet(false);
+						setMode("");
+						setInviteComp(true);
+						setGameInfo(data);
+						setSelectedFriend(data.player1);
+					}
+					
+				});
+				socket?.on("start", (data: any) => {
+					if (inGame) return;
+					setGameInfo(data);
+				});
+			
+				
 		return () => {socket?.off("invite"), ()=>{}}
-	},[socket, accept]);
+	},[socket, accept, inGame]);
 
 
 	const [gameSettings, setGameSettings] = useState({
@@ -166,7 +177,8 @@ export default function GamePage() {
 
 	function FriendlyMatch(){
 		const [refuse, setRefuse] = useState(false);
-		if (send && gameInfo?.player1 == me?.username){
+		
+		if (send && !inGame && gameInfo?.player1 == me?.username){
 			socket?.emit("invite", gameInfo);
 		}
 		useEffect(() => {
@@ -198,6 +210,7 @@ export default function GamePage() {
 					setSelectedFriend("");
 					setGameInfo(undefined);
 					setSend(false);
+					swal(`${data?.receiver} refused your invitation`, "your friend is busy or he already in game", "info");
 				}
 			})
 			return () => {socket?.off("start"), ()=>{}
@@ -214,7 +227,6 @@ export default function GamePage() {
 		</>)
 	}
 	
-
 
 	if (!hooks.waitHook.state) {
 		return (<Loading />)

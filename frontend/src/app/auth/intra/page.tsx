@@ -35,7 +35,7 @@ export default function Auth() {
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
-						router.push("/setting");
+						router.push("/settings");
 					else
 						router.push("/");
 				}

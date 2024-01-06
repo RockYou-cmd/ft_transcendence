@@ -167,14 +167,14 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
         if (player1.username == me?.username) {
           if (player1.y > 0)
             socket?.emit("move", {
-              y: player1.y - 20,
+              y: player1.y - 28,
               roomName: roomName.current,
               player: "player1",
             });
         } else {
           if (player2.y > 0)
             socket?.emit("move", {
-              y: player2.y - 20,
+              y: player2.y - 28,
               roomName: roomName.current,
               player: "player2",
             });
@@ -183,14 +183,14 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
         if (player2.username == me?.username) {
           if (player2.y + player2.height < gameHeight)
             socket?.emit("move", {
-              y: player2.y + 20,
+              y: player2.y + 28,
               roomName: roomName.current,
               player: "player2",
             });
         } else {
           if (player1.y + player1.height < gameHeight)
             socket?.emit("move", {
-              y: player1.y + 20,
+              y: player1.y + 28,
               roomName: roomName.current,
               player: "player1",
             });
@@ -198,9 +198,9 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
       }
     });
 
-	if (gameInfo?.player2 == me?.username && gameInfo?.roomName){
-		socket?.on("start", (data: any) => {});
-	}
+	// if (gameInfo?.player2 == me?.username && gameInfo?.roomName){
+	// 	socket?.on("start", (data: any) => {});
+	// }
     return () => {
       socket?.off("frame", () => {});
     };
