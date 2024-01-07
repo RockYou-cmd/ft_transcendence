@@ -25,7 +25,7 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 
 	return (
 		<>
-			<div id="home" className='felx h-screen bg-gradient-to-br from-black via-gray-800 to-black'>
+			<div id="home" className='felx h-full bg-gradient-to-br from-black via-gray-800 to-black'>
 				{/* <div className='mx-8 w-[95%]'> */}
 					<div >
 						<Landing_navbar />
@@ -72,31 +72,31 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 
 					{/* <div className='flex justify-center items-center mt-16'>
           <Slider />
-        </div>
+				</div>*/}
 
-					{/* <div className='flex justify-center'>
+					 <div className='flex justify-center'>
 					</div>
 					<div className='flex  flex-col justify-between  bg-[#e7ebf4] rounded-3xl p-7 mt-16 mb-16 overflow-hidden' >
 						<h1 className='  items-center font-bold text-2xl bg-slate-400 w-fit rounded-[30px] text-center p-4 '>MEET THE TEAM</h1>
 						<div className='flex flex-col items-center '>
 							<h2 className='font-bold m-7 text-black text-lg'>At PONGY, we are a dynamic trio of passionate developers, each bringing a unique set of skills to the table.</h2>
 						</div>
-						<div className='flex justify-between w-full'>
-							<ProfileCard imageurl={bboulhan} name={"BRAHIM"} title={"FULL-STACK DEV"} discription={"our versatile Full Stack Developer, seamlessly blends creativity with functionality to build robust and efficient systems. "} ></ProfileCard>
-							<ProfileCard imageurl={yelqabl} name={"YOUSSEF"} title={"FRONTEND UX/UI"} discription={"our UX/UI and Frontend Developer, crafts immersive and user-friendly interfaces that elevate the overall experience."} ></ProfileCard>
-							<ProfileCard imageurl={aelkorc} name={"ALAE"} title={"BACKEND DEVOPS"} discription={"our backend-DevOps Developer, powers the heart of our projects with his expertise, ensuring a solid foundation for seamless functionality."} ></ProfileCard>
+						<div className='flex justify-evenly w-full'>
+							<ProfileCard imageurl={bboulhan.src} name={"BRAHIM"} title={"FULL-STACK DEV"} discription={"our versatile Full Stack Developer, seamlessly blends creativity with functionality to build robust and efficient systems. "} ></ProfileCard>
+							<ProfileCard imageurl={yelqabl.src} name={"YOUSSEF"} title={"FRONTEND UX/UI"} discription={"our UX/UI and Frontend Developer, crafts immersive and user-friendly interfaces that elevate the overall experience."} ></ProfileCard>
+							<ProfileCard imageurl={aelkorc.src} name={"ALAE"} title={"BACKEND DEVOPS"} discription={"our backend-DevOps Developer, powers the heart of our projects with his expertise, ensuring a solid foundation for seamless functionality."} ></ProfileCard>
 						</div>
 					</div>
-					<div className=' flex h-fit'>
+					{/* <div className=' flex h-fit'>
 						<div className=' h-full rounded-l-2xl overflow-hidden'>
 						<Image src={contact.src} priority={true} alt={"contact"} width={750} height={512} />
 						</div>
 						<ContactForm />
-					</div>
+			</div>*/}
 					<div className='mt-32'>
 						<Footer />
 					</div>
-				</div>  */}
+			{/*	</div>  */}
 			{/* </div> */}
 			</div>
 		</>

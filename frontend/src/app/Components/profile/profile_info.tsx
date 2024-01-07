@@ -13,8 +13,8 @@ import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
-
+import Achievment from "./achievment"
+import AchievmentIcon from "../../../../public/achievment.png";
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
@@ -30,7 +30,7 @@ export default function Profile_info() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
 		console.log("profile data", data);
-		if (data?.username != me?.username || data?.photo != me?.photo){
+		if (data?.username != me?.username || data?.photo != me?.photo) {
 			setMe(data);
 		}
 	}
@@ -44,7 +44,7 @@ export default function Profile_info() {
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
 
-	function CalculateWinRate(play: any, win: any ) { // calculate winrate
+	function CalculateWinRate(play: any, win: any) { // calculate winrate
 		if (play === 0)
 			return 0;
 		const winrate = (win / play) * 100;
@@ -63,9 +63,9 @@ export default function Profile_info() {
 			<div
 				// ref={mousehover}
 				className="gap-5 w-full grid grid-cols-3 grid-rows-4 lg:grid-cols-subgrid "
-				// id={hover ? "profile_grid_blur" : ""}
-				// onMouseEnter={() => setHover(true)}
-				// onMouseLeave={() => setHover(false)}
+			// id={hover ? "profile_grid_blur" : ""}
+			// onMouseEnter={() => setHover(true)}
+			// onMouseLeave={() => setHover(false)}
 			>
 				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
@@ -103,9 +103,10 @@ export default function Profile_info() {
 					</div>
 				</div>
 				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
+					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
 					<MatchHistory matches={[]} />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User=""/>
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User="" />
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>
@@ -165,15 +166,13 @@ export default function Profile_info() {
 				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{data.bio}
 				</div>
-				<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
-					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
-						<Image src={achiev_pic} width={60} alt="achievment" />{" "}
-						Achievmnet
+				<div className="flex flex-col mt-8    gap-3 w-[95%] h-fit ">
+					<div className="flex items-center justify-center border bg-cyan-400/30 rounded-t-xl p-4">
+						<Image src={AchievmentIcon} priority={true} width={60} height={60} />
+						<h1 className="font-bold text-2xl ">ACHIEVMENTS</h1>
+						<Image src={AchievmentIcon} priority={true} width={60} height={60} />
 					</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">1</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">2</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">3</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">4</div>
+					<Achievment gamesPlayed={data?.gameProfile?.played} goalScored={data?.gameProfile?.goal} />
 				</div>
 			</div>
 		);

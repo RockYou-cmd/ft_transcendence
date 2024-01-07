@@ -25,6 +25,7 @@ import { useSearchParams } from 'next/navigation';
 import Loading from '../loading';
 import { SendFriendRequest } from '../Components/Settings/ChatSettings';
 import { Disconnect } from '../Components/Log/Logout';
+import chatAnimation from "../../../public/chat.gif"
 
 // import Lottie from "lottie-react";
 // import chatAnimation from "../../../public/chatAnimation.json"
@@ -196,6 +197,10 @@ export default function Chat() {
 							<div className='Chat'>
 								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
 									: <div className='openChat'>
+										<div className='mix-blend-multiply w-[20vh]'>
+
+										<Image src={chatAnimation} alt='chat animtaio' priority={true} ></Image>
+										</div>
 										{/* {typeof document != undefined &&  <Lottie className='w-[50%]'  animationData={chatAnimation} loop={true}  />} */}
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</div>
