@@ -63,7 +63,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			description : gDesc.current.value,
 			privacy : privacy,
 			password : gPass.current.value,
-			photo : image,
+			photo : image ? image : info?.photo,
 			id : info?.id,
 		}, APIs.roomModify);
 		if (res?.ok)

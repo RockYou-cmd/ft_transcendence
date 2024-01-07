@@ -3,6 +3,7 @@ import TwoAuth from "./2fa";
 import Image from "next/image";
 import avatar from "../../../../public/avatar.png";
 import swal from "sweetalert";
+import '../../assest/mapBorder.css';
 import { faCircleChevronDown , faCircleChevronUp , faEyeLowVision , faEye} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";interface Props {
   handleClick: (val: boolean) => void;

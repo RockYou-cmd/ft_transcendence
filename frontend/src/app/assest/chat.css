@@ -34,7 +34,8 @@
 	display: flex;
 	flex-direction: row;
 	position: relative;
-	margin-bottom: 6.5vh;
+	/* margin-bottom: 6.5vh; */
+	margin-bottom: 95px;
 }
 
 .searchInput {

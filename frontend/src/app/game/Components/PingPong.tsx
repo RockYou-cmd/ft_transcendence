@@ -39,7 +39,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 		const time = setTimeout(() => {
 			if (lag.current == false){
 				const player = gameInfo?.player1 == me?.username ? gameInfo.player2 : gameInfo.player1;
-				swal({title : "You Won", text : `${player} has left the game`,icon :  "info", buttons : ["CONFIRM"]});
+				swal( "You Won", `${player} has left the game`,"info");
 				leaveMatch();
 			}
 		}, 15000);

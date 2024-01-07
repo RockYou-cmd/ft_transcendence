@@ -1,6 +1,6 @@
 "use client"
 import '../assest/game.css'
-import {useRef, useEffect, useState} from 'react';
+import {useRef, useEffect} from 'react';
 import React from 'react';
 
 export interface Player {
@@ -24,7 +24,7 @@ export default function GameDemo({gameSettings} : {gameSettings : any}){
 		}
 		
 		const FPS = 50;
-		const BALL_SPEED = 1.2;
+		const BALL_SPEED = 1.1;
 		const COM_LVL = 0.20;
 		
 		const context = game.current?.getContext('2d');

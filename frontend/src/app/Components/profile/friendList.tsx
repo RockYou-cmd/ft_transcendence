@@ -6,18 +6,20 @@ import avatar from '../../../../public/avatar.png'
 import Link from "next/link";
 import '../../assest/mapBorder.css'
 
-const FriendListComponent: any = ({User} : {User : string}) => {
+const FriendListComponent: any = ({User, refresh} : {User : string, refresh : boolean}) => {
     const [friendList, setFriendList] = useState<any>();
 const fetchFriendList = async () => {
   try {
 	let response : any;
+	console.log("user", User);
 	if (User == ""){
 		response = await Get(APIs.Friends);
+		console.log("res", response);
 	}
 	else{
 		response = await Get(APIs.UserFriends + User);
-		const res  = GetRes(APIs.UserFriends + User);
-		console.log("res", res);
+		// const res  = GetRes(APIs.UserFriends + User);
+		console.log("res", response);
 	}
     setFriendList(response);
    
@@ -29,7 +31,7 @@ const fetchFriendList = async () => {
 
 useEffect(() => {
     fetchFriendList();
-}, []); 
+}, [refresh]); 
 
   function Print(user : any){
     user = user?.user;
