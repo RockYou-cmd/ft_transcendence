@@ -10,7 +10,7 @@ import Form from "@/app/profile/form";
 import swal from "sweetalert";
 
 
-export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
+export default function Auth() {
 
 	const { online, setOnline } = useLogContext();
 	const [TwoEA, setTwoEA] = useState(false);
@@ -36,7 +36,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
-						router.push("/setting");
+						router.push("/settings");
 					else
 						router.push("/");
 

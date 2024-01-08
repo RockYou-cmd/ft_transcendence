@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "GameProfile" ADD COLUMN     "goalsConced" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "goalsScored" INTEGER NOT NULL DEFAULT 0;

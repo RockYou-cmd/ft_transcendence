@@ -11,7 +11,7 @@ import swal from "sweetalert";
 
 
 
-export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
+export default function Auth() {
 
 	const { online, setOnline } = useLogContext();
 	const [code, setValue] = useState(null) as any;
@@ -35,7 +35,7 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
-						router.push("/setting");
+						router.push("/settings");
 					else
 						router.push("/");
 				}

@@ -25,6 +25,7 @@ import { useSearchParams } from 'next/navigation';
 import Loading from '../loading';
 import { SendFriendRequest } from '../Components/Settings/ChatSettings';
 import { Disconnect } from '../Components/Log/Logout';
+import chatAnimation from "../../../public/chat.gif"
 
 // import Lottie from "lottie-react";
 // import chatAnimation from "../../../public/chatAnimation.json"
@@ -52,7 +53,6 @@ export default function Chat() {
 	
 	function InviteToGame(User : any){
 		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
-		// router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend" + "&invite=true");
 	}
 	// hooks for data
 	const [User, setUser] = useState({} as any);
@@ -121,13 +121,16 @@ export default function Chat() {
 
 	useEffect(() => {	
 		socket?.on("update", (data: any) => {
-			// console.log("update in page", data);
+			console.log("update in page", data);
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
 			}
+			else if (data?.option == "newChat"){
+				setRefresh(!refresh);
+			}
 		});
 		return () => {socket?.off("update", ()=>{});}
-	},[socket, User])
+	},[socket, refresh])
 
 	useEffect(() => {
 		async function fetchData(user : string) {
@@ -194,6 +197,10 @@ export default function Chat() {
 							<div className='Chat'>
 								{Object.keys(User).length != 0 ? <Cnvs User={User} Role={setRole} OptionHandler={OptionsHandler} refresh={refresh}/>
 									: <div className='openChat'>
+										<div className='mix-blend-multiply w-[20vh]'>
+
+										<Image src={chatAnimation} alt='chat animtaio' priority={true} ></Image>
+										</div>
 										{/* {typeof document != undefined &&  <Lottie className='w-[50%]'  animationData={chatAnimation} loop={true}  />} */}
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</div>

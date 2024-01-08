@@ -8,18 +8,6 @@
 	z-index: 2;
 }
 
-/* .swal-modal {
-	border: 3px solid white;
-	border-radius: 20px;
-	background-color: #4E4E4E;
-}
-
-.swal-button{
-	background-color: #2a2a2a;
-	border: 1px solid #ffff;
-	border-radius: 10px;
-	padding: 10px 20px;
-} */
 
 #SearchComponent .resBar {
 	background-color: rgba(13, 13, 13, 1);
@@ -84,8 +72,8 @@
 
 #SearchComponent .results span {
 	font: 600 16px 'Inter', sans-serif;
-	margin: 0px 10px;
-	width: 30%;
+	margin: 0px auto;
+	/* width: 30%; */
 	/* line-height: 20px; */
 }
 
@@ -108,7 +96,10 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: baseline;
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	/* color: #ffff; */
 	padding: 35px 50px 20px;
 	width: 30vh;

@@ -2,7 +2,6 @@ import Image from "next/image";
 import achiev_pic from '../../../../public/achievment.png';
 import { useEffect, useState, useRef } from 'react';
 import avatar from "../../../../public/avatar.png";
-import img from "../../../../public/avatar.png";
 import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
 import { useLogContext, useMe } from "../Log/LogContext";
@@ -12,39 +11,45 @@ import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";
-import WinRate from "./winRate"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { GiPingPongBat } from "react-icons/gi";
-
-
-
+import Achievment from "./achievment"
+import AchievmentIcon from "../../../../public/achievment.png";
 
 export default function Profile_info() {
 	const { online, setOnline } = useLogContext();
 	const { me, setMe } = useMe() as any;
 	const imgRef = useRef(null) as any;
 	let photo = avatar.src;
+	const [data, setData] = useState({} as any);
+	const [hover, setHover] = useState(false);
+	const mousehover = useRef(null) as any;
+	const [showSetting, setShowSetting] = useState<boolean>(false);
 
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
-		console.log("herr");
-		setMe(data);
+		console.log("profile data", data);
+		if (data?.username != me?.username || data?.photo != me?.photo) {
+			setMe(data);
+		}
 	}
 
-	const [hover, setHover] = useState(false);
-	const mousehover = useRef(null) as any;
-	const [data, setData] = useState({} as any);
-	const [refresh, setRefresh] = useState<boolean>(false);
-	const [showSetting, setShowSetting] = useState<boolean>(false);
 	useEffect(() => {
+		console.log("show setting", showSetting);
 		if (online && !showSetting) fetchData();
 		// TODO
-	}, [showSetting, online]);
+	}, [showSetting]);
 
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
+
+	function CalculateWinRate(play: any, win: any) { // calculate winrate
+		if (play === 0)
+			return 0;
+		const winrate = (win / play) * 100;
+		return winrate;
+	}
 
 
 	const handleClick = (val: boolean) => {
@@ -58,19 +63,18 @@ export default function Profile_info() {
 			<div
 				// ref={mousehover}
 				className="gap-5 w-full grid grid-cols-3 grid-rows-4 lg:grid-cols-subgrid "
-				// id={hover ? "profile_grid_blur" : ""}
-				// onMouseEnter={() => setHover(true)}
-				// onMouseLeave={() => setHover(false)}
+			// id={hover ? "profile_grid_blur" : ""}
+			// onMouseEnter={() => setHover(true)}
+			// onMouseLeave={() => setHover(false)}
 			>
 				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="flex  w-full  flex-row justify-center text-center ">
-							{/* <GiPingPongBat />  */}
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
 						</div>
-						<p className="text-gray-300"> Played: X</p>
-						<p className="text-gray-300"> Wins: X</p>
-						<p className="text-gray-300"> Losses : X</p>
+						<p className="text-gray-300"> Played: {data?.gameProfile?.gamesPlayed}</p>
+						<p className="text-gray-300"> Wins: {data?.gameProfile?.wins}</p>
+						<p className="text-gray-300"> Losses : {data?.gameProfile?.losses}</p>
 					</div>
 
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
@@ -81,14 +85,17 @@ export default function Profile_info() {
 						<p className="text-gray-300"> goal conced: X</p>
 					</div >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
-						<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
+						<div className="lex  w-full  flex-row justify-center text-center">
+
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
+						</div>
 						<div className="  w-[10vw] mb-4 ">
-							<CircularProgressbar value={75} text={"75%"} />
+							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win)} text={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win).toString()} />
 						</div>
 					</div>
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
-							<h1 className="text-white text-lg font-bold mb-2">Game State</h1>
+							<h1 className="lex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
 						<p className="text-gray-300"> games played: X</p>
 						<p className="text-gray-300"> games played: X</p>
@@ -96,9 +103,10 @@ export default function Profile_info() {
 					</div>
 				</div>
 				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
+					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
 					<MatchHistory matches={[]} />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User="" />
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>
@@ -153,20 +161,18 @@ export default function Profile_info() {
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div> */}
 				<div className=" w-full ">
-					<UserLevel level="9.90" />
+					<UserLevel level={data?.gameProfile?.level?.toString()} />
 				</div>
 				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{data.bio}
 				</div>
-				<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
-					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
-						<Image src={achiev_pic} width={60} alt="achievment" />{" "}
-						Achievmnet
+				<div className="flex flex-col mt-8    gap-3 w-[95%] h-fit ">
+					<div className="flex items-center justify-center border bg-cyan-400/30 rounded-t-xl p-4">
+						<Image src={AchievmentIcon} priority={true} width={60} height={60} />
+						<h1 className="font-bold text-2xl ">ACHIEVMENTS</h1>
+						<Image src={AchievmentIcon} priority={true} width={60} height={60} />
 					</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">1</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">2</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">3</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">4</div>
+					<Achievment gamesPlayed={data?.gameProfile?.played} goalScored={data?.gameProfile?.goal} />
 				</div>
 			</div>
 		);

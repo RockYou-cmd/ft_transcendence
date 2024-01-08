@@ -53,7 +53,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 	const [input, setInput] = useState("");
 	const [option, setOption] = useState(false);
 	const Muted = useRef({ mute: false, id: "" });
-	const [refreshChat, setRefreshChat] = useState(false);
 
 	//hooks for chat settings
 
@@ -81,7 +80,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			Api = APIs.RoomChat + channel?.id;
 		}
 		const data = await Get(Api);
-		console.log("chat", data);
 		if (data == undefined) 
 			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		if (channel?.username && data?.chats[0]?.id == undefined) {
@@ -195,9 +193,14 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 					chatId: ChatID.current,
 				};
 				if (!group && status.current.status != "BLOCKED") {
-					socket.emit(Room.current, { ...message, receiver: User?.username });
+					socket?.emit(Room.current, { ...message, receiver: User?.username });
+					
+					if (Object.keys(chat.messages).length == 0){
+						console.log("new chat");
+						socket?.emit("update", { option: "newChat", receiver: User?.username , sender : me?.username });
+					}
 				} else if (group) {
-					socket.emit(Room.current, { ...message, receivers: chat?.members });
+					socket?.emit(Room.current, { ...message, receivers: chat?.members });
 				}
 				else {
 

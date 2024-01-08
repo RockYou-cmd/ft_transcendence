@@ -23,8 +23,8 @@
     "cloudinary": "^1.41.0",
     "gsap": "^3.12.4",
     "install": "^0.13.0",
-    "js-cookie": "^3.0.5",
     "lottie-react": "^2.4.0",
+    "n": "^9.2.0",
     "next": "14.0.1",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18",
@@ -38,11 +38,13 @@
     "styled-components": "^6.1.1",
     "sweetalert": "^2.1.2",
     "swiper": "^11.0.5",
+    "tailwindcss-patterns": "^0.1.2",
     "tsparticles": "^3.0.2",
-    "typed.js": "^2.1.0"
+    "typed.js": "^2.1.0",
+    "whatwg-url": "^14.0.0",
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
     "@types/node": "20.8.10",
     "@types/react": "^18.2.34",
     "@types/react-dom": "^18.2.18",
@@ -50,6 +52,7 @@
     "postcss": "^8.4.31",
     "postcss-nesting": "^12.0.1",
     "tailwindcss": "^3.3.0",
+    "tailwindcss-bg-patterns": "^0.3.0",
     "typescript": "^5.3.3"
   }
 }

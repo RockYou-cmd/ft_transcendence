@@ -1,8 +1,8 @@
 
-import Cookies from 'js-cookie';
+
 import axios from 'axios';
 
-export async function Post(data : object, path : string){
+export async function Post(data: object, path: string) {
 	const header = {
 		method: 'POST',
 		credentials: 'include' as RequestCredentials,
@@ -13,7 +13,7 @@ export async function Post(data : object, path : string){
 		body: JSON.stringify(data),
 	};
 
-	const res = await fetch(path , header);
+	const res = await fetch(path, header);
 	// try{
 	// 	const res = await axios.post(path, data, {withCredentials: true});
 	// 	return res;
@@ -24,7 +24,7 @@ export async function Post(data : object, path : string){
 	return res;
 }
 
-export async function Get(path : string){
+export async function Get(path: string) {
 	const header = {
 		credentials: 'include' as RequestCredentials,
 		method: 'GET',
@@ -40,7 +40,7 @@ export async function Get(path : string){
 }
 
 
-export async function GetRes(path : string){
+export async function GetRes(path: string) {
 	const header = {
 		credentials: 'include' as RequestCredentials,
 		method: 'GET',
@@ -54,7 +54,7 @@ export async function GetRes(path : string){
 
 
 
-export async function Put(data : object, path : string){
+export async function Put(data: object, path: string) {
 	const header = {
 		method: 'PUT',
 		credentials: 'include' as RequestCredentials,
@@ -64,6 +64,6 @@ export async function Put(data : object, path : string){
 		},
 		body: JSON.stringify(data),
 	};
-	const res = await fetch(path , header);
+	const res = await fetch(path, header);
 	return res;
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import { GetData } from "@/app/Components/Log/CheckLogin";
 import Image from "next/image";
@@ -22,9 +22,8 @@ import FriendListComponent from "@/app/Components/profile/friendList";
 import swal from "sweetalert";
 
 
-export default function UserProfile({ param }: { param: { id: string } }) {
+export default function UserProfile() {
 
-	// const [data, setData] = useState({} as any);
 	const { socket } = useSocket();
 	const { me } = useMe() as any;
 	const [wait, checkwait] = useState(false);
@@ -50,17 +49,17 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 	let render = LoG({ page: "User", LogIn: hooks , User :name}) as any;
 
 	async function fetchData() {
+		console.log("fetching data")
 		const data = await GetData({ Api: "User", user: name }) as any;
 		if (data == undefined) {
 			Logout();
 		}
 
-		if (data?.statusCode == 404 || (data?.blocked && data?.blocked !== data?.username)) {
-			router.push("/users/not-found");
-		}
+		// if (data?.statusCode == 404 || (data?.blocked && data?.blocked !== data?.username)) {
+		// 	router.push("/users/not-found");
+		// }
 
 		UsersetData(data);
-		console.log("herr");
 		if (data?.friendShipstatus == "PENDING" && data?.sender == data?.username)
 			Fstatus.current = "accept request";
 		else if (data?.friendShipstatus == "PENDING")
@@ -75,19 +74,20 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			friend.current = data?.friendShipstatus;
 		else
 			friend.current = "not friend";
-	
-		if (data?.statusCode == 404 || (data?.blocked && data?.blocked !== data?.username)) {
-			router.push("/users/not-found");
-		}
 	}
+	// console.log("userdata", Userdata, "hooks", hooks.dataHook.state)
 	
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
-		console.log("Userdata", Userdata);	
-	}, [refresh, isMenuOpen]);
+	}, [refresh]);
+
+	
 	
 	useEffect(() => {
+		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
+			router.push("/users/not-found");
+		}
 		if (Userdata?.friendShipstatus == "PENDING" && Userdata?.sender == Userdata?.username)
 			Fstatus.current = "accept request";
 		else if (Userdata?.friendShipstatus == "PENDING")
@@ -102,10 +102,10 @@ export default function UserProfile({ param }: { param: { id: string } }) {
 			friend.current = Userdata?.friendShipstatus;
 		else
 			friend.current = "not friend";
-	}, [Userdata]);
 
-	console.log("status", Fstatus.current)
-	
+		
+	}, [Userdata, hooks.dataHook.state]);
+
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
@@ -206,7 +206,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 
 				(<><div className="m-8 flex flex-row gap-8 h-[85vh]  ">
 					<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black" >
-						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2  bg-white '></Image>
+						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2 aspect-square bg-white '></Image>
 						<h1 className='text-3xl mt-8 font-bold pt-3 ' > {Userdata?.username?.toUpperCase()} </h1>
 
 						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center   min-w-[450px] ">
@@ -218,7 +218,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 							{/* Show the profile menu when isMenuOpen is true */}
 
 							<div className="relative bg-red-500 mb-10">
-								{isMenuOpen && Userdata?.friendShipstatus != "BLOCKED"  && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} />}
+								{isMenuOpen && Userdata?.friendShipstatus != "BLOCKED"  && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} refresh={refresh} setRefresh={setRefresh} />}
 							</div>
 						</div>
 						<div className="flex w-full p-1 bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900  mt-8 items-center justify-center ">
@@ -273,7 +273,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 				> 5
 				</div>
 				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
-				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent />
+				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User={Userdata?.username} refresh={refresh}/>
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " >
 					7

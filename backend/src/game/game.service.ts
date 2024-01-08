@@ -7,21 +7,21 @@ const prisma = new PrismaClient();
 export class GameService {
   FPS = 50;
   ball_SPEED = 1.2;
-  ball_acc = 0.12;
+  ball_acc = 0.1;
   gameHeight = 900;
   gameWidth = 1500;
 
   player1 = {
-    x: 20,
-    y: this.gameHeight / 2 - 120 / 2,
+    x: 12,
+	y: this.gameHeight / 2 - this.gameHeight / 6.5 / 2,
     width: 12,
     height: this.gameHeight / 6.5,
     score: 0,
   };
 
   player2 = {
-    x: this.gameWidth - 32,
-    y: this.gameHeight / 2 - 120 / 2,
+    x: this.gameWidth - 24,
+    y: this.gameHeight / 2 - this.gameHeight / 6.5 / 2,
     width: 12,
     height: this.gameHeight / 6.5,
     score: 0,
@@ -60,26 +60,26 @@ export class GameService {
     this.ball.y = this.gameHeight / 2;
     this.ball.speed = this.ball_SPEED;
     this.ball.velocityX = -this.ball.velocityX;
-    this.ball.velocityY = 0;
-    this.player1.y = this.gameHeight / 2;
-    this.player2.y = this.gameHeight / 2;
+	this.ball.velocityY = 0;
+	this.player1.y = this.gameHeight / 2 - this.gameHeight / 6.5 / 2,
+    this.player2.y = this.gameHeight / 2 - this.gameHeight / 6.5 / 2;
   }
 
   updateCOM() {
-    if (this.ball.velocityX == 10 || this.ball.velocityX == -10) {
-      this.ball.y += (this.ball.velocityY * this.ball.speed) / 2;
-      this.ball.x += (this.ball.velocityX * this.ball.speed) / 2;
-    } else {
-      this.ball.y += this.ball.velocityY * this.ball.speed;
-      this.ball.x += this.ball.velocityX * this.ball.speed;
-    }
 
-    if (
-      this.ball.y + this.ball.radius >= this.gameHeight ||
-      this.ball.y - this.ball.radius <= 0
-    ) {
-      this.ball.velocityY = -this.ball.velocityY;
-    }
+	this.ball.y += this.ball.velocityY * this.ball.speed;
+	this.ball.x += this.ball.velocityX * this.ball.speed;
+    
+	if (this.ball.y + this.ball.radius >= this.gameHeight || this.ball.y - this.ball.radius <= 0){
+		if (this.ball.y + this.ball.radius >= this.gameHeight){
+			if (this.ball.velocityY > 0)
+				this.ball.velocityY = -this.ball.velocityY;
+		}
+		else if (this.ball.y - this.ball.radius <= 0){
+			if (this.ball.velocityY < 0)
+				this.ball.velocityY = -this.ball.velocityY;
+		}
+	}
 
     var touch_player =
       this.ball.x < this.gameWidth / 2 ? this.player1 : this.player2;
@@ -90,31 +90,24 @@ export class GameService {
         buttom: touch_player.y + touch_player.height,
         middle: touch_player.height / 2 + touch_player.y,
       };
-      if (this.ball.velocityY == 0) this.ball.velocityY = 5;
 
-      this.ball.speed += this.ball_acc;
+	console.log("game Speed", this.ball.speed, this.ball_acc);
+	if (this.ball.speed < 8){
+		this.ball.speed += this.ball_acc;
+	}
+	console.log("game Speed", this.ball.speed);
 
-      if (
-        playerPos.top <= this.ball.y + this.ball.radius / 2 &&
-        this.ball.y + this.ball.radius / 2 < playerPos.middle
-      ) {
-        if (this.ball.velocityY > 0) {
-          this.ball.velocityX = 10;
-        } else {
-          this.ball.velocityX = 5;
-        }
-      } else if (
-        playerPos.buttom > this.ball.y + this.ball.radius / 2 &&
-        this.ball.y + this.ball.radius / 2 >= playerPos.middle
-      ) {
-        if (this.ball.velocityY < 0) {
-          this.ball.velocityX = 10;
-        } else {
-          this.ball.velocityX = 5;
-        }
-      }
-      if (touch_player == this.player2)
-        this.ball.velocityX = -this.ball.velocityX;
+
+     	if ((playerPos.top <= (this.ball.y  + this.ball.radius)) && ((this.ball.y  + this.ball.radius / 2) < playerPos.middle)){
+			this.ball.velocityY = -5;
+		}
+		else if (playerPos.buttom >= (this.ball.y  - this.ball.radius) && (this.ball.y  - this.ball.radius / 2) > playerPos.middle){
+			this.ball.velocityY = 5;
+		}
+		else
+			this.ball.velocityY= 0;
+
+		this.ball.velocityX = -this.ball.velocityX;
     }
     // Compute
 
@@ -129,7 +122,6 @@ export class GameService {
 
   async updateGameProfile(data) {
     try {
-      // console.log(data);
       await prisma.game.create({
         data: {
           participants: {
@@ -187,16 +179,21 @@ export class GameService {
       }
       await prisma.gameProfile.update({
         where: {
-          userId: data.player1
+          userId: data.player1,
         },
         data: {
           gamesPlayed: {
-            increment:1
+            increment: 1,
+          },
+          goalsScored: {
+            increment: data.player1Score,
+          },
+          goalsConced: {
+            increment: data.player2Score,
           },
           ...data.player1Stats,
-
-        }
-      })
+        },
+      });
       await prisma.gameProfile.update({
         where: {
           userId: data.player2
@@ -204,6 +201,12 @@ export class GameService {
         data: {
           gamesPlayed: {
             increment:1
+          },
+          goalsScored: {
+            increment: data.player2Score,
+          },
+          goalsConced: {
+            increment: data.player1Score,
           },
           ...data.player2Stats,
 
