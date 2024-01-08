@@ -6,8 +6,6 @@ import { APIs } from '../Props/APIs';
 import { useEffect, useState } from 'react';
 import avatar from '../../../public/avatar.png';
 
-
-
 export default function Channel({ selectChat, refresh }: { selectChat: any, refresh: boolean }) {
 
 	const [data, setData] = useState({} as any);

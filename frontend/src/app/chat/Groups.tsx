@@ -6,8 +6,6 @@ import { APIs } from '../Props/APIs';
 import { useEffect, useState } from 'react';
 import avatar from '../../../public/avatar.png';
 
-// import { channels } from './page';
-
 
 
 
@@ -31,7 +29,6 @@ export default function Groups({ Group, refresh }: { Group: any, refresh: boolea
 	}
 
 	function PrintGroup({ chn }: { chn: any }) {
-		// const chn = rooms?.rooms;
 		const group = <>
 			<div className="content" onClick={(e: MouseEvent) => SelecteEvent(e, chn)}>
 				<Image className="g_img" src={chn?.photo ? chn.photo : avatar} priority={true} alt="img" width={70} height={70} />

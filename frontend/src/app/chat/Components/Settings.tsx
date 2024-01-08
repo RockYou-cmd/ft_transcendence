@@ -9,9 +9,7 @@ import '../../assest/chat.css'
 import '../../assest/chatComponents.css'
 import { ChatOptions } from "@/app/Props/Interfaces";
 import Options from "./Options";
-import Invite from "./Invite";
 import { useRouter } from "next/navigation";
-import Add from "./Add";
 import { Make } from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -246,7 +244,6 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				<div className="content">
 					{data?.members?.map((user: any, index: number) => (<Print key={index} users={user} />))}
 				</div>
-				{/* {option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}				 */}
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
 				{invite && <Confirm Make={InviteToGame} title='Invite This User To A Game' close={setInvite} user={User?.user} />}
 				{add && <AddMembers group={group} close={setAdd} />}
