@@ -220,7 +220,7 @@
 
 .matchHistory{width: 33%;
 	padding:2.5% 2%;
-	& .title{
+	/* & .title{
 		font : 700 28px "Inter", sans-serif;
 		text-align: center;
 		margin-bottom:20px;
@@ -230,7 +230,10 @@
 		overflow-y: auto;
 		height: 80%;
 		background-color: #002932;
-	}	
+	}	 */
+	overflow-y: auto;
+	&::-webkit-scrollbar{display:none;}
+
 }
 
 .matchHistory .SingleMatch{

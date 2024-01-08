@@ -104,14 +104,14 @@ export default function Profile_info() {
 				</div>
 				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
 					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
-					<MatchHistory matches={[]} />
+					<MatchHistory page="Profile"/>
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > 
-					<section className="flex-row p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
-						<h1 className="inline mr-8 text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
-						<button className="inline" onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
+				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > 
+					<section className="flex flex-row  justify-between space-x p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
+						<h1 className=" text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
+						<button onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
 					</section>
-					<FriendListComponent User="" />
+					<FriendListComponent User="" Pending={Pending}/>
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>

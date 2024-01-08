@@ -6,32 +6,35 @@ import avatar from '../../../../public/avatar.png'
 import Link from "next/link";
 import '../../assest/mapBorder.css'
 
-const FriendListComponent: any = ({User, refresh} : {User : string, refresh : boolean}) => {
+const FriendListComponent: any = ({User, refresh, Pending} : {User : string, refresh : boolean, Pending : boolean}) => {
     const [friendList, setFriendList] = useState<any>();
-const fetchFriendList = async () => {
-  try {
-	let response : any;
-	console.log("user", User);
-	if (User == ""){
-		response = await Get(APIs.Friends);
-		console.log("res", response);
-	}
-	else{
-		response = await Get(APIs.UserFriends + User);
-		// const res  = GetRes(APIs.UserFriends + User);
-		console.log("res", response);
-	}
-    setFriendList(response);
-   
+	const fetchFriendList = async () => {
+	try {
+		let response : any;
+		console.log("user", User, "pending", Pending);
+		if (User == ""){
+			if (!Pending)
+				response = await Get(APIs.Friends);
+			else
+				response = await Get(APIs.friendPending);
+			console.log("res", response);
+		}
+		else{
+			response = await Get(APIs.UserFriends + User);
+			// const res  = GetRes(APIs.UserFriends + User);
+			console.log("res", response);
+		}
+		setFriendList(response);
+	
 
-} catch (error) {
-    console.error('Error fetching friend list:', error);
-}
-};
+	} catch (error) {
+		console.error('Error fetching friend list:', error);
+	}
+	};
 
 useEffect(() => {
     fetchFriendList();
-}, [refresh]); 
+}, [refresh, Pending]); 
 
   function Print(user : any){
     user = user?.user;
