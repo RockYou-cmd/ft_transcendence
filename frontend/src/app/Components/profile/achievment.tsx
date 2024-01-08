@@ -36,7 +36,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
     return (
         <>
             <div className="flex flex-col  w-full ">
-                <div className=" w-full flex border my-2 rounded-xl items-center">
+                <div className=" w-full flex border my-2 bg-cyan-400/10 rounded-xl items-center">
                     {risingStar &&
                         <>
                             <Image src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
@@ -48,7 +48,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                     }
                 </div>
 
-                <div className=" w-full flex border my-2 rounded-xl items-center">
+                <div className=" w-full flex border my-2 rounded-xl bg-cyan-400/10  items-center">
                     {goalMachine &&
                         <>
                             <Image src={achiev2} alt="achiev1" priority={true} width={80} height={80} />
@@ -59,7 +59,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                         </>
                     }
                 </div>
-                <div className=" w-full flex border my-2 rounded-xl items-center">
+                <div className=" w-full flex border my-2 rounded-xl bg-cyan-400/10  items-center">
                     {goalMachine &&
                         <>
                             <Image src={achiev3} alt="achiev1" priority={true} width={80} height={80} />
@@ -70,7 +70,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                         </>
                     }
                 </div>
-                <div className=" w-full flex border my-2 rounded-xl items-center">
+                <div className=" w-full flex border my-2 rounded-xl bg-cyan-400/10  items-center">
                     {goalMachine &&
                         <>
                             <Image src={achiev4} alt="achiev1" priority={true} width={80} height={80} />
