@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException, Req } from "@nestjs/common";
 import { Prisma, PrismaClient, User } from "@prisma/client";
 import * as argon from "argon2"
 import { AuthService } from "src/auth/auth.service";
@@ -93,6 +93,7 @@ export class UserService {
         select: {
           friends: {
             where: {
+              status: "ACCEPTED"
             },
             select: {
               users: {
@@ -114,7 +115,7 @@ export class UserService {
 
   async getUsers() {
     try {
-      return prisma.user.findMany({
+      return await prisma.user.findMany({
         include: {
           friends: true,
           // messagesSent:true,
@@ -128,6 +129,30 @@ export class UserService {
       });
     } catch (err) {
       console.log("get all error");
+      return err;
+    }
+  }
+
+  async getGames(account) {
+    try {
+      const games = await prisma.game.findMany({
+        where: {
+          participants: {
+            some: {
+              profile: {
+                userId: account.username
+              }
+            }
+          }
+        },
+        select: {
+          participants: true
+        }
+      });
+      console.log(games)
+      return games;
+    } catch (err) {
+      console.log("get games error :  ",err);
       return err;
     }
   }
@@ -168,8 +193,27 @@ export class UserService {
       });
       return this.authService.generateJwt(user);
     } catch (err) {
-      // throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
       console.log("invalid data or user not found");
+      throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async changePassword(account, data) {
+    try {
+      const verified = this.authService.verifyCredintials({username:account.username, password:data.password})
+      console.log(verified);
+      if (!verified) throw new HttpException("password incorrect", HttpStatus.UNAUTHORIZED);
+      const hash = await argon.hash(data.password);
+      const ret = await prisma.user.update({
+        where: {
+          username: account.username
+        },
+        data: {
+          password: hash
+        }
+      })
+    } catch (err) {
+      throw err;
     }
   }
 }

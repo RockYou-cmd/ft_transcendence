@@ -15,16 +15,16 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Achievment from "./achievment"
 import AchievmentIcon from "../../../../public/achievment.png";
+import { faUserGroup , faUserPlus} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Profile_info() {
-	const { online, setOnline } = useLogContext();
+	const { online } = useLogContext();
 	const { me, setMe } = useMe() as any;
-	const imgRef = useRef(null) as any;
 	let photo = avatar.src;
 	const [data, setData] = useState({} as any);
-	const [hover, setHover] = useState(false);
-	const mousehover = useRef(null) as any;
 	const [showSetting, setShowSetting] = useState<boolean>(false);
+	const [Pending, setPending] = useState<boolean>(false);
 
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
@@ -106,7 +106,12 @@ export default function Profile_info() {
 					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
 					<MatchHistory matches={[]} />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User="" />
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > 
+					<section className="flex-row p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
+						<h1 className="inline mr-8 text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
+						<button className="inline" onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
+					</section>
+					<FriendListComponent User="" />
 				</div>
 				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>
@@ -172,7 +177,7 @@ export default function Profile_info() {
 						<h1 className="font-bold text-2xl ">ACHIEVEMENTS</h1>
 						<Image src={AchievmentIcon} priority={true} width={45} height={45} alt="achievmentIcon"/>
 					</div>
-					<Achievment gamesPlayed={data?.gameProfile?.played} goalScored={data?.gameProfile?.goal} />
+					<Achievment gamesPlayed={data?.gameProfile?.gamesPlayed} goalScored={data?.gameProfile?.goal} />
 				</div>
 			</div>
 		);

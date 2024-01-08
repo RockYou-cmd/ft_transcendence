@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
+import swal from 'sweetalert';
+import { MouseEvent } from 'react';
 
-const TwoAuth = ({ User }: { User: any }) => {
+const TwoAuth = ({ User , change}: { User: any , change : any}) => {
   const [is2FAEnabled, setIs2FAEnabled] = useState(User?.is2FAEnabled);
   const [showQRCode, setShowQRCode] = useState(false);
   const [qrCodeBase64, setQRCodeBase64] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
-  const [verificationResult, setVerificationResult] = useState('');
 
   useEffect(()=>{
     setIs2FAEnabled(User?.is2faEnabled);
   },[User])
 
   const handleToggle2FA = async () => {
+	change.current = true;
     if (!is2FAEnabled) {
       try {
         const qrCodeResponse = await fetch(`http://localhost:3001/2fa/generate`, {
@@ -30,7 +32,6 @@ const TwoAuth = ({ User }: { User: any }) => {
     } 
     else {
       setShowQRCode(false);
-      setVerificationResult('');
       try {
         const response = await fetch(`http://localhost:3001/2fa/disable`, {
           method: 'POST',
@@ -55,7 +56,8 @@ const TwoAuth = ({ User }: { User: any }) => {
     setIs2FAEnabled(!is2FAEnabled);
   };
 
-  const handleVerification = async () => {
+  const handleVerification = async (e : MouseEvent) => {
+	e.preventDefault();
     try {
        const verifyResponse = await fetch(`http://localhost:3001/2fa/enable`, {
          method: 'POST',
@@ -68,10 +70,15 @@ const TwoAuth = ({ User }: { User: any }) => {
            token: verificationCode,
          }),
        });
-
-      const { message } = await verifyResponse.json();
-      console.log("message",message);
-      setVerificationResult(message);
+	   if (verifyResponse.ok) {
+			swal("Success!", "2FA enabled!", "success");
+			setIs2FAEnabled(true);
+			setShowQRCode(false);
+	   }
+	   else{
+			swal("Error!", "2FA not enabled!\nWrong verfication number", "error");
+			setVerificationCode("");
+	   }
     } catch (error) {
       console.error('Error verifying code:', error);
     }
@@ -103,10 +110,9 @@ const TwoAuth = ({ User }: { User: any }) => {
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
           />
-          <button className="bg-teal-700 text-white font-bold rounded w-[4rem] ml-3" onClick={handleVerification}>
+          <button className="bg-teal-700 text-white font-bold rounded w-[4rem] ml-3" onClick={(e : MouseEvent)=>handleVerification(e)}>
             Verify
           </button>
-          <p>{verificationResult}</p>
         </div>
       )}
     </div>

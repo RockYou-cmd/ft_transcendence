@@ -30,6 +30,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
   const [oldPass, setOldPass] = useState<string>('');
   const [newPass, setNewPass] = useState<string>('');
   const [showPass, setShowPass] = useState<boolean>(false);
+  const changes = useRef(false);
 
   // object that will snet to backend
   const [formData, setFormData] = useState<FormData>({
@@ -62,6 +63,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	
       });
     }
+	changes.current = true;
     return value;
   };
 
@@ -122,25 +124,30 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 			updatedData.photo = photo;
 		}
 		
-		const response = await fetch('http://localhost:3001/user/update', {
-			method: 'PUT',
-			credentials: 'include' as RequestCredentials,
-			headers: {
-				'Content-Type': 'application/json',
-			},
+		if (changes.current == true){
+
+			const response = await fetch('http://localhost:3001/user/update', {
+				method: 'PUT',
+				credentials: 'include' as RequestCredentials,
+				headers: {
+					'Content-Type': 'application/json',
+				},
 			body: JSON.stringify({ updatedData }),
 		});
 		//   console.log(updatedData);
 		
-		console.log("res ", response);
+		console.log("res in settings ", response);
 		if (response.ok) {
 			swal("Profile updated successfully","","success");
 			handleClick(false);
 		} else {
-			console.error('Profile update failed');
+			swal("Profile update failed","","error");
 		}
-		setBio('');
-		setUsername('');
+		}
+		else{
+			swal("No changes made","","info");
+			handleClick(false);
+		}
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -175,7 +182,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
           </div>
 
           <div>
-            <TwoAuth User={User} />
+            <TwoAuth User={User} change={changes}/>
           </div>
           <div className="flex gap-8 h-[30px] justify-center mt-7 text-white font-bold ">
             <button type="submit" onClick={() => handleSubmit} className="bg-[#4173c3]  rounded w-32 hover:scale-105 duration-500">Save</button>

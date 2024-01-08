@@ -9,14 +9,6 @@ import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 import { fileUploadFunction } from '@/app/Components/Fetch/ImageCloudUpload';
 import swal from 'sweetalert';
 
-interface Data {
-	name?: string,
-	description?: string,
-	privacy?: string,
-	password?: string,
-
-}
-
 export default function CreateGroup({ close , change, info}: { close: any, change : boolean, info? : any}) {
 
 	const [input, setInput] = useState("");

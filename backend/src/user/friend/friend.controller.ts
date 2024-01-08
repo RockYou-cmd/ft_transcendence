@@ -27,6 +27,12 @@ export class FriendController {
 		return this.friendService.getFriendsChats(account.user);
 	}
 	
+	@Get("pending")
+	@UseGuards(AuthGuard)
+	async getPendingRequests(@Req() account) {
+		return this.friendService.getPendingRequests(account.user);
+	}
+	
 	@Get("all")
 	@UseGuards(AuthGuard)
 	async getFriends(@Req() account) {

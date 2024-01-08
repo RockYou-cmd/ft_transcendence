@@ -122,7 +122,6 @@ export class GameService {
 
   async updateGameProfile(data) {
     try {
-      // console.log(data);
       await prisma.game.create({
         data: {
           participants: {
@@ -151,6 +150,9 @@ export class GameService {
         data["player1Stats"] = {
           wins: {
             increment:1
+          },
+          level: {
+            increment: 10.26
           }
         }
         data["player2Stats"] = {
@@ -163,6 +165,9 @@ export class GameService {
         data["player2Stats"] = {
           wins: {
             increment:1
+          },
+          level: {
+            increment: 10.26
           }
         }
         data["player1Stats"] = {
@@ -174,16 +179,21 @@ export class GameService {
       }
       await prisma.gameProfile.update({
         where: {
-          userId: data.player1
+          userId: data.player1,
         },
         data: {
           gamesPlayed: {
-            increment:1
+            increment: 1,
+          },
+          goalsScored: {
+            increment: data.player1Score,
+          },
+          goalsConced: {
+            increment: data.player2Score,
           },
           ...data.player1Stats,
-
-        }
-      })
+        },
+      });
       await prisma.gameProfile.update({
         where: {
           userId: data.player2
@@ -191,6 +201,12 @@ export class GameService {
         data: {
           gamesPlayed: {
             increment:1
+          },
+          goalsScored: {
+            increment: data.player2Score,
+          },
+          goalsConced: {
+            increment: data.player1Score,
           },
           ...data.player2Stats,
 
