@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException, Req } from "@nestjs/common";
 import { Prisma, PrismaClient, User } from "@prisma/client";
 import * as argon from "argon2"
 import { AuthService } from "src/auth/auth.service";
@@ -144,6 +144,9 @@ export class UserService {
               }
             }
           }
+        },
+        select: {
+          participants: true
         }
       });
       console.log(games)
@@ -192,6 +195,25 @@ export class UserService {
     } catch (err) {
       console.log("invalid data or user not found");
       throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async changePassword(account, data) {
+    try {
+      const verified = this.authService.verifyCredintials({username:account.username, password:data.password})
+      console.log(verified);
+      if (!verified) throw new HttpException("password incorrect", HttpStatus.UNAUTHORIZED);
+      const hash = await argon.hash(data.password);
+      const ret = await prisma.user.update({
+        where: {
+          username: account.username
+        },
+        data: {
+          password: hash
+        }
+      })
+    } catch (err) {
+      throw err;
     }
   }
 }
