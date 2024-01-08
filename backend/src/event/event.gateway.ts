@@ -15,7 +15,7 @@ import { gameGuard } from "./event.guard/game.guard";
 import { GameService } from "src/game/game.service";
 
 @WebSocketGateway({
-  cors: { credentials: true, origin: "http://localhost:3000" },
+  cors: { credentials: true, origin: true },
   namespace: "events",
 })
 export class EventGateway {
@@ -94,7 +94,7 @@ export class EventGateway {
       payload.sender,
 		);
 		
-		var blockedBy = userData.user.blockedBy.map(
+		var blockedBy = userData.user.friends.map(
       (user) => user?.users[0]?.username,
     );
     if (userData.status == "MUTED") {
@@ -108,9 +108,8 @@ export class EventGateway {
           username: userData.userId,
         });
     }
+    console.log(blockedBy);
 		payload.receivers.forEach((receiver) => {
-			// console.log(receiver.userId)
-			// console.log(blockedBy.includes(receiver.userId));
       if (!blockedBy.includes(receiver.userId)) {
         console.log("receiver : ", receiver.userId);
         this.server

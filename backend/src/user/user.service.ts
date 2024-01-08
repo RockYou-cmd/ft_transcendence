@@ -93,6 +93,7 @@ export class UserService {
         select: {
           friends: {
             where: {
+              status: "ACCEPTED"
             },
             select: {
               users: {
@@ -114,7 +115,7 @@ export class UserService {
 
   async getUsers() {
     try {
-      return prisma.user.findMany({
+      return await prisma.user.findMany({
         include: {
           friends: true,
           // messagesSent:true,
@@ -128,6 +129,27 @@ export class UserService {
       });
     } catch (err) {
       console.log("get all error");
+      return err;
+    }
+  }
+
+  async getGames(account) {
+    try {
+      const games = await prisma.game.findMany({
+        where: {
+          participants: {
+            some: {
+              profile: {
+                userId: account.username
+              }
+            }
+          }
+        }
+      });
+      console.log(games)
+      return games;
+    } catch (err) {
+      console.log("get games error :  ",err);
       return err;
     }
   }
@@ -168,8 +190,8 @@ export class UserService {
       });
       return this.authService.generateJwt(user);
     } catch (err) {
-      throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
       console.log("invalid data or user not found");
+      throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
     }
   }
 }

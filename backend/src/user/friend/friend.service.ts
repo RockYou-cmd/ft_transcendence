@@ -215,18 +215,23 @@ export class FriendService {
 			}
 			else {
 				var blocked = await prisma.friendShip.update({
-					where: {
-						id: friendShipId
-					},
-					data: {
-						blocked: {
-							connect: {
-								username: user.username
-							}
-						},
-						status: "BLOCKED"
-					}
-				})
+          where: {
+            id: friendShipId,
+          },
+          data: {
+            blocked: {
+              connect: {
+                username: user.username,
+              },
+            },
+            sender: {
+              connect: {
+                username: account.username,
+              },
+            },
+            status: "BLOCKED",
+          },
+        });
 				console.log("blocked: ", blocked)
 			}
 			return "User blocked"
