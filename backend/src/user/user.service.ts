@@ -168,7 +168,7 @@ export class UserService {
       });
       return this.authService.generateJwt(user);
     } catch (err) {
-      // throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
+      throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
       console.log("invalid data or user not found");
     }
   }

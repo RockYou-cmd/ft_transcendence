@@ -14,7 +14,6 @@ import StartChat from './Components/StartChat';
 import { useRouter } from 'next/navigation';
 import { APIs } from '../Props/APIs';
 import ExploreRooms from './Components/ExploreRooms';
-import Invite from './Components/Invite';
 import Confirm from './Components/Confirm';
 import OwnerSettings from './Components/Settings';
 import { Post, Put ,Get } from '../Components/Fetch/Fetch';
@@ -26,9 +25,6 @@ import Loading from '../loading';
 import { SendFriendRequest } from '../Components/Settings/ChatSettings';
 import { Disconnect } from '../Components/Log/Logout';
 import chatAnimation from "../../../public/chat.gif"
-
-// import Lottie from "lottie-react";
-// import chatAnimation from "../../../public/chatAnimation.json"
 
 
 
@@ -73,8 +69,7 @@ export default function Chat() {
 	const router = useRouter();
 	const [option, setOption] = useState(false);
 	const visible = useRef(null);
-	
-	// setUser
+
 
 	//  hooks for options
 	const [createG, setCreateG] = useState(false);

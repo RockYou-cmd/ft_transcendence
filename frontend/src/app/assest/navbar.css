@@ -74,7 +74,9 @@
 	width: 300px;
 	z-index: 10;
 	border : 1px solid #fff;
-	background-color: #fff;
+	/* background-color: #fff; */
+	background-color: #E2DCD4;
+	border-radius: 20px;
 	padding:10px 20px 15px;
 	color: black;
 	right:0px;
@@ -100,21 +102,22 @@
 	}
 
 	& button:first-of-type{
-		background-color: green;
+		background-color: rgb(3, 169, 3);
 		/* background-color: #ff2638; */
 	}
 
 	& button:last-of-type{
-		background-color: blue;
+		background-color: #2563EB;
 	}
 
 	& :after{
 		content: '';
 		position: absolute;
-		left : 0px;
-		bottom: 0px;
-		width:100%;
+		left : 8px;
+		bottom: -1px;
+		width:95%;
 		height: 5px;
+		border-radius: 20px;
 		background-color: green;
 		animation: showUp 5s;
 	}
@@ -164,7 +167,6 @@
 	}
 
 	#header #SearchComponent{
-		/* width: 30%; */
 		left: 80px;
 		margin: 22px 0px;
 	}

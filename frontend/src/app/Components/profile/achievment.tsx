@@ -1,3 +1,4 @@
+import { useEffect , useState} from "react"
 import achiev1 from "../../../../public/sprites/achievment_icons-01.png"
 import achiev2 from "../../../../public/sprites/achievment_icons-03.png"
 import achiev3 from "../../../../public/sprites/achievment_icons-04.png"
@@ -15,19 +16,23 @@ interface achievmentProps {
 }
 
 const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRate, goalConced }) => {
-    var risingStar: Boolean = true;
-    var goalMachine: Boolean = true;
-    var wallOfSteel: Boolean = true;
-    var undisputed: Boolean = true;
+   const [risingStar, setRisingStar] = useState(false);
+   const [goalMachine, setGoalMachine] = useState(false);
+   const [wallOfSteel, setWallOfSteel] = useState(false);
+   const [undisputed, setUndisputed] = useState(false);
 
-    if (Number(gamesPlayed) >= 3)
-        risingStar = true;
-    if (Number(goalScored) >= 20)
-        goalMachine = true;
-    if ((Number(goalConced) / Number(goalScored)) >= 25)
-        wallOfSteel = true;
-    if (Number(winRate) >= 80)
-        undisputed = true;
+
+	useEffect(() => {
+		console.log("achievment", gamesPlayed, goalScored, winRate, goalConced);
+		if (Number(gamesPlayed) >= 3)
+			setRisingStar(true);
+		if (Number(goalScored) >= 20)
+			setGoalMachine(true);
+		if ((Number(goalConced) / Number(goalScored)) >= 25)
+			setWallOfSteel(true);
+		if (Number(winRate) >= 80)
+			setUndisputed(true);
+	},[gamesPlayed, goalScored, winRate, goalConced])
     //  Rising Star: Bright Start
     //  Goal Machine: ⚽️ Scoring Spree
     //  Wall of Steel: ️ Defensive Wall
@@ -39,7 +44,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                 <div className=" w-full flex border my-2 rounded-xl items-center">
                     {risingStar &&
                         <>
-                            <Image src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
+                            <Image className="aspect-square"  src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
                             <div className="m-3">
                                 <h1 className=" font-bold text-xl">RISING STAR</h1>
                                 <p>Played more than 3 gmaes</p>
@@ -51,7 +56,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                 <div className=" w-full flex border my-2 rounded-xl items-center">
                     {goalMachine &&
                         <>
-                            <Image src={achiev2} alt="achiev1" priority={true} width={80} height={80} />
+                            <Image className="aspect-square"  src={achiev2} alt="achiev1" priority={true} width={80} height={80} />
                             <div className="m-3">
                                 <h1 className=" font-bold text-xl">GOAL MACHINE</h1>
                                 <p>Scored over 20 goals</p>
@@ -62,7 +67,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                 <div className=" w-full flex border my-2 rounded-xl items-center">
                     {goalMachine &&
                         <>
-                            <Image src={achiev3} alt="achiev1" priority={true} width={80} height={80} />
+                            <Image className="aspect-square"  src={achiev3} alt="achiev1" priority={true} width={80} height={80} />
                             <div className="m-3">
                                 <h1 className=" font-bold text-xl">WALL OF STEEL</h1>
                                 <p>Get less than 25% conceded on you </p>
@@ -73,7 +78,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
                 <div className=" w-full flex border my-2 rounded-xl items-center">
                     {goalMachine &&
                         <>
-                            <Image src={achiev4} alt="achiev1" priority={true} width={80} height={80} />
+                            <Image className="aspect-square"  src={achiev4} alt="achiev1" priority={true} width={80} height={80} />
                             <div className="m-3">
                                 <h1 className=" font-bold text-xl">UNDISPUTED CHAMPION</h1>
                                 <p>Win over 80% of your games</p>

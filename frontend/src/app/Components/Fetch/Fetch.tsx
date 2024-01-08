@@ -1,27 +1,25 @@
 
 
 import axios from 'axios';
+import swal from 'sweetalert';
 
 export async function Post(data: object, path: string) {
-	const header = {
-		method: 'POST',
-		credentials: 'include' as RequestCredentials,
-		headers: {
-			'Content-Type': 'application/json',
-			// 'authorization': 'Bearer ' + Cookies.get('access_token'),
-		},
-		body: JSON.stringify(data),
-	};
+	try{
 
-	const res = await fetch(path, header);
-	// try{
-	// 	const res = await axios.post(path, data, {withCredentials: true});
-	// 	return res;
-
-	// }catch(err){
-	// 	alert(err);
-	// }
-	return res;
+		const header = {
+			method: 'POST',
+			credentials: 'include' as RequestCredentials,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		};
+		
+		const res = await fetch(path, header);
+		return res;
+	}catch(err){
+		swal("Error", "", "error");
+	}
 }
 
 export async function Get(path: string) {

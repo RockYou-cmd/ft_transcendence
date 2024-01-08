@@ -34,11 +34,8 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 	else if (join == "INVITE")
 		Style = {"background": "linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%)"}
 	else
-	Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
+		Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
 	
-
-		
-
 
 	function MakeEvent(e: MouseEvent, user : any){
 		e.preventDefault();
@@ -99,7 +96,6 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 				<div className="content">
 					{data?.map((user : any, index : number)=>(<Print key={index} users={user}/>))}
 				</div>	
-				{/* {option && <Options visible={setOption} option={option} btnRef={null} setOptions={null} content={role == "SimpleUser" ? SimpleUser : role == "Admin" ? Admin : Owner}/>} */}
 			</div>
 		</>
 	)

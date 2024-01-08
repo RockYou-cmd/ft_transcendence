@@ -18,8 +18,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
 import { Disconnect } from '../Components/Log/Logout';
 import swal from 'sweetalert';
-
-
+import Link from 'next/link';
 
 const chatSettings: ChatOptions = { Option: ["invite","block" ,"view"], desc: ["Invite For A Game", "Block","View Profile"] };
 
@@ -84,9 +83,9 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			Disconnect({setOnline : setOnline, socket : socket, router : router});
 		if (channel?.username && data?.chats[0]?.id == undefined) {
 			const res = await Post({ username: channel?.username }, APIs.createChat);
-			if (res.status == 201) {
+			if (res?.status == 201) {
 
-				const datas = await res.json();
+				const datas = await res?.json();
 				status.current.status = datas?.friends[0]?.status;
 				if (datas?.friends && datas?.friends[0]?.status == "BLOCKED") {
 					status.current.sender = datas?.friends[0]?.blocked?.username;
@@ -268,7 +267,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 
 		const message = <>
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
-				{User?.name && msg?.senderId != me?.username && <h4>{msg?.senderId}</h4>}
+				{User?.name && msg?.senderId != me?.username && <Link href={"/users/" + User?.name}><h4>{msg?.senderId}</h4></Link>}
 				<section>
 					{
 						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{ width: "fit-content", height: "fit-content" }} /> : <p>{msg?.content}</p>

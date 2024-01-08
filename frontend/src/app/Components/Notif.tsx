@@ -19,7 +19,6 @@ export default function Notif({content} : {content?: string}) {
 	const [invite, setInvite] = useState(false);
 	const router = useRouter();
 	const pathname = usePathname();
-	// const [Reply, setReply] = useState(false);
 	const { me, setMe } = useMe() as any;
 
 	useEffect(() => {
@@ -79,7 +78,6 @@ export default function Notif({content} : {content?: string}) {
 						if (!silence)
 						setShow(true);
 				}
-				
 			})
 		}
 		return () => {socket?.off("message");
