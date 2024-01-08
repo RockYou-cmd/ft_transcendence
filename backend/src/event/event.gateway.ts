@@ -59,17 +59,20 @@ export class EventGateway {
       client.leave(username);
       var match = this.findMatch(username);
       if (match) {
+        const roomName = match.get("roomName");
         this.userService.updateData({ username }, { status: "ONLINE" });
         const player1 = Array.from(match.keys())[0];
-				if (match.size == 4) var player2 = Array.from(match.keys())[1];
-        else var player2 = Array.from(match.keys())[2];
-        this.server
-          .to(player1)
-          .to(player2)
-          .emit("endGame", "the opponent left");
-        clearInterval(match.get("loop"));
-        match?.get("game")?.reset();
-        match.clear();
+        if (!match.has("friend"))
+        {
+          var player2 = Array.from(match.keys())[1];
+          this.endRankGame({ player1, player2 }, match, 1);
+        }
+        else
+        {
+          var player2 = Array.from(match.keys())[2];
+          this.endRankGame({ player1, player2, roomName }, match, 0);
+
+        }
       }
       const userTabs = await this.server.in(username).fetchSockets();
       if (!userTabs.length)
@@ -92,9 +95,9 @@ export class EventGateway {
     const userData = await this.roomService.getMemberShip(
       payload.chatId,
       payload.sender,
-		);
-		
-		var blockedBy = userData.user.friends.map(
+    );
+
+    var blockedBy = userData.user.friends.map(
       (user) => user?.users[0]?.username,
     );
     if (userData.status == "MUTED") {
@@ -109,14 +112,14 @@ export class EventGateway {
         });
     }
     console.log(blockedBy);
-		payload.receivers.forEach((receiver) => {
+    payload.receivers.forEach((receiver) => {
       if (!blockedBy.includes(receiver.userId)) {
         console.log("receiver : ", receiver.userId);
         this.server
           .to(receiver.userId)
           .except(payload.sender)
           .emit("roomMessage", payload);
-			}
+      }
     });
     // console.log("message Sent!");
     this.roomService.sendMessage(payload);
@@ -124,7 +127,11 @@ export class EventGateway {
 
   @SubscribeMessage("update")
   handleBlock(client: Socket, payload: any) {
-    if (payload.option === "block" || payload.option === "unblock" || payload.option === "newChat")
+    if (
+      payload.option === "block" ||
+      payload.option === "unblock" ||
+      payload.option === "newChat"
+    )
       this.server
         .to(payload.receiver)
         .to(payload.sender)
@@ -189,28 +196,31 @@ export class EventGateway {
   @SubscribeMessage("invite")
   @UseGuards(gameGuard)
   async invite(client: Socket, payload: any) {
-    this.server.to(payload.player2).emit("invite",  payload);
+    this.server.to(payload.player2).emit("invite", payload);
   }
 
   @SubscribeMessage("accept")
   @UseGuards(gameGuard)
   async accept(client: Socket, payload: any) {
     const { user }: any = client;
-     const players = new Map<string, any>();
+    const players = new Map<string, any>();
     //  players.set(payload.player1, client.id);
-     players.set(user.username, client.id);
-     players.set("friend", true);
-     this.matches.push(players);
-     const roomName = payload.player1 + payload.player2;
+    players.set(user.username, client.id);
+    players.set("friend", true);
+    this.matches.push(players);
+    const roomName = payload.player1 + payload.player2;
     client.join(roomName);
-    this.server.to(payload.player1).to(roomName).emit("start", {...payload, roomName});
+    this.server
+      .to(payload.player1)
+      .to(roomName)
+      .emit("start", { ...payload, roomName });
   }
 
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
   async startGame(client: Socket, payload) {
-	console.log(payload);
-	console.log('start');
+    console.log(payload);
+    console.log("start");
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },
@@ -222,28 +232,20 @@ export class EventGateway {
     );
     var match = this.findMatch(payload.player2);
     match.set(user.username, client.id);
+    match.set("roomName", payload.roomName);
     client.join(payload.roomName);
     match.set("game", new GameService());
     const game: GameService = match.get("game");
+    console.log("match: ", match.has("friend"));
     const loop = setInterval(() => {
       game.updateCOM();
       const player1 = game.player1;
       const player2 = game.player2;
       const ball = game.ball;
-      if (player1.score == 7 || player2.score == 7) {
-        const winner = player1.score == 7 ? payload.player1 : payload.player2;
-        clearInterval(match?.get("loop"));
-        this.server.to(payload.roomName).emit("endGame", {winner});
-        game.reset();
-        match.clear();
-        this.gameService.updateGameProfile({
-          player1: payload.player1,
-          player2: payload.player2,
-          player1Score: player1.score,
-          player2Score: player2.score,
-        });
-        console.log("we got a goat here  : ", winner);
-      }
+      if ((player1.score == 7 || player2.score == 7) && !match.has("friend"))
+        this.endRankGame(payload, match, 1);
+      else
+        this.endRankGame(payload, match, 0);
       this.server.to(payload.roomName).emit("frame", {
         player1,
         player2,
@@ -252,5 +254,23 @@ export class EventGateway {
       });
     }, 1000 / 60);
     match.set("loop", loop);
+  }
+
+  async endRankGame(payload, match, ranked) {
+    const game: GameService = match.get("game");
+    const player1 = game.player1;
+    const player2 = game.player2;
+    const winner = player1.score == 7 ? payload.player1 : payload.player2;
+    clearInterval(match?.get("loop"));
+    this.server.to(payload.roomName).emit("endGame", { winner });
+    game.reset();
+    match.clear();
+    if (ranked)
+      this.gameService.updateGameProfile({
+        player1: payload.player1,
+        player2: payload.player2,
+        player1Score: player1.score,
+        player2Score: player2.score,
+      });
   }
 }
