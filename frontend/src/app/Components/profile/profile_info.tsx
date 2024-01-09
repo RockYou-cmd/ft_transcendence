@@ -57,16 +57,9 @@ export default function Profile_info() {
 	};
 
 	return (
-		<div className="m-8 flex flex-row gap-8 h-[85vh]">
+		<div className="m-8 flex flex-row gap-8 ">
 			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
-
-			<div
-				// ref={mousehover}
-				className="gap-5 w-full grid grid-cols-3 grid-rows-4 lg:grid-cols-subgrid "
-			// id={hover ? "profile_grid_blur" : ""}
-			// onMouseEnter={() => setHover(true)}
-			// onMouseLeave={() => setHover(false)}
-			>
+			<div className="gap-5 w-full h-full grid grid-cols-3   grid-rows-4  overflow-y-scroll ">
 				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="flex  w-full  flex-row justify-center text-center ">
@@ -83,7 +76,8 @@ export default function Profile_info() {
 						</div>
 						<p className="text-gray-300"> goal scored: X</p>
 						<p className="text-gray-300"> goal conced: X</p>
-					</div >
+					</div>
+
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="lex  w-full  flex-row justify-center text-center">
 
@@ -93,6 +87,7 @@ export default function Profile_info() {
 							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win)} text={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win).toString()} />
 						</div>
 					</div>
+
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
 							<h1 className="lex  w-full  flex-row justify-center text-center">Game State</h1>
@@ -102,18 +97,18 @@ export default function Profile_info() {
 						<p className="text-gray-300"> games played: X</p>
 					</div>
 				</div>
-				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 overflow-auto shadow-sm shadow-cyan-500/50" >
+				
+				<div className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2 overflow-auto shadow-sm shadow-cyan-500/50" >
 					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
 					<MatchHistory matches={[]} />
 				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50" > 
+
+				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3 lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
 					<section className="flex-row p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
 						<h1 className="inline mr-8 text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
 						<button className="inline" onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
 					</section>
 					<FriendListComponent User="" />
-				</div>
-				<div className=" rounded-lg col-span-2 bg-gray-800  shadow-sm shadow-cyan-500/50 " > 7
 				</div>
 			</div>
 		</div>
@@ -140,7 +135,7 @@ export default function Profile_info() {
 
 
 		return (
-			<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black">
+			<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-[screen] min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black">
 
 				<Image
 					src={photo}
