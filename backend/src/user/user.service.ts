@@ -12,7 +12,15 @@ export class UserService {
     await prisma.roomMessage.deleteMany()
     await prisma.roomMembership.deleteMany()
     await prisma.message.deleteMany()
-    // await prisma.friendShip.deleteMany()
+	await prisma.gameParticipation.deleteMany();
+    await prisma.friendShip.deleteMany()
+	await prisma.gameProfile.deleteMany();
+	await prisma.game.deleteMany();
+	await prisma.room.deleteMany();
+	await prisma.roomMembership.deleteMany();
+	await prisma.roomMessage.deleteMany();
+	await prisma.chat.deleteMany();
+	await prisma.message.deleteMany();
     await prisma.user.deleteMany();
   }
 
@@ -145,9 +153,14 @@ export class UserService {
           }
         },
         select: {
-          participants: true
+          participants: {
+			select:{
+				profile:true
+			}
+		  }
         }
       });
+	  console.log(games);
       return games;
     } catch (err) {
       console.log("get games error :  ",err);

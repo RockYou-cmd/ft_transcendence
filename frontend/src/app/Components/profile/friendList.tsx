@@ -18,7 +18,6 @@ const FriendListComponent: any = ({User, refresh, Pending} : {User : string, ref
 	const [friendList, setFriendList] = useState<any>(undefined);
 	const [refresh2, setRefresh2] = useState<boolean>(false);
 	const fetchFriendList = async () => {
-		console.log("fetching friend list");
 		try {
 			let response : any;
 			// console.log("user", User, "pending", Pending);

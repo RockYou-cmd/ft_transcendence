@@ -37,7 +37,7 @@ const maps: Map[] = [
 ]
 
 const reset ={
-	Map : "shark",
+	Map : "black",
 	ballColor : "white",
 	paddleColor : "white",
 }
@@ -48,7 +48,7 @@ export default function GameSettings({Options , close, setMode, save} : { Option
 		map : {},
 		ball : {},
 		Paddle: {},
-		mapName : "shark",
+		mapName : "black",
 		ballColor : "white",
 		paddleColor : "white",
 	});

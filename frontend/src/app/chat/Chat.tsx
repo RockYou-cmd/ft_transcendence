@@ -267,7 +267,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 
 		const message = <>
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
-				{User?.name && msg?.senderId != me?.username && <Link href={"/users/" + User?.name}><h4>{msg?.senderId}</h4></Link>}
+				{User?.name && msg?.senderId != me?.username && <Link href={"/users/" + msg?.senderId}><h4>{msg?.senderId}</h4></Link>}
 				<section>
 					{
 						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{ width: "fit-content", height: "fit-content" }} /> : <p>{msg?.content}</p>
