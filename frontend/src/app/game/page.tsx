@@ -19,7 +19,6 @@ import Invite from '../chat/Components/Invite';
 import React from 'react';
 import swal from 'sweetalert';
 import MatchHistory from '../Components/profile/matchHistory';
-import GameResult from './Components/gameResult';
 
 
 interface GameInfo {

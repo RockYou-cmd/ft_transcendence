@@ -43,10 +43,41 @@ export default function UserProfile() {
 
 	let name: string = "";
 	const friend = useRef("not friend");
-	name = pathname.split("/")[2];
 	const router = useRouter();
+	name = pathname.split("/")[2];
+	
+	useEffect(() => {
+		if (name == me?.username)
+			router.push("/");
+	},[me]);
 
+	
 	let render = LoG({ page: "User", LogIn: hooks , User :name}) as any;
+
+	
+	useEffect(() => {
+
+		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
+			router.push("/users/not-found");
+		}
+		if (Userdata?.friendShipstatus == "PENDING" && Userdata?.sender == Userdata?.username)
+			Fstatus.current = "accept request";
+		else if (Userdata?.friendShipstatus == "PENDING")
+			Fstatus.current = "cancel request";
+		else if (Userdata?.friendShipstatus == "ACCEPTED")
+			Fstatus.current = "remove friend";
+		else if (Userdata?.friendShipstatus == "BLOCKED")
+			Fstatus.current = "unblock";
+		else
+			Fstatus.current = "request friend";
+		if (Userdata?.friendShipstatus)
+			friend.current = Userdata?.friendShipstatus;
+		else
+			friend.current = "not friend";
+
+		
+	}, [Userdata, hooks.dataHook.state]);
+
 
 	async function fetchData() {
 		console.log("fetching data")
@@ -83,28 +114,6 @@ export default function UserProfile() {
 	}, [refresh]);
 
 	
-	
-	useEffect(() => {
-		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
-			router.push("/users/not-found");
-		}
-		if (Userdata?.friendShipstatus == "PENDING" && Userdata?.sender == Userdata?.username)
-			Fstatus.current = "accept request";
-		else if (Userdata?.friendShipstatus == "PENDING")
-			Fstatus.current = "cancel request";
-		else if (Userdata?.friendShipstatus == "ACCEPTED")
-			Fstatus.current = "remove friend";
-		else if (Userdata?.friendShipstatus == "BLOCKED")
-			Fstatus.current = "unblock";
-		else
-			Fstatus.current = "request friend";
-		if (Userdata?.friendShipstatus)
-			friend.current = Userdata?.friendShipstatus;
-		else
-			friend.current = "not friend";
-
-		
-	}, [Userdata, hooks.dataHook.state]);
 
 
 	useEffect(() => {

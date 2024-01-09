@@ -5,36 +5,53 @@ import Image from "next/image";
 import avatar from '../../../../public/avatar.png'
 import Link from "next/link";
 import '../../assest/mapBorder.css'
+import { MouseEvent } from "react";
+import { SendFriendRequest } from "../Settings/ChatSettings";
+import { useSocket } from "../Log/LogContext";
+import { useMe } from "../Log/LogContext";
+import swal from "sweetalert";
 
-const FriendListComponent: any = ({User, refresh, Pending} : {User : string, refresh : boolean, Pending : boolean}) => {
-    const [friendList, setFriendList] = useState<any>();
+
+const FriendListComponent: any = ({User, refresh, Pending} : {User : string, refresh? : boolean, Pending : boolean}) => {
+    const {socket} = useSocket();
+	const {me} = useMe() as any;
+	const [friendList, setFriendList] = useState<any>(undefined);
+	const [refresh2, setRefresh2] = useState<boolean>(false);
 	const fetchFriendList = async () => {
-	try {
-		let response : any;
-		console.log("user", User, "pending", Pending);
-		if (User == ""){
-			if (!Pending)
-				response = await Get(APIs.Friends);
-			else
-				response = await Get(APIs.friendPending);
-			console.log("res", response);
-		}
-		else{
-			response = await Get(APIs.UserFriends + User);
-			// const res  = GetRes(APIs.UserFriends + User);
-			console.log("res", response);
-		}
-		setFriendList(response);
-	
+		console.log("fetching friend list");
+		try {
+			let response : any;
+			// console.log("user", User, "pending", Pending);
+			if (User == ""){
+				if (!Pending)
+					response = await Get(APIs.Friends);
+				else
+					response = await Get(APIs.friendPending);
+			}
+			else{
+				response = await Get(APIs.UserFriends + User);
+			}
+			setFriendList(response);
+		
 
-	} catch (error) {
-		console.error('Error fetching friend list:', error);
-	}
+		} catch (error) {
+			console.error('Error fetching friend list:', error);
+		}
 	};
 
+	async function accept(e : MouseEvent, friend : string){
+		e.preventDefault();
+		const res = await SendFriendRequest({username : friend, status : "accept request", socket : socket, me : me});
+		if (!res.ok)
+		swal("Error", "Something wrong", "error");
+	setRefresh2(!refresh2);
+}
+
 useEffect(() => {
+	setFriendList(undefined);
     fetchFriendList();
-}, [refresh, Pending]); 
+	// console.log("refresh", refresh, "pending", Pending, "refresh2", refresh2);	
+}, [refresh, Pending, refresh2]);
 
   function Print(user : any){
     user = user?.user;
@@ -44,7 +61,8 @@ useEffect(() => {
       <Image  className=" rounded-full border aspect-square " src={user?.photo ? user?.photo : avatar} alt="img"  width={60} height={60} />
       <span className="  pl-8 text-lg font-bold justify-center text-center items-center">{user?.username.toUpperCase()}</span>
 	  {((user?.status == "ONLINE" || user?.status == "INGAME") && (user?.friends ? (user.friends[0]?.status != "BLOCKED" ? true : false) : true)) ? <div className="status"></div> : <></>}
-    </div></Link>
+		{Pending && <button onClick={(e : MouseEvent)=>accept(e, user?.username)} className="p-2 text-sm bg-green-500 rounded-xl">ACCEPT</button>}
+	</div></Link>
     )
   }
 

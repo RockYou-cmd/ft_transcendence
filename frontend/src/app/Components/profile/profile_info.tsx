@@ -44,10 +44,11 @@ export default function Profile_info() {
 	if (data?.photo) photo = data?.photo;
 	else photo = avatar.src;
 
-	function CalculateWinRate(play: any, win: any) { // calculate winrate
-		if (play === 0)
+	function CalculateWinRate(play: string, win: string) { // calculate winrate
+		if (Number(play) === 0)
 			return 0;
-		const winrate = (win / play) * 100;
+		const winrate = ((Number(win) / Number(play)) * 100);
+		console.log("winrate", winrate, "wins", win, "play", play);
 		return winrate;
 	}
 
@@ -79,10 +80,10 @@ export default function Profile_info() {
 
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className=" flex  w-full  flex-row justify-center text-center">
-							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">Game Stats</h1>
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">Goals Stats</h1>
 						</div>
-						<p className="text-gray-300"> goal scored: X</p>
-						<p className="text-gray-300"> goal conced: X</p>
+						<p className="text-gray-300"> goals scored: {data?.gameProfile?.goalsScored}</p>
+						<p className="text-gray-300"> goals conced: {data?.gameProfile?.goalsConced}</p>
 					</div >
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="lex  w-full  flex-row justify-center text-center">
@@ -90,7 +91,7 @@ export default function Profile_info() {
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
 						</div>
 						<div className="  w-[10vw] mb-4 ">
-							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win)} text={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.win).toString()} />
+							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)} text={`${CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)}%`} />
 						</div>
 					</div>
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
@@ -177,7 +178,7 @@ export default function Profile_info() {
 						<h1 className="font-bold text-2xl ">ACHIEVMENTS</h1>
 						<Image className="aspect-square" alt="achievement" src={AchievmentIcon} priority={true} width={60} height={60} />
 					</div>
-					<Achievment gamesPlayed={data?.gameProfile?.gamesPlayed} goalScored={data?.gameProfile?.goal} />
+					<Achievment gamesPlayed={data?.gameProfile?.gamesPlayed} goalScored={data?.gameProfile?.goal} goalConced={data?.gameProfile?.goalsConced} wins={data?.gameProfile?.wins}/>
 				</div>
 			</div>
 		);
