@@ -10,10 +10,11 @@ export class GameService {
   ball_acc = 0.1;
   gameHeight = 900;
   gameWidth = 1500;
+  base_xp = 100;
 
   player1 = {
     x: 12,
-	y: this.gameHeight / 2 - this.gameHeight / 6.5 / 2,
+    y: this.gameHeight / 2 - this.gameHeight / 6.5 / 2,
     width: 12,
     height: this.gameHeight / 6.5,
     score: 0,
@@ -60,26 +61,25 @@ export class GameService {
     this.ball.y = this.gameHeight / 2;
     this.ball.speed = this.ball_SPEED;
     this.ball.velocityX = -this.ball.velocityX;
-	this.ball.velocityY = 0;
-	this.player1.y = this.gameHeight / 2 - this.gameHeight / 6.5 / 2,
-    this.player2.y = this.gameHeight / 2 - this.gameHeight / 6.5 / 2;
+    this.ball.velocityY = 0;
+    (this.player1.y = this.gameHeight / 2 - this.gameHeight / 6.5 / 2),
+      (this.player2.y = this.gameHeight / 2 - this.gameHeight / 6.5 / 2);
   }
 
   updateCOM() {
+    this.ball.y += this.ball.velocityY * this.ball.speed;
+    this.ball.x += this.ball.velocityX * this.ball.speed;
 
-	this.ball.y += this.ball.velocityY * this.ball.speed;
-	this.ball.x += this.ball.velocityX * this.ball.speed;
-    
-	if (this.ball.y + this.ball.radius >= this.gameHeight || this.ball.y - this.ball.radius <= 0){
-		if (this.ball.y + this.ball.radius >= this.gameHeight){
-			if (this.ball.velocityY > 0)
-				this.ball.velocityY = -this.ball.velocityY;
-		}
-		else if (this.ball.y - this.ball.radius <= 0){
-			if (this.ball.velocityY < 0)
-				this.ball.velocityY = -this.ball.velocityY;
-		}
-	}
+    if (
+      this.ball.y + this.ball.radius >= this.gameHeight ||
+      this.ball.y - this.ball.radius <= 0
+    ) {
+      if (this.ball.y + this.ball.radius >= this.gameHeight) {
+        if (this.ball.velocityY > 0) this.ball.velocityY = -this.ball.velocityY;
+      } else if (this.ball.y - this.ball.radius <= 0) {
+        if (this.ball.velocityY < 0) this.ball.velocityY = -this.ball.velocityY;
+      }
+    }
 
     var touch_player =
       this.ball.x < this.gameWidth / 2 ? this.player1 : this.player2;
@@ -91,23 +91,25 @@ export class GameService {
         middle: touch_player.height / 2 + touch_player.y,
       };
 
-	console.log("game Speed", this.ball.speed, this.ball_acc);
-	if (this.ball.speed < 8){
-		this.ball.speed += this.ball_acc;
-	}
-	console.log("game Speed", this.ball.speed);
+      console.log("game Speed", this.ball.speed, this.ball_acc);
+      if (this.ball.speed < 8) {
+        this.ball.speed += this.ball_acc;
+      }
+      console.log("game Speed", this.ball.speed);
 
+      if (
+        playerPos.top <= this.ball.y + this.ball.radius &&
+        this.ball.y + this.ball.radius / 2 < playerPos.middle
+      ) {
+        this.ball.velocityY = -5;
+      } else if (
+        playerPos.buttom >= this.ball.y - this.ball.radius &&
+        this.ball.y - this.ball.radius / 2 > playerPos.middle
+      ) {
+        this.ball.velocityY = 5;
+      } else this.ball.velocityY = 0;
 
-     	if ((playerPos.top <= (this.ball.y  + this.ball.radius)) && ((this.ball.y  + this.ball.radius / 2) < playerPos.middle)){
-			this.ball.velocityY = -5;
-		}
-		else if (playerPos.buttom >= (this.ball.y  - this.ball.radius) && (this.ball.y  - this.ball.radius / 2) > playerPos.middle){
-			this.ball.velocityY = 5;
-		}
-		else
-			this.ball.velocityY= 0;
-
-		this.ball.velocityX = -this.ball.velocityX;
+      this.ball.velocityX = -this.ball.velocityX;
     }
     // Compute
 
@@ -122,96 +124,115 @@ export class GameService {
 
   async updateGameProfile(data) {
     try {
-      await prisma.game.create({
+      // console.log("data: ", data);
+      const { participants } = await prisma.game.create({
         data: {
           participants: {
             create: [
               {
-                score: data.player1Score,
+                score: data.winnerScore,
                 profile: {
                   connect: {
-                    userId: data.player1,
+                    userId: data.winner,
                   },
                 },
               },
               {
-                score: data.player2Score,
+                score: data.loserScore,
                 profile: {
                   connect: {
-                    userId: data.player2,
+                    userId: data.loser,
                   },
                 },
               },
             ],
           },
         },
-      });
-      if (data.player1Score > data.player2Score) {
-        data["player1Stats"] = {
-          wins: {
-            increment:1
+        select: {
+          participants: {
+            select: {
+              profile: true,
+            },
+            orderBy: {
+              score: "desc",
+            },
           },
-          level: {
-            increment: 10.26
-          }
-        }
-        data["player2Stats"] = {
-          losses: {
-            increment:1
-          }
-        }
-      }
-      else {
-        data["player2Stats"] = {
-          wins: {
-            increment:1
-          },
-          level: {
-            increment: 10.26
-          }
-        }
-        data["player1Stats"] = {
-          losses: {
-            increment:1
-          }
-        }
-
-      }
-      await prisma.gameProfile.update({
-        where: {
-          userId: data.player1,
         },
-        data: {
-          gamesPlayed: {
+      });
+      console.log(data);
+      console.log(participants);
+      var newWinnerData:any = {xp:participants[0].profile.xp + 50};
+      var newLoserData: any = {xp:participants[1].profile.xp + 10};
+      // const requiredXp = participants[0].profile.requiredXp;
+      console.log(this.base_xp * (1.2 ^ (participants[0].profile.level - 1));
+      if (
+        newWinnerData.xp >
+        this.base_xp * (1.2 ^ (participants[0].profile.level - 1))
+      ) {
+        newWinnerData = {
+          level: {
             increment: 1,
           },
-          goalsScored: {
-            increment: data.player1Score,
+          xp: 0,
+          requiredXp:
+            this.base_xp * (1.2 ^ (participants[0].profile.level - 1)),
+        };
+      }
+      if (
+        newLoserData.xp >
+        this.base_xp * (1.2 ^ (participants[1].profile.level - 1))
+      ) {
+        newLoserData = {
+          level: {
+            increment: 1,
           },
-          goalsConced: {
-            increment: data.player2Score,
-          },
-          ...data.player1Stats,
-        },
-      });
-      await prisma.gameProfile.update({
-        where: {
-          userId: data.player2
-        },
-        data: {
-          gamesPlayed: {
-            increment:1
-          },
-          goalsScored: {
-            increment: data.player2Score,
-          },
-          goalsConced: {
-            increment: data.player1Score,
-          },
-          ...data.player2Stats,
+          xp: 0,
+          requiredXp:
+            this.base_xp * (1.2 ^ (participants[1].profile.level - 1)),
+        };
+      }
 
-        }
-      })
+       const ret = await prisma.gameProfile.update({
+         where: {
+           userId: data.winner,
+         },
+         data: {
+           gamesPlayed: {
+             increment: 1,
+           },
+           goalsScored: {
+             increment: data.winnerScore,
+           },
+           goalsConced: {
+             increment: data.loserScore,
+           },
+           wins: {
+             increment: 1,
+           },
+           ...newWinnerData,
+         },
+       });
+        await prisma.gameProfile.update({
+          where: {
+            userId: data.loser,
+          },
+          data: {
+            gamesPlayed: {
+              increment: 1,
+            },
+            goalsScored: {
+              increment: data.loserScore,
+            },
+            goalsConced: {
+              increment: data.winnerScore,
+            },
+            losses: {
+              increment: 1,
+            },
+            ...newLoserData,
+          },
+        });
+      // console.log(ret);
     } catch (err) {
       throw err;
     }

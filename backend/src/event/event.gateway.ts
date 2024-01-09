@@ -65,7 +65,19 @@ export class EventGateway {
         if (!match.has("friend"))
         {
           var player2 = Array.from(match.keys())[1];
-          this.endRankGame({ player1, player2 }, match, 1);
+          const game: GameService = match.get("game");
+          if (username == player1)
+          {
+            game["player1"].score = 1;
+            game["player2"].score = 6;
+          }
+          else {
+            console.log(username);
+            game["player2"].score = 1;
+            game["player1"].score = 6;
+            console.log(game);
+          }
+          this.endRankGame({ player1, player2, roomName }, match, 1);
         }
         else
         {
@@ -111,7 +123,6 @@ export class EventGateway {
           username: userData.userId,
         });
     }
-    console.log(blockedBy);
     payload.receivers.forEach((receiver) => {
       if (!blockedBy.includes(receiver.userId)) {
         console.log("receiver : ", receiver.userId);
@@ -219,8 +230,6 @@ export class EventGateway {
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
   async startGame(client: Socket, payload) {
-    console.log(payload);
-    console.log("start");
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },
@@ -236,16 +245,15 @@ export class EventGateway {
     client.join(payload.roomName);
     match.set("game", new GameService());
     const game: GameService = match.get("game");
-    console.log("match: ", match.has("friend"));
     const loop = setInterval(() => {
       game.updateCOM();
       const player1 = game.player1;
       const player2 = game.player2;
       const ball = game.ball;
-      if ((player1.score == 7 || player2.score == 7) && !match.has("friend"))
-        this.endRankGame(payload, match, 1);
-      else
-        this.endRankGame(payload, match, 0);
+      if (player1.score == 7 || player2.score == 7) {
+        if (!match.has("friend")) this.endRankGame(payload, match, 1);
+        else this.endRankGame(payload, match, 0);
+      }
       this.server.to(payload.roomName).emit("frame", {
         player1,
         player2,
@@ -260,17 +268,27 @@ export class EventGateway {
     const game: GameService = match.get("game");
     const player1 = game.player1;
     const player2 = game.player2;
-    const winner = player1.score == 7 ? payload.player1 : payload.player2;
+    // console.log(game);
+    var winner =
+      player1.score > player2.score ? payload.player1 : payload.player2;
     clearInterval(match?.get("loop"));
     this.server.to(payload.roomName).emit("endGame", { winner });
     game.reset();
     match.clear();
-    if (ranked)
+    if (ranked) {
+      var loser =
+        player1.score > player2.score ? payload.player2 : payload.player1;
+      console.log(loser);
+      var winnerScore =
+        player1.score > player2.score ? player1.score : player2.score;
+      var loserScore =
+        player1.score > player2.score ? player2.score : player1.score;
       this.gameService.updateGameProfile({
-        player1: payload.player1,
-        player2: payload.player2,
-        player1Score: player1.score,
-        player2Score: player2.score,
+        winner,
+        loser,
+        winnerScore,
+        loserScore,
       });
+    }
   }
 }

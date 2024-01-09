@@ -74,7 +74,6 @@ export class UserService {
         },
       });
       if (!ret) throw new NotFoundException("User Not Found");
-      console.log(userData);
       return {
         ...userData,
         friendShipstatus: ret.friends[0]?.status,
@@ -149,7 +148,6 @@ export class UserService {
           participants: true
         }
       });
-      console.log(games)
       return games;
     } catch (err) {
       console.log("get games error :  ",err);
@@ -201,7 +199,6 @@ export class UserService {
   async changePassword(account, data) {
     try {
       const verified = this.authService.verifyCredintials({username:account.username, password:data.password})
-      console.log(verified);
       if (!verified) throw new HttpException("password incorrect", HttpStatus.UNAUTHORIZED);
       const hash = await argon.hash(data.password);
       const ret = await prisma.user.update({

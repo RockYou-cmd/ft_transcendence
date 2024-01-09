@@ -240,10 +240,21 @@ export class FriendService {
         where: { username: account.username },
         select: {
           friends: {
-            where: {
-              status: "PENDING",
+						where: {
+							AND: [
+								{
+									status: "PENDING",
+								},
+								{
+									sender: {
+										username: {
+											not: account.username
+										}
+									}
+								}
+							]
             },
-            select: {
+						select: {
               users: {
                 where: {
                   NOT: {
