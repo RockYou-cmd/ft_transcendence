@@ -15,6 +15,7 @@ export default function LeaderBoard() {
 
 	async function getData() {
 		const data = await Get(APIs.Friends);
+		console.log("player data", data);
 		setData(data);
 	}
 
@@ -23,13 +24,13 @@ export default function LeaderBoard() {
 	}, []);
 
 	/******************************************************* */
-	const [view, setView] = useState(false);
 	const router = useRouter();
 
-	function Print(info: any) {
+	function Print(info: any, rank : number) {
+		console.log("rank", rank)
 		const player = info?.info.users[0];
 		const board = <>
-			<div className="rankTable" onClick={() => { router.push("/users/" + player.username) }}>
+			<div className="rankTable" onClick={() => { router.push("/users/" + player?.username) }}>
 				<h2>1</h2>
 				<Image className="g_img" src={player?.photo ? player?.photo : avatar} priority={true} alt="img" width={70} height={70} />
 
@@ -49,7 +50,7 @@ export default function LeaderBoard() {
 				<h1>RANK</h1>
 				<div className='content'>
 
-					{data?.friends?.map((friend: any, index : number) => (<Print key={index} info={friend} />))}
+					{data?.friends?.map((friend: any, index : number) => (<Print key={index} info={friend} rank={index}/>))}
 				</div>
 
 			</div>

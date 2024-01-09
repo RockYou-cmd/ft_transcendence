@@ -43,10 +43,41 @@ export default function UserProfile() {
 
 	let name: string = "";
 	const friend = useRef("not friend");
-	name = pathname.split("/")[2];
 	const router = useRouter();
+	name = pathname.split("/")[2];
+	
+	useEffect(() => {
+		if (name == me?.username)
+			router.push("/");
+	},[me]);
 
+	
 	let render = LoG({ page: "User", LogIn: hooks , User :name}) as any;
+
+	
+	useEffect(() => {
+
+		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
+			router.push("/users/not-found");
+		}
+		if (Userdata?.friendShipstatus == "PENDING" && Userdata?.sender == Userdata?.username)
+			Fstatus.current = "accept request";
+		else if (Userdata?.friendShipstatus == "PENDING")
+			Fstatus.current = "cancel request";
+		else if (Userdata?.friendShipstatus == "ACCEPTED")
+			Fstatus.current = "remove friend";
+		else if (Userdata?.friendShipstatus == "BLOCKED")
+			Fstatus.current = "unblock";
+		else
+			Fstatus.current = "request friend";
+		if (Userdata?.friendShipstatus)
+			friend.current = Userdata?.friendShipstatus;
+		else
+			friend.current = "not friend";
+
+		
+	}, [Userdata, hooks.dataHook.state]);
+
 
 	async function fetchData() {
 		console.log("fetching data")
@@ -83,28 +114,6 @@ export default function UserProfile() {
 	}, [refresh]);
 
 	
-	
-	useEffect(() => {
-		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
-			router.push("/users/not-found");
-		}
-		if (Userdata?.friendShipstatus == "PENDING" && Userdata?.sender == Userdata?.username)
-			Fstatus.current = "accept request";
-		else if (Userdata?.friendShipstatus == "PENDING")
-			Fstatus.current = "cancel request";
-		else if (Userdata?.friendShipstatus == "ACCEPTED")
-			Fstatus.current = "remove friend";
-		else if (Userdata?.friendShipstatus == "BLOCKED")
-			Fstatus.current = "unblock";
-		else
-			Fstatus.current = "request friend";
-		if (Userdata?.friendShipstatus)
-			friend.current = Userdata?.friendShipstatus;
-		else
-			friend.current = "not friend";
-
-		
-	}, [Userdata, hooks.dataHook.state]);
 
 
 	useEffect(() => {
@@ -204,7 +213,7 @@ let statusColor:string  = checkStatus(Userdata?.status);
 		<>
 			{online == "OFF" ? render :
 
-				(<><div className="m-8 flex flex-row gap-8 h-[85vh]  ">
+				(<><div className="m-8 flex flex-row gap-8 h-[88vh]  ">
 					<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black" >
 						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2 aspect-square bg-white '></Image>
 						<h1 className='text-3xl mt-8 font-bold pt-3 ' > {Userdata?.username?.toUpperCase()} </h1>

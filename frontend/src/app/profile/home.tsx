@@ -49,16 +49,16 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 								<div className='flex '>
 									<div onClick={()=>setMap("black")} className=' cursor-pointer flex flex-col relative w-92 h-52 m-8 items-center bg-slate-300 rounded-xl overflow-hidden'>
 										<h1 className='text-black font-bold text-2xl m-1'>CLASSIC MAP</h1>
-										<Image src={screen1.src} alt={"screen1"} className='w-full h-full' width={200} height={200}></Image>
+										<Image src={screen1.src} alt={"screen1"} priority={true} className='w-full h-full' width={200} height={200}></Image>
 									</div>
 
 									<div onClick={()=>setMap("shark")}  className='cursor-pointer flex flex-col relative w-92 h-52 m-8 items-center bg-blue-300 rounded-xl overflow-hidden'>
 										<h1 className='text-white font-bold  text-2xl m-1'>SHARK MAP</h1>
-										<Image src={screen2.src} alt={"screen1"} className='w-full h-full' width={200} height={200}></Image>
+										<Image src={screen2.src} alt={"screen1"} priority={true} className='w-full h-full' width={200} height={200}></Image>
 									</div>
 									<div onClick={()=>setMap("dragon")}  className='cursor-pointer flex flex-col items-center relative w-92 h-52 m-8  bg-red-300 rounded-xl overflow-hidden'>
 										<h1 className=' text-white font-bold text-2xl m-1'>DRAGON MAP</h1>
-										<Image src={screen3.src} alt={"screen1"} className='w-full h-full ' width={200} height={200}></Image>
+										<Image src={screen3.src} alt={"screen1"} priority={true} className='w-full h-full ' width={200} height={200}></Image>
 									</div>
 								</div>
 							</div>
