@@ -10,7 +10,7 @@ import { APIs } from "../../Props/APIs";
 const MatchHistory = ({page} : {page : string}) => {
 
 	const [data, setData] = useState({} as any);
-	const div1 = page == "Profile" ? "bg-gradient-to-b from-slate-700 via-slate-900 to-black" : "bg-gradient-to-b from-cyan-700 to-[#172554]";
+	const div1 = page == "Profile" ? "bg-gradient-to-b from-slate-700 via-slate-900 to-black" : "bg-gradient-to-b from-cyan-800 to-[#172554]";
 	const div2 = page == "Profile" ? "bg-gradient-to-br from-slate-900 via-slate-700 to-black" : "bg-gradient-to-tl from-[#172554] via-cyan-700 to-[#172554]";
 	const div3 = page == "Profile" ? "bg-gradient-to-bl from-slate-900 via-slate-700 to-black" : "bg-gradient-to-bl from-[#172554] via-cyan-700 to-[#172554]";
 	async function fetchData() {
