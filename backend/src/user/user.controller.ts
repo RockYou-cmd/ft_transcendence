@@ -48,6 +48,12 @@ export class UserController {
     return this.UserService.search(data.username);
   }
 
+  @Get("password")
+  @UseGuards(AuthGuard)
+  chanePassword(@Req()account, @Query() data) {
+    return this.UserService.changePassword(account.user, data);
+  }
+
   @Put("update")
   @UseGuards(AuthGuard)
   async updateData(

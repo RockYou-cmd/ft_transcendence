@@ -152,12 +152,16 @@ export class UserService {
             }
           }
         },
-        select: {
+        include: {
           participants: {
-			select:{
-				profile:true
-			}
-		  }
+            include: {
+              profile: {
+                include: {
+                  user:true
+                }
+              }
+            }
+          }
         }
       });
 	  console.log(games);
@@ -205,7 +209,7 @@ export class UserService {
       return this.authService.generateJwt(user);
     } catch (err) {
       console.log("invalid data or user not found");
-      throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
+      return err;
     }
   }
 
