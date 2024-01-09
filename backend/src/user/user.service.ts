@@ -144,8 +144,16 @@ export class UserService {
             }
           }
         },
-        select: {
-          participants: true
+        include: {
+          participants: {
+            include: {
+              profile: {
+                include: {
+                  user:true
+                }
+              }
+            }
+          }
         }
       });
       return games;

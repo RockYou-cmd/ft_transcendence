@@ -159,15 +159,11 @@ export class GameService {
           },
         },
       });
-      console.log(data);
-      console.log(participants);
-      var newWinnerData:any = {xp:participants[0].profile.xp + 50};
+      var newWinnerData: any = {xp:participants[0].profile.xp + 50};
       var newLoserData: any = {xp:participants[1].profile.xp + 10};
-      // const requiredXp = participants[0].profile.requiredXp;
-      console.log(this.base_xp * (1.2 ^ (participants[0].profile.level - 1));
       if (
         newWinnerData.xp >
-        this.base_xp * (1.2 ^ (participants[0].profile.level - 1))
+        this.base_xp * (1.2 ^ (participants[0].profile.level))
       ) {
         newWinnerData = {
           level: {
@@ -175,12 +171,12 @@ export class GameService {
           },
           xp: 0,
           requiredXp:
-            this.base_xp * (1.2 ^ (participants[0].profile.level - 1)),
+            this.base_xp * (1.2 ^ (participants[0].profile.level)),
         };
       }
       if (
         newLoserData.xp >
-        this.base_xp * (1.2 ^ (participants[1].profile.level - 1))
+        this.base_xp * (1.2 ^ (participants[1].profile.level))
       ) {
         newLoserData = {
           level: {
@@ -188,10 +184,11 @@ export class GameService {
           },
           xp: 0,
           requiredXp:
-            this.base_xp * (1.2 ^ (participants[1].profile.level - 1)),
+            this.base_xp * (1.2 ^ (participants[1].profile.level)),
         };
       }
-
+      if (!data.loserScore)
+        newWinnerData["cs"] = participants[0].profile.cs + 1;
        const ret = await prisma.gameProfile.update({
          where: {
            userId: data.winner,

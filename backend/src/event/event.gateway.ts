@@ -33,64 +33,70 @@ export class EventGateway {
   matches: Map<string, any>[] = [];
 
   async handleConnection(client: Socket) {
-    const cookie = client.handshake.headers.cookie;
-    if (cookie) {
-      const access_token = parse(cookie).access_token;
-      var { username } =
-        await this.authGuard.extractPayloadFromToken(access_token);
-      client.join(username);
-
-      const userTabs = await this.server.in(username).fetchSockets();
-      if (userTabs.length <= 1) {
-        // console.log("less than 1");
-        this.userService.updateData({ username }, { status: "ONLINE" });
+    try {
+      const cookie = client.handshake.headers.cookie;
+      if (cookie) {
+        const access_token = parse(cookie).access_token;
+        var { username } =
+          await this.authGuard.extractPayloadFromToken(access_token);
+        client.join(username);
+  
+        const userTabs = await this.server.in(username).fetchSockets();
+        if (userTabs.length <= 1) {
+          // console.log("less than 1");
+          this.userService.updateData({ username }, { status: "ONLINE" });
+        }
       }
+      console.log(username, " CONNECTED");
+      // console.log(this.matches[0].size);      
+    } catch (err) {
+      throw err;
     }
-    console.log(username, " CONNECTED");
-    // console.log(this.matches[0].size);
   }
 
   async handleDisconnect(client: Socket) {
-    const cookie = client.handshake.headers.cookie;
-    if (cookie) {
-      const access_token = parse(cookie).access_token;
-      var { username } =
-        await this.authGuard.extractPayloadFromToken(access_token);
-      client.leave(username);
-      var match = this.findMatch(username);
-      if (match) {
-        const roomName = match.get("roomName");
-        this.userService.updateData({ username }, { status: "ONLINE" });
-        const player1 = Array.from(match.keys())[0];
-        if (!match.has("friend"))
-        {
-          var player2 = Array.from(match.keys())[1];
-          const game: GameService = match.get("game");
-          if (username == player1)
+    try {
+      const cookie = client.handshake.headers.cookie;
+      if (cookie) {
+        const access_token = parse(cookie).access_token;
+        var { username } =
+          await this.authGuard.extractPayloadFromToken(access_token);
+        client.leave(username);
+        var match = this.findMatch(username);
+        if (match) {
+          const roomName = match.get("roomName");
+          this.userService.updateData({ username }, { status: "ONLINE" });
+          const player1 = Array.from(match.keys())[0];
+          if (!match.has("friend"))
           {
-            game["player1"].score = 1;
-            game["player2"].score = 6;
+            var player2 = Array.from(match.keys())[1];
+            const game: GameService = match.get("game");
+            if (username == player1)
+            {
+              game["player1"].score = 1;
+              game["player2"].score = 6;
+            }
+            else {
+              game["player2"].score = 1;
+              game["player1"].score = 6;
+            }
+            this.endRankGame({ player1, player2, roomName }, match, 1);
           }
-          else {
-            console.log(username);
-            game["player2"].score = 1;
-            game["player1"].score = 6;
-            console.log(game);
+          else
+          {
+            var player2 = Array.from(match.keys())[2];
+            this.endRankGame({ player1, player2, roomName }, match, 0);
+  
           }
-          this.endRankGame({ player1, player2, roomName }, match, 1);
         }
-        else
-        {
-          var player2 = Array.from(match.keys())[2];
-          this.endRankGame({ player1, player2, roomName }, match, 0);
-
-        }
+        const userTabs = await this.server.in(username).fetchSockets();
+        if (!userTabs.length)
+          this.userService.updateData({ username }, { status: "OFFLINE" });
       }
-      const userTabs = await this.server.in(username).fetchSockets();
-      if (!userTabs.length)
-        this.userService.updateData({ username }, { status: "OFFLINE" });
+      console.log(username, " DISCONNECT");
+    } catch (err) {
+      throw err;
     }
-    console.log(username, " DISCONNECT");
   }
 
   @SubscribeMessage("message")

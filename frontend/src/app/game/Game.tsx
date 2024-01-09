@@ -56,7 +56,7 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 				console.log("start", data);
 				matchInfo.current = data;
 				timer(data);
-				setCounter(4);
+				setCounter(0);
 				setSec(0);
 				setTime(true);
 			})
