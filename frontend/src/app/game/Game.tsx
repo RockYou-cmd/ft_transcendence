@@ -1,11 +1,9 @@
 
-import Canvas from "./canvas"
 import '../assest/game.css';
 import React from "react";
 import { useMe, useSocket } from "../Components/Log/LogContext";
 import { useEffect, useState ,useRef } from "react";
 import Image from 'next/image';
-import { APIs } from "../Props/APIs";
 import avatar from '../../../public/avatar.png';
 import { MouseEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +24,6 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 		const n = useRef(false);
 		useEffect(() => {
 			if (n.current == false){
-				console.log("matchmaking", socket);
 				socket?.emit("matchmaking", {});
 			}
 			n.current = true;
@@ -56,7 +53,7 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 				console.log("start", data);
 				matchInfo.current = data;
 				timer(data);
-				setCounter(4);
+				setCounter(0);
 				setSec(0);
 				setTime(true);
 			})
@@ -83,9 +80,12 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 	return(
 		<>
 			<div className="MatchMaking">
-				<button id='backBtn' onClick={()=>{setMode("");close(true);
-				socket?.disconnect();
-				socket?.connect()}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+				<button id='backBtn' onClick={()=>{
+					socket?.emit("update", {option : "refuse", receiver : Opp?.username, sender : me?.username, mode : "rank"});
+					socket?.disconnect();
+					setMode("");close(true);
+					socket?.connect()}
+					}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<h1>FINDING PLAYER</h1>
 
 				<section>

@@ -22,6 +22,14 @@ input:focus, textarea:focus, select:focus{
 	outline: none;
 }
 
+#scrollHide{
+	overflow-y: auto;
+	& ::-webkit-scrollbar{
+		display: none;
+	}
+
+}
+
 #header{
 	background-color: "red";
 }

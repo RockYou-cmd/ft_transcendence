@@ -12,7 +12,15 @@ export class UserService {
     await prisma.roomMessage.deleteMany()
     await prisma.roomMembership.deleteMany()
     await prisma.message.deleteMany()
-    // await prisma.friendShip.deleteMany()
+	await prisma.gameParticipation.deleteMany();
+    await prisma.friendShip.deleteMany()
+	await prisma.gameProfile.deleteMany();
+	await prisma.game.deleteMany();
+	await prisma.room.deleteMany();
+	await prisma.roomMembership.deleteMany();
+	await prisma.roomMessage.deleteMany();
+	await prisma.chat.deleteMany();
+	await prisma.message.deleteMany();
     await prisma.user.deleteMany();
   }
 
@@ -144,10 +152,19 @@ export class UserService {
             }
           }
         },
-        select: {
-          participants: true
+        include: {
+          participants: {
+            include: {
+              profile: {
+                include: {
+                  user:true
+                }
+              }
+            }
+          }
         }
       });
+	  console.log(games);
       return games;
     } catch (err) {
       console.log("get games error :  ",err);
@@ -192,7 +209,7 @@ export class UserService {
       return this.authService.generateJwt(user);
     } catch (err) {
       console.log("invalid data or user not found");
-      throw new HttpException("User Not Found Or Data Invalid", HttpStatus.NOT_FOUND);
+      return err;
     }
   }
 

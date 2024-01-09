@@ -24,6 +24,7 @@ export class AuthService {
           },
         },
       });
+      delete ret.password;
       return await this.generateJwt(ret);
     } catch (err) {
       console.log("SignUp error");
@@ -43,6 +44,7 @@ export class AuthService {
       if (!ret || !ret.password) throw new NotFoundException();
       if (!(await argon.verify(ret.password, user.password)))
         throw new HttpException("Password incorrect", 404); // unAuthorized exception should be thrown
+      delete ret.password;
       return ret;
     } catch (err) {
       throw err;
