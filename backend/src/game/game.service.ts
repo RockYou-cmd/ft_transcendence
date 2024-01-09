@@ -164,7 +164,7 @@ export class GameService {
       var newWinnerData:any = {xp:participants[0].profile.xp + 50};
       var newLoserData: any = {xp:participants[1].profile.xp + 10};
       // const requiredXp = participants[0].profile.requiredXp;
-      console.log(this.base_xp * (1.2 ^ (participants[0].profile.level - 1));
+      console.log(this.base_xp * (1.2 ^ (participants[0].profile.level - 1)));
       if (
         newWinnerData.xp >
         this.base_xp * (1.2 ^ (participants[0].profile.level - 1))
