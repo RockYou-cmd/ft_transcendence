@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Column 1: Logo and About */}
             <div className="mb-8 md:mb-0">
-            <Image src={logo.src} alt={"logo"} priority={true} width={128} height={64} />              
+            <Image src={logo.src} alt={"logo"} priority={true} width={160} height={54} />              
             <h2 className="text-xl font-bold mb-4"></h2>
               <p className="text-sm">
                 PONGY is a real time Game platform that allow user to play and chat and many more features

@@ -173,10 +173,10 @@ export default function Profile_info() {
 					{data.bio}
 				</div>
 				<div className="flex flex-col mt-8    gap-3 w-[95%] h-fit ">
-					<div className="flex items-center justify-center border bg-cyan-400/30 rounded-t-xl p-4">
-						<Image className="aspect-square" src={AchievmentIcon} alt="achievement" priority={true} width={60} height={60} />
-						<h1 className="font-bold text-2xl ">ACHIEVMENTS</h1>
-						<Image className="aspect-square" alt="achievement" src={AchievmentIcon} priority={true} width={60} height={60} />
+					<div className="flex items-center justify-center border bg-cyan-400/30 rounded-t-xl p-2">
+						<Image src={AchievmentIcon} priority={true} width={45} height={45} alt="achievmentIcon"/>
+						<h1 className="font-bold text-2xl ">ACHIEVEMENTS</h1>
+						<Image src={AchievmentIcon} priority={true} width={45} height={45} alt="achievmentIcon"/>
 					</div>
 					<Achievment gamesPlayed={data?.gameProfile?.gamesPlayed} goalScored={data?.gameProfile?.goal} goalConced={data?.gameProfile?.goalsConced} wins={data?.gameProfile?.wins}/>
 				</div>

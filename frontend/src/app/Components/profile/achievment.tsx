@@ -42,7 +42,8 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
         <>
             <div className="flex flex-col  w-full ">
                     {risingStar &&
-					<div className=" w-full flex border my-2 rounded-xl items-center">
+                <div className=" w-full flex border my-2 bg-cyan-400/10  rounded-xl items-center">
+				
 							<>
 								<Image className="aspect-square"  src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
 								<div className="m-3">
