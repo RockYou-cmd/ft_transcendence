@@ -15,10 +15,10 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import SelectFriend from './Components/FriendlyGame';
 import Invite from '../chat/Components/Invite';
-import MatchHistory from './Components/MatchHistory';
+// import MatchHistory from './Components/MatchHistory';
 import React from 'react';
 import swal from 'sweetalert';
-import GameResult from './Components/gameResult';
+import MatchHistory from '../Components/profile/matchHistory';
 
 
 interface GameInfo {
@@ -246,9 +246,12 @@ export default function GamePage() {
 								<button onClick={()=>setMode("rank")}> PLAY RANK</button>
 								</>
 							}
+						</div>	
+						
+						<div className='matchHistory'>
+							<h1 className='font-bold text-[24px] text-center mb-8'>MATCH HISTORY</h1>
+							<MatchHistory page="game"/>
 						</div>
-						<MatchHistory/>
-
 					</div>
 					}
 

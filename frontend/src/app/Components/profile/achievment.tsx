@@ -15,7 +15,7 @@ interface achievmentProps {
     goalConced?: string;
 }
 
-const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRate, goalConced }) => {
+const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalConced , wins}) => {
    const [risingStar, setRisingStar] = useState(false);
    const [goalMachine, setGoalMachine] = useState(false);
    const [wallOfSteel, setWallOfSteel] = useState(false);
@@ -23,69 +23,70 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, winRat
 
 
 	useEffect(() => {
-		console.log("achievment", gamesPlayed, goalScored, winRate, goalConced);
+		console.log("achievment", gamesPlayed, goalScored, goalConced);
 		if (Number(gamesPlayed) >= 3)
 			setRisingStar(true);
 		if (Number(goalScored) >= 20)
 			setGoalMachine(true);
-		if ((Number(goalConced) / Number(goalScored)) >= 25)
+		if ((Number(goalConced) / Number(goalScored)) <= 25 * 100)
 			setWallOfSteel(true);
-		if (Number(winRate) >= 80)
+		if ((Number(wins) * 100 / Number(gamesPlayed)) >= 80 && Number(gamesPlayed) >= 5)
 			setUndisputed(true);
-	},[gamesPlayed, goalScored, winRate, goalConced])
+	},[gamesPlayed, goalScored, goalConced, wins])
     //  Rising Star: Bright Start
-    //  Goal Machine: ⚽️ Scoring Spree
+    //  Goal Machine: ⚽️ Scoring Spreecalc
     //  Wall of Steel: ️ Defensive Wall
     //  Undisputed Champion: Top Dog
 
     return (
         <>
             <div className="flex flex-col  w-full ">
-                <div className=" w-full flex border my-2 bg-cyan-400/10 rounded-xl items-center">
                     {risingStar &&
-                        <>
-                            <Image className="aspect-square"  src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
-                            <div className="m-3">
-                                <h1 className=" font-bold text-xl">RISING STAR</h1>
-                                <p>Played more than 3 gmaes</p>
-                            </div>
-                        </>
+                <div className=" w-full flex border my-2 bg-cyan-400/10  rounded-xl items-center">
+				
+							<>
+								<Image className="aspect-square"  src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
+								<div className="m-3">
+									<h1 className=" font-bold text-xl">RISING STAR</h1>
+									<p>Played more than 3 gmaes</p>
+								</div>
+							</>
+					</div>
                     }
-                </div>
 
-                <div className=" w-full flex border my-2 rounded-xl bg-cyan-400/10  items-center">
                     {goalMachine &&
-                        <>
-                            <Image className="aspect-square"  src={achiev2} alt="achiev1" priority={true} width={80} height={80} />
-                            <div className="m-3">
-                                <h1 className=" font-bold text-xl">GOAL MACHINE</h1>
-                                <p>Scored over 20 goals</p>
-                            </div>
-                        </>
+					<div className=" w-full flex border my-2 rounded-xl items-center">
+							<>
+								<Image className="aspect-square"  src={achiev2} alt="achiev1" priority={true} width={80} height={80} />
+								<div className="m-3">
+									<h1 className=" font-bold text-xl">GOAL MACHINE</h1>
+									<p>Scored over 20 goals</p>
+								</div>
+							</>
+					</div>
                     }
-                </div>
-                <div className=" w-full flex border my-2 rounded-xl bg-cyan-400/10  items-center">
-                    {goalMachine &&
-                        <>
-                            <Image className="aspect-square"  src={achiev3} alt="achiev1" priority={true} width={80} height={80} />
-                            <div className="m-3">
-                                <h1 className=" font-bold text-xl">WALL OF STEEL</h1>
-                                <p>Get less than 25% conceded on you </p>
-                            </div>
-                        </>
+                    {wallOfSteel &&
+					<div className=" w-full flex border my-2 rounded-xl items-center">
+							<>
+								<Image className="aspect-square"  src={achiev3} alt="achiev1" priority={true} width={80} height={80} />
+								<div className="m-3">
+									<h1 className=" font-bold text-xl">WALL OF STEEL</h1>
+									<p>Get less than 25% conceded on you </p>
+								</div>
+							</>
+					</div>
                     }
-                </div>
-                <div className=" w-full flex border my-2 rounded-xl bg-cyan-400/10  items-center">
-                    {goalMachine &&
-                        <>
-                            <Image className="aspect-square"  src={achiev4} alt="achiev1" priority={true} width={80} height={80} />
-                            <div className="m-3">
-                                <h1 className=" font-bold text-xl">UNDISPUTED CHAMPION</h1>
-                                <p>Win over 80% of your games</p>
-                            </div>
-                        </>
+                    {undisputed &&
+					<div className=" w-full flex border my-2 rounded-xl items-center">
+							<>
+								<Image className="aspect-square"  src={achiev4} alt="achiev1" priority={true} width={80} height={80} />
+								<div className="m-3">
+									<h1 className=" font-bold text-xl">UNDISPUTED CHAMPION</h1>
+									<p>Win over 80% of your games</p>
+								</div>
+							</>
+					</div>
                     }
-                </div>
             </div>
         </>
     );

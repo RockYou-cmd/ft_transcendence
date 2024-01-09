@@ -44,6 +44,8 @@ export interface Api {
 	roomModify: string,
 	unMute: string,
 	UserFriends : string,
+	matchHistory : string,
+	friendPending : string,
 }
 
 export const APIs : Api = {
@@ -87,4 +89,6 @@ export const APIs : Api = {
 	roomModify : Host + "/room/modify",
 	unMute : Host + "/room/unmute/member",
 	UserFriends : Host + "/user/friends/?username=",
+	matchHistory : Host + "/user/games",
+	friendPending : Host + "/friend/pending",
 };
