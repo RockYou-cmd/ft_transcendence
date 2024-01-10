@@ -306,8 +306,8 @@ export default function Canvas({gameSettings, close, setMode} : Param){
 					<button id='backBtn' onClick={()=>{close(false);setMode("")}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 
 				<section>
-					<Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/>
-					<h1>{(me as {username : string})?.username}</h1>
+					<Image className="g_img" src={(me as {photo : any})?.photo ? (me as {photo : any})?.photo : avatar} priority={true} alt="img" width={60} height={60}/>
+					<h1>{(me as {username : string})?.username || ''}</h1>
 					<h2>{myScore} | {oppScore}</h2>
 					<h1>Computer</h1>
 					<FontAwesomeIcon id='icon' icon={faRobot} />

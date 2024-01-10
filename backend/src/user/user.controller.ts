@@ -53,9 +53,9 @@ export class UserController {
     return this.UserService.search(data.username);
   }
 
-  @Get("password")
+  @Put("password")
   @UseGuards(AuthGuard)
-  chanePassword(@Req()account, @Query() data) {
+  chanePassword(@Req()account, @Body() data) {
     return this.UserService.changePassword(account.user, data);
   }
 

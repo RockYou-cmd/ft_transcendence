@@ -4,6 +4,9 @@ import Image from "next/image";
 import avatar from "../../../../public/avatar.png";
 import swal from "sweetalert";
 import '../../assest/mapBorder.css';
+import { useSocket } from "../Log/LogContext";
+import { Put } from "../Fetch/Fetch";
+import { APIs } from "../../Props/APIs";
 import { faCircleChevronDown, faCircleChevronUp, faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; interface Props {
 	handleClick: (val: boolean) => void;
@@ -32,6 +35,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	const [showPass, setShowPass] = useState<boolean>(false);
 	const changes = useRef(false);
 	const refImg = useRef(null) as any;
+	const {socket} = useSocket();
 
 	// object that will snet to backend
 	const [formData, setFormData] = useState<FormData>({
@@ -96,12 +100,23 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 		}
 	};
 
-	function ChangePassword(e: any) {
+	async function ChangePassword(e: any) {
 		e?.preventDefault();
 		console.log("change password old", oldPassRef.current?.value);
 		console.log("change password new", newPassRef.current?.value);
-		swal("Password changed successfully", "", "success");
-		setChangePass(false);
+
+		const data = {oldPassword : oldPassRef.current?.value, newPassword : newPassRef.current?.value}
+		const res = await Put(data, APIs.changePassword)
+		console.log("change password", res, "passwords", data);
+
+		if (res?.ok){
+			swal("Password changed successfully", "", "success");
+			setChangePass(false);
+		}
+		else{
+			swal("Password change failed", "", "error");
+		}
+
 	}
 
 
@@ -134,11 +149,14 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({ updatedData }),
+					
 				});
 				//   console.log(updatedData);
 
-				console.log("res in settings ", response);
 				if (response.ok) {
+					if (updatedData.username){
+						socket?.emit("nameUpdate", updatedData.username);
+					}
 					swal("Profile updated successfully", "", "success");
 					handleClick(false);
 				} else {
@@ -162,26 +180,26 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 				<form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6  rounded-md ">
 					<label htmlFor="preview " >
 
-						{/* <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black">
-              
-            </div> */}
-						<div className=" relative cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black">
+						{/* <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black"> */}
+
+						<div className=" relative cursor-pointer w-64 aspect-square mx-auto items-center  text-white rounded border-2 border-dashed bg-black">
 							<input
 								ref={refImg}
 								id="preview"
-								className=" hidden z-50"
+								className=" hidden w-0 "
 								type="file"
 								onChange={handleChange}
 								name="photo"
 								accept="image/*"
 							/>
 							<div
-							onClick={() => refImg.current?.click()}
-							className=" absolute w-full h-full top-0 items-center justify-center ">
-								<Image src={imagePreview ? imagePreview : User?.photo ? User?.photo : avatar} alt={"preview"} width={256} height={256} />
+								onClick={() => refImg.current?.click()}
+								className=" absolute w-full h-full top-0 items-center justify-center ">
+								<Image src={imagePreview ? imagePreview : User?.photo ? User?.photo : avatar} alt={"preview"} width={100} height={100} className="w-full h-full" />
 							</div>
 
 						</div>
+						{/* </div> */}
 					</label>
 					<div className=" focus:ring mb-6 mt-5">
 						<label className=" text-white font-bold rounded-lg focus:outline-none focus:ring focus:border-blue-300" htmlFor="username">Username:<br /></label>
@@ -197,9 +215,9 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 						<button className="bg-[#707070] rounded w-32 hover:scale-105 duration-500 " onClick={() => handleClick(false)}>Cancel</button>
 					</div>
 				</form>
-					<div>
-						<TwoAuth User={User} change={changes} />
-					</div>
+				<div>
+					<TwoAuth User={User} change={changes} />
+				</div>
 				{	// change password for no intra or google account
 					<div className="changePassword">
 						<button onClick={() => setChangePass(!changePass)} >Change Password {!changePass ? <FontAwesomeIcon icon={faCircleChevronDown} className="ml-3" />

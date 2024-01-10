@@ -1,7 +1,7 @@
 
 const UserLevel = ({ data } : { data : any}) => {
    
-    const decimalPart = (Number(data?.xp) * 100) / (Number(data?.requiredXp) * -1);
+    const decimalPart = (Number(data?.xp) * 100) / (Number(data?.requiredXp));
 
     const barstyle ={
         width: `${decimalPart}%`,

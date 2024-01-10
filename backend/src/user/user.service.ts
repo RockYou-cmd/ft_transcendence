@@ -240,7 +240,7 @@ export class UserService {
         }
       })
     } catch (err) {
-      throw err;
+      throw err.message;
     }
   }
 }

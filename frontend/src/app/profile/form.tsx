@@ -59,12 +59,12 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 				const res = await Post(data, APIs.SignIn);
 				const resData = await res?.json();
 				console.log("res in form",res);
-				if (res.status == 201) {
+				if (res?.status == 201) {
 					if (online != "ON") {
 						setOnline("ON");
 					}
 				}
-				else if (res.status == 425) {
+				else if (res?.status == 425) {
 					setshow2FA(true);
 				}
 				else {
@@ -103,7 +103,6 @@ return (
 					<input ref={passwordRef} type={hide ? "text" : "password"} className="pasIn" name="password" placeholder="Type your password" />
 					{!hide ? <FontAwesomeIcon id="icon" icon={faEyeLowVision} onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} /> : <FontAwesomeIcon icon={faEye} id="icon" onClick={() => setHide(!hide)} style={{ cursor: "pointer" }} />}
 				</div>
-				<Link href="" className="forgot">Forgot your password?</Link>
 				<button className="btn" onClick={handleClick}>Login</button>
 				<Link href={APIs?.intraAuth} className="Intra">Login with Intranet</Link>
 				<Link href={APIs?.googleAuth} className="Intra Google">Login with Google</Link>
