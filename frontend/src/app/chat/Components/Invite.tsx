@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { MouseEvent } from 'react';
 import { useSocket } from '@/app/Components/Log/LogContext';
 import { useEffect , useState} from 'react';
+import swal from 'sweetalert';
 
 
 
@@ -31,12 +32,11 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 		if (ACCEPT)
 			ACCEPT("refused");
 		close(false);
-		console.log("refuse");
 		try{
 			socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
 		}
 		catch(e){
-			console.log(e);
+			swal("Error", "You are not connected to the server", "error");
 		}
 	}
 

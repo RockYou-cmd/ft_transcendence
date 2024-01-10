@@ -116,7 +116,7 @@ export default function Chat() {
 
 	useEffect(() => {	
 		socket?.on("update", (data: any) => {
-			console.log("update in page", data);
+
 			if (data?.option == "Kick" || data?.option == "Ban" || data?.option == "joinGroup"){
 				setUser({});
 			}

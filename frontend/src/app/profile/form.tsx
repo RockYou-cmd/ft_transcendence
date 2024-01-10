@@ -20,8 +20,6 @@ var data: { username: string, password: string } = {
 
 export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : string, back? : any}) {
 	
-	const host = "http://localhost:3001";
-	// const host = "http://10.12.11.1:3001";
 	const { online, setOnline } = useLogContext();
 	const [hide, setHide] = useState(false);
 	const [show2FA, setshow2FA] = useState(false);
@@ -58,7 +56,9 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 			try {
 				const res = await Post(data, APIs.SignIn);
 				const resData = await res?.json();
-				console.log("res in form",res);
+				console.log("res", res);
+				console.log("resData", resData);
+	
 				if (res?.status == 201) {
 					if (online != "ON") {
 						setOnline("ON");
@@ -73,7 +73,6 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 			}
 			catch (err) {
 				swal(err as string, "", "error");
-				// return <Error error={err as Error} reset={LogIn.resetHooks} />
 			}
 		}
 		else {

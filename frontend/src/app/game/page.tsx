@@ -70,7 +70,7 @@ export default function GamePage() {
 			setInGame(true);			
 		}
 		if (!inGame && Mode == "" && !f.current){
-			console.log("reset")
+
 			invite.current = false;
 			setGameInfo(undefined);
 			setSelectedFriend("");
@@ -201,7 +201,7 @@ export default function GamePage() {
 				}
 			})
 			socket?.on("update", (data: any) => {
-				console.log("update", data)
+
 				if (data?.option == "refuse"){
 					setAccept("");
 					setRefuse(true);

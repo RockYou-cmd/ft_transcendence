@@ -169,10 +169,6 @@ export default function Profile_info() {
 					</span>{" "}
 					EDIT
 				</button>
-				{/* <div className="flex w-full p-1 bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900  mt-8 items-center justify-center ">
-					<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
-					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
-				</div> */}
 				<div className=" w-full ">
 					<UserLevel data={data?.gameProfile} />
 				</div>
@@ -185,7 +181,7 @@ export default function Profile_info() {
 						<h1 className="font-bold text-2xl ">ACHIEVEMENTS</h1>
 						<Image src={AchievmentIcon} priority={true} width={45} height={45} alt="achievmentIcon"/>
 					</div>
-					<Achievment gamesPlayed={data?.gameProfile?.gamesPlayed} goalScored={data?.gameProfile?.goal} goalConced={data?.gameProfile?.goalsConced} wins={data?.gameProfile?.wins}/>
+					<Achievment gamesPlayed={data?.gameProfile?.gamesPlayed} goalScored={data?.gameProfile?.goalsScored} goalConced={data?.gameProfile?.goalsConced} wins={data?.gameProfile?.wins}/>
 				</div>
 			</div>
 		);
