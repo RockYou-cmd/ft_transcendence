@@ -162,7 +162,7 @@ export class GameService {
       var newWinnerData: any = {xp:participants[0].profile.xp + 50};
       var newLoserData: any = {xp:participants[1].profile.xp + 10};
       if (
-        newWinnerData.xp >
+        newWinnerData.xp >=
         this.base_xp * (1.2 ^ (participants[0].profile.level))
       ) {
         newWinnerData = {
@@ -171,11 +171,11 @@ export class GameService {
           },
           xp: 0,
           requiredXp:
-            this.base_xp * (1.2 ^ (participants[0].profile.level)),
+            this.base_xp * Math.pow(1.2, participants[0].profile.level + 1),
         };
       }
       if (
-        newLoserData.xp >
+        newLoserData.xp >=
         this.base_xp * (1.2 ^ (participants[1].profile.level))
       ) {
         newLoserData = {
@@ -184,7 +184,7 @@ export class GameService {
           },
           xp: 0,
           requiredXp:
-            this.base_xp * (1.2 ^ (participants[1].profile.level)),
+            this.base_xp * Math.pow(1.2, participants[1].profile.level + 1),
         };
       }
       if (!data.loserScore)
@@ -229,7 +229,7 @@ export class GameService {
             ...newLoserData,
           },
         });
-      // console.log(ret);
+      console.log(ret);
     } catch (err) {
       throw err;
     }

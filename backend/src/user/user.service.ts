@@ -177,7 +177,6 @@ export class UserService {
           }
         }
       });
-	  console.log(games);
       return games;
     } catch (err) {
       console.log("get games error :  ",err);
