@@ -20,6 +20,17 @@ import { SlClose } from "react-icons/sl";
 import ProfileMenu from "@/app/Components/profile/userMenu";
 import FriendListComponent from "@/app/Components/profile/friendList";
 import swal from "sweetalert";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import MatchHistory from "../../Components/profile/matchHistory";
+import { BsPersonFillAdd } from "react-icons/bs";
+import { FaUserFriends } from "react-icons/fa";
+import AchievmentIcon from "../../../../public/achievment.png";
+import Achievment from "../../Components/profile/achievment"
+import UserLevel from "@/app/Components/profile/userLevel";
+
+
+
+
 
 
 export default function UserProfile() {
@@ -27,7 +38,7 @@ export default function UserProfile() {
 	const { socket } = useSocket();
 	const { me } = useMe() as any;
 	const [wait, checkwait] = useState(false);
-	
+
 	let photo = avatar.src;
 	const Fstatus = useRef("request friend");
 	const { online } = useLogContext();
@@ -45,16 +56,16 @@ export default function UserProfile() {
 	const friend = useRef("not friend");
 	const router = useRouter();
 	name = pathname.split("/")[2];
-	
+
 	useEffect(() => {
 		if (name == me?.username)
 			router.push("/");
-	},[me]);
+	}, [me]);
 
-	
-	let render = LoG({ page: "User", LogIn: hooks , User :name}) as any;
 
-	
+	let render = LoG({ page: "User", LogIn: hooks, User: name }) as any;
+
+
 	useEffect(() => {
 
 		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
@@ -75,7 +86,7 @@ export default function UserProfile() {
 		else
 			friend.current = "not friend";
 
-		
+
 	}, [Userdata, hooks.dataHook.state]);
 
 
@@ -107,13 +118,13 @@ export default function UserProfile() {
 			friend.current = "not friend";
 	}
 	// console.log("userdata", Userdata, "hooks", hooks.dataHook.state)
-	
+
 	useEffect(() => {
 		if (online == "ON")
 			fetchData();
 	}, [refresh]);
 
-	
+
 
 
 	useEffect(() => {
@@ -187,11 +198,11 @@ export default function UserProfile() {
 			</button>
 		);
 	}
-	function checkStatus(status:string) {
-			
-		switch  (status) {
+	function checkStatus(status: string) {
+
+		switch (status) {
 			case "ONLINE":
-				return  "bg-green-500"
+				return "bg-green-500"
 			case "OFFLINE":
 				return "bg-red-500"
 			case "INGAME":
@@ -199,9 +210,18 @@ export default function UserProfile() {
 			default:
 				return "bg-gray-500"
 
+		}
 	}
-}
-let statusColor:string  = checkStatus(Userdata?.status);
+	let statusColor: string = checkStatus(Userdata?.status);
+
+
+	function CalculateWinRate(play: string, win: string) { // calculate winrate
+		if (Number(play) === 0)
+			return 0;
+		const winrate = ((Number(win) / Number(play)) * 100).toFixed(0);
+		console.log("winrate", winrate, "wins", win, "play", play);
+		return winrate;
+	}
 
 
 
@@ -215,80 +235,119 @@ let statusColor:string  = checkStatus(Userdata?.status);
 
 				(<><div className="m-8 flex flex-row gap-8 h-[88vh]  ">
 					<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-full min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black" >
-						<Image src={photo} alt="user" priority={true} quality={100} width={200} height={200} className=' rounded-full border-2 aspect-square bg-white '></Image>
-						<h1 className='text-3xl mt-8 font-bold pt-3 ' > {Userdata?.username?.toUpperCase()} </h1>
+					<Image
+					src={photo}
+					alt="user"
+					priority={true}
+					quality={100}
+					width={200}
+					height={200}
+					className=" rounded-full mt-8 border-2 w-[250px] h-[250px] bg-white flex-shrink-0 "
+				></Image>
+				<h1 className="text-3xl mt-8 font-bold pt-3 "> {Userdata?.username?.toUpperCase()} </h1>
 
 						<div className="flex flex-rowjustify justify-center  h-auto rounded-lg items-center   min-w-[450px] ">
 							{renderFriendStatusButton()}
-							{Userdata?.friendShipstatus != "BLOCKED" ?  isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-600 rounded-full top-0 left-0 cursor-pointer" />
+							{Userdata?.friendShipstatus != "BLOCKED" ? isMenuOpen ? <SlClose size={25} onClick={toggleMenu} className=" bg-red-600 rounded-full top-0 left-0 cursor-pointer" />
 								: <CgMoreVerticalR size={25} onClick={toggleMenu} className="hover:bg-gray-200/20 cursor-pointer" />
-							: null}
+								: null}
 
-							{/* Show the profile menu when isMenuOpen is true */}
 
 							<div className="relative bg-red-500 mb-10">
-								{isMenuOpen && Userdata?.friendShipstatus != "BLOCKED"  && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} refresh={refresh} setRefresh={setRefresh} />}
+								{isMenuOpen && Userdata?.friendShipstatus != "BLOCKED" && <ProfileMenu User={Userdata} onClose={setIsMenuOpen} refresh={refresh} setRefresh={setRefresh} />}
 							</div>
 						</div>
 						<div className="flex w-full p-1 bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900  mt-8 items-center justify-center ">
-						<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
+							<div className={` w-[15px] h-[15px] relative animate-pulse mr-3 rounded-full justify-center shadow-lg ${statusColor}`}></div>
 							<h1 className="text-xl  font-bold  items-center"> {Userdata?.status}</h1>
 						</div>
 
 
-					{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
+						{/* <button onClick={friendEvent} className="m-4 bg-green-600 p-2 rounded-md">{Fstatus.current}</button>
 						<button onClick={(e: MouseEvent) => friendEvent(e, "block")} className="m-4 bg-red-600 p-3 rounded-md">{Fstatus.current == "unblock" ? "UNBLOCK" : "BLOCK"}</button>
 						<span className="bg-yellow-500 p-2 rounded-md font-normal text-lg">{friend.current}</span>  */}
+						<div className=" w-full ">
+							<UserLevel data={Userdata?.gameProfile} />
+						</div>
 
 						<div className="w-[95%] mt-8 h-auto   bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 							{Userdata.bio}
 						</div>
-						<div className="grid mt-8 grid-cols-2 grid-rows-2 gap-3 w-[95%] h-fit ">
-					<div className="text-2xl mt-6 col-span-2 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300  p-6 shadow-lg flex justify-center items-center h-16 rounded-tr-2xl rounded-tl-2xl">
-						{/* <Image src={achiev_pic} width={60} height={60} alt="achievment" />{" "} */}
-						Achievmnet
-					</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">1</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">2</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">3</div>
-					<div className="bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg border border-gray-300 rounded-lg p-6 shadow-lg h-auto">4</div>
-				</div>
+
+						<div className="flex flex-col mt-8    gap-3 w-[95%] h-fit ">
+							<div className="flex items-center justify-center border bg-cyan-400/30 rounded-t-xl p-2">
+								<Image src={AchievmentIcon} priority={true} width={45} height={45} alt="achievmentIcon" />
+								<h1 className="font-bold text-2xl ">ACHIEVEMENTS</h1>
+								<Image src={AchievmentIcon} priority={true} width={45} height={45} alt="achievmentIcon" />
+							</div>
+							<Achievment gamesPlayed={Userdata?.gameProfile?.gamesPlayed} goalScored={Userdata?.gameProfile?.goal} goalConced={Userdata?.gameProfile?.goalsConced} wins={Userdata?.gameProfile?.wins} />
+						</div>
 
 					</div>
-					{/* <div className='gap-8 w-full grid  grid-cols-3 grid-rows-4 '>
-						<div className="rounded-lg  w-[350px]  bg-teal-500 min-w-full hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50 ">2</div>
-						<div className="rounded-lg  w-[350px] bg-teal-500 min-w-full hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">3</div>
-						<div className="rounded-lg  w-[350px] bg-teal-500 min-w-full hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">4</div>
-						<div className=" rounded-lg col-span-2 row-span-2 bg-teal-500 hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">5</div>
-						<div className="rounded-lg bg-teal-500 min-w-[350px] hover:ease-in-out row-span-3 hover:bg-teal-900 shadow-lg shadow-cyan-500/50">6</div>
-						<div className=" rounded-lg col-span-2 bg-teal-500 hover:ease-in-out hover:bg-teal-900 shadow-lg shadow-cyan-500/50">7</div>
-					</div> */}
+	
 
-<div className="gap-8 w-full grid  grid-cols-3 grid-rows-4 " >
-				<div className="  rounded-lg  w-[30%]  bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500  " >
-					2 is teh
-					<div className=" relative w-full h-full m-[50%] rounded-full bg-blue-400 blur-3xl"></div>
+
+<div className="gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] ">
+				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
+					<div className="flex h-full relative border rounded-lg flex-col w-auto justify-center items-center ">
+						<div className="flex  w-full  flex-row justify-center text-center ">
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
+						</div>
+						<p className="text-gray-300"> Played: {Userdata?.gameProfile?.gamesPlayed}</p>
+						<p className="text-gray-300"> Wins: {Userdata?.gameProfile?.wins}</p>
+						<p className="text-gray-300"> Losses : {Userdata?.gameProfile?.losses}</p>
+					</div>
+
+					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+						<div className=" flex  w-full  flex-row justify-center text-center">
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg ">Goals Stats</h1>
+						</div>
+						<p className="text-gray-300"> goals scored: {Userdata?.gameProfile?.goalsScored}</p>
+						<p className="text-gray-300"> goals conced: {Userdata?.gameProfile?.goalsConced}</p>
+					</div >
+					<div className="flex h-full relative border rounded-lg flex-col w-auto  justify-center items-center">
+						<div className="flex  w-full  flex-row justify-center text-center">
+
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
+						</div>
+						<div className=" h-fit w-[10vw]  ">
+							<CircularProgressbar value={CalculateWinRate(Userdata?.gameProfile?.gamesPlayed, Userdata?.gameProfile?.wins)} text={`${CalculateWinRate(Userdata?.gameProfile?.gamesPlayed, Userdata?.gameProfile?.wins)}%`} />
+						</div>
+					</div>
+
+					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
+							<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
+						</div>
+						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> games played: X</p>
+					</div>
+				</div>
+				
+				<div id="scrollHide" className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2 overflow-y-scroll shadow-sm shadow-cyan-500/50" >
+					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
+					<MatchHistory page="Profile"/>
 				</div>
 
-				<div className="rounded-lg  w-[30%] bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500" 
-				> 3 <div className=" relative w-full h-full m-[50%] rounded-full bg-green-500 blur-3xl"></div>
+				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3  lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
+				<div className="divide-x-2 divide-slate-400/25 flex flex-row  w-full h-14 cursor-pointer bg-gradient-radial from-slate-600 to bg-slate-900">
+					<div className="flex items-center justify-center w-[50%] h-full" >
+						<BsPersonFillAdd size={25}/>
+						<h1 className=" m-2 font-bold text-xl">Friends</h1>
+					</div>
 				</div>
-
-				<div className="rounded-lg  w-[30%] bg-gray-800 min-w-full overflow-hidden hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500" 
-				> 4 <div className=" relative w-full h-full m-[50%] rounded-full bg-red-400 blur-3xl"></div>
-				</div>
-
-				<div className=" rounded-lg col-span-2 row-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " 
-				> 5
-				</div>
-				<div className="rounded-lg overflow-auto bg-gray-800 hover:ease-in-out row-span-3  duration-700 shadow-sm shadow-cyan-500/50 " 
-				> <h1 className="text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900">Friends List</h1> <FriendListComponent User={Userdata?.username} refresh={refresh}/>
-				</div>
-				<div className=" rounded-lg col-span-2 bg-gray-800 hover:ease-in-out  duration-700 shadow-sm shadow-cyan-500/50 " >
-					7
+					{/* <section className="flex flex-row  justify-between space-x p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
+						<h1 className=" text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
+						<button onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
+					</section> */}
+						
+					<FriendListComponent User=""  />
 				</div>
 			</div>
-				</div></>)}
+		</div>
+
+				</>)}
 		</>
 	)
 }

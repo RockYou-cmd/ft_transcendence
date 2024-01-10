@@ -17,6 +17,10 @@ import Achievment from "./achievment"
 import AchievmentIcon from "../../../../public/achievment.png";
 import { faUserGroup , faUserPlus} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BsPersonFillAdd } from "react-icons/bs";
+import { FaUserFriends } from "react-icons/fa";
+
+
 
 export default function Profile_info() {
 	const { online } = useLogContext();
@@ -105,11 +109,13 @@ export default function Profile_info() {
 
 				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3  lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
 				<div className="divide-x-2 divide-slate-400/25 flex flex-row  w-full h-14 cursor-pointer bg-gradient-radial from-slate-600 to bg-slate-900">
-					<div className="flex items-center justify-center w-[50%] h-full" onClick={()=>setPending(false)}>
-						<h1 className="font-bold text-xl">Friends</h1>
+					<div className="flex items-center justify-center w-[50%] h-full" style={{ backgroundColor: !Pending ? 'rgb(0, 128, 255,.2)' : '' }} onClick={()=>setPending(false)}>
+						<BsPersonFillAdd size={25}/>
+						<h1 className=" m-2 font-bold text-xl">Friends</h1>
 					</div>
-					<div className="flex items-center justify-center w-[50%] h-full "style={{ backgroundColor: Pending ? 'red' : 'black' }}  onClick={()=>setPending(true)}>
-						<h1 className="font-bold text-xl">Invite</h1>
+					<div className="flex items-center justify-center w-[50%] h-full "style={{ backgroundColor: Pending ? 'rgb(0, 128, 255,.2)' : '' }}  onClick={()=>setPending(true)}>
+						<FaUserFriends size={25}/>
+						<h1 className="m-2 font-bold text-xl">Invite</h1>
 					</div>
 				</div>
 					{/* <section className="flex flex-row  justify-between space-x p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
