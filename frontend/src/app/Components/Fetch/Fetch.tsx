@@ -30,7 +30,6 @@ export async function Get(path: string) {
 			'Content-Type': 'application/json',
 		},
 	}
-	console.log("path", path);
 	const res = await fetch(path, header);
 	if (res.status == 401)
 		return undefined;

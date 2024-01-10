@@ -23,8 +23,9 @@ input:focus, textarea:focus, select:focus{
 }
 
 #scrollHide{
-	overflow-y: auto;
-	& ::-webkit-scrollbar{
+	overflow-y: scroll;
+	scrollbar-width: none;
+	&::-webkit-scrollbar{
 		display: none;
 	}
 

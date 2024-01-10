@@ -30,9 +30,7 @@ export default function Auth() {
 	useEffect(() => {
 		async function fetchToken() {
 			const res = await Post({ code, }, APIs.intraToken);
-			console.log("res", res);
 			const data = await res?.json();
-			console.log("resData", data);
 			if (res?.status == 201) {
 				if (online != "ON") {
 					setOnline("ON");

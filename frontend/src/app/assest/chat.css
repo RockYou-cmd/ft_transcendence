@@ -198,11 +198,8 @@
 /***************************************** Sec2 Chat ************************************/
 
 .Chat {
-	/* background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
-	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
-	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+
 	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
-	/* background: linear-gradient(to bottom right, #1f2933, #2b3445, #000000); */
 
 	margin: 25px 18px 10px 6px;
 	border: 1px solid black;
