@@ -236,7 +236,6 @@ export class EventGateway {
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
   async startGame(client: Socket, payload) {
-    console.log(payload);
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },
