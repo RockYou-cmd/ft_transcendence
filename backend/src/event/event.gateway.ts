@@ -71,16 +71,16 @@ export class EventGateway {
           {
             var player2 = Array.from(match.keys())[1];
             const game: GameService = match.get("game");
-            if (username == player1)
-            {
-              game["player1"].score = 1;
-              game["player2"].score = 6;
-            }
-            else {
-              game["player2"].score = 1;
-              game["player1"].score = 6;
-            }
-            this.endRankGame({ player1, player2, roomName }, match, 1);
+          if (!player2) match.clear();
+          else if (username == player1) {
+            game["player1"].score = 1;
+            game["player2"].score = 6;
+          } else {
+            game["player2"].score = 1;
+            game["player1"].score = 6;
+          }
+            if (player2)
+              this.endRankGame({ player1, player2, roomName }, match, 1);
           }
           else
           {
@@ -236,6 +236,7 @@ export class EventGateway {
   @SubscribeMessage("start")
   @UseGuards(gameGuard)
   async startGame(client: Socket, payload) {
+    console.log(payload);
     const { user }: any = client;
     this.userService.updateData(
       { username: payload.player1 },
@@ -278,9 +279,9 @@ export class EventGateway {
     var winner =
       player1.score > player2.score ? payload.player1 : payload.player2;
     clearInterval(match?.get("loop"));
-    this.server.to(payload.roomName).emit("endGame", { winner });
     game.reset();
     match.clear();
+    this.server.to(payload.roomName).emit("endGame", { winner });
     if (ranked) {
       var loser =
         player1.score > player2.score ? payload.player2 : payload.player1;
