@@ -66,6 +66,7 @@ export class UserService {
           username: account.username,
         },
         include: {
+          gameProfile: true,
           friends: {
             where: {
               users: {
@@ -140,14 +141,14 @@ export class UserService {
     }
   }
 
-  async getGames(account) {
+  async getGames(username) {
     try {
       const games = await prisma.game.findMany({
         where: {
           participants: {
             some: {
               profile: {
-                userId: account.username
+                userId: username
               }
             }
           }
@@ -215,9 +216,9 @@ export class UserService {
 
   async changePassword(account, data) {
     try {
-      const verified = this.authService.verifyCredintials({username:account.username, password:data.password})
+      const verified = this.authService.verifyCredintials({username:account.username, password:data.oldPassword})
       if (!verified) throw new HttpException("password incorrect", HttpStatus.UNAUTHORIZED);
-      const hash = await argon.hash(data.password);
+      const hash = await argon.hash(data.newPassword);
       const ret = await prisma.user.update({
         where: {
           username: account.username
