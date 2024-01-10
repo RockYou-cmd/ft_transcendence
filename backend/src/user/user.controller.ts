@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Put, Query, Req, Request, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
-import { Response } from "express";
+import { Response, query } from "express";
 
 @Controller("/user")
 export class UserController {
@@ -32,8 +32,8 @@ export class UserController {
 	
   @Get("games")
 	@UseGuards(AuthGuard)
-	getGames(@Req() account) {
-		return this.UserService.getGames(account.user);	
+	getGames(@Req() account, @Query("username") username) {
+		return this.UserService.getGames(username);	
 	}
 
   @Get("friends")

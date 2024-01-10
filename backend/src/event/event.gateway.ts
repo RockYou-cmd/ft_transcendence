@@ -40,7 +40,7 @@ export class EventGateway {
         var { username } =
           await this.authGuard.extractPayloadFromToken(access_token);
         client.join(username);
-  
+
         const userTabs = await this.server.in(username).fetchSockets();
         if (userTabs.length <= 1) {
           // console.log("less than 1");
@@ -48,7 +48,7 @@ export class EventGateway {
         }
       }
       console.log(username, " CONNECTED");
-      // console.log(this.matches[0].size);      
+      // console.log(this.matches[0].size);
     } catch (err) {
       throw err;
     }
@@ -67,26 +67,22 @@ export class EventGateway {
           const roomName = match.get("roomName");
           this.userService.updateData({ username }, { status: "ONLINE" });
           const player1 = Array.from(match.keys())[0];
-          if (!match.has("friend"))
-          {
+          if (!match.has("friend")) {
             var player2 = Array.from(match.keys())[1];
             const game: GameService = match.get("game");
-          if (!player2) match.clear();
-          else if (username == player1) {
-            game["player1"].score = 1;
-            game["player2"].score = 6;
-          } else {
-            game["player2"].score = 1;
-            game["player1"].score = 6;
-          }
+            if (!player2) match.clear();
+            else if (username == player1) {
+              game["player1"].score = 1;
+              game["player2"].score = 6;
+            } else {
+              game["player2"].score = 1;
+              game["player1"].score = 6;
+            }
             if (player2)
               this.endRankGame({ player1, player2, roomName }, match, 1);
-          }
-          else
-          {
+          } else {
             var player2 = Array.from(match.keys())[2];
             this.endRankGame({ player1, player2, roomName }, match, 0);
-  
           }
         }
         const userTabs = await this.server.in(username).fetchSockets();
@@ -160,6 +156,18 @@ export class EventGateway {
     return this.matches.find((e) => {
       return e.has(username);
     });
+  }
+
+  @SubscribeMessage("nameUpdate")
+  @UseGuards(gameGuard)
+  handleNameUpdate(client: Socket, payload: any) {
+    try {
+      const { user }: any = client;
+      this.server.in(user.username).socketsJoin(payload.username);
+      this.server.in(user.username).disconnectSockets();
+    } catch (err) {
+      throw err;
+    }
   }
 
   @SubscribeMessage("matchmaking")
