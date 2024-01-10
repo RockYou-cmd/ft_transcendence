@@ -229,7 +229,7 @@ export class GameService {
             ...newLoserData,
           },
         });
-      // console.log(ret);
+      console.log(ret);
     } catch (err) {
       throw err;
     }
