@@ -121,6 +121,18 @@ export class UserService {
     }
   }
 
+  async leaderBoard(account) {
+    try {
+      const ret = await prisma.gameProfile.findMany({
+        orderBy: {
+          level: "desc"
+        }
+      })
+    } catch (err) {
+      throw Error(err.message);
+    }
+  }
+
   async getUsers() {
     try {
       return await prisma.user.findMany({
@@ -165,7 +177,6 @@ export class UserService {
           }
         }
       });
-	  console.log(games);
       return games;
     } catch (err) {
       console.log("get games error :  ",err);

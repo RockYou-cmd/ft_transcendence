@@ -1,6 +1,6 @@
 
 all:
-	docker-compose up
+	docker-compose up --build
 
 server:
 	docker-compose up server

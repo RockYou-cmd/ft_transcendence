@@ -41,7 +41,12 @@ export class UserController {
   async getUserFriends(@Query("username") username) {
     return this.UserService.getUserFriends(username);
   }
-
+  
+  @Get("leaderBoard")
+  @UseGuards(AuthGuard)
+  async leaderBoard(@Req() account) {
+    return this.UserService.leaderBoard(account.user);
+  }
   @Get("search")
   @UseGuards(AuthGuard)
   search(@Query() data) {
