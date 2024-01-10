@@ -49,6 +49,9 @@ export class UserService {
         where: {
           username: user.username,
         },
+        include: {
+          gameProfile:true
+        }
       });
       if (!ret) throw new NotFoundException("User Not Found");
       return ret;
@@ -227,7 +230,7 @@ export class UserService {
 
   async changePassword(account, data) {
     try {
-      const verified = this.authService.verifyCredintials({username:account.username, password:data.oldPassword})
+      const verified = await this.authService.verifyCredintials({username:account.username, password:data.oldPassword})
       if (!verified) throw new HttpException("password incorrect", HttpStatus.UNAUTHORIZED);
       const hash = await argon.hash(data.newPassword);
       const ret = await prisma.user.update({

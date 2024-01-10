@@ -15,7 +15,6 @@ export default function LeaderBoard() {
 
 	async function getData() {
 		const data = await Get(APIs.Friends);
-		console.log("player data", data);
 		setData(data);
 	}
 

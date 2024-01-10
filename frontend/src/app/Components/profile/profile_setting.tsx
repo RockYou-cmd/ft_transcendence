@@ -84,12 +84,12 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 			});
 			if (response.ok) {
 				const data = await response.json();
-				console.log(data.secure_url);
+		
 				setFormData({
 					...formData,
 					photo: data.secure_url,
 				});
-				console.log("success");
+	
 
 			} else {
 				console.error('Failed to upload image to Cloudinary');

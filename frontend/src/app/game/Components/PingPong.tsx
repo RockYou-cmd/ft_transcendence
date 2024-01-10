@@ -100,8 +100,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 
     socket?.on("endGame", (data: any) => {
 		const winner = data?.winner == me?.username ? "You Win" : "You Lose";
-		console.log(winner);
-		console.log(data);
+
 		msg.current = winner;
 		setGameRes(true);
     });

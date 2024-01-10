@@ -67,7 +67,7 @@ export default function UserProfile() {
 
 
 	useEffect(() => {
-
+		console.log("Userdata", Userdata);
 		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
 			router.push("/users/not-found");
 		}
@@ -91,7 +91,6 @@ export default function UserProfile() {
 
 
 	async function fetchData() {
-		console.log("fetching data", Userdata);
 		const data = await GetData({ Api: "User", user: name }) as any;
 		if (data == undefined) {
 			Logout();
@@ -117,7 +116,6 @@ export default function UserProfile() {
 		else
 			friend.current = "not friend";
 	}
-	// console.log("userdata", Userdata, "hooks", hooks.dataHook.state)
 
 	useEffect(() => {
 		if (online == "ON")

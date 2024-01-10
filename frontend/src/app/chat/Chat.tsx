@@ -159,7 +159,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 						buttons: { closeModal : false}
 					}).then(async () => {
 						img = await fileUploadFunction(msgImg.current.files[0]) as any;
-						console.log(img);
 						if (img != null && img != "") {
 							swal({
 								title: "Image Uploaded",
@@ -195,7 +194,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 					socket?.emit(Room.current, { ...message, receiver: User?.username });
 					
 					if (Object.keys(chat.messages).length == 0){
-						console.log("new chat");
 						socket?.emit("update", { option: "newChat", receiver: User?.username , sender : me?.username });
 					}
 				} else if (group) {
@@ -213,27 +211,25 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 							alert("You have blocked this user");
 						}
 					}
-					console.log("blocked status", status.current.status, status.current.sender, me?.username)
 				}
 			}
 			setInput("");
 			msgImg.current.value = null;
 		}
 	}
-	// console.log("");
+
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
-			console.log("update", data)
 			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: true, id: data?.groupId };
 			}
 			else if (data?.option == "block" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 				status.current.status = "BLOCKED";
-				status.current.sender = data?.sender;
+				status.current.sender = data?.receiver;
 
 				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : 
-				(status.current.status == "BLOCKED" ? (status.current.sender == me?.username ? blockSettings: noSettings) : chatSettings)));
+				(status.current.status == "BLOCKED" ? (status.current.sender != me?.username ? blockSettings: noSettings) : chatSettings)));
 			}
 			else if (data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 	
@@ -258,6 +254,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			}
 		})
 		if (scroll.current) {
+			console.log("scroll", scroll.current.scrollTop,"scroll height" ,scroll.current.scrollHeight)
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
 		return () => {
@@ -274,9 +271,8 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			<div className={msg?.senderId == me.username ? "my_msg" : "usr_msg"}>
 				{User?.name && msg?.senderId != me?.username && <Link href={"/users/" + msg?.senderId}><h4>{msg?.senderId}</h4></Link>}
 				<section>
-					{
-						(msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{ width: "fit-content", height: "fit-content" }} /> : <p>{msg?.content}</p>
-					}
+						{/*  (msg?.type == "image" || (msg?.content as string).includes("https://res.cloudinary.com")) ? <Image src={msg?.content} alt='img' width={100} height={100} style={{ width: "fit-content", height: "fit-content" }} /> : <p>{msg?.content}</p> */}
+					<p>{msg?.content}</p>
 				</section>
 			
 				<div className='triangle'></div>
@@ -309,7 +305,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				<div className="line"></div>
 				<section>
 					<input type="text" placeholder="Type a message" value={input} onChange={(e) => { setInput(e.target.value) }} onKeyDown={(e: KeyboardEvent) => send(e)} />
-					<input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" />
+					{/* <input ref={msgImg} className='sendImg' type="file" /><FontAwesomeIcon icon={faCamera} className="icon" /> */}
 				</section>
 				<button onClick={(e: MouseEvent) => send(e)}><FontAwesomeIcon icon={faPaperPlane} style={{
 					width: "20px",

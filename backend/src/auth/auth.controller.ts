@@ -36,7 +36,6 @@ export class AuthController {
     console.log(token);
     if (!token) res.status(425).json({message: "2faEnabled"});
     else {
-      console.log('toksi')
       res.cookie("access_token", token, { httpOnly: true });
       res.status(201).json({message: "User signed successfully"});
     }

@@ -44,10 +44,10 @@ const TwoAuth = ({ User , change}: { User: any , change : any}) => {
           
         });
         if (response.ok) {
-            console.log("succeful disable");
+			swal("Success!", "2FA disabled!", "success");
         }
         else {
-          console.log("error disable");
+			swal("Error!", "2FA not disabled!", "error");
         }
      } catch (error) {
        console.error('Error verifying code:', error);

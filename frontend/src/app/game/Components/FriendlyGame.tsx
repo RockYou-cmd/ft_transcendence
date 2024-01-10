@@ -34,7 +34,7 @@ export default function SelectFriend({close , setMode, select, gameInfo, send} :
 	},[])
 
 	function SELECT(User : any){
-		// console.log("selected one", User);
+
 		select(User?.username);
 		selected.current = User?.username;
 		

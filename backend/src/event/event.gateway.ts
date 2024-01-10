@@ -15,7 +15,7 @@ import { gameGuard } from "./event.guard/game.guard";
 import { GameService } from "src/game/game.service";
 
 @WebSocketGateway({
-  cors: { credentials: true, origin: true },
+  cors: { credentials: true, origin: "http://localhost:3000" },
   namespace: "events",
 })
 export class EventGateway {

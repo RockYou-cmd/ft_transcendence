@@ -19,7 +19,6 @@ const MatchHistory = ({page, User} : {page : string, User : string}) => {
 	const style5 = page == "Profile" ? "text-lg" : "text-sm";
 	async function fetchData() {
 		const resData = await Get(APIs.matchHistory + "?username=" + User);
-		console.log("games", resData, "user", User);
 		setData({games : resData});
 	}
 	const router = useRouter();
