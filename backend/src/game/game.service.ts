@@ -231,7 +231,7 @@ export class GameService {
         });
       // console.log(ret);
     } catch (err) {
-      throw err;
+      return err;
     }
   }
 }

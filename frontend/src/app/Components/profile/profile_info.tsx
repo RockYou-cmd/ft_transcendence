@@ -64,9 +64,9 @@ export default function Profile_info() {
 	return (
 		<div className="m-8 flex flex-row gap-8 h-[88vh] font-bold ">
 			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
-			<div className="gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] ">
-				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
-					<div className="flex h-full relative border rounded-lg flex-col w-auto justify-center items-center ">
+			<div className=" gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] text-xl">
+				<div className="   items-center rounded-lg col-span-3 min-h-0 grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full   shadow-sm  " >
+					<div className="flex h-full relative border rounded-lg flex-col w-auto  justify-center items-center ">
 						<div className="flex  w-full  flex-row justify-center text-center ">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
 						</div>
@@ -75,7 +75,7 @@ export default function Profile_info() {
 						<p className="text-gray-300"> Losses : {data?.gameProfile?.losses}</p>
 					</div>
 
-					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+					<div className="flex  relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className=" flex  w-full  flex-row justify-center text-center">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg ">Goals Stats</h1>
 						</div>
@@ -83,11 +83,10 @@ export default function Profile_info() {
 						<p className="text-gray-300"> goals conced: {data?.gameProfile?.goalsConced}</p>
 					</div >
 					<div className="flex h-full relative border rounded-lg flex-col w-auto  justify-center items-center">
-						<div className="flex  w-full  flex-row justify-center text-center">
-
+						<div className="flex  w-full  flex-row justify-center items-center text-center">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
 						</div>
-						<div className=" h-fit w-[10vw]  ">
+						<div className="flex items-center just h-full  w-[8vw]  ">
 							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)} text={`${CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)}%`} />
 						</div>
 					</div>
