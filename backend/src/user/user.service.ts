@@ -215,9 +215,9 @@ export class UserService {
 
   async changePassword(account, data) {
     try {
-      const verified = this.authService.verifyCredintials({username:account.username, password:data.password})
+      const verified = this.authService.verifyCredintials({username:account.username, password:data.oldPassword})
       if (!verified) throw new HttpException("password incorrect", HttpStatus.UNAUTHORIZED);
-      const hash = await argon.hash(data.password);
+      const hash = await argon.hash(data.newPassword);
       const ret = await prisma.user.update({
         where: {
           username: account.username
