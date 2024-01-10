@@ -30,8 +30,10 @@ export default function Auth() {
 	useEffect(() => {
 		async function fetchToken() {
 			const res = await Post({ code, }, APIs.intraToken);
-			const data = await res.json();
-			if (res.status == 201) {
+			console.log("res", res);
+			const data = await res?.json();
+			console.log("resData", data);
+			if (res?.status == 201) {
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
@@ -50,6 +52,10 @@ export default function Auth() {
 		}
 		if (value && code)
 			fetchToken();
+		else if (value && code == undefined){
+			router.push("/");
+		}
+		console.log("code", code, "value", value);
 	}, [value]);
 
 	return (
