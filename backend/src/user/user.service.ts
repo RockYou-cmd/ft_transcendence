@@ -66,6 +66,7 @@ export class UserService {
           username: account.username,
         },
         include: {
+          gameProfile: true,
           friends: {
             where: {
               users: {
@@ -140,14 +141,14 @@ export class UserService {
     }
   }
 
-  async getGames(account) {
+  async getGames(username) {
     try {
       const games = await prisma.game.findMany({
         where: {
           participants: {
             some: {
               profile: {
-                userId: account.username
+                userId: username
               }
             }
           }
