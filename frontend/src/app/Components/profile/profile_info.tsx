@@ -47,7 +47,7 @@ export default function Profile_info() {
 	function CalculateWinRate(play: string, win: string) { // calculate winrate
 		if (Number(play) === 0)
 			return 0;
-		const winrate = ((Number(win) / Number(play)) * 100).toFixed(0);
+		const winrate = ((Number(win) / Number(play)) * 100);
 		console.log("winrate", winrate, "wins", win, "play", play);
 		return winrate;
 	}
@@ -84,7 +84,7 @@ export default function Profile_info() {
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
 						</div>
 						<div className="  w-[10vw] h-full mb-4 ">
-							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)} text={`${CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)}%`} />
+							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins).toFixed(0)} text={`${CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)}%`} />
 						</div>
 					</div>
 

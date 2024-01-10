@@ -29,7 +29,6 @@
 }
 
 .closeBtn {
-	/* overflow: hidden; */
 	position: absolute;
 	top: 1.5vh;
 	right: 1vh;
@@ -221,7 +220,7 @@ input[type=file]::file-selector-button:hover {
 
 .Add .content {
 	overflow-y: auto;
-	/* overflow-x:visible; */
+	scrollbar-width: none;
 
 	height: 43vh;
 	/* max-width: 100%; */
@@ -496,7 +495,7 @@ input[type=file]::file-selector-button:hover {
 	justify-content: space-between;
 	height: 10vh;
 	overflow-y: auto;
-
+	scrollbar-width: none;
 
 
 	&::-webkit-scrollbar {

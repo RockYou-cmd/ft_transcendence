@@ -84,6 +84,7 @@
 
 .sec1 .Groups .content_g {
 	overflow-y: scroll;
+	scrollbar-width: none;
 	height: 26.5vh;
 }
 
@@ -175,6 +176,7 @@
 
 .Friends .content_f {
 	overflow-y: scroll;
+	scrollbar-width: none;
 	height: 42.7vh;
 
 	& div:first-child {
@@ -274,7 +276,7 @@
 	margin: 5vh 0px 2.5vh;
 	height: 65.5vh;
 	overflow-y: scroll;
-	
+	scrollbar-width: none;
 }
 
 .Msg::-webkit-scrollbar {

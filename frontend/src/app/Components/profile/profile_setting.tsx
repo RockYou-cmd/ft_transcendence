@@ -162,26 +162,26 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 				<form onSubmit={handleSubmit} className="w-full max-w-md mx-auto p-6  rounded-md ">
 					<label htmlFor="preview " >
 
-						{/* <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black">
-              
-            </div> */}
-						<div className=" relative cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black">
+						{/* <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black"> */}
+
+						<div className=" relative cursor-pointer w-64 aspect-square mx-auto items-center  text-white rounded border-2 border-dashed bg-black">
 							<input
 								ref={refImg}
 								id="preview"
-								className=" hidden z-50"
+								className=" hidden w-0 "
 								type="file"
 								onChange={handleChange}
 								name="photo"
 								accept="image/*"
 							/>
 							<div
-							onClick={() => refImg.current?.click()}
-							className=" absolute w-full h-full top-0 items-center justify-center ">
-								<Image src={imagePreview ? imagePreview : User?.photo ? User?.photo : avatar} alt={"preview"} width={256} height={256} />
+								onClick={() => refImg.current?.click()}
+								className=" absolute w-full h-full top-0 items-center justify-center ">
+								<Image src={imagePreview ? imagePreview : User?.photo ? User?.photo : avatar} alt={"preview"} width={100} height={100} className="w-full h-full" />
 							</div>
 
 						</div>
+						{/* </div> */}
 					</label>
 					<div className=" focus:ring mb-6 mt-5">
 						<label className=" text-white font-bold rounded-lg focus:outline-none focus:ring focus:border-blue-300" htmlFor="username">Username:<br /></label>
@@ -197,9 +197,9 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 						<button className="bg-[#707070] rounded w-32 hover:scale-105 duration-500 " onClick={() => handleClick(false)}>Cancel</button>
 					</div>
 				</form>
-					<div>
-						<TwoAuth User={User} change={changes} />
-					</div>
+				<div>
+					<TwoAuth User={User} change={changes} />
+				</div>
 				{	// change password for no intra or google account
 					<div className="changePassword">
 						<button onClick={() => setChangePass(!changePass)} >Change Password {!changePass ? <FontAwesomeIcon icon={faCircleChevronDown} className="ml-3" />

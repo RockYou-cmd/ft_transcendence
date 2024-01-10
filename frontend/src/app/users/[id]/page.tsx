@@ -80,7 +80,7 @@ export default function UserProfile() {
 
 
 	async function fetchData() {
-		console.log("fetching data")
+		console.log("fetching data", Userdata);
 		const data = await GetData({ Api: "User", user: name }) as any;
 		if (data == undefined) {
 			Logout();
