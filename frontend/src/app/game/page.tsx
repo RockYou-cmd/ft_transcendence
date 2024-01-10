@@ -252,7 +252,7 @@ export default function GamePage() {
 						
 						<div className='matchHistory'>
 							<h1 className='font-bold text-[24px] text-center mb-8'>MATCH HISTORY</h1>
-							<MatchHistory page="game"/>
+							<MatchHistory page="game" User={me?.username}/>
 						</div>
 					</div>
 					}

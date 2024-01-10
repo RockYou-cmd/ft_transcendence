@@ -46,6 +46,7 @@ export interface Api {
 	UserFriends : string,
 	matchHistory : string,
 	friendPending : string,
+	changePassword : string,
 }
 
 export const APIs : Api = {
@@ -91,4 +92,5 @@ export const APIs : Api = {
 	UserFriends : Host + "/user/friends/?username=",
 	matchHistory : Host + "/user/games",
 	friendPending : Host + "/friend/pending",
+	changePassword : Host + "/user/password",
 };

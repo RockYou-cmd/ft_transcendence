@@ -4,6 +4,9 @@ import Image from "next/image";
 import avatar from "../../../../public/avatar.png";
 import swal from "sweetalert";
 import '../../assest/mapBorder.css';
+import { useSocket } from "../Log/LogContext";
+import { Put } from "../Fetch/Fetch";
+import { APIs } from "../../Props/APIs";
 import { faCircleChevronDown, faCircleChevronUp, faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; interface Props {
 	handleClick: (val: boolean) => void;
@@ -32,6 +35,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	const [showPass, setShowPass] = useState<boolean>(false);
 	const changes = useRef(false);
 	const refImg = useRef(null) as any;
+	const {socket} = useSocket();
 
 	// object that will snet to backend
 	const [formData, setFormData] = useState<FormData>({
@@ -96,12 +100,23 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 		}
 	};
 
-	function ChangePassword(e: any) {
+	async function ChangePassword(e: any) {
 		e?.preventDefault();
 		console.log("change password old", oldPassRef.current?.value);
 		console.log("change password new", newPassRef.current?.value);
-		swal("Password changed successfully", "", "success");
-		setChangePass(false);
+
+		const data = {oldPassword : oldPassRef.current?.value, newPassword : newPassRef.current?.value}
+		const res = await Put(data, APIs.changePassword)
+		console.log("change password", res, "passwords", data);
+
+		if (res?.ok){
+			swal("Password changed successfully", "", "success");
+			setChangePass(false);
+		}
+		else{
+			swal("Password change failed", "", "error");
+		}
+
 	}
 
 
@@ -134,11 +149,14 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({ updatedData }),
+					
 				});
 				//   console.log(updatedData);
 
-				console.log("res in settings ", response);
 				if (response.ok) {
+					if (updatedData.username){
+						socket?.emit("nameUpdate", updatedData.username);
+					}
 					swal("Profile updated successfully", "", "success");
 					handleClick(false);
 				} else {
