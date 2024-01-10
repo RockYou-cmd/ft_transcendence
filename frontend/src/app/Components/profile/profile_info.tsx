@@ -176,7 +176,7 @@ export default function Profile_info() {
 					<UserLevel data={data?.gameProfile} />
 				</div>
 				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
-					{data.bio}
+					{data?.bio}
 				</div>
 				<div className="flex flex-col mt-8    gap-3 w-[95%] h-fit ">
 					<div className="flex items-center justify-center border bg-cyan-400/30 rounded-t-xl p-2">
