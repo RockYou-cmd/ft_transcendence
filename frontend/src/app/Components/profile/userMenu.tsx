@@ -37,7 +37,7 @@ const ProfileMenu = ({ User, onClose , setRefresh, refresh} : {User : any, onClo
 },[]);
 
   return (
-      <div ref={visible} className="absolute top-10 right-4 bg-gray-800 w-[10rem] shadow-lg rounded-md p-2 z-10 border">
+      <div ref={visible} className="absolute top-10  right-4 bg-gray-800 w-[10rem] shadow-lg rounded-md p-2 z-20 border">
 
       <div onClick={(e : MouseEvent) => handleMenuItemClick(e, "invite")} className="cursor-pointer hover:bg-gray-100/20 p-2 rounded-md">Invite To Game</div>
       <Link href={"/chat/?user=" + User?.username}><div className="cursor-pointer hover:bg-gray-100/20 p-2 rounded-md">Open Chat</div></Link>
