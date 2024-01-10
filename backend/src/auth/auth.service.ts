@@ -47,7 +47,9 @@ export class AuthService {
       delete ret.password;
       return ret;
     } catch (err) {
-      throw err;
+		console.log(err.message)
+
+      throw new Error(err.message);
     }
   }
 

@@ -220,36 +220,11 @@
 
 .matchHistory{width: 33%;
 	padding:2.5% 2%;
-	/* & .title{
-		font : 700 28px "Inter", sans-serif;
-		text-align: center;
-		margin-bottom:20px;
-	}
-
-	& .content{
-		overflow-y: auto;
-		height: 80%;
-		background-color: #002932;
-	}	 */
 	overflow-y: auto;
+	scrollbar-width: none;
 	&::-webkit-scrollbar{display:none;}
 
 }
-
-.matchHistory .SingleMatch{
-	background-color: #60E2FF;
-	margin:10px 0px;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	& h1{
-		font : 700 20px "Inter", sans-serif;
-		text-align: center;
-		margin:10px 0px;
-		display: block;
-	}
-}
-
 
 .GameMode{
 	width: 27%;
@@ -281,7 +256,7 @@
 
 .MatchMaking{
 	padding:15px 50px 30px;
-	width: 30vh;
+	width: 450px;
 	background-color: #011627;
 	position: absolute;
 	left:50%;

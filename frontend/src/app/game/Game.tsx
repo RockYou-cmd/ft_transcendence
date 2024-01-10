@@ -53,7 +53,7 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 				console.log("start", data);
 				matchInfo.current = data;
 				timer(data);
-				setCounter(0);
+				setCounter(3);
 				setSec(0);
 				setTime(true);
 			})
@@ -80,12 +80,12 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 	return(
 		<>
 			<div className="MatchMaking">
-				<button id='backBtn' onClick={()=>{
+				{!time && <button id='backBtn' onClick={()=>{
 					socket?.emit("update", {option : "refuse", receiver : Opp?.username, sender : me?.username, mode : "rank"});
 					socket?.disconnect();
 					setMode("");close(true);
 					socket?.connect()}
-					}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+					}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>}
 				<h1>FINDING PLAYER</h1>
 
 				<section>

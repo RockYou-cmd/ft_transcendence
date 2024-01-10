@@ -204,11 +204,16 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				else {
 
 					if (status.current.status == "BLOCKED") {
-						if (status.current.sender == me?.username)
-							swal("You are blocked by this user", "", "error");
-						else
-							swal("You have blocked this user","" ,"error");
+						if (status.current.sender == me?.username){
+							// swal("You are blocked by this user", "", "error");
+							alert("You are blocked by this user");
+						}
+						else{
+							// swal("You have blocked this user","" ,"error");
+							alert("You have blocked this user");
+						}
 					}
+					console.log("blocked status", status.current.status, status.current.sender, me?.username)
 				}
 			}
 			setInput("");

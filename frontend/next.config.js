@@ -7,9 +7,9 @@ const nextConfig = {
 			hostname: "**",
 		}],
 	},
-	experimental: {
-		swcTraceProfiling: true,
-	},
+	// experimental: {
+	// 	swcTraceProfiling: true,
+	// },
 }
 
 module.exports = nextConfig

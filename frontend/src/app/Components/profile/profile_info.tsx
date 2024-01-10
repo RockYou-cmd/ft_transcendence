@@ -33,14 +33,12 @@ export default function Profile_info() {
 	async function fetchData() {
 		const data = await GetData({ Api: "Profile", user: "" }) as any;
 		setData(data);
-		console.log("profile data", data);
 		if (data?.username != me?.username || data?.photo != me?.photo) {
 			setMe(data);
 		}
 	}
 
 	useEffect(() => {
-		console.log("show setting", showSetting);
 		if (online && !showSetting) fetchData();
 		// TODO
 	}, [showSetting]);
@@ -51,8 +49,7 @@ export default function Profile_info() {
 	function CalculateWinRate(play: string, win: string) { // calculate winrate
 		if (Number(play) === 0)
 			return 0;
-		const winrate = ((Number(win) / Number(play)) * 100).toFixed(0);
-		console.log("winrate", winrate, "wins", win, "play", play);
+		const winrate = Number(((Number(win) / Number(play)) * 100).toFixed(0));
 		return winrate;
 	}
 
@@ -101,9 +98,10 @@ export default function Profile_info() {
 					</div>
 				</div>
 				
-				<div id="scrollHide" className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2 overflow-y-scroll shadow-sm shadow-cyan-500/50" >
+				<div id="scrollHide" className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2  shadow-sm shadow-cyan-500/50" >
 					<h1 className=" text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
-					<MatchHistory page="Profile"/>
+					
+					<MatchHistory page="Profile" User={me?.username}/>
 				</div>
 
 				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3  lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
