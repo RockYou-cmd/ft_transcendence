@@ -30,8 +30,8 @@ export default function Auth() {
 	useEffect(() => {
 		async function fetchToken() {
 			const res = await Post({ code, }, APIs.googleToken);
-			const data = await res.json();
-			if (res.status == 201) {
+			const data = await res?.json();
+			if (res?.status == 201) {
 
 				if (online != "ON") {
 					setOnline("ON");
@@ -52,6 +52,9 @@ export default function Auth() {
 		}
 		if (value && code)
 			fetchToken();
+		else if (value && code == undefined){
+			router.push("/");
+		}
 	}, [value]);
 
 	return (

@@ -47,7 +47,7 @@ export default function Profile_info() {
 	function CalculateWinRate(play: string, win: string) { // calculate winrate
 		if (Number(play) === 0)
 			return 0;
-		const winrate = ((Number(win) / Number(play)) * 100);
+		const winrate = ((Number(win) / Number(play)) * 100).toFixed(0);
 		console.log("winrate", winrate, "wins", win, "play", play);
 		return winrate;
 	}
@@ -58,11 +58,11 @@ export default function Profile_info() {
 	};
 
 	return (
-		<div className="m-8 flex flex-row gap-8 h-[88vh]  ">
+		<div className="m-8 flex flex-row gap-8 h-[88vh] font-bold ">
 			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
 			<div className="gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] ">
 				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
-					<div className="flex relative border rounded-lg flex-col w-auto h-full justify-center items-center ">
+					<div className="flex h-full relative border rounded-lg flex-col w-auto justify-center items-center ">
 						<div className="flex  w-full  flex-row justify-center text-center ">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
 						</div>
@@ -73,24 +73,24 @@ export default function Profile_info() {
 
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className=" flex  w-full  flex-row justify-center text-center">
-							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">Goals Stats</h1>
+							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg ">Goals Stats</h1>
 						</div>
 						<p className="text-gray-300"> goals scored: {data?.gameProfile?.goalsScored}</p>
 						<p className="text-gray-300"> goals conced: {data?.gameProfile?.goalsConced}</p>
 					</div >
-					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
+					<div className="flex h-full relative border rounded-lg flex-col w-auto  justify-center items-center">
 						<div className="flex  w-full  flex-row justify-center text-center">
 
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2 ">Win Rate</h1>
 						</div>
-						<div className="  w-[10vw] h-full mb-4 ">
+						<div className=" h-fit w-[10vw]  ">
 							<CircularProgressbar value={CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)} text={`${CalculateWinRate(data?.gameProfile?.gamesPlayed, data?.gameProfile?.wins)}%`} />
 						</div>
 					</div>
 
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
-							<h1 className="lex  w-full  flex-row justify-center text-center">Game State</h1>
+							<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
 						<p className="text-gray-300"> games played: X</p>
 						<p className="text-gray-300"> games played: X</p>
@@ -98,16 +98,25 @@ export default function Profile_info() {
 					</div>
 				</div>
 				
-				<div className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2 overflow-y-scroll shadow-sm shadow-cyan-500/50" >
+				<div id="scrollHide" className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2 overflow-y-scroll shadow-sm shadow-cyan-500/50" >
 					<h1 className="hidden text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
 					<MatchHistory page="Profile"/>
 				</div>
 
-				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3 lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
-					<section className="flex flex-row  justify-between space-x p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
+				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3  lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
+				<div className="divide-x-2 divide-slate-400/25 flex flex-row  w-full h-14 cursor-pointer bg-gradient-radial from-slate-600 to bg-slate-900">
+					<div className="flex items-center justify-center w-[50%] h-full" onClick={()=>setPending(false)}>
+						<h1 className="font-bold text-xl">Friends</h1>
+					</div>
+					<div className="flex items-center justify-center w-[50%] h-full "style={{ backgroundColor: Pending ? 'red' : 'black' }}  onClick={()=>setPending(true)}>
+						<h1 className="font-bold text-xl">Invite</h1>
+					</div>
+				</div>
+					{/* <section className="flex flex-row  justify-between space-x p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
 						<h1 className=" text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
 						<button onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
-					</section>
+					</section> */}
+						
 					<FriendListComponent User="" Pending={Pending} />
 				</div>
 			</div>
@@ -161,7 +170,7 @@ export default function Profile_info() {
 					<h1 className="text-xl  font-bold  items-center"> {data?.status}</h1>
 				</div> */}
 				<div className=" w-full ">
-					<UserLevel level={data?.gameProfile?.level?.toString()} />
+					<UserLevel data={data?.gameProfile} />
 				</div>
 				<div className="w-[95%] mt-8 h-auto bg-black bg-opacity-50 rounded-md p-6 text-white border-2 border-gray-700 shadow-lg ">
 					{data.bio}

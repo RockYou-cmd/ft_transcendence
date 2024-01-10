@@ -26,12 +26,20 @@ export default function LeaderBoard() {
 	/******************************************************* */
 	const router = useRouter();
 
-	function Print(info: any, rank : number) {
-		console.log("rank", rank)
+	function CraeteCounter() {
+		let count = 1;
+		return function () {
+			return count++;
+		}
+	}
+
+	const counter = CraeteCounter();
+	function Print(info: any) {
 		const player = info?.info.users[0];
+		
 		const board = <>
 			<div className="rankTable" onClick={() => { router.push("/users/" + player?.username) }}>
-				<h2>1</h2>
+				<h2>{`${counter()}`}</h2>
 				<Image className="g_img" src={player?.photo ? player?.photo : avatar} priority={true} alt="img" width={70} height={70} />
 
 				<h3>{player?.username}</h3>
@@ -49,8 +57,7 @@ export default function LeaderBoard() {
 			<div className="Leaderboard">
 				<h1>RANK</h1>
 				<div className='content'>
-
-					{data?.friends?.map((friend: any, index : number) => (<Print key={index} info={friend} rank={index}/>))}
+					{data?.friends?.map((friend: any, index : number) => (<Print key={index} info={friend}/>))}
 				</div>
 
 			</div>

@@ -63,15 +63,16 @@ export default function Create() {
 				const data: { username: string, password: string, email: string } = { username: info.username, password: info.password, email: info.email };
 
 				const res = await Post(data, APIs.SignUp);
+				console.log("res", res);
 
-
-				if (res.status == 201) {
+				if (res?.status == 201) {
 					swal("Account Created", "", "success");
 					route.push('/settings');
 				}
 				else {
 					const msg = await res?.json();
-					swal(msg?.message, "", "error");
+					console.log("msg", msg);
+					swal(msg?.message[0], "", "error");
 				}
 			}
 

@@ -23,7 +23,6 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
 
 
 	useEffect(() => {
-		console.log("achievment", gamesPlayed, goalScored, goalConced);
 		if (Number(gamesPlayed) >= 3)
 			setRisingStar(true);
 		if (Number(goalScored) >= 20)
@@ -32,7 +31,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
 			setWallOfSteel(true);
 		if ((Number(wins) * 100 / Number(gamesPlayed)) >= 80 && Number(gamesPlayed) >= 5)
 			setUndisputed(true);
-	},[gamesPlayed, goalScored, goalConced, wins])
+	},[])
     //  Rising Star: Bright Start
     //  Goal Machine: ⚽️ Scoring Spreecalc
     //  Wall of Steel: ️ Defensive Wall

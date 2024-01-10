@@ -201,6 +201,7 @@ export default function GamePage() {
 				}
 			})
 			socket?.on("update", (data: any) => {
+				console.log("update", data)
 				if (data?.option == "refuse"){
 					setAccept("");
 					setRefuse(true);
@@ -210,7 +211,8 @@ export default function GamePage() {
 					setSelectedFriend("");
 					setGameInfo(undefined);
 					setSend(false);
-					swal(`${data?.receiver} refused your invitation`, "your friend is busy or he already in game", "info");
+					// if (data?.mode == undefined)
+						swal(`${data?.receiver} refused your invitation`, "your friend is busy or he already in game", "info");
 				}
 			})
 			return () => {socket?.off("start"), ()=>{}
