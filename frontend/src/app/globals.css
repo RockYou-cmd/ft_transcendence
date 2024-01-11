@@ -4,18 +4,12 @@
 
 body{
 
-	/* background: url(../../public/4268225\ 1.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: center center; */
 	-webkit-font-smoothing: antialiased;
  	-moz-osx-font-smoothing: grayscale;
   	font-smooth: always;
 	color:#FFFFFF;
 	font-family: 'Inter', sans-serif;
 	background-color: rgba(34, 40, 49, 1);
-	/* min-width: 810px; */
 }
 
 input:focus, textarea:focus, select:focus{

@@ -85,7 +85,7 @@ export default function Create() {
 	useEffect(() => {
 		async function fetchData() {
 			const res = await GetRes(APIs.Profile);
-			if (res.ok)
+			if (res?.ok)
 				route.push("/");
 			else
 				checkwait(true);

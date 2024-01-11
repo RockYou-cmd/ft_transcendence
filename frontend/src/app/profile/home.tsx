@@ -93,9 +93,9 @@ export default function Home({ setSignIn }: { setSignIn: any }) {
 						</div>
 						<ContactForm />
 			</div>*/}
-					<div className='mt-32'>
+					{/* <div className='mt-32'>
 						<Footer />
-					</div>
+					</div> */}
 			{/*	</div>  */}
 			{/* </div> */}
 			</div>

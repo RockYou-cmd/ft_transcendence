@@ -17,10 +17,10 @@ export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: 
 		const UserProfile = User ? User : "";
 		async function fetchData() {
 			const data = await GetData({ Api: page, user: UserProfile }) as any;
-			console.log("profile data", data);
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {
 				setOnline("OFF");
+				console.log("OFFline", data);
 			}
 			else {
 	
@@ -29,7 +29,7 @@ export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: 
 				}
 				
 					socket?.disconnect();
-				setSocket(io(host + "/events", {
+					setSocket(io(host + "/events", {
 					withCredentials: true,
 				}));
 		

@@ -77,7 +77,6 @@ export default function ExploreRooms({ close }: { close: any }) {
 	async function getRooms() {
 		const data = await Get(APIs.Groups);
 		setData(data);
-		console.log("rooms", data);
 		if (search != null) {
 			const filter = data?.rooms?.filter((room: any) => {
 				return room?.name?.toLowerCase().includes(search?.toLowerCase());

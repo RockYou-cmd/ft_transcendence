@@ -15,7 +15,6 @@ export default function LeaderBoard() {
 
 	async function getData() {
 		const data = await Get(APIs.leaderBoard);
-		console.log("data leaderBoard", data);
 		setData({rank : data});
 	}
 
@@ -37,7 +36,7 @@ export default function LeaderBoard() {
 	function Print(info: any) {
 		const player = info?.info;
 	
-		const xp = (player?.xp * 100 / player?.requiredXp).toFixed(0);
+		// const xp = (player?.xp * 100 / player?.requiredXp).toFixed(0);
 		
 		const board = <>
 			<div className="rankTable" onClick={() => { router.push("/users/" + player?.userId) }}>
@@ -45,7 +44,7 @@ export default function LeaderBoard() {
 				<Image className="g_img" src={player?.user?.photo ? player?.user?.photo : avatar} priority={true} alt="img" width={70} height={70} />
 
 				<h3>{player?.userId}</h3>
-				<span>{player?.level + '.' + xp}</span>
+				<span>{player?.level}</span>
 
 			</div>
 		</>

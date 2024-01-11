@@ -1,6 +1,8 @@
 
 export const Host = "http://localhost:3001";
 
+// const Host = `${process.env.LOCALHOST}`;
+
 export interface Api {
 	SignIn: string,
 	SignUp: string,
@@ -46,6 +48,7 @@ export interface Api {
 	friendPending : string,
 	changePassword : string,
 	leaderBoard : string,
+	userUpdate : string,
 }
 
 export const APIs : Api = {
@@ -93,4 +96,5 @@ export const APIs : Api = {
 	friendPending : Host + "/friend/pending",
 	changePassword : Host + "/user/password",
 	leaderBoard : Host + "/user/leaderBoard",
+	userUpdate : Host + "/user/update",
 };

@@ -255,7 +255,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			}
 		})
 		if (scroll.current) {
-			console.log("scroll", scroll.current.scrollTop,"scroll height" ,scroll.current.scrollHeight)
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
 		return () => {

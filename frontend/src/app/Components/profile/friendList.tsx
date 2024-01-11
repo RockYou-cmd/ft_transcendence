@@ -20,7 +20,6 @@ const FriendListComponent: any = ({ User, refresh, Pending }: { User: string, re
 	const fetchFriendList = async () => {
 		try {
 			let response: any;
-			// console.log("user", User, "pending", Pending);
 			if (User == "") {
 				if (!Pending)
 					response = await Get(APIs.Friends);
@@ -32,7 +31,6 @@ const FriendListComponent: any = ({ User, refresh, Pending }: { User: string, re
 			}
 			setFriendList(response);
 
-
 		} catch (error) {
 			console.error('Error fetching friend list:', error);
 		}
@@ -41,7 +39,7 @@ const FriendListComponent: any = ({ User, refresh, Pending }: { User: string, re
 	async function accept(e: MouseEvent, friend: string) {
 		e.preventDefault();
 		const res = await SendFriendRequest({ username: friend, status: "accept request", socket: socket, me: me });
-		if (!res.ok)
+		if (!res?.ok)
 			swal("Error", "Something wrong", "error");
 		setRefresh2(!refresh2);
 	}
@@ -49,7 +47,6 @@ const FriendListComponent: any = ({ User, refresh, Pending }: { User: string, re
 	useEffect(() => {
 		setFriendList(undefined);
 		fetchFriendList();
-		// console.log("refresh", refresh, "pending", Pending, "refresh2", refresh2);	
 	}, [refresh, Pending, refresh2]);
 
 	function Print(user: any) {

@@ -67,7 +67,6 @@ export default function UserProfile() {
 
 
 	useEffect(() => {
-		console.log("Userdata", Userdata);
 		if (Userdata?.statusCode == 404 || (Userdata?.blocked && Userdata?.blocked !== Userdata?.username)) {
 			router.push("/users/not-found");
 		}

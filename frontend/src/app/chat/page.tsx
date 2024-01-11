@@ -41,7 +41,7 @@ export default function Chat() {
 	
 	async function Block(User: any) {
 		const res = await Put({ username: User?.username }, APIs.Block);
-		if (res.ok) {
+		if (res?.ok) {
 			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
 		}
 	}

@@ -34,7 +34,7 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 		e.preventDefault();
 
 		const verify2FAResponse = await GetRes(`http://localhost:3001/auth/verifyToken/?username=${user}&token=${token}`)
-		if (verify2FAResponse.ok) {
+		if (verify2FAResponse?.ok) {
 			if (online != "ON") {
 				setOnline("ON");
 				route.push("/");

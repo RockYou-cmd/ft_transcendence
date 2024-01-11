@@ -33,12 +33,12 @@ export async function SendFriendRequest({ username, status , socket, me}: { user
 		res = await Post(data, subApi);
 
 
-	if (res.ok){
+	if (res?.ok){
 		const msg = status == "request friend" ? "has sent a friend request" : status == "accept request" ? "has accepted your friend request" : "";
 		socket?.emit("update", {type : "friendship",  content : msg , option : status , receiver: username , sender : me?.username});
 	}
 
-	if (res.status == 401)
+	if (res?.status == 401)
 		return undefined;
 
 	return res;

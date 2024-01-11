@@ -27,6 +27,7 @@ export default function PingPong({gameSettings, gameInfo, close, setMode} : { ga
 	const [gameRes, setGameRes] = useState(false);
 	const msg = useRef("");
 
+
 	function leaveMatch(e? : MouseEvent){
 		e?.preventDefault();
 		socket?.disconnect();

@@ -43,7 +43,7 @@ const TwoAuth = ({ User , change}: { User: any , change : any}) => {
           }),
           
         });
-        if (response.ok) {
+        if (response?.ok) {
 			swal("Success!", "2FA disabled!", "success");
         }
         else {
@@ -70,7 +70,7 @@ const TwoAuth = ({ User , change}: { User: any , change : any}) => {
            token: verificationCode,
          }),
        });
-	   if (verifyResponse.ok) {
+	   if (verifyResponse?.ok) {
 			swal("Success!", "2FA enabled!", "success");
 			setIs2FAEnabled(true);
 			setShowQRCode(false);
