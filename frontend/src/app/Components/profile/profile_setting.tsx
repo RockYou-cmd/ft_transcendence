@@ -152,7 +152,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 				if (response.ok) {
 					if (updatedData.username){
 						if (socket){
-							// socket?.emit("nameUpdate",  {username : updatedData.username});
+							socket?.emit("nameUpdate",  {username : updatedData.username});
 						}
 					}
 					swal("Profile updated successfully", "", "success");
