@@ -23,11 +23,13 @@ import swal from "sweetalert";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import MatchHistory from "../../Components/profile/matchHistory";
 import { BsPersonFillAdd } from "react-icons/bs";
-import { FaUserFriends } from "react-icons/fa";
 import AchievmentIcon from "../../../../public/achievment.png";
 import Achievment from "../../Components/profile/achievment"
 import UserLevel from "@/app/Components/profile/userLevel";
-
+import { FaUserFriends } from "react-icons/fa";
+import { GiPingPongBat } from "react-icons/gi";
+import { FaRankingStar } from "react-icons/fa6";
+import { GiGoalKeeper } from "react-icons/gi";
 
 
 
@@ -289,6 +291,7 @@ export default function UserProfile() {
 						<div className="flex  w-full  flex-row justify-center text-center ">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
 						</div>
+						<GiPingPongBat size={100}  className="absolute opacity-5 xl:w-64 lg:w-36 md:w-28 sm:w-16"/>
 						<p className="text-gray-300"> Played: {Userdata?.gameProfile?.gamesPlayed}</p>
 						<p className="text-gray-300"> Wins: {Userdata?.gameProfile?.wins}</p>
 						<p className="text-gray-300"> Losses : {Userdata?.gameProfile?.losses}</p>
@@ -298,6 +301,7 @@ export default function UserProfile() {
 						<div className=" flex  w-full  flex-row justify-center text-center">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg ">Goals Stats</h1>
 						</div>
+						<GiGoalKeeper  size={100} className="absolute opacity-10 xl:w-64 lg:w-36 md:w-28 sm:w-16" />
 						<p className="text-gray-300"> goals scored: {Userdata?.gameProfile?.goalsScored}</p>
 						<p className="text-gray-300"> goals conced: {Userdata?.gameProfile?.goalsConced}</p>
 					</div >
@@ -315,6 +319,7 @@ export default function UserProfile() {
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
 						<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
+						<FaRankingStar size={100}  className="absolute opacity-10 xl:w-64 lg:w-36 md:w-28 sm:w-16" />
 						<p className="text-gray-300"> Player XP: {Userdata?.gameProfile?.xp}</p>
 						<p className="text-gray-300"> Clean Sheet: {Userdata?.gameProfile?.cs}</p>
 					</div>

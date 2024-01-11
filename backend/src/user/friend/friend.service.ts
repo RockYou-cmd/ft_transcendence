@@ -1,4 +1,10 @@
-import { ForbiddenException, HttpCode, HttpException, HttpStatus, Injectable } from "@nestjs/common"; 
+import {
+  UnauthorizedException,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from "@nestjs/common"; 
 import { PrismaClient } from "@prisma/client";
 import { UserService } from "../user.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -35,7 +41,7 @@ export class FriendService {
     } catch (err) {
       console.log(err);
       if (err instanceof PrismaClientKnownRequestError && err.code == "P2002")
-        throw new ForbiddenException(
+        throw new UnauthorizedException(
           err.meta.target[0] + " already in the friend list",
         );
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
