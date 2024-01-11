@@ -1,8 +1,10 @@
-import { IsEmail, IsNotEmpty, IsStrongPassword } from "class-validator"
+import { IsAlphanumeric, IsEmail, IsNotEmpty, IsStrongPassword, Length } from "class-validator"
 
 export class authDto {
 
 	@IsNotEmpty()
+	@Length(4, 12)
+	@IsAlphanumeric()
 	username: String
 
 	@IsEmail()

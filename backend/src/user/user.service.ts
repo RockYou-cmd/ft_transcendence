@@ -37,6 +37,9 @@ export class UserService {
         },
       });
       if (!ret) throw new NotFoundException("User Not Found");
+      ret.password = "false";
+      if (ret.password) 
+        ret.password = "true"
       return ret;
     } catch (err) {
       console.log("getProfile !Error!");
@@ -54,6 +57,7 @@ export class UserService {
         }
       });
       if (!ret) throw new NotFoundException("User Not Found");
+      delete ret.password;
       return ret;
     } catch (err) {
       console.log("getData !Error!");
@@ -113,6 +117,10 @@ export class UserService {
                     username: username,
                   },
                 },
+                select: {
+                  username: true,
+                  photo:true
+                }
               },
             },
           },
@@ -129,32 +137,40 @@ export class UserService {
       const ret = await prisma.gameProfile.findMany({
         orderBy: {
           level: "desc"
+        },
+        include: {
+          user: {
+            select: {
+              photo:true
+            }
+          }
         }
       })
+      return ret;
     } catch (err) {
       throw Error(err.message);
     }
   }
 
-  async getUsers() {
-    try {
-      return await prisma.user.findMany({
-        include: {
-          friends: true,
-          // messagesSent:true,
-          // messagesReceived:true,
-          rooms: {
-            include: {
-              room: true,
-            },
-          },
-        },
-      });
-    } catch (err) {
-      console.log("get all error");
-      return err;
-    }
-  }
+  // async getUsers() {
+  //   try {
+  //     return await prisma.user.findMany({
+  //       include: {
+  //         friends: true,
+  //         // messagesSent:true,
+  //         // messagesReceived:true,
+  //         rooms: {
+  //           include: {
+  //             room: true,
+  //           },
+  //         },
+  //       },
+  //     });
+  //   } catch (err) {
+  //     console.log("get all error");
+  //     return err;
+  //   }
+  // }
 
   async getGames(username) {
     try {
@@ -173,7 +189,12 @@ export class UserService {
             include: {
               profile: {
                 include: {
-                  user:true
+                  user: {
+                    select: {
+                      username: true,
+                      photo: true
+                    }
+                  }
                 }
               }
             }
@@ -209,6 +230,10 @@ export class UserService {
           mode: "insensitive",
         },
       },
+      select: {
+        username: true,
+        photo: true
+      }
     });
     return { users: ret };
   }
