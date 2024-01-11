@@ -1,11 +1,9 @@
 import Image from "next/image";
-import achiev_pic from '../../../../public/achievment.png';
 import { useEffect, useState, useRef } from 'react';
 import avatar from "../../../../public/avatar.png";
 import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
 import { useLogContext, useMe } from "../Log/LogContext";
-import { Get, Post } from "../Fetch/Fetch";
 import Setting from "./profile_setting";
 import { APIs } from "@/app/Props/APIs";
 import FriendListComponent from "./friendList";
@@ -15,10 +13,10 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Achievment from "./achievment"
 import AchievmentIcon from "../../../../public/achievment.png";
-import { faUserGroup , faUserPlus} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
+import { GiPingPongBat } from "react-icons/gi";
+
 
 
 
@@ -92,20 +90,19 @@ export default function Profile_info() {
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
 							<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
-						<p className="text-gray-300"> games played: X</p>
-						<p className="text-gray-300"> games played: X</p>
-						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> Player XP: {data?.gameProfile?.xp}</p>
+						<p className="text-gray-300"> Clean Sheet: {data?.gameProfile?.cs}</p>
 					</div>
 				</div>
-				
-				<div id="scrollHide" className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2  shadow-sm shadow-cyan-500/50" >
-					<h1 className=" text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</h1>
-					
-					<MatchHistory page="Profile" User={me?.username}/>
+				<div className=" rounded-lg col-span-2 row-span-3 bg-gray-800 sm:col-span-3 md:col-span-3 lg:col-span-3 xl:col-span-2  shadow-sm shadow-cyan-500/50 flex flex-col">
+						<div className=" text-white font-bold text-xl  justify-center text-center p-4 bg-gradient-radial from-slate-600 to bg-slate-900 ">Match history</div>
+						<div id="scrollHide" className="flex-1 px-4">
+							<MatchHistory page="Profile" User={me?.username} />
+						</div>
 				</div>
 
 				<div className="rounded-lg bg-red- overflow-auto bg-gray-800 hover:ease-in-out row-span-3  lg:col-span-3 md:col-span-3  sm:col-span-3 xl:col-span-1 duration-700 shadow-sm shadow-cyan-500/50" > 
-				<div className="divide-x-2 divide-slate-400/25 flex flex-row  w-full h-14 cursor-pointer bg-gradient-radial from-slate-600 to bg-slate-900">
+				<div className="divide-x-4 divide-slate-100/20 flex flex-row  w-full h-14 cursor-pointer bg-gradient-radial from-slate-600 to bg-slate-900">
 					<div className="flex items-center justify-center w-[50%] h-full" style={{ backgroundColor: !Pending ? 'rgb(0, 128, 255,.2)' : '' }} onClick={()=>setPending(false)}>
 						<BsPersonFillAdd size={25}/>
 						<h1 className=" m-2 font-bold text-xl">Friends</h1>
@@ -115,12 +112,8 @@ export default function Profile_info() {
 						<h1 className="m-2 font-bold text-xl">Invite</h1>
 					</div>
 				</div>
-					{/* <section className="flex flex-row  justify-between space-x p-4 bg-gradient-radial from-slate-600 to bg-slate-900">
-						<h1 className=" text-white font-bold text-xl  ">{!Pending ? "Friends List" : "Invitations"}</h1> 
-						<button onClick={()=>setPending(!Pending)}>{!Pending ? <FontAwesomeIcon icon={faUserGroup} /> : <FontAwesomeIcon icon={faUserPlus} />}</button>
-					</section> */}
 						
-					<FriendListComponent User="" Pending={Pending} />
+					<FriendListComponent User="" Pending={Pending}  />
 				</div>
 			</div>
 		</div>
@@ -143,8 +136,6 @@ export default function Profile_info() {
 			}
 		}
 		let statusColor: string = checkStatus(data?.status);
-
-
 
 		return (
 			<div className=" flex flex-col overflow-auto rounded-lg  items-center  h-[screen] min-w-[450px] max-w-[450px] bg-gradient-to-br from-slate-900 via-slate-700 to-black">

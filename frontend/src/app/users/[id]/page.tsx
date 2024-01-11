@@ -284,8 +284,8 @@ export default function UserProfile() {
 	
 
 
-<div className="gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] ">
-				<div className=" min-h-[17.8rem] items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
+<div className="gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] font-bold ">
+				<div className=" min-h-[17.8rem] tetx-xl items-start rounded-lg col-span-3  grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full overflow-hidden  shadow-sm  " >
 					<div className="flex h-full relative border rounded-lg flex-col w-auto justify-center items-center ">
 						<div className="flex  w-full  flex-row justify-center text-center ">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
@@ -314,11 +314,10 @@ export default function UserProfile() {
 
 					<div className="flex relative border rounded-lg flex-col w-auto h-full  felx justify-center items-center">
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
-							<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
+						<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
-						<p className="text-gray-300"> games played: X</p>
-						<p className="text-gray-300"> games played: X</p>
-						<p className="text-gray-300"> games played: X</p>
+						<p className="text-gray-300"> Player XP: {Userdata?.gameProfile?.xp}</p>
+						<p className="text-gray-300"> Clean Sheet: {Userdata?.gameProfile?.cs}</p>
 					</div>
 				</div>
 				
