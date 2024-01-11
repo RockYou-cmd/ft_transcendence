@@ -19,8 +19,6 @@ import { GiPingPongBat } from "react-icons/gi";
 import { FaRankingStar } from "react-icons/fa6";
 
 
-
-
 export default function Profile_info() {
 	const { online } = useLogContext();
 	const { me, setMe } = useMe() as any;

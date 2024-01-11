@@ -32,7 +32,7 @@ export async function Get(path: string) {
 		}
 
 		const res = await fetch(path, header);
-		if (!res?.ok){
+		if (res?.status == 401 || res?.status == 403){
 			return undefined;
 		}
 		const data = await res?.json();

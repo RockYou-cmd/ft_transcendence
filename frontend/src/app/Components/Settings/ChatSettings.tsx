@@ -40,5 +40,4 @@ export async function SendFriendRequest({ username, status , socket, me}: { user
 		return undefined;
 
 	return res;
-	// return response;
 }

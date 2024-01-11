@@ -15,6 +15,11 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 	const router = useRouter();
 	const pathname = usePathname();
 	const {socket} = useSocket();
+	const [matchInfo, setMatchInfo] = useState<any>(data);
+
+	useEffect(() => {
+		setMatchInfo(data);
+	}, [data]);
 
 	function accept(e : MouseEvent){
 		e.preventDefault();
@@ -27,13 +32,15 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 		close(false);
 	}	
 
+
+	
 	function refuse(e? : MouseEvent){
 		e?.preventDefault();
 		if (ACCEPT)
 			ACCEPT("refused");
 		close(false);
 		try{
-			socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
+			socket?.emit("update", {option : "refuse", receiver : matchInfo.player1, sender : matchInfo.player2});
 		}
 		catch(e){
 			swal("Error", "", "error");
@@ -45,7 +52,7 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 			refuse();
 		}, 5000);
 		return () => clearTimeout(timer);
-	},[]);
+	},[matchInfo]);
 
 	return (
 		<>

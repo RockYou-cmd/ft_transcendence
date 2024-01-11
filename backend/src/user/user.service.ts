@@ -61,13 +61,14 @@ export class UserService {
       delete ret.password;
       return ret;
     } catch (err) {
-      console.log("getData !Error!");
+      console.log("getData !Error! : ", err);
       throw err;
     }
   }
 
   async getUser(account, user) {
     try {
+		console.log(user);
       const userData = await this.getData(user);
       const ret = await prisma.user.findUnique({
         where: {
@@ -98,6 +99,8 @@ export class UserService {
         blocked: ret.friends[0]?.blocked?.username,
       };
     } catch (err) {
+		console.log("getUser Error");
+		console.log(err);
       throw err;
     }
   }
