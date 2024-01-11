@@ -15,6 +15,7 @@ export default function Groups({ Group, refresh }: { Group: any, refresh: boolea
 
 	async function getRooms() {
 		const data = await Get(APIs.myGroups);
+		console.log("data groups", data);
 		setData(data);
 	}
 

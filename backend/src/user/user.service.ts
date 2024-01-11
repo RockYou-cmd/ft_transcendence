@@ -37,9 +37,10 @@ export class UserService {
         },
       });
       if (!ret) throw new NotFoundException("User Not Found");
-      ret.password = "false";
       if (ret.password) 
-        ret.password = "true"
+		  ret.password = "true"
+	  else
+		ret.password = "false";
       return ret;
     } catch (err) {
       console.log("getProfile !Error!");

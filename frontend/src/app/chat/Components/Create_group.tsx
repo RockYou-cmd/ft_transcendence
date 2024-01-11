@@ -23,6 +23,7 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 	const [privacy, setPrivacy] = useState("PUBLIC" || "PRIVATE" || "PROTECTED");
 	const [hide, setHide] = useState(false);
 
+	console.log("info", info);
 
 	useEffect(() => {
 		if (privacy == "PROTECTED") {
@@ -42,13 +43,16 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			gName.current.value = info?.name;
 			gDesc.current.value = info?.description;
 			setPrivacy(info?.privacy);
-			gPass.current.value = info?.password;
+			// gPass.current.value = info?.password;
 		}
 	},[]);
 
 	async function changeSettings(e: any) {
 		e.preventDefault();
-		const image =  await fileUploadFunction(gPic.current.files[0]);
+		let image : any;
+		if (gPic.current?.files[0]){
+			image = await fileUploadFunction(gPic?.current?.files[0]);
+		}
 	
 		const res = await Put({
 			name : gName.current.value,

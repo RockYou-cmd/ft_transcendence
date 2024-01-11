@@ -37,6 +37,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	const refImg = useRef(null) as any;
 	const { socket } = useSocket();
 
+	console.log("user", User);
 	// object that will snet to backend
 	const [formData, setFormData] = useState<FormData>({
 		username: '',
@@ -104,7 +105,8 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 		e?.preventDefault();
 		const data = {oldPassword : oldPassRef.current?.value, newPassword : newPassRef.current?.value}
 		const res = await Put(data, APIs.changePassword)
-
+	
+		
 		if (res?.ok){
 			swal("Password changed successfully", "", "success");
 			setChangePass(false);
@@ -215,12 +217,12 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 				<div>
 					<TwoAuth User={User} change={changes} />
 				</div>
-				{	// change password for no intra or google account
+				{	User?.password == "true" && // change password for no intra or google account
 					<div className="changePassword">
 						<button onClick={() => setChangePass(!changePass)} >Change Password {!changePass ? <FontAwesomeIcon icon={faCircleChevronDown} className="ml-3" />
 							: <FontAwesomeIcon icon={faCircleChevronUp} className="ml-3" />}
 						</button>
-						{changePass &&
+						{changePass && 
 							<form className="bg-gradient-to-br from-[#2B3044]
 					via-[#636a87]to-[#2B3044]" onSubmit={ChangePassword}>
 								<label>Enter The current Password</label>

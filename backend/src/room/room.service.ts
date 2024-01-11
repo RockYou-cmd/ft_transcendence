@@ -262,7 +262,8 @@ export class RoomService {
           name: true,
           photo: true,
           privacy: true,
-          description: true
+          description: true,
+		  id : true,
         }
       });
       return { rooms: rooms };
@@ -294,7 +295,8 @@ export class RoomService {
           name: true,
           photo: true,
           privacy: true,
-          description: true
+          description: true,
+		  id : true
         }
       });
       return { rooms: roomsIn };

@@ -42,7 +42,7 @@ export default function LeaderBoard() {
 		const board = <>
 			<div className="rankTable" onClick={() => { router.push("/users/" + player?.userId) }}>
 				<h2>{`${counter()}`}</h2>
-				<Image className="g_img" src={player?.photo ? player?.photo : avatar} priority={true} alt="img" width={70} height={70} />
+				<Image className="g_img" src={player?.user?.photo ? player?.user?.photo : avatar} priority={true} alt="img" width={70} height={70} />
 
 				<h3>{player?.userId}</h3>
 				<span>{player?.level + '.' + xp}</span>
