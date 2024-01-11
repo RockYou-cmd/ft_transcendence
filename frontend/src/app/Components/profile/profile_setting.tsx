@@ -180,7 +180,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
 						{/* <div className="cursor-pointer w-64 aspect-square ml-[20%] items-center  text-white rounded border-2 border-dashed bg-black"> */}
 
-						<div className=" relative cursor-pointer w-64 aspect-square mx-auto items-center  text-white rounded border-2 border-dashed bg-black">
+						<div className="overflow-hidden relative cursor-pointer w-64 aspect-square mx-auto items-center  text-white rounded border-2 border-dashed bg-black">
 							<input
 								ref={refImg}
 								id="preview"
@@ -189,6 +189,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 								onChange={handleChange}
 								name="photo"
 								accept="image/*"
+								
 							/>
 							<div
 								onClick={() => refImg.current?.click()}

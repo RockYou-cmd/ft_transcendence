@@ -3,7 +3,6 @@ import achiev1 from "../../../../public/sprites/achievment_icons-01.png"
 import achiev2 from "../../../../public/sprites/achievment_icons-03.png"
 import achiev3 from "../../../../public/sprites/achievment_icons-04.png"
 import achiev4 from "../../../../public/sprites/achievment_icons-06.png"
-import achiev5 from "../../../../public/sprites/achievment_icons-08.png"
 import Image from "next/image"
 
 interface achievmentProps {
@@ -49,7 +48,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
                     }
 
                     {goalMachine &&
-					<div className=" w-full flex border my-2 rounded-xl items-center">
+					<div className=" w-full flex border my-2 bg-cyan-400/10 rounded-xl items-center">
 							<>
 								<Image className="aspect-square"  src={achiev2} alt="achiev1" priority={true} width={80} height={80} />
 								<div className="m-3">
@@ -60,7 +59,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
 					</div>
                     }
                     {wallOfSteel &&
-					<div className=" w-full flex border my-2 rounded-xl items-center">
+					<div className=" w-full flex border my-2 bg-cyan-400/10 rounded-xl items-center">
 							<>
 								<Image className="aspect-square"  src={achiev3} alt="achiev1" priority={true} width={80} height={80} />
 								<div className="m-3">
@@ -71,7 +70,7 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
 					</div>
                     }
                     {undisputed &&
-					<div className=" w-full flex border my-2 rounded-xl items-center">
+					<div className=" w-full flex border my-2 bg-cyan-400/10 rounded-xl items-center">
 							<>
 								<Image className="aspect-square"  src={achiev4} alt="achiev1" priority={true} width={80} height={80} />
 								<div className="m-3">
