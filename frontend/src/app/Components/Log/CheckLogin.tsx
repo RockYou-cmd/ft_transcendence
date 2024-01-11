@@ -6,7 +6,6 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 
 	let data: any;
 
-
 	if (Api == "User")
 		data = await Get(APIs.User + user);
 	else if (Api == "Profile")

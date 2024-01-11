@@ -23,7 +23,6 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 	const [privacy, setPrivacy] = useState("PUBLIC" || "PRIVATE" || "PROTECTED");
 	const [hide, setHide] = useState(false);
 
-	console.log("info", info);
 
 	useEffect(() => {
 		if (privacy == "PROTECTED") {
@@ -52,6 +51,10 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 		let image : any;
 		if (gPic.current?.files[0]){
 			image = await fileUploadFunction(gPic?.current?.files[0]);
+		}
+		if (privacy == "PROTECTED" && !gPass.current.value){
+			swal("Please enter password", "", "info");
+			return;
 		}
 	
 		const res = await Put({

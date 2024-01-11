@@ -15,11 +15,11 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import SelectFriend from './Components/FriendlyGame';
 import Invite from '../chat/Components/Invite';
-// import MatchHistory from './Components/MatchHistory';
 import React from 'react';
 import swal from 'sweetalert';
 import MatchHistory from '../Components/profile/matchHistory';
-
+import { GetData } from '../Components/Log/CheckLogin';
+import { get } from 'http';
 
 interface GameInfo {
 	roomName: string,
@@ -61,7 +61,6 @@ export default function GamePage() {
 
 	useEffect(() => {
 		let n = false;
-		// console.log("f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
 		
 		if (!gameSet && Mode != "rank" && Mode != "friend") {
 			setMatchMake(false);
@@ -113,12 +112,12 @@ export default function GamePage() {
 		}
 	}, [gameSet, inGame, matchMake, Mode ,inviteComp, accept, endGame]);
 
-// console.log("after  f" , f.current, "invite", invite.current, "selectedFriend", selectedFriend, "gameSet", gameSet, "matchMake", matchMake, "inGame", inGame, "Mode", Mode);
-
 	useEffect(() => {	
 		if (param.get("player1") != null && param.get("player2") != null){
 			setMode(param.get("mode") as string);
-			setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
+			const data = {roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string};
+			GetOpp(data);
+			// setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
 			setSelectedFriend(param.get("player2") as string);
 			if (param.get("invite") == "true")
 			invite.current = true;
@@ -126,31 +125,45 @@ export default function GamePage() {
 	router.replace("/game");
 	},[])
 	
+
+	async function GetOpp( data : any){
+		const name = data.player1 == me?.username ? data.player2 : data.player1;
+		const Opp = await GetData({ Api: "User", user: name });
+		const matchInfo = data;
+		matchInfo.photo = Opp?.photo;
+		setGameInfo(matchInfo);
+	}
+
 	useEffect(() => {
 
+		socket?.on("invite", (data: any) => {
+			if (inGame){
+				socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
+				return;
+			}
+			else{
 
-				socket?.on("invite", (data: any) => {
-					if (inGame){
-						socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
-						return;
-					}
-					else{
+				invite.current = true;
 
-						invite.current = true;
+				setMode("");
+				setInviteComp(true);
 
-						// setGameSet(false);
-						setMode("");
-						setInviteComp(true);
-						setGameInfo(data);
-						setSelectedFriend(data.player1);
-					}
-					
-				});
-				socket?.on("start", (data: any) => {
-					if (inGame) return;
-					setGameInfo(data);
-				});
+				// setGameInfo(data);
+				GetOpp(data);
+				setSelectedFriend(data.player1);
+			}
 			
+		});
+		socket?.on("start", (data: any) => {
+			if (inGame) return;
+			if (Mode == "friend"){
+				GetOpp(data);
+			}
+			else{
+				setGameInfo(data);
+			}
+		});
+	
 				
 		return () => {socket?.off("invite"), ()=>{}}
 	},[socket, accept, inGame]);
@@ -191,7 +204,7 @@ export default function GamePage() {
 				setInGame(true);
 			}
 			socket?.on("start", (data: any) => {
-				setGameInfo(data);
+				GetOpp(data);
 				if (data?.player1 == me?.username && data?.roomName){
 					socket?.emit("start", data);
 				}
@@ -211,8 +224,7 @@ export default function GamePage() {
 					setSelectedFriend("");
 					setGameInfo(undefined);
 					setSend(false);
-					// if (data?.mode == undefined)
-						swal(`${data?.receiver} refused your invitation`, "your friend is busy or he already in game", "info");
+					swal(`${data?.receiver} refused your invitation`, "your friend is busy or he already in game", "info");
 				}
 			})
 			return () => {socket?.off("start"), ()=>{}

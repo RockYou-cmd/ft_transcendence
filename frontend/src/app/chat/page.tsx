@@ -41,7 +41,7 @@ export default function Chat() {
 	
 	async function Block(User: any) {
 		const res = await Put({ username: User?.username }, APIs.Block);
-		if (res.ok) {
+		if (res?.ok) {
 			socket?.emit("update", {type : "friendship" , option : "block" , receiver : User?.username, sender : me?.username});
 		}
 	}
@@ -196,7 +196,6 @@ export default function Chat() {
 
 										<Image src={chatAnimation} alt='chat animtaio' priority={true} ></Image>
 										</div>
-										{/* {typeof document != undefined &&  <Lottie className='w-[50%]'  animationData={chatAnimation} loop={true}  />} */}
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</div>
 								}

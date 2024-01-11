@@ -1,7 +1,6 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import RootLayout from './layout';
 import './assest/login.css';
 import { MouseEvent } from 'react';
 import { useState, useEffect } from 'react';
@@ -25,7 +24,6 @@ export default function App() {
 	
 	let render = LoG({ page: "Profile", LogIn: hooks, back : setSignIn }) as any;
 	
-	// console.log(online);
 	
 	if (!hooks.waitHook.state) {
 		return (<Loading />)

@@ -18,7 +18,6 @@ export default function SelectFriend({close , setMode, select, gameInfo, send} :
 	const {socket} = useSocket();
 	const {me} = useMe() as any;
 	const selected = useRef("");
-	// const [refresh, setRefresh] = useState(false);
 	const {online, setOnline} = useLogContext();
 
 	useEffect(() => {
@@ -47,7 +46,6 @@ export default function SelectFriend({close , setMode, select, gameInfo, send} :
 		}
 		else{
 			send(true);
-			// socket?.emit("invite", {player2 : selected.current, player1 : me?.username});
 			gameInfo({player1 : me?.username, player2 : selected.current});
 			close(false);
 		}
