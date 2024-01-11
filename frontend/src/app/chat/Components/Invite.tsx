@@ -36,7 +36,7 @@ export default function Invite({User, close, data, ACCEPT} : {User: any, close: 
 			socket?.emit("update", {option : "refuse", receiver : data.player1, sender : data.player2});
 		}
 		catch(e){
-			swal("Error", "You are not connected to the server", "error");
+			swal("Error", "", "error");
 		}
 	}
 

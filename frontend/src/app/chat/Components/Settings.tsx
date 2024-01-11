@@ -164,7 +164,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			e.preventDefault();
 			try{
 				const res = await Put({id : group.id , username : User?.user?.username, duration : time}, APIs.Mute);
-				if (res.ok){
+				if (res?.ok){
 					socket?.emit("update", {option : "Mute" , groupId : group?.id , receiver : User?.user?.username, sender : me?.username});
 				}
 				setMute(false);
@@ -221,7 +221,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				content = UserSettings;
 
 			if(role == "OWNER" || role == "ADMIN"){
-				if (User.status == "MUTED"){
+				if (User?.status == "MUTED"){
 					if (role == "OWNER" || (role == "ADMIN" && User.role == "MEMBER"))
 						content = {...content, Option : [...content.Option, "unMute"], desc : [...content.desc, "UnMute"]};
 				}

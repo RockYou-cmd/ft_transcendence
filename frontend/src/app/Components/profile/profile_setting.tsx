@@ -37,7 +37,6 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	const refImg = useRef(null) as any;
 	const { socket } = useSocket();
 
-	console.log("user", User);
 	// object that will snet to backend
 	const [formData, setFormData] = useState<FormData>({
 		username: '',
@@ -79,10 +78,11 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 			uploadData.append('file', file);
 			uploadData.append('upload_preset', 'image_upload');
 
-			const response = await fetch(`https://api.cloudinary.com/v1_1/dkcnaj5qm/image/upload`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_UPLOAD}`, {
 				method: 'POST',
 				body: uploadData,
 			});
+			console.log("response ", response);
 			if (response.ok) {
 				const data = await response.json();
 		
@@ -93,10 +93,9 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	
 
 			} else {
-				console.error('Failed to upload image to Cloudinary');
+				swal("Failed to upload image", "", "error");
 			}
 		} catch (error) {
-			// console.error('Error uploading image:', error);
 			swal("Error uploading image:", "", "error");
 		}
 	};
@@ -122,7 +121,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		try {
 			e.preventDefault();
-			// const { username, bio, photo } = formData;
+
 
 			const { username, bio, photo } = formData;
 
@@ -140,7 +139,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
 			if (changes.current == true) {
 
-				const response = await fetch('http://localhost:3001/user/update', {
+				const response = await fetch(APIs.userUpdate, {
 					method: 'PUT',
 					credentials: 'include' as RequestCredentials,
 					headers: {
@@ -149,7 +148,6 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 					body: JSON.stringify({ updatedData }),
 					
 				});
-				//   console.log(updatedData);
 
 				if (response.ok) {
 					if (updatedData.username){

@@ -150,7 +150,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
 		) {
 			if ((input !== "")) {
-				let img: string = "";
+				// let img: string = "";
 			// 	if (msgImg.current?.files[0] != undefined) {
 			// 		await swal({
 			// 			title: "Uploading Image",
@@ -204,11 +204,11 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 
 					if (status.current.status == "BLOCKED") {
 						if (status.current.sender == me?.username){
-							// swal("You are blocked by this user", "", "error");
+					
 							alert("You are blocked by this user");
 						}
 						else{
-							// swal("You have blocked this user","" ,"error");
+							
 							alert("You have blocked this user");
 						}
 					}
@@ -255,7 +255,6 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			}
 		})
 		if (scroll.current) {
-			console.log("scroll", scroll.current.scrollTop,"scroll height" ,scroll.current.scrollHeight)
 			scroll.current.scrollTop = scroll.current.scrollHeight;
 		}
 		return () => {

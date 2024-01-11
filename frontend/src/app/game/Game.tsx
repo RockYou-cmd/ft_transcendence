@@ -95,7 +95,6 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 					{!time ?  <h2>Matchmaking... {sec} : {counter}</h2> 
 						: <h2>STARTING IN {counter} sec</h2>
 					}
-				{/* <button onClick={startgame} className='bg-green-500 text-white p-2 rounded m-5'> PLAY</button> */}
 			</div>
 		</>
 	)
