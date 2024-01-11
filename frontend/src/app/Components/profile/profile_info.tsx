@@ -16,6 +16,7 @@ import AchievmentIcon from "../../../../public/achievment.png";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import { GiPingPongBat } from "react-icons/gi";
+import { FaRankingStar } from "react-icons/fa6";
 
 
 
@@ -57,7 +58,7 @@ export default function Profile_info() {
 	};
 
 	return (
-		<div className="m-8 flex flex-row gap-8 h-[88vh] font-bold ">
+		<div className="m-8 flex flex-row gap-8 h-[88vh] font-semibold ">
 			{showSetting ? <Setting handleClick={handleClick} User={data} /> : <Info />}
 			<div className=" gap-5 w-full h-full grid grid-cols-3  grid-rows-4 xl:h-[100%] text-xl">
 				<div className="   items-center rounded-lg col-span-3 min-h-0 grid xl:grid-cols-4 lg:grid-cols-2  md:grid-cols-2 sm:grid-cols-2 grid-row-2 gap-1  bg-gray-800 min-w-full   shadow-sm  " >
@@ -65,6 +66,7 @@ export default function Profile_info() {
 						<div className="flex  w-full  flex-row justify-center text-center ">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2"> Games</h1>
 						</div>
+						<GiPingPongBat size={100}  className="absolute opacity-5 xl:w-64 lg:w-36 md:w-28 sm:w-16"/>
 						<p className="text-gray-300"> Played: {data?.gameProfile?.gamesPlayed}</p>
 						<p className="text-gray-300"> Wins: {data?.gameProfile?.wins}</p>
 						<p className="text-gray-300"> Losses : {data?.gameProfile?.losses}</p>
@@ -90,6 +92,7 @@ export default function Profile_info() {
 						<div className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg mb-2">
 							<h1 className="flex  w-full  flex-row justify-center text-center">Game State</h1>
 						</div>
+						<FaRankingStar size={100}  className="absolute opacity-10 xl:w-64 lg:w-36 md:w-28 sm:w-16" />
 						<p className="text-gray-300"> Player XP: {data?.gameProfile?.xp}</p>
 						<p className="text-gray-300"> Clean Sheet: {data?.gameProfile?.cs}</p>
 					</div>
