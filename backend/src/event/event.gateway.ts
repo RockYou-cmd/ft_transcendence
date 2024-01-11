@@ -163,9 +163,7 @@ export class EventGateway {
   handleNameUpdate(client: Socket, payload: any) {
     try {
       const { user }: any = client;
-      console.log(payload.username);
       this.server.in(payload.oldUsername).socketsJoin(payload.username);
-      this.server.in(payload.oldUsername).disconnectSockets();
     } catch (err) {
       throw err;
     }

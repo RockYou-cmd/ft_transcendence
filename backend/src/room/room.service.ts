@@ -216,7 +216,12 @@ export class RoomService {
         select: {
           members: {
             include: {
-              user: true,
+              user: {
+                select: {
+                  username: true,
+                  photo: true
+                }
+              },
             },
             where: {
               status: {
@@ -253,6 +258,12 @@ export class RoomService {
             },
           ],
         },
+        select: {
+          name: true,
+          photo: true,
+          privacy: true,
+          description: true
+        }
       });
       return { rooms: rooms };
     } catch (err) {
@@ -279,6 +290,12 @@ export class RoomService {
             },
           },
         },
+        select: {
+          name: true,
+          photo: true,
+          privacy: true,
+          description: true
+        }
       });
       return { rooms: roomsIn };
     } catch (err) {
@@ -316,7 +333,6 @@ export class RoomService {
           id: data.id,
         },
       });
-      console.log(room.password);
       if (!(await argon.verify(room.password, data.password)))
         throw new Error("password incorrect");
       return this.joinRoom(account, data.id);
@@ -519,6 +535,10 @@ export class RoomService {
                         not: username,
                       },
                     },
+                    select: {
+                      username: true,
+                      photo:true
+                    }
                   },
                 },
               },
