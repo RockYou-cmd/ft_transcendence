@@ -70,7 +70,6 @@ export default function Create() {
 				}
 				else {
 					const msg = await res?.json();
-					console.log("msg ", msg);
 					const messageError = msg?.message[3] ? msg?.message : msg?.message[0];
 					swal(messageError, "", "error");
 				}

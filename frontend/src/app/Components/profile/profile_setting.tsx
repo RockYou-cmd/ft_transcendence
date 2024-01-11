@@ -147,7 +147,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 					body: JSON.stringify({ updatedData }),
 					
 				});
-
+				console.log("response", response)
 				if (response?.ok) {
 					if (updatedData.username){
 						socket?.emit("nameUpdate", {username:updatedData.username, oldUsername : User?.username});
