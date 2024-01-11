@@ -33,6 +33,7 @@ const MatchHistory = ({page, User} : {page : string, User : string}) => {
 		if (user != me?.username)
 			router.push("/users/" + user);
 	}
+  console.log("data", data);
 
 
     return (
