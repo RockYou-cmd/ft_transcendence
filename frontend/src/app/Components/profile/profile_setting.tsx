@@ -35,7 +35,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	const [showPass, setShowPass] = useState<boolean>(false);
 	const changes = useRef(false);
 	const refImg = useRef(null) as any;
-	const {socket} = useSocket();
+	const { socket } = useSocket();
 
 	// object that will snet to backend
 	const [formData, setFormData] = useState<FormData>({
@@ -151,9 +151,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
 				if (response.ok) {
 					if (updatedData.username){
-						if (socket){
-							socket?.emit("nameUpdate",  {username : updatedData.username});
-						}
+						socket?.emit("nameUpdate", {username:updatedData.username, oldUsername : User?.username});
 					}
 					swal("Profile updated successfully", "", "success");
 					handleClick(false);

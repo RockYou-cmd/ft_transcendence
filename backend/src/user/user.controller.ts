@@ -25,10 +25,10 @@ export class UserController {
 		return this.UserService.getUser(account.user, user);
   }
 	
-  @Get("all")
-  getUsers() {
-    return this.UserService.getUsers();
-  }
+  // @Get("all")
+  // getUsers() {
+  //   return this.UserService.getUsers();
+  // }
 	
   @Get("games")
 	@UseGuards(AuthGuard)

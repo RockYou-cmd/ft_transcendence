@@ -163,8 +163,9 @@ export class EventGateway {
   handleNameUpdate(client: Socket, payload: any) {
     try {
       const { user }: any = client;
-      this.server.in(user.username).socketsJoin(payload.username);
-      this.server.in(user.username).disconnectSockets();
+      console.log(payload.username);
+      this.server.in(payload.oldUsername).socketsJoin(payload.username);
+      this.server.in(payload.oldUsername).disconnectSockets();
     } catch (err) {
       throw err;
     }
@@ -221,6 +222,7 @@ export class EventGateway {
   @SubscribeMessage("invite")
   @UseGuards(gameGuard)
   async invite(client: Socket, payload: any) {
+    console.log(payload);
     this.server.to(payload.player2).emit("invite", payload);
   }
 
