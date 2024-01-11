@@ -1,32 +1,5 @@
 
 
-/* .swal-modal{
-	border-radius: 20px;
-	background: #232226;
-	
-}
-
-.swal-button--confirm{
-	background-color: #B32A2E;
-	padding: 10px 30px;
-	text-align: center;
-	margin:auto;
-}
-
-.swal-title{
-	font : 800 25px "Poppins", sans-serif;
-	color: #fff;	
-	background-color: #36343A;
-}
-
-.swal-text{
-	font : 600 18px "Poppins", sans-serif;
-	color: #fff;
-	text-align: center;
-} */
-
-
-
 .PingPong{
 	display: flex;
 	align-items: center;
@@ -216,9 +189,9 @@
 	/* box-shadow: 2px 2px 20px 3px #4E4E4E; */
 }
 
-.Leaderboard{width: 34%;}
+.Leaderboard{width: 32%;}
 
-.matchHistory{width: 33%;
+.matchHistory{width: 36%;
 	padding:2.5% 2%;
 	overflow-y: auto;
 	scrollbar-width: none;

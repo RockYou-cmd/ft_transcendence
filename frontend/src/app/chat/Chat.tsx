@@ -149,32 +149,33 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			e.type === "click" ||
 			(e.type === "keydown" && (e as KeyboardEvent).key === "Enter")
 		) {
-			if ((input !== "" || msgImg.current?.files[0] != undefined)) {
+			if ((input !== "")) {
 				let img: string = "";
-				if (msgImg.current?.files[0] != undefined) {
-					await swal({
-						title: "Uploading Image",
-						icon: "info",
-						timer: 1500,
-						buttons: { closeModal : false}
-					}).then(async () => {
-						img = await fileUploadFunction(msgImg.current.files[0]) as any;
-						if (img != null && img != "") {
-							swal({
-								title: "Image Uploaded",
-								icon: "success",	
-							});
-						}
-						else{
-							swal({
-								title: "Image Not Uploaded",
-								icon: "error",	
-							});
-						}
-					});	
-			}
+			// 	if (msgImg.current?.files[0] != undefined) {
+			// 		await swal({
+			// 			title: "Uploading Image",
+			// 			icon: "info",
+			// 			timer: 1500,
+			// 			buttons: { closeModal : false}
+			// 		}).then(async () => {
+			// 			img = await fileUploadFunction(msgImg.current.files[0]) as any;
+			// 			if (img != null && img != "") {
+			// 				swal({
+			// 					title: "Image Uploaded",
+			// 					icon: "success",	
+			// 				});
+			// 			}
+			// 			else{
+			// 				swal({
+			// 					title: "Image Not Uploaded",
+			// 					icon: "error",	
+			// 				});
+			// 			}
+			// 		});	
+			// }
 
-				const s = img != "" ? img : input;
+				// const s = img != "" ? img : input;
+				const s = input;
 				const msg = { content: s, senderId: me?.username };
 				if (status.current.status != "BLOCKED") {
 					setChat((chat: { messages: any }) => ({
@@ -214,7 +215,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				}
 			}
 			setInput("");
-			msgImg.current.value = null;
+			// msgImg.current.value = null;
 		}
 	}
 

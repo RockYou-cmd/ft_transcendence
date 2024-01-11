@@ -56,8 +56,6 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 			try {
 				const res = await Post(data, APIs.SignIn);
 				const resData = await res?.json();
-				console.log("res", res);
-				console.log("resData", resData);
 	
 				if (res?.status == 201) {
 					if (online != "ON") {
@@ -68,7 +66,7 @@ export default function Form({TwoEA, User, back} : {TwoEA? : boolean, User? : st
 					setshow2FA(true);
 				}
 				else {
-					swal(resData?.message, "", "error");
+					swal("User Not Found", "", "error");
 				}
 			}
 			catch (err) {
@@ -91,7 +89,6 @@ return (
 		<div className=' relative mt-[30vh] '>
 			<ParticleBackground />
 
-			{/* <Link href="/" >back to Home</Link> */}
 			<div id="main" className='' >
 				{!show2FA ?  <>
 					{back && <button id='backBtn' onClick={()=>{back(false);}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>}
@@ -116,7 +113,6 @@ return (
 					onKeyDown={(e : any)=>handle2fa}
 					>
 					</input>
-					{/* <button onClick={(e:MouseEvent)=>handle2fa}> Verify </button> */}
 					<button type='submit'> Verify </button>
 				
 				</form>

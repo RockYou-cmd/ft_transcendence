@@ -21,21 +21,16 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
    const [wallOfSteel, setWallOfSteel] = useState(false);
    const [undisputed, setUndisputed] = useState(false);
 
-
 	useEffect(() => {
 		if (Number(gamesPlayed) >= 3)
 			setRisingStar(true);
 		if (Number(goalScored) >= 20)
 			setGoalMachine(true);
-		if ((Number(goalConced) / Number(goalScored)) <= 25 * 100)
+		if ((Number(goalConced) / Number(goalScored) * 100) <= 25)
 			setWallOfSteel(true);
 		if ((Number(wins) * 100 / Number(gamesPlayed)) >= 80 && Number(gamesPlayed) >= 5)
 			setUndisputed(true);
 	},[])
-    //  Rising Star: Bright Start
-    //  Goal Machine: ⚽️ Scoring Spreecalc
-    //  Wall of Steel: ️ Defensive Wall
-    //  Undisputed Champion: Top Dog
 
     return (
         <>
@@ -43,13 +38,13 @@ const Achievment: React.FC<achievmentProps> = ({ gamesPlayed, goalScored, goalCo
                     {risingStar &&
                 <div className=" w-full flex border my-2 bg-cyan-400/10  rounded-xl items-center">
 				
-							<>
-								<Image className="aspect-square"  src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
-								<div className="m-3">
-									<h1 className=" font-bold text-xl">RISING STAR</h1>
-									<p>Played more than 3 gmaes</p>
-								</div>
-							</>
+					<>
+						<Image className="aspect-square"  src={achiev1} alt="achiev1" priority={true} width={80} height={80} />
+						<div className="m-3">
+							<h1 className=" font-bold text-xl">RISING STAR</h1>
+							<p>Played more than 3 gmaes</p>
+						</div>
+					</>
 					</div>
                     }
 

@@ -102,12 +102,8 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
 	async function ChangePassword(e: any) {
 		e?.preventDefault();
-		console.log("change password old", oldPassRef.current?.value);
-		console.log("change password new", newPassRef.current?.value);
-
 		const data = {oldPassword : oldPassRef.current?.value, newPassword : newPassRef.current?.value}
 		const res = await Put(data, APIs.changePassword)
-		console.log("change password", res, "passwords", data);
 
 		if (res?.ok){
 			swal("Password changed successfully", "", "success");
@@ -155,7 +151,9 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 
 				if (response.ok) {
 					if (updatedData.username){
-						socket?.emit("nameUpdate", updatedData.username);
+						if (socket){
+							// socket?.emit("nameUpdate",  {username : updatedData.username});
+						}
 					}
 					swal("Profile updated successfully", "", "success");
 					handleClick(false);

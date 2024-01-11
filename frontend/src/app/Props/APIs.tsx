@@ -1,6 +1,5 @@
 
 export const Host = "http://localhost:3001";
-// export const Host = LocalHost;
 
 export interface Api {
 	SignIn: string,
@@ -46,6 +45,7 @@ export interface Api {
 	matchHistory : string,
 	friendPending : string,
 	changePassword : string,
+	leaderBoard : string,
 }
 
 export const APIs : Api = {
@@ -92,4 +92,5 @@ export const APIs : Api = {
 	matchHistory : Host + "/user/games",
 	friendPending : Host + "/friend/pending",
 	changePassword : Host + "/user/password",
+	leaderBoard : Host + "/user/leaderBoard",
 };
