@@ -1,4 +1,4 @@
-import { HttpException, ForbiddenException, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException, UseGuards, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -29,7 +29,7 @@ export class AuthService {
     } catch (err) {
       console.log("SignUp error");
       if (err instanceof PrismaClientKnownRequestError && err.code == "P2002")
-        throw new ForbiddenException(err.meta.target[0] + " already exist");
+        throw new UnauthorizedException(err.meta.target[0] + " already exist");
       return err.message;
     }
   }
@@ -47,8 +47,6 @@ export class AuthService {
       delete ret.password;
       return ret;
     } catch (err) {
-		console.log(err.message)
-
       throw new Error(err.message);
     }
   }
@@ -60,13 +58,13 @@ export class AuthService {
       return await this.generateJwt(ret);
     } catch (err) {
       console.log("SignIn !!Error!!");
-      throw err;
+      throw new HttpException(err.message, HttpStatus.NOT_FOUND);
     }
   }
 
   async OAuthValidation(data) {
     try {
-      if (!data) throw new ForbiddenException();
+      if (!data) throw new UnauthorizedException();
       var user = await prisma.user.findUnique({
         where: {
           email: data.email,
@@ -97,10 +95,14 @@ export class AuthService {
   }
 
   async generateJwt(user) {
-    const payload = {
-      userId: user.id,
-      username: user.username,
-    };
-    return await this.jwtService.signAsync(payload, { secret: "doIwannaKnow" });
+    try {
+      const payload = {
+        userId: user.id,
+        username: user.username,
+      };
+      return await this.jwtService.signAsync(payload, { secret: "doIwannaKnow" });
+    } catch (err) {
+      throw Error(err.message);
+    }
   }
 }

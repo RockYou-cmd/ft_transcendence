@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
+import {
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+  Injectable,
+} from "@nestjs/common";
 import { Observable } from "rxjs";
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
@@ -9,13 +14,13 @@ export class AuthGuard {
 	constructor(private jwtServive: JwtService) {};
 	async canActivate(context: ExecutionContext){
 		const request = context.switchToHttp().getRequest();
-		if (!request.cookies.access_token) throw new ForbiddenException();
+		if (!request.cookies.access_token) throw new UnauthorizedException();
 		try {
 			const payload = await this.extractPayloadFromToken(request.cookies.access_token);
 			request.user = payload;
 		}
 		catch (err) {
-			throw new ForbiddenException();
+			throw new UnauthorizedException();
 		}
 		return true;
 	}

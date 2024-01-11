@@ -33,7 +33,6 @@ export class AuthController {
   @Post("signIn")
   async singIn(@Body() ndto, @Res() res: Response) {
     const token = await this.authService.signIn(ndto);
-    console.log(token);
     if (!token) res.status(425).json({message: "2faEnabled"});
     else {
       res.cookie("access_token", token, { httpOnly: true });
@@ -47,7 +46,6 @@ export class AuthController {
       { username: data.username },
       data.token,
     );
-    console.log("kkk")
     const token = await this.authService.generateJwt(ret);
     res.cookie("access_token", token, { httpOnly: true });
     res.status(200).json({message:"token is valid"});

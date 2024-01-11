@@ -33,7 +33,7 @@ export async function Get(path: string) {
 	}
 	const res = await fetch(path, header);
 	
-	if (res.status == 401){
+	if (!res?.ok){
 		return undefined;
 	}
 	const data = await res?.json();
