@@ -8,7 +8,7 @@ import Form from "../../profile/form";
 
 export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: any , User? : string, back? : any}) {
 
-	const host = "http://localhost:3001";
+	const host = `${process.env.NEXT_PUBLIC_LOCALHOST}`;
 
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();

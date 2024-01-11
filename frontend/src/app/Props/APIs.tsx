@@ -1,7 +1,7 @@
 
-export const Host = "http://localhost:3001";
+// export const Host = "http://localhost:3001";
 
-// const Host = `${process.env.LOCALHOST}`;
+const Host = `${process.env.NEXT_PUBLIC_LOCALHOST}`;
 
 export interface Api {
 	SignIn: string,

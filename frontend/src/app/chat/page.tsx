@@ -196,7 +196,6 @@ export default function Chat() {
 
 										<Image src={chatAnimation} alt='chat animtaio' priority={true} ></Image>
 										</div>
-										{/* {typeof document != undefined &&  <Lottie className='w-[50%]'  animationData={chatAnimation} loop={true}  />} */}
 										<button className='openChat' onClick={() => setNewChat(!newChat)}>Open a Chat<FontAwesomeIcon className='icon' icon={faComments} /></button>
 									</div>
 								}

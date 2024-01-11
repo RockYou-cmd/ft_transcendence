@@ -78,9 +78,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 			uploadData.append('file', file);
 			uploadData.append('upload_preset', 'image_upload');
 
-			const api = process.env.NEXT_PUBLIC_UPLOAD;
-			console.log("api ", `"${api}"`);
-			const response = await fetch(`"${api}"`, {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_UPLOAD}`, {
 				method: 'POST',
 				body: uploadData,
 			});
@@ -95,7 +93,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 	
 
 			} else {
-				console.error('Failed to upload image to Cloudinary');
+				swal("Failed to upload image", "", "error");
 			}
 		} catch (error) {
 			swal("Error uploading image:", "", "error");

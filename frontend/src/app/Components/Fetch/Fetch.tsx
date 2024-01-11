@@ -16,7 +16,6 @@ export async function Post(data: object, path: string) {
 		const res = await fetch(path, header);
 		return res;
 	}catch(err){
-		swal("Error", "", "error");
 		return null;
 	}
 }
@@ -31,7 +30,7 @@ export async function Get(path: string) {
 				'Content-Type': 'application/json',
 			},
 		}
-		// console.log("path", path)
+
 		const res = await fetch(path, header);
 		if (!res?.ok){
 			return undefined;
@@ -40,7 +39,6 @@ export async function Get(path: string) {
 		return data;
 	}
 	catch(err){
-		// console.log("err", err);
 		return undefined;
 	}
 }

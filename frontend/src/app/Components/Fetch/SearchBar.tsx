@@ -1,6 +1,5 @@
 import React from 'react';
-import { useState, useRef, useEffect, use } from 'react';
-import { MouseEvent } from 'react';
+import { useState, useRef, useEffect} from 'react';
 import { Get } from './Fetch';
 import { APIs } from '../../Props/APIs';
 import Image from 'next/image';
@@ -51,9 +50,7 @@ export default function SearchBar({ title }: { title: string }) {
 			getData();
 			setStyle({
 				"height": "21vh",
-				// "padding-bottom": "15px",
-				// "padding" : "0px 0px 20px",
-				// "width" : "70%",
+
 			})
 		}
 		else

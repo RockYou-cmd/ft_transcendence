@@ -9,8 +9,6 @@ export async function SendFriendRequest({ username, status , socket, me}: { user
 	let res : any;
 
 
-
-
 	if (status == "request friend")
 		subApi = APIs.SendFriendRequest;
 	else if (status == "cancel request")
