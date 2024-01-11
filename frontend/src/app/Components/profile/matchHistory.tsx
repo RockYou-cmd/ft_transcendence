@@ -38,7 +38,7 @@ const MatchHistory = ({page, User} : {page : string, User : string}) => {
 
     return (
       <div>
-        {Array.isArray(data?.games) &&  data?.games?.map((match : any, index : number) => (
+        {data?.games?.map((match : any, index : number) => (
           <div key={index} className={style1 +  " flex relative my-2 w-full  rounded-2xl items-center justify-between overflow-hidden "}>
             <div className={style2 + " w-full flex items-center justify-start relative overflow-hidden"}>
               <div className={style4 + " m-1 rounded-full flex items-center justify-center  bg-white overflow-hidden border"}>
