@@ -263,7 +263,7 @@ export class RoomService {
           photo: true,
           privacy: true,
           description: true,
-		  id : true,
+		      id : true,
         }
       });
       return { rooms: rooms };
@@ -296,7 +296,7 @@ export class RoomService {
           photo: true,
           privacy: true,
           description: true,
-		  id : true
+		      id:true
         }
       });
       return { rooms: roomsIn };

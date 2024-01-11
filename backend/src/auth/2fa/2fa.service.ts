@@ -2,7 +2,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  UnauthorizedException,
 } from "@nestjs/common";
 import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";

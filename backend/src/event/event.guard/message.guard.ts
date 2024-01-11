@@ -1,7 +1,7 @@
 import {
   ExecutionContext,
+  ForbiddenException,
   Injectable,
-  UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import {parse} from "cookie"
@@ -11,14 +11,14 @@ export class messageGuard {
   constructor(private jwtServive: JwtService) {}
   async canActivate(context: ExecutionContext) {
     var cookie = context.switchToHttp().getRequest().handshake.headers.cookie;
-    if (!cookie) throw new UnauthorizedException();
+    if (!cookie) throw new ForbiddenException();
     cookie = parse(cookie);
     try {
       const payload = await this.verifyToken(cookie.access_token);
       const data = context.switchToWs().getData();
       if (data.sender != payload.username) throw new Error();
     } catch (err) {
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
     }
     return true;
   }
