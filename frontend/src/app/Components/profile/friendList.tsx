@@ -71,7 +71,7 @@ const FriendListComponent: any = ({ User, refresh, Pending }: { User: string, re
 	}
 
 	return (
-		<div className="">
+		<div className="px-2">
 			<ul>
 				{friendList?.friends?.map((friend: any, index: any) => (
 					<Print key={index} user={friend} />

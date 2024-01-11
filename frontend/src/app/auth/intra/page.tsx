@@ -53,7 +53,6 @@ export default function Auth() {
 		else if (value && code == undefined){
 			router.push("/");
 		}
-		console.log("code", code, "value", value);
 	}, [value]);
 
 	return (

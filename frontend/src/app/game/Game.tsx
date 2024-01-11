@@ -47,10 +47,9 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 		}
 		
 		useEffect(() => {
-			console.log("start event");
+
 			socket?.on("start", (data: any) => {
-				// GameInfo(data);
-				console.log("start", data);
+	
 				matchInfo.current = data;
 				timer(data);
 				setCounter(3);

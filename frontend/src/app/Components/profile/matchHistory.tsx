@@ -19,7 +19,6 @@ const MatchHistory = ({page, User} : {page : string, User : string}) => {
 	const style5 = page == "Profile" ? "text-lg" : "text-sm";
 	async function fetchData() {
 		const resData = await Get(APIs.matchHistory + "?username=" + User);
-		console.log("games", resData, "user", User);
 		setData({games : resData});
 	}
 	const router = useRouter();
@@ -39,12 +38,12 @@ const MatchHistory = ({page, User} : {page : string, User : string}) => {
     return (
       <div>
         {data?.games?.map((match : any, index : number) => (
-          <div key={index} className={style1 +  " flex relative my-2 w-full  rounded-2xl items-center justify-between overflow-hidden"}>
+          <div key={index} className={style1 +  " flex relative my-2 w-full  rounded-2xl items-center justify-between overflow-hidden "}>
             <div className={style2 + " w-full flex items-center justify-start relative overflow-hidden"}>
-              <div className={style4 + " m-1 rounded-full overflow-hidden border"}>
+              <div className={style4 + " m-1 rounded-full flex items-center justify-center  bg-white overflow-hidden border"}>
                 <Image src={match?.participants[0]?.profile?.user?.photo ? match?.participants[0]?.profile?.user?.photo  : avatar} alt={"image"} width={60} height={60} />
               </div>
-              <h1 onClick={(e : MouseEvent)=>seeProfile(e, match?.participants[0]?.profile?.userId)} className={style5 +  "cursor-pointer font-bold"}>{match?.participants[0]?.profile?.user?.username}</h1>
+              <h1 onClick={(e : MouseEvent)=>seeProfile(e, match?.participants[0]?.profile?.userId)} className={style5 +  " cursor-pointer font-bold"}>{match?.participants[0]?.profile?.user?.username}</h1>
 			  <h1 className={style5 + " font-bold mr-5 ml-auto"}>{match?.participants[0]?.score}</h1>
             </div>
             <div>
@@ -53,7 +52,7 @@ const MatchHistory = ({page, User} : {page : string, User : string}) => {
             <div className={style3 + "  w-full flex relative items-center justify-end"}>
 			  <h1 className={style5 + " font-bold ml-6 mr-auto"}>{match?.participants[1]?.score}</h1>
               <h1 onClick={(e : MouseEvent)=>seeProfile(e, match?.participants[1]?.profile?.userId)} className={style5 + " cursor-pointer font-bold"}>{match?.participants[1]?.profile?.user?.username}</h1>
-              <div className={style4 + " m-1 rounded-full overflow-hidden border"}>
+              <div className={style4 + " flex items-center justify-center  bg-white m-1 rounded-full overflow-hidden border"}>
                 <Image src={match?.participants[1]?.profile?.user?.photo ? match?.participants[1]?.profile?.user?.photo : avatar} alt={"image"} width={60} height={60} />
               </div>
             </div>

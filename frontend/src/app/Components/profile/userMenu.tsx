@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { SendFriendRequest } from '../Settings/ChatSettings';
 import { useMe , useSocket} from '../Log/LogContext';
 import { useEffect , useRef } from 'react';
-import { on } from 'events';
 
 const ProfileMenu = ({ User, onClose , setRefresh, refresh} : {User : any, onClose : any , setRefresh : any, refresh : boolean}) => {
   

@@ -10,27 +10,25 @@ import { useLogContext , useSocket, useMe, useSilence} from "./Log/LogContext";
 import SearchBar from "./Fetch/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser ,faMessage , faTableTennisPaddleBall , faBell, faBellSlash} from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
-import { copyFileSync } from "fs";
+import { useRouter , usePathname} from "next/navigation";
 
-// import { WebSocket } from "./Log/LogContext";
-// import { useContext } from "react";
 
 export default function Navbar() {
 
-	
-	// const socket = useSocket();
+
 	const {me, setMe} = useMe() as any;
 	const {silence, setSilence} = useSilence();
 	const router  = useRouter();
 	const {socket} = useSocket();
-	
+	const pathnames = usePathname();
+
 
 	let photo = avatar;
 	const { online, setOnline } = useLogContext();
 
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
+
 
 	async function fetchData() {
 		const data = await GetData({Api : "Navbar", user: ""}) as any;
@@ -44,12 +42,13 @@ export default function Navbar() {
 	}
 
 	useEffect(() => {
-		checkwait(true);
-		if (online == "ON") {
-			// console.log("fetching data");
-			fetchData();
+		if (pathnames != "/settings" && pathnames != "/auth/intra" && pathnames != "/auth/google") {
+			checkwait(true);
+			if (online == "ON") {
+				fetchData();
+			}
 		}
-	}, [online, me]);
+	}, [online, me, pathnames]);
 
 	if (data?.photo != null) {
 		photo = data.photo;
