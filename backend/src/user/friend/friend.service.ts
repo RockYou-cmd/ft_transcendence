@@ -1,4 +1,4 @@
-import { ForbiddenException, HttpCode, HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common"; 
+import { ForbiddenException, HttpCode, HttpException, HttpStatus, Injectable } from "@nestjs/common"; 
 import { PrismaClient } from "@prisma/client";
 import { UserService } from "../user.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
