@@ -17,6 +17,7 @@ import { BsPersonFillAdd } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import { GiPingPongBat } from "react-icons/gi";
 import { FaRankingStar } from "react-icons/fa6";
+import { GiGoalKeeper } from "react-icons/gi";
 
 
 
@@ -76,6 +77,7 @@ export default function Profile_info() {
 						<div className=" flex  w-full  flex-row justify-center text-center">
 							<h1 className="text-white absolute top-0 text-lg w-full   bg-gradient-to-tr from-blue-800 via-blue-400 to-blue-900 font-bold rounded-t-lg ">Goals Stats</h1>
 						</div>
+						<GiGoalKeeper  size={100} className="absolute opacity-10 xl:w-64 lg:w-36 md:w-28 sm:w-16" />
 						<p className="text-gray-300"> goals scored: {data?.gameProfile?.goalsScored}</p>
 						<p className="text-gray-300"> goals conced: {data?.gameProfile?.goalsConced}</p>
 					</div >
