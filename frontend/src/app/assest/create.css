@@ -1,13 +1,6 @@
-/* body{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-} */
-
 
 .create{
-	/* margin:30% 20%; */
+
 	margin:auto;
 	margin-top: 30vh;
 	background: rgb(255, 255, 255, 0.1);
@@ -34,7 +27,7 @@
 	font-weight: 900;
 	letter-spacing: 1px;
 	padding-bottom: 15px;
-	/* margin: 10px 34%; */
+
 	margin:0px 30% 40px;
 	border-bottom: 2px solid white;
 }
@@ -46,12 +39,11 @@
 	width:100%;
 	width: 270px;
 	font-weight: 300;
-	/* padding: 0px 20px; */
+
 }
 
 .create input{
-	/* display: flex; */
-	/* display: block; */
+
 	margin-bottom: 20px;
 	padding: 10px 40px;
 	border-radius: 5px;

@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState} from 'react';
 import avatar from "../../../../public/avatar.png";
 import { FaCog } from "react-icons/fa";
 import { GetData } from "../Log/CheckLogin";
 import { useLogContext, useMe } from "../Log/LogContext";
 import Setting from "./profile_setting";
-import { APIs } from "@/app/Props/APIs";
+
 import FriendListComponent from "./friendList";
 import UserLevel from "./userLevel";
 import MatchHistory from "./matchHistory";

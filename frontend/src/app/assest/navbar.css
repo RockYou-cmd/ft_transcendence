@@ -74,7 +74,6 @@
 	width: 300px;
 	z-index: 10;
 	border : 1px solid #fff;
-	/* background-color: #fff; */
 	background-color: #E2DCD4;
 	border-radius: 20px;
 	padding:10px 20px 15px;
@@ -103,7 +102,6 @@
 
 	& button:first-of-type{
 		background-color: rgb(3, 169, 3);
-		/* background-color: #ff2638; */
 	}
 
 	& button:last-of-type{
@@ -144,10 +142,6 @@
 		text-align: center;}
 	}
 
-	/* #header #SearchComponent{
-		left: 100px;
-		margin: 22px 0px;
-	} */
 }
 
 @media (max-width : 450px){

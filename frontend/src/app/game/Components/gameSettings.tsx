@@ -1,6 +1,5 @@
 
 import '../../assest/game.css';
-import Canvas from '../canvas';
 import Image from 'next/image';
 import shark from '../../../../public/Frame_1.png';
 import dragon from '../../../../public/dragon.png';

@@ -28,9 +28,6 @@ export default function App() {
 	return (
 		<>
 
-			{/* <Head>
-				<link rel="icon" type="image/x-icon" href="./favicon.ico"></link>
-			</Head> */}
 
 			<div>
 				{online == "OFF" ? (!SignIn && online == "OFF" ? <Home setSignIn={setSignIn} /> : render) : <Profile User={""} />}

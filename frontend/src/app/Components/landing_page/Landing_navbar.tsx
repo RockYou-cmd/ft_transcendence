@@ -1,8 +1,8 @@
-import { useEffect, useRef,useState } from "react";
+
 import logo from "../../../../public/logo.png"
 import Image from "next/image";
 import Link from "next/link";
-import { Inter } from 'next/font/google'
+
 
 export default function Landing_navbar() {
     return (

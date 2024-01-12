@@ -1,11 +1,6 @@
-import { Brygada_1918 } from "next/font/google";
-import Image from "next/image";
-import Paddle from "../../../../public/paddle.png"
+
 import { useRef, useEffect } from "react";
 import Typed from "typed.js";
-import cover from "../../../../public/pingpong.gif"
-import "../../assest/corner.css"
-import GameDemo from "../../profile/gameDemo"
 
 
 export default function Hero_section({ setSignIn }: { setSignIn: any }) {
@@ -34,7 +29,6 @@ export default function Hero_section({ setSignIn }: { setSignIn: any }) {
     }
     return (
         <>
-        {/* <div className="flex relative "> */}
 
             <div className=" flex w-[45%] h-[40rem] bg-[#e7ebf4] rounded-b-3xl  ">
                 <div className="w-full h-full">
@@ -51,14 +45,7 @@ export default function Hero_section({ setSignIn }: { setSignIn: any }) {
 
 
             </div>
-                {/* <div className= "flex  h-[24rem] w-[43%] m-12 mr-2 items-center justify-center  overflow-hidden rounded-3xl ">
-                    <Image className="  " id="bg1" alt="bg1" priority={true} src={cover} ></Image>
-                    <div className="absolute  ">
-                        <div className="  relative left-64 -top-64  "></div>
-                    </div>
-                </div> */}
-				
-        {/* </div> */}
+    
         </>
     );
 }

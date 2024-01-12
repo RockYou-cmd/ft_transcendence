@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import "../../assest/ProfileCard.css"
 import Image from "next/image"
 

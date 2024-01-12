@@ -43,7 +43,7 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
               <div className="flex space-x-4">
-                <Link href="#" className="text-white hover:text-gray-400 transition duration-300">
+                {/* <Link href="#" className="text-white hover:text-gray-400 transition duration-300">
                   <i className="fab fa-facebook-f"></i>
                 </Link>
                 <Link href="#" className="text-white hover:text-gray-400 transition duration-300">
@@ -51,7 +51,7 @@ const Footer = () => {
                 </Link>
                 <Link href="#" className="text-white hover:text-gray-400 transition duration-300">
                   <i className="fab fa-instagram"></i>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
