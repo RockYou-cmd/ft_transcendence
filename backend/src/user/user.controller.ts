@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Put, Query, Req, Request, Res, UseGuards }
 import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard/auth.guard";
 import { Response, query } from "express";
+import { ProfileUpdateDto } from "./profileUpdate.dto/profileUpdate.dto";
 
 @Controller("/user")
 export class UserController {
@@ -64,7 +65,7 @@ export class UserController {
   async updateData(
     @Req() account,
     @Res() res: Response,
-    @Body("updatedData") data,
+    @Body("updatedData") data: ProfileUpdateDto,
   ) {
     const token = await this.UserService.updateData(account.user, data);
     res.cookie("access_token", token, { httpOnly: true });

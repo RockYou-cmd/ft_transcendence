@@ -31,7 +31,7 @@ export class ChatService {
           },
         },
       });
-      // console.log(updatedChat)
+
       return "message sent!";
     } catch (err) {
       throw err;

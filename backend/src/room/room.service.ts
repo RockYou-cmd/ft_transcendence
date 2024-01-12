@@ -27,7 +27,7 @@ export class RoomService {
       if (data.photo) roomData["photo"] = data.photo;
       if (data.privacy == "PROTECTED") {
         const hash = await argon.hash(data.password);
-        console.log("Hash: ", hash);
+    
         roomData["password"] = hash;
       }
       const room = await prisma.room.create({
@@ -78,7 +78,7 @@ export class RoomService {
           members: true,
         },
       });
-      console.log(chat);
+
       return chat;
     } catch (err) {
       throw err;
@@ -329,7 +329,7 @@ export class RoomService {
 
   async joinProtected(account, data) {
     try {
-      console.log(data);
+      
       const room = await prisma.room.findUnique({
         where: {
           id: data.id,
@@ -496,7 +496,7 @@ export class RoomService {
     try {
       if (data.privacy == "PROTECTED")
         data.password = await argon.hash(data.password);
-      console.log(data);
+   
       var newData = {
         name: data.name,
         description: data.description,

@@ -39,7 +39,7 @@ export class FriendService {
       });
       return "Request Sent";
     } catch (err) {
-      console.log(err);
+
       if (err instanceof PrismaClientKnownRequestError && err.code == "P2002")
         throw new UnauthorizedException(
           err.meta.target[0] + " already in the friend list",
@@ -61,7 +61,6 @@ export class FriendService {
       });
       return "User accepted";
     } catch (err) {
-      console.log("Accept error");
       throw err;
     }
   }
@@ -232,7 +231,6 @@ export class FriendService {
             status: "BLOCKED",
           },
         });
-        console.log("blocked: ", blocked);
       }
       return "User blocked";
     } catch (err) {

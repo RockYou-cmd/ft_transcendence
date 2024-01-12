@@ -2,6 +2,7 @@ import { HttpException, Injectable, NotFoundException, UseGuards, HttpStatus, Un
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ConfigService } from '@nestjs/config';
 import * as argon from "argon2"
 
 
@@ -9,7 +10,7 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private configService: ConfigService) {}
 
   async signUp(user) {
     try {
@@ -27,7 +28,7 @@ export class AuthService {
       delete ret.password;
       return await this.generateJwt(ret);
     } catch (err) {
-      console.log("SignUp error");
+
       if (err instanceof PrismaClientKnownRequestError && err.code == "P2002")
         throw new UnauthorizedException(err.meta.target[0] + " already exist");
       return err.message;
@@ -57,7 +58,6 @@ export class AuthService {
       if (ret.is2faEnabled) return 0;
       return await this.generateJwt(ret);
     } catch (err) {
-      console.log("SignIn !!Error!!");
       throw new HttpException(err.message, HttpStatus.NOT_FOUND);
     }
   }
@@ -89,7 +89,6 @@ export class AuthService {
         ret["new"] = 1;
       return ret;
     } catch (err) {
-      console.log(err);
       return err;
     }
   }
@@ -100,9 +99,9 @@ export class AuthService {
         userId: user.id,
         username: user.username,
       };
-      return await this.jwtService.signAsync(payload, { secret: "doIwannaKnow" });
+      return await this.jwtService.signAsync(payload, { secret: this.configService.get("SECRET") });
     } catch (err) {
-      throw Error(err.message);
+      throw new Error(err.message);
     }
   }
 }

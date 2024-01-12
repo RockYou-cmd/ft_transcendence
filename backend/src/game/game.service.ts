@@ -91,11 +91,11 @@ export class GameService {
         middle: touch_player.height / 2 + touch_player.y,
       };
 
-      console.log("game Speed", this.ball.speed, this.ball_acc);
+
       if (this.ball.speed < 8) {
         this.ball.speed += this.ball_acc;
       }
-      console.log("game Speed", this.ball.speed);
+
 
       if (
         playerPos.top <= this.ball.y + this.ball.radius &&
@@ -229,7 +229,7 @@ export class GameService {
             ...newLoserData,
           },
         });
-      console.log(ret);
+
     } catch (err) {
       return err;
     }

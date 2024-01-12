@@ -7,7 +7,6 @@ export class AppController {
 
   @Get()
   getHello() {
-    console.log("mojo gogo");
     return this.appService.getHello();
   }
 }

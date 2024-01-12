@@ -1,18 +1,17 @@
 import { PassportStrategy } from "@nestjs/passport";
 import {Strategy} from "passport-42"
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 
 @Injectable()
-
 export class intraStrategy extends PassportStrategy(Strategy) {
-	constructor () {
+	constructor(private configService: ConfigService) {
+
 		super({
-      clientID:
-        "u-s4t2ud-5023299b300ab5240b76edd245e84997d96d9e8b3718f2b327a776a10156f6d0",
-      clientSecret:
-        "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",
-      callbackURL: "http://localhost:3000/auth/intra",
+      clientID: configService.get("INTRA_CLIENT_ID"),
+      clientSecret: configService.get("INTRA_CLIENT_SECRET"),
+      callbackURL: configService.get("INTRA_CALLBACK_URL"),
     });
 	}
 	validate(iDontNeed, iDontNeedAgain, profile, done) {

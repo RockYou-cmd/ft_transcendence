@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException, Req } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { Prisma, PrismaClient, User } from "@prisma/client";
 import * as argon from "argon2"
 import { AuthService } from "src/auth/auth.service";
@@ -27,6 +28,7 @@ export class UserService {
 
   async getProfile(user) {
     try {
+     
       const ret = await prisma.user.findUnique({
         where: {
           username: user.username,
@@ -36,14 +38,14 @@ export class UserService {
           gameProfile: true
         },
       });
-      if (!ret) throw new NotFoundException("User Not Found");
+      if (!ret) throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
       if (ret.password) 
 		  ret.password = "true"
 	  else
 		ret.password = "false";
       return ret;
     } catch (err) {
-      console.log("getProfile !Error!");
+   
       throw err;
     }
   }
@@ -61,14 +63,14 @@ export class UserService {
       delete ret.password;
       return ret;
     } catch (err) {
-      console.log("getData !Error! : ", err);
+   
       throw err;
     }
   }
 
   async getUser(account, user) {
     try {
-		console.log(user);
+
       const userData = await this.getData(user);
       const ret = await prisma.user.findUnique({
         where: {
@@ -99,8 +101,7 @@ export class UserService {
         blocked: ret.friends[0]?.blocked?.username,
       };
     } catch (err) {
-		console.log("getUser Error");
-		console.log(err);
+
       throw err;
     }
   }
@@ -207,7 +208,7 @@ export class UserService {
       });
       return games;
     } catch (err) {
-      console.log("get games error :  ",err);
+   
       return err;
     }
   }
@@ -252,8 +253,7 @@ export class UserService {
       });
       return this.authService.generateJwt(user);
     } catch (err) {
-      console.log("invalid data or user not found");
-      throw new HttpException(err.message, HttpStatus.CONFLICT);
+      throw new HttpException(err.message, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -271,7 +271,7 @@ export class UserService {
         }
       })
     } catch (err) {
-      throw err.message;
+      throw new HttpException(err.message, HttpStatus.NOT_FOUND);
     }
   }
 }

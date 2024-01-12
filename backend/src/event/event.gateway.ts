@@ -1,4 +1,4 @@
-import { Req, UseGuards } from "@nestjs/common";
+import { HttpException, HttpStatus, Req, UseGuards } from "@nestjs/common";
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -43,15 +43,10 @@ export class EventGateway {
 
         const userTabs = await this.server.in(username).fetchSockets();
         if (userTabs.length <= 1) {
-          // console.log("less than 1");
-          this.userService.updateData({ username }, { status: "ONLINE" });
+          await this.userService.updateData({ username }, { status: "ONLINE" });
         }
       }
-      console.log(username, " CONNECTED");
-      // console.log(this.matches[0].size);
-    } catch (err) {
-      throw err;
-    }
+    } catch (err) {}
   }
 
   async handleDisconnect(client: Socket) {
@@ -63,9 +58,10 @@ export class EventGateway {
           await this.authGuard.extractPayloadFromToken(access_token);
         client.leave(username);
         var match = this.findMatch(username);
-        if (match) {
+
+        if (match && match.get(username) == client.id) {
           const roomName = match.get("roomName");
-          this.userService.updateData({ username }, { status: "ONLINE" });
+          await this.userService.updateData({ username }, { status: "ONLINE" });
           const player1 = Array.from(match.keys())[0];
           if (!match.has("friend")) {
             var player2 = Array.from(match.keys())[1];
@@ -87,18 +83,17 @@ export class EventGateway {
         }
         const userTabs = await this.server.in(username).fetchSockets();
         if (!userTabs.length)
-          this.userService.updateData({ username }, { status: "OFFLINE" });
+          await this.userService.updateData(
+            { username },
+            { status: "OFFLINE" },
+          );
       }
-      console.log(username, " DISCONNECT");
-    } catch (err) {
-      throw err;
-    }
+    } catch (err) {}
   }
 
   @SubscribeMessage("message")
   @UseGuards(messageGuard)
   handleMessage(client: Socket, payload: any) {
-    console.log("normal message event called");
     this.server.to(payload.receiver).emit("message", payload);
     this.chatService.sendMessage(payload);
   }
@@ -127,14 +122,12 @@ export class EventGateway {
     }
     payload.receivers.forEach((receiver) => {
       if (!blockedBy.includes(receiver.userId)) {
-        console.log("receiver : ", receiver.userId);
         this.server
           .to(receiver.userId)
           .except(payload.sender)
           .emit("roomMessage", payload);
       }
     });
-    // console.log("message Sent!");
     this.roomService.sendMessage(payload);
   }
 
@@ -175,7 +168,7 @@ export class EventGateway {
     const { user }: any = client;
     const already = this.findMatch(user.username);
     if (already) {
-      console.log("player already ");
+      client.emit("inGame", {});
       return;
     }
     const t = this.matches.filter((e) => {
@@ -212,7 +205,6 @@ export class EventGateway {
   @SubscribeMessage("move")
   async movePaddle(client: Socket, payload: any) {
     const { user }: any = client;
-    // console.log(payload);
     var match = this.findMatch(user.username);
     match.get("game")[payload.player].y = payload.y;
   }
@@ -220,7 +212,6 @@ export class EventGateway {
   @SubscribeMessage("invite")
   @UseGuards(gameGuard)
   async invite(client: Socket, payload: any) {
-    console.log(payload);
     this.server.to(payload.player2).emit("invite", payload);
   }
 
@@ -292,7 +283,7 @@ export class EventGateway {
     if (ranked) {
       var loser =
         player1.score > player2.score ? payload.player2 : payload.player1;
-      console.log(loser);
+
       var winnerScore =
         player1.score > player2.score ? player1.score : player2.score;
       var loserScore =

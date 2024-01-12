@@ -147,15 +147,22 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 					body: JSON.stringify({ updatedData }),
 					
 				});
-	
+				
 				if (response?.ok) {
+					console.log("herrrr");
 					if (updatedData.username){
 						socket?.emit("nameUpdate", {username:updatedData.username, oldUsername : User?.username});
 					}
 					swal("Profile updated successfully", "", "success");
 					handleClick(false);
 				} else {
-					swal("Profile update failed", "", "error");
+					response?.json().then((msg : any) => {
+						swal("Profile update failed", msg?.message[0], "error");
+					}
+					)
+					// console.log("msg ", msg);
+
+					
 				}
 			}
 			else {

@@ -32,7 +32,6 @@ const FriendListComponent: any = ({ User, refresh, Pending }: { User: string, re
 			setFriendList(response);
 
 		} catch (error) {
-			console.error('Error fetching friend list:', error);
 		}
 	};
 

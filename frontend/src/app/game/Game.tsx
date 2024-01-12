@@ -9,6 +9,7 @@ import { MouseEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { GetData } from '../Components/Log/CheckLogin'
+import swal from 'sweetalert';
 
 
 export default function MatchMaking({GameInfo, close, setMode, startGame, friend} : {setMode :any ,GameInfo : any, close : any, startGame : any, friend? : boolean}){
@@ -47,6 +48,13 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 		}
 		
 		useEffect(() => {
+			
+			socket?.on("inGame", (data: any) => {
+				console.log("herr");
+				swal("You Already in Game", "", "info");
+				setMode("");
+				close(true);
+			})			
 
 			socket?.on("start", (data: any) => {
 	
@@ -57,7 +65,10 @@ export default function MatchMaking({GameInfo, close, setMode, startGame, friend
 				setTime(true);
 			})
 
-			return () => {socket?.off("start"), ()=>{}}
+			return () => {
+				socket?.off("start"), () => {}
+				socket?.off("inGame", ()=>{})
+			}
 		},[socket]);
 
 		useEffect(() => {

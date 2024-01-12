@@ -27,7 +27,6 @@ const TwoAuth = ({ User, change }: { User: any, change: any }) => {
 				setQRCodeBase64(tmp.qr);
 				setShowQRCode(true);
 			} catch (error) {
-				console.error('Error fetching QR code:', error);
 			}
 		}
 		else {
@@ -50,7 +49,6 @@ const TwoAuth = ({ User, change }: { User: any, change: any }) => {
 					swal("Error!", "2FA not disabled!", "error");
 				}
 			} catch (error) {
-				console.error('Error verifying code:', error);
 			}
 		}
 		setIs2FAEnabled(!is2FAEnabled);
@@ -80,7 +78,6 @@ const TwoAuth = ({ User, change }: { User: any, change: any }) => {
 				setVerificationCode("");
 			}
 		} catch (error) {
-			console.error('Error verifying code:', error);
 		}
 	};
 

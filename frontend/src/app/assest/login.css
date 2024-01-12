@@ -110,12 +110,12 @@
 	text-align: center;
 	color: white;
 	width: 100%;
-	border: 1px solid #0C88E4;
-	background-color: #0C88E4;
+	background-color: black;
 	border-radius: 5px;
 	padding: 8px;
 	font-size: 300;
 	margin:5px 0px;
+	
 }
 
 .Google{

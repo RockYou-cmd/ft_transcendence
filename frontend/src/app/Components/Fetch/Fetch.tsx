@@ -21,27 +21,33 @@ export async function Post(data: object, path: string) {
 }
 
 export async function Get(path: string) {
+	const header = {
+		credentials: 'include' as RequestCredentials,
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	}
 	try{
 
-		const header = {
-			credentials: 'include' as RequestCredentials,
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}
-
 		const res = await fetch(path, header);
-		console.log("res", res)
 		if (res?.status == 401){
 			return undefined;
 		}
 		const data = await res?.json();
-		console.log("data", data)
 		return data;
 	}
-	catch(err){
-		return undefined;
+	catch (err) {
+		try {
+			const res = await fetch(path, header);
+			if (res?.status == 401){
+				return undefined;
+			}
+			const data = await res?.json();
+			return data;
+		} catch (err) {
+			return undefined;
+		}
 	}
 }
 

@@ -136,6 +136,12 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 	}, [User])
 
 	useEffect(() => {
+		if (group) {
+			setBlocked(false);
+		}
+	},[group])
+
+	useEffect(() => {
 		async function fetchData() {
 			const data = await Get(APIs.getChat + User?.username);
 			if (data == undefined) 
@@ -228,10 +234,10 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 
 	useEffect(() => {
 		socket?.on("update", (data: any) => {
-			if (data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
+			if (group && data?.option == "Mute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: true, id: data?.groupId };
 			}
-			else if (data?.option == "block" && (data?.receiver == me?.username || data?.sender == me?.username)) {
+			else if (!group && data?.option == "block" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 				status.current.status = "BLOCKED";
 				status.current.sender = data?.receiver;
 				if (data?.receiver == me?.username){
@@ -240,18 +246,18 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : 
 				(status.current.status == "BLOCKED" ? (status.current.sender != me?.username ? blockSettings: noSettings) : chatSettings)));
 			}
-			else if (data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)) {
+			else if (!group && data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 				setBlocked(false);
 				status.current.status = "";
 				status.current.sender = "";
 				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings));
 			}
-			else if (data?.option == "unMute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
+			else if (group && data?.option == "unMute" && data?.groupId == ChatID.current && data?.receiver == me?.username) {
 				Muted.current = { mute: false, id: data?.groupId };
 			}
 		});
 		socket?.on("muted", (data: any) => {
-			if (data?.roomId == ChatID.current) {
+			if (group && data?.roomId == ChatID.current) {
 				swal("You are muted in this group", "", "error");
 				Muted.current = { mute: true, id: data?.roomId };
 			}
