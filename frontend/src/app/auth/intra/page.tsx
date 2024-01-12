@@ -7,10 +7,11 @@ import Loading from "../../loading";
 import { useRouter } from "next/navigation";
 import { useLogContext, useSocket } from "../../Components/Log/LogContext";
 import Form from "@/app/profile/form";
+import swal from "sweetalert";
 
 
 
-export default function Auth({ searchParam, }: { searchParam: { param: string | undefined } }) {
+export default function Auth() {
 
 	const { online, setOnline } = useLogContext();
 	const [code, setValue] = useState(null) as any;
@@ -29,12 +30,12 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 	useEffect(() => {
 		async function fetchToken() {
 			const res = await Post({ code, }, APIs.intraToken);
-			const data = await res.json();
-			if (res.status == 201) {
+			const data = await res?.json();
+			if (res?.status == 201) {
 				if (online != "ON") {
 					setOnline("ON");
 					if (data?.new == 1)
-						router.push("/setting");
+						router.push("/settings");
 					else
 						router.push("/");
 				}
@@ -44,11 +45,14 @@ export default function Auth({ searchParam, }: { searchParam: { param: string | 
 				setUser(data?.username?.username);
 			}
 			else {
-				alert(data?.message);
+				swal(data.message, "", "error");
 			}
 		}
 		if (value && code)
 			fetchToken();
+		else if (value && code == undefined){
+			router.push("/");
+		}
 	}, [value]);
 
 	return (

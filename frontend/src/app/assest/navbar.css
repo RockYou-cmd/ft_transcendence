@@ -45,17 +45,7 @@
 	cursor: pointer;
 }
 
-#logout{
-	/* background-color: rgba(34, 40, 49, 1);
-	border-radius: 30px;
-	border: 1px solid rgb(107, 108, 111);
-	padding: 0px 20px;
-	margin: 30px 50px 30px 0px;  */
-}
-
 #logout:hover{
-	/* background-color: #ff2638;
-	border-color: #ff2638; */
 	box-shadow: 0px 0px 10px 2px #ff2638;
 }
 
@@ -66,14 +56,10 @@
 	width:20%;
 	left:100px;
 	z-index: 4;
-	/* &:current{
-		width: 280px;
-	} */
 }
 
 .NotifBtn{
-	margin: 0px 30px;
-
+	margin: 0px 10px 0px 30px;
 }
 
 .NotifBtn .icon{
@@ -88,7 +74,8 @@
 	width: 300px;
 	z-index: 10;
 	border : 1px solid #fff;
-	background-color: #fff;
+	background-color: #E2DCD4;
+	border-radius: 20px;
 	padding:10px 20px 15px;
 	color: black;
 	right:0px;
@@ -114,23 +101,23 @@
 	}
 
 	& button:first-of-type{
-		background-color: green;
-		/* background-color: #ff2638; */
+		background-color: rgb(3, 169, 3);
 	}
 
 	& button:last-of-type{
-		background-color: blue;
+		background-color: #2563EB;
 	}
 
 	& :after{
 		content: '';
 		position: absolute;
-		left : 0px;
-		bottom: 0px;
-		width:100%;
+		left : 8px;
+		bottom: -1px;
+		width:95%;
 		height: 5px;
+		border-radius: 20px;
 		background-color: green;
-		animation: showUp 5s linear forwards;
+		animation: showUp 5s;
 	}
 }
 
@@ -138,5 +125,53 @@
 
 	100%{
 		width: 0%;
+	}
+}
+
+
+
+@media (max-width : 850px){
+	#header{
+		font : 600 12px 'Inter', sans-serif;
+	}
+
+	#header .nav{
+		padding: 10px 15px;
+		width:300px;
+		& li{padding: 8px 12px;
+		text-align: center;}
+	}
+
+}
+
+@media (max-width : 450px){
+	#header{
+		font : 600 10px 'Inter', sans-serif;
+	}
+
+	#header #avatar{
+		margin:20px 10px;
+	}
+
+	#header .nav{
+		padding: 10px 5px;
+		width:160px;
+		& li{padding: 8px 10px;
+		text-align: center;}
+	}
+
+	#header #SearchComponent{
+		left: 80px;
+		margin: 22px 0px;
+	}
+
+	.NotifBtn{
+		display: none;
+	}
+}
+
+@media (max-width : 800px){
+	.NotifBtn{
+		display: none;
 	}
 }

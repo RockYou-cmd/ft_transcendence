@@ -2,7 +2,7 @@
 import avatar from "../../../public/avatar.jpeg";
 import Image from "next/image";
 import Link from "next/link";
-import Logout from "./Log/Logout";
+import Logout, { Disconnect } from "./Log/Logout";
 import { GetData } from "./Log/CheckLogin";
 import { useEffect, useRef, useState } from "react";
 import '../assest/navbar.css';
@@ -10,17 +10,18 @@ import { useLogContext , useSocket, useMe, useSilence} from "./Log/LogContext";
 import SearchBar from "./Fetch/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser ,faMessage , faTableTennisPaddleBall , faBell, faBellSlash} from "@fortawesome/free-solid-svg-icons";
+import { useRouter , usePathname} from "next/navigation";
 
-// import { WebSocket } from "./Log/LogContext";
-// import { useContext } from "react";
 
 export default function Navbar() {
 
-	
-	// const socket = useSocket();
-	const {me, setMe} = useMe();
+
+	const {me, setMe} = useMe() as any;
 	const {silence, setSilence} = useSilence();
-	
+	const router  = useRouter();
+	const {socket} = useSocket();
+	const pathnames = usePathname();
+
 
 	let photo = avatar;
 	const { online, setOnline } = useLogContext();
@@ -28,20 +29,26 @@ export default function Navbar() {
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
 
+
 	async function fetchData() {
 		const data = await GetData({Api : "Navbar", user: ""}) as any;
+		if (data == undefined) {
+			Disconnect({setOnline : setOnline, socket : socket, router : router});
+		}
 		setData(data);
-		setMe(data);
+		if (me?.username != data?.username || me?.photo != data?.photo){
+			setMe(data);
+		}
 	}
 
-
 	useEffect(() => {
-		checkwait(true);
-		if (online == "ON") {
-			fetchData();
+		if (pathnames != "/settings" && pathnames != "/auth/intra" && pathnames != "/auth/google") {
+			checkwait(true);
+			if (online == "ON") {
+				fetchData();
+			}
 		}
-	}, [online]);
-
+	}, [online, me, pathnames]);
 
 	if (data?.photo != null) {
 		photo = data.photo;

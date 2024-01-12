@@ -6,12 +6,16 @@
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	width: 40vh;
 	/* height: 35vh; */
-	top: 200px;
-	left: 34.5%;
+	left:55%;
+	top:40%;
+	transform: translate(-50%,-50%);
 	margin: auto;
 	/* width: fit-content; */
 	/* background-color: #1A66FF; */
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	border-radius: 16px;
 	box-shadow: 0px 0px 7px 0px #ffff;
 }
@@ -25,7 +29,6 @@
 }
 
 .closeBtn {
-	/* overflow: hidden; */
 	position: absolute;
 	top: 1.5vh;
 	right: 1vh;
@@ -149,7 +152,9 @@
 input[type=file]::file-selector-button {
 	margin-right: 20px;
 	border: none;
-	background: linear-gradient(180deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000);
+
+	/* background: linear-gradient(180deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	padding: 10px 20px;
 	border-radius: 10px;
 	color: #fff;
@@ -192,11 +197,15 @@ input[type=file]::file-selector-button:hover {
 	justify-content: center;
 	position: absolute;
 	padding: 30px 55px;
-	top: 15vh;
-	left: 34.5%;
-	width: 40vh;
+	left:60%;
+	top:50%;
+	transform: translate(-50%,-50%);
+	width: 581px;
 	border: 1px solid rgba(255, 255, 255, 0.5);
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	border-radius: 16px;
 }
 
@@ -210,8 +219,13 @@ input[type=file]::file-selector-button:hover {
 }
 
 .Add .content {
-	overflow: auto;
+	overflow-y: auto;
+	scrollbar-width: none;
+
 	height: 43vh;
+	/* max-width: 100%; */
+	/* max-width: 35vh; */
+	position: relative;
 	&::-webkit-scrollbar {
 		display: none;
 	}
@@ -219,10 +233,11 @@ input[type=file]::file-selector-button:hover {
 
 .Add #optionsBar {
 	position: absolute;
-	top: 140px;
-	right: -120px;
+	top: -150px;
+	/* right: 200px; */
 	width: 200px;
-	
+	z-index: 100;
+	left: 268px;
 	& button {
 		padding: 13px 18px;
 		font-size: 15px;
@@ -268,7 +283,10 @@ input[type=file]::file-selector-button:hover {
 	flex-direction: column;
 	padding: 20px 30px;
 	width: 200px;
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	color: #fff;
 	position: absolute;
 	right:-120px;
@@ -355,12 +373,17 @@ input[type=file]::file-selector-button:hover {
 /***************************** Confirm  ***********************************/
 
 #Confirm {
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	/* background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	color: #ffff;
 	position: absolute;
 	top: 30%;
 	left: 40%;
-	width: 27vh;
+	/* width: 27vh; */
+	width:400px;
 	padding: 1.5vh 3vh;
 	border-radius: 16px;
 	box-shadow: 0px 0px 3px 0px #ffff;
@@ -399,44 +422,71 @@ input[type=file]::file-selector-button:hover {
 }
 
 #Invite {
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
+	background: linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%);
 	color: #ffff;
 	position: absolute;
+	font : 600 23px 'Inter', sans-serif;
 	top: 30%;
 	left: 35%;
 	width: 30vh;
 	border-radius: 16px;
-	box-shadow: 0px 0px 3px 0px #e0e0e0;
+	/* box-shadow: 0px 0px 3px 0px #e0e0e0; */
+	z-index: 10;
+	padding:5px 10px 15px 20px;
+	box-shadow: 0px 0px 3px 0px #ffff;
+	& :after{
+		content: '';
+		position: absolute;
+		left : 5px;
+		bottom: 0px;
+		width:98%;
+		height: 5px;
+		background-color: #ffff;
+		animation: showUp 5s linear forwards;
+		border-bottom-left-radius:  20px;
+		border-bottom-right-radius:  20px;
+	}
+}
+
+@keyframes showUp{
+	100%{
+		width: 0%;
+	}
 }
 
 #Invite div {
 	display: flex;
 	flex-direction: row;
-	margin: 15px 10px;
+	/* margin: 15px 10px; */
 }
 
 #Invite h1 {
-	text-align: center;
-	font-weight: 600;
-	font-size: 24px;
 	letter-spacing: 0.3px;
-	margin: 1vh;
+	
+	margin: 25px 0px 20px 20px;
+}
+
+#Invite section{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin:0px 45px;
 }
 
 #Invite button {
-	padding: 8px 35px;
-	width: 50%;
-	font-size: 25px;
+	padding: 10px 25px;
+	border-radius: 20px;
+	/* width: 50%; */
+	font-size: 20px;
 }
 
 #Invite button:first-of-type {
-	background-color: rgba(235, 28, 36, 1);
-	border-bottom-left-radius: 16px;
+	background-color: #FA4D4D;
 }
 
 #Invite button:last-child {
-	background-color: rgba(46, 81, 145, 1);
-	border-bottom-right-radius: 16px;
+	background-color: #3184BF;
 }
 
 .showMembers {
@@ -445,7 +495,7 @@ input[type=file]::file-selector-button:hover {
 	justify-content: space-between;
 	height: 10vh;
 	overflow-y: auto;
-
+	scrollbar-width: none;
 
 
 	&::-webkit-scrollbar {

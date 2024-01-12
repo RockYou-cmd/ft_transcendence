@@ -6,11 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot } from '@fortawesome/free-solid-svg-icons';
 import avatar from '../../../../public/avatar.png';
 import { useSocket , useMe } from '../../Components/Log/LogContext';
+import { faCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { MouseEvent } from 'react';
+import swal from 'sweetalert';
+import GameResult from './gameResult';
 
 
 
 
-export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2, close} : {PLAYER1 : string, PLAYER2 : string , map : string, ballColor : string, paddleColor : string, close : any	}){
+export default function PingPong({gameSettings, gameInfo, close, setMode} : { gameSettings : any , gameInfo : any ,close : any, setMode: any }){
 
 	const {me} = useMe() as any;
 	const {socket} = useSocket();
@@ -18,35 +23,54 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
 	const [oppScore, setOppScore] = useState(0);
 	const game = useRef<HTMLCanvasElement>(null);
 	const roomName = useRef("");
-	const first = useRef(false);
+	const lag = useRef(false);
+	const [gameRes, setGameRes] = useState(false);
+	const msg = useRef("");
+
+
+	function leaveMatch(e? : MouseEvent){
+		e?.preventDefault();
+		socket?.disconnect();
+		close(false);
+		setMode("");
+		socket?.connect();
+	}
+
+	useEffect(() => {
+		const time = setTimeout(() => {
+			if (lag.current == false){
+				const player = gameInfo?.player1 == me?.username ? gameInfo.player2 : gameInfo.player1;
+				swal( "You Won", `${player} has left the game`,"info");
+				leaveMatch();
+			}
+		}, 15000);
+		return	() => clearTimeout(time);
+	},[]);
 
   useEffect(() => {
     if (game.current === null) return;
 
-    // let parent = game.current?.parentElement;
-    // game.current.width = parent?.clientWidth || 0;
-    // game.current.height = parent?.clientHeight || 0;
     let gameWidth = game.current.width || 0;
     let gameHeight = game.current.height || 0;
     let player1 = {
-      x: 20,
-      y: gameHeight / 2 - 120 / 2,
-      score: 0,
-      username: PLAYER1,
-      width: 12,
-      height: 140,
-      color: paddleColor,
+		height: gameHeight / 6.5,
+		width: 12,
+		x: 10,
+		y: (gameHeight / 2) -(gameHeight / 6.5) / 2,
+		score: 0,
+		username: gameInfo?.player1,
+		color: gameSettings?.paddleColor,
     };
     let player2 = {
-      x: gameWidth - 32,
-      y: gameHeight / 2 - 120 / 2,
-      score: 0,
-      username: PLAYER2,
-      width: 12,
-      height: 140,
-      color: paddleColor,
+		width: 12,
+		height: gameHeight / 6.5,
+		x: gameWidth - 22,
+		y: (gameHeight / 2) -  (gameHeight / 6.5)/ 2,
+		score: 0,
+		username: gameInfo?.player2,
+		color: gameSettings?.paddleColor,
     };
-    let ball = { x: 0, y: 0, color: ballColor, radius: 16 };
+    let ball = { x: 0, y: 0, color: gameSettings?.ballColor, radius: 16 };
     let net = {
       x: gameWidth / 2 - 2 / 1,
       y: 0,
@@ -65,24 +89,21 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       player2.score = data.player2.score;
       ball.x = data.ball.x;
       ball.y = data.ball.y;
-
-	//   if (!first.current){
-		  player1.username = data.payload.player1;
-		  player2.username = data.payload.player2;
-		  roomName.current = data?.roomName;
-		//   first.current = true;
-	//   }
-	//   console.log("data", data);
-	//   console.log("data player1", data?.player1);
-	//   console.log("data player2", data?.player2);
-	//   console.log("in data player1", player1.username, "player2", player2.username)
+	  if (lag.current == false){
+		lag.current =  true;
+	  }
+	  
+	
       if (myScore != data.player1.score) setMyScore(data.player1.score);
       if (oppScore != data.player2.score) setOppScore(data.player2.score);
       render();
     });
 
     socket?.on("endGame", (data: any) => {
-      close("");
+		const winner = data?.winner == me?.username ? "You Win" : "You Lose";
+
+		msg.current = winner;
+		setGameRes(true);
     });
 
     function drawRect(
@@ -141,35 +162,35 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       drawCircle(ball.x, ball.y, ball.radius, ball.color);
     }
 
-    document.body.addEventListener("keydown", function (key) {
-      if (key.code == "ArrowUp") {
+    window.addEventListener("keydown", function (key) {
+      if (key.code == "KeyW") {
         if (player1.username == me?.username) {
           if (player1.y > 0)
             socket?.emit("move", {
-              y: player1.y - 20,
+              y: player1.y - 28,
               roomName: roomName.current,
               player: "player1",
             });
         } else {
           if (player2.y > 0)
             socket?.emit("move", {
-              y: player2.y - 20,
+              y: player2.y - 28,
               roomName: roomName.current,
               player: "player2",
             });
         }
-      } else if (key.code == "ArrowDown") {
+      } else if (key.code == "KeyS") {
         if (player2.username == me?.username) {
           if (player2.y + player2.height < gameHeight)
             socket?.emit("move", {
-              y: player2.y + 20,
+              y: player2.y + 28,
               roomName: roomName.current,
               player: "player2",
             });
         } else {
           if (player1.y + player1.height < gameHeight)
             socket?.emit("move", {
-              y: player1.y + 20,
+              y: player1.y + 28,
               roomName: roomName.current,
               player: "player1",
             });
@@ -177,27 +198,38 @@ export default function PingPong({map, ballColor, paddleColor, PLAYER1, PLAYER2,
       }
     });
 
+	// if (gameInfo?.player2 == me?.username && gameInfo?.roomName){
+	// 	socket?.on("start", (data: any) => {});
+	// }
     return () => {
       socket?.off("frame", () => {});
     };
   }, [socket]);
 
 
-	
+  	const photo = gameInfo?.player1 == me?.username ? me?.photo : gameInfo?.photo;
+	const oppPhoto = gameInfo?.player2 == me?.username ? me?.photo : gameInfo?.photo;
 
 	return(
 		<>
-			<div id="container" className={map}>
-				<section>
-					{/* <Image className="g_img" src={(me as {photo : any})?.photo} priority={true} alt="img" width={60} height={60}/> */}
-					<h1>{PLAYER1}</h1>
-					<h2>{myScore} | {oppScore}</h2>
-					<h1>{PLAYER2}</h1>
-					{/* <FontAwesomeIcon id='icon' icon={faRobot} /> */}
-				</section>
-					<canvas id="canvas" ref={game} width={1500} height={900} />
-			</div>	
+			{gameRes && <GameResult msg={msg.current} close={setGameRes} make={()=>leaveMatch()}/>}
+			<div className={"PingPong"} style={
+				gameSettings?.map == "black" ? {backgroundColor : "black"} : gameSettings?.map == "shark" ? 
+				{backgroundColor : "#20A4F3"} : {backgroundColor : "#e65757"}
+			}>
 
+				<div id="container" className={gameSettings.map}>
+					<button id="backBtn" onClick={(e : MouseEvent)=>leaveMatch(e)}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
+					<section>
+						<Image className="g_img" src={photo ? photo : avatar} priority={true} alt="img" width={60} height={60}/>
+						<h1>{gameInfo.player1}</h1>
+						<h2>{myScore} | {oppScore}</h2>
+						<h1>{gameInfo.player2}</h1>
+						<Image className="g_img" src={oppPhoto ? oppPhoto : avatar} priority={true} alt="img" width={60} height={60}/>
+					</section>
+					<canvas id="canvas" ref={game} width={1500} height={900} />
+				</div>	
+			</div>
 		</>
 	)
 }

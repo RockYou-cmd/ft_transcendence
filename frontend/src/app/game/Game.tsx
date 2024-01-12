@@ -1,87 +1,112 @@
 
-import Canvas from "./canvas"
 import '../assest/game.css';
+import React from "react";
 import { useMe, useSocket } from "../Components/Log/LogContext";
 import { useEffect, useState ,useRef } from "react";
 import Image from 'next/image';
-import { APIs } from "../Props/APIs";
 import avatar from '../../../public/avatar.png';
 import { MouseEvent } from "react";
-import GameSettings from "./Components/gameSettings";
-import PingPong from "./Components/PingPong";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { GetData } from '../Components/Log/CheckLogin'
+import swal from 'sweetalert';
 
-export default function Game({Mode, setMode, setGame} : {Mode : string, setMode : any, setGame : any}){
+
+export default function MatchMaking({GameInfo, close, setMode, startGame, friend} : {setMode :any ,GameInfo : any, close : any, startGame : any, friend? : boolean}){
 	
 	const { me, setMe } = useMe() as any;
-	const [map, setMap] = useState("shark");
 	const { socket } = useSocket();
-	const [setting, setSetting] = useState(true);
-	const [ballColor, setBallColor] = useState("white");
-	const [paddleColor, setPaddleColor] = useState("white");
-	const [startGame, setStart] = useState(false);
-	const player1 = useRef("");
-	const player2 = useRef("");
-	const roomName = useRef("");
-	
+	const [Opp, setOpp] = useState<any>({});
+	const [time, setTime] = useState(false);
+	const [counter, setCounter] = useState(0);
+	const [sec, setSec] = useState(0);
+	const matchInfo = useRef({} as any);
 
-	function MatchMaking(){
-		
-		async function startgame(e : MouseEvent){
-			e.preventDefault();
-			socket?.emit("matchmaking", {});
-		}
+		const n = useRef(false);
+		useEffect(() => {
+			if (n.current == false){
+				socket?.emit("matchmaking", {});
+			}
+			n.current = true;
+		},[]);
 
 		useEffect(() => {
+			const one = time == false ? 1 : -1;
+			const interval = setInterval(() => {
+				setCounter(counter => counter + one);
+			}, 1000);
+
+			return () => {clearInterval(interval);};
+		},[time]);
+
+		async function timer(data: any) {
+			const Oppname = data.player1 == me.username ? data.player2 : data.player1;
+			const datas = await GetData({ Api: "User", user: Oppname });
+			setOpp(datas);
+			matchInfo.current.photo = datas?.photo;
+			GameInfo(matchInfo.current);
+		}
+		
+		useEffect(() => {
+			
+			socket?.on("inGame", (data: any) => {
+				console.log("herr");
+				swal("You Already in Game", "", "info");
+				setMode("");
+				close(true);
+			})			
+
 			socket?.on("start", (data: any) => {
-				setStart(true);
-				player1.current = data.player1;
-				player2.current = data.player2;
-				console.log(" in play Rank player1", data.player1, "player2", data.player2);
-				roomName.current = data.roomName;
-				if (data.player1 == me.username){
-					socket?.emit("start", data);
-					console.log("start game", me.username);
-				}
+	
+				matchInfo.current = data;
+				timer(data);
+				setCounter(3);
+				setSec(0);
+				setTime(true);
 			})
 
-			return () => {socket?.off("start"), ()=>{}}
-		},[socket])
+			return () => {
+				socket?.off("start"), () => {}
+				socket?.off("inGame", ()=>{})
+			}
+		},[socket]);
 
+		useEffect(() => {
+
+			if (counter % 60 == 0 && counter != 0){
+				setSec(sec => sec + 1);
+				setCounter(0);
+			}
+			if (counter == 0 && time == true){
+
+				if (matchInfo.current.player1 == me.username){
+					socket?.emit("start", matchInfo.current);
+				}
+				close(false);
+				startGame(true);
+			}
+		},[counter, time]);
 		
-		return(
-			<>
-				<div className="MatchMaking">
-					<h1>FINDING PLAYER</h1>
-
-					<section>
-						<Image className="g_img" src={me?.photo ? me.photo : avatar} priority={true} alt="img" width={60} height={60}/>
-						<h1>VS</h1>
-						<Image className="g_img" src={avatar} priority={true} alt="img" width={60} height={60}/>					
-					</section>
-					<button onClick={startgame} className='bg-green-500 text-white p-2 rounded m-5'> PLAY</button>
-				</div>
-			</>
-		)
-	}
-
-	useEffect(() => {
-		if (!setting)
-			setGame(true);
-	},[setting])
-	
 	return(
 		<>
-		{ setting ? <GameSettings Map={setMap} Ball={setBallColor} Paddle={setPaddleColor} close={setSetting} setMode={setMode}/> :
+			<div className="MatchMaking">
+				{!time && <button id='backBtn' onClick={()=>{
+					socket?.emit("update", {option : "refuse", receiver : Opp?.username, sender : me?.username, mode : "rank"});
+					socket?.disconnect();
+					setMode("");close(true);
+					socket?.connect()}
+					}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>}
+				<h1>FINDING PLAYER</h1>
 
-			<div className="GamePage">
-
-
-				{Mode == "computer" && <Canvas COM={true} Map={map} ballColor={ballColor} paddleColor={paddleColor} />}
-				<button className='bg-black text-white p-2 rounded m-5' onClick={(e) => {console.log("back to black", roomName.current);socket?.emit("leaveMatch", {roomName : roomName.current});setMode("");}}> BACK</button>
-				{Mode == "rank" && !startGame && <MatchMaking />}
-				{startGame && <PingPong map={map} ballColor={ballColor} paddleColor={paddleColor} PLAYER1={player1.current} PLAYER2={player2.current} close={setMode}/>}
+				<section>
+					<Image className="g_img" src={me?.photo ? me.photo : avatar} priority={true} alt="img" width={60} height={60}/>
+					<h1>VS</h1>
+					<Image className="g_img" src={Opp?.photo ? Opp?.photo : avatar} priority={true} alt="img" width={60} height={60}/>					
+				</section>
+					{!time ?  <h2>Matchmaking... {sec} : {counter}</h2> 
+						: <h2>STARTING IN {counter} sec</h2>
+					}
 			</div>
-		}
 		</>
 	)
 }

@@ -2,7 +2,6 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { RoomService } from "../room.service";

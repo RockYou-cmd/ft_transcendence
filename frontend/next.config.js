@@ -2,15 +2,18 @@
 const nextConfig = {
 	reactStrictMode: false,
 	images: {
-		remotePatterns:[{
-			// protocol: '*',
-			hostname: "**",
-		}],
+		remotePatterns: [
+			{
+				// protocol: '*',
+				hostname: "**",
+			},
+		],
+		// unoptimized: true,
 	},
-	experimental: {
-		swcTraceProfiling: true,
-	},
-}
+	// experimental: {
+	// 	swcTraceProfiling: true,
+	// },
+};
 
 module.exports = nextConfig
 

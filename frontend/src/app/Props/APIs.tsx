@@ -1,7 +1,7 @@
 
-export const LocalHost = "http://localhost:3001";
-export const Host = "http://localhost:3001";
-// export const Host = LocalHost;
+// export const Host = "http://localhost:3001";
+
+const Host = `${process.env.NEXT_PUBLIC_LOCALHOST}`;
 
 export interface Api {
 	SignIn: string,
@@ -43,6 +43,12 @@ export interface Api {
 	createChat: string,
 	roomModify: string,
 	unMute: string,
+	UserFriends : string,
+	matchHistory : string,
+	friendPending : string,
+	changePassword : string,
+	leaderBoard : string,
+	userUpdate : string,
 }
 
 export const APIs : Api = {
@@ -85,4 +91,10 @@ export const APIs : Api = {
 	FriendsChat : Host + "/friend/chats",
 	roomModify : Host + "/room/modify",
 	unMute : Host + "/room/unmute/member",
+	UserFriends : Host + "/user/friends/?username=",
+	matchHistory : Host + "/user/games",
+	friendPending : Host + "/friend/pending",
+	changePassword : Host + "/user/password",
+	leaderBoard : Host + "/user/leaderBoard",
+	userUpdate : Host + "/user/update",
 };

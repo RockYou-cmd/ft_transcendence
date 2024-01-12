@@ -1,7 +1,14 @@
 
-
 .Cover {
 	position: relative;
+	min-width: 810px;
+	
+	/* background-color:  rgb(2, 44, 78); */
+	/* background-color: #2176e5; */
+	/* background: linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%); */
+	/* background: #1F295E; */
+
+
 }
 
 
@@ -27,7 +34,8 @@
 	display: flex;
 	flex-direction: row;
 	position: relative;
-	margin-bottom: 6.5vh;
+	/* margin-bottom: 6.5vh; */
+	margin-bottom: 95px;
 }
 
 .searchInput {
@@ -63,8 +71,10 @@
 /********************************* Groups *********************************/
 
 .sec1 .Groups {
+	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
 
-	background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(133deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	width: auto;
 	margin: 20px;
 	border-radius: 20px;
@@ -74,6 +84,7 @@
 
 .sec1 .Groups .content_g {
 	overflow-y: scroll;
+	scrollbar-width: none;
 	height: 26.5vh;
 }
 
@@ -92,13 +103,6 @@
 	font-weight: 600;
 	font-size: 20px;
 	line-height: 30px;
-}
-
-
-.g_img {
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
 }
 
 .sec1 .g_img {
@@ -158,7 +162,11 @@
 /***************************************** Friends ************************************/
 
 .Friends {
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%); */
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	width: auto;
 	margin: 30px 20px 20px;
 	border-radius: 20px;
@@ -168,6 +176,7 @@
 
 .Friends .content_f {
 	overflow-y: scroll;
+	scrollbar-width: none;
 	height: 42.7vh;
 
 	& div:first-child {
@@ -179,17 +188,6 @@
 	display: none;
 }
 
-.status {
-	display: flex;
-	background-color: rgba(0, 255, 117, 1);
-	width: 15px;
-	height: 15px;
-	border-radius: 50%;
-	position: absolute;
-	top: 51px;
-	left: 51px;
-	border: 2px solid #ffffff;
-}
 
 .Friends .status {
 	top: 54px;
@@ -200,7 +198,8 @@
 /***************************************** Sec2 Chat ************************************/
 
 .Chat {
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
 
 	margin: 25px 18px 10px 6px;
 	border: 1px solid black;
@@ -274,7 +273,7 @@
 	margin: 5vh 0px 2.5vh;
 	height: 65.5vh;
 	overflow-y: scroll;
-	
+	scrollbar-width: none;
 }
 
 .Msg::-webkit-scrollbar {
@@ -507,7 +506,10 @@ input:focus {
 	position: absolute;
 	right: 20px;
 	top: 69px;
-	background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%);
+	/* background: linear-gradient(to bottom right, #1f2933, #4b5563, #000000); */
+	background: linear-gradient(to bottom right, #1f2933, #3a4250, #000000);
+
+	/* background: linear-gradient(133.84deg, #4E4E4E -16.04%, #333333 9.33%, #1A1A1A 32.02%, #1A1A1A 62.06%, #262626 87.42%, #4E4E4E 112.12%); */
 	z-index: 1;
 	box-shadow: 0px 0px 3px 0px #ffff;
 }

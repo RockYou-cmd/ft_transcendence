@@ -9,14 +9,13 @@ import '../../assest/chat.css'
 import '../../assest/chatComponents.css'
 import { ChatOptions } from "@/app/Props/Interfaces";
 import Options from "./Options";
-import Invite from "./Invite";
 import { useRouter } from "next/navigation";
-import Add from "./Add";
 import { Make } from '../../Components/Fetch/Make';
 import AddMembers from "./AddMembers";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMe, useSocket } from "@/app/Components/Log/LogContext";
+import Confirm from "./Confirm";
 
 let UserSettings: ChatOptions = { Option: ["invite", "sendMsg", "view"], desc: ["Invite To A Game", "Send Message", "View Profile"] };
 let AdminSettings: ChatOptions = { Option: ["invite", "sendMsg", "view", "Kick", "Ban"], desc: ["Invite To A Game", "Send Message", "View Profile", "Kick", "Ban"] };
@@ -32,6 +31,11 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 	const { socket } = useSocket();
 	const { me } = useMe() as any;
 	const [options, setOptions] = useState({} as any);
+
+	function InviteToGame(User : any){
+		socket?.emit("invite", {player2 : User?.username, player1 : me?.username});
+		router.push("/game?" + "player1=" + me.username + "&player2=" + User.username + "&mode=friend" + "&invite=true");
+	}
 
 	async function getMembers() {
 		const data = await Get(APIs.members + group?.id);
@@ -104,7 +108,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			wait()
 			setRefresh(!refresh);
 		}
-		if (!add)
+		if (!add || !mute)
 			setRefresh(!refresh);
 		if (sendMsg) {
 			DirectMsg(User?.user);
@@ -112,8 +116,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 		}
 		if (view)
 			router.push("/users/" + User?.user?.username);
-		// console.log("make ", make);
-	}, [make, add, sendMsg, view]);
+	}, [make, add, sendMsg, view, mute]);
 
 
 	useEffect(() => {
@@ -161,7 +164,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 			e.preventDefault();
 			try{
 				const res = await Put({id : group.id , username : User?.user?.username, duration : time}, APIs.Mute);
-				if (res.ok){
+				if (res?.ok){
 					socket?.emit("update", {option : "Mute" , groupId : group?.id , receiver : User?.user?.username, sender : me?.username});
 				}
 				setMute(false);
@@ -190,11 +193,13 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 
 	function Print(users: any) {
 		const user = users?.users;
+
 		const print = <>
 			<div className={user.role == "ADMIN" ? "user admin" : user.role == "OWNER" ? "user owner" : "user"} ref={visible}>
 				<Image className="g_img" src={user?.user?.photo ? user?.user?.photo : avatar} priority={true} alt="img" width={45} height={45} />
 				<h3>{user?.user.username}</h3>
 				{(user.role != "OWNER" || role != "OWNER" ) && user?.user?.username != me?.username && <button className="UseraddBtn" onClick={(e: MouseEvent) => showOptions(e, user)}><FontAwesomeIcon icon={faBars} /></button>}
+				{user?.userId == User?.userId &&  option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}
 			</div>
 		</>
 		return <div>{print}</div>
@@ -216,7 +221,7 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				content = UserSettings;
 
 			if(role == "OWNER" || role == "ADMIN"){
-				if (User.status == "MUTED"){
+				if (User?.status == "MUTED"){
 					if (role == "OWNER" || (role == "ADMIN" && User.role == "MEMBER"))
 						content = {...content, Option : [...content.Option, "unMute"], desc : [...content.desc, "UnMute"]};
 				}
@@ -227,10 +232,8 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				
 			} 
 			setOptions(content);
-			console.log("content ", content);
 		}
 	}, [option]);
-
 
 	return (
 		<>
@@ -241,12 +244,10 @@ export default function OwnerSettings({ group, close, role, DirectMsg }: { group
 				<div className="content">
 					{data?.members?.map((user: any, index: number) => (<Print key={index} users={user} />))}
 				</div>
-				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={Settings} content={options} />}				
 				{role == "OWNER" && <button className="addBtn" onClick={() => setAdd(true)}>Add Member</button>}
-				{invite && <Invite User={data} close={setInvite} />}
+				{invite && <Confirm Make={InviteToGame} title='Invite This User To A Game' close={setInvite} user={User?.user} />}
 				{add && <AddMembers group={group} close={setAdd} />}
-				{mute && <MuteOption User={User}/>}
-				{/* {view && router.push("/users/" + User?.user?.username)} */}
+				{mute && <MuteOption />}
 			</div>
 		</>
 	)

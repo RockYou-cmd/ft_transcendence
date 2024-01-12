@@ -6,45 +6,46 @@ import Form from "../../profile/form";
 
 
 
-export default function LoG({ page, LogIn }: { page: string, LogIn: any }) {
+export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: any , User? : string, back? : any}) {
 
-	const host = "http://localhost:3001";
+	const host = `${process.env.NEXT_PUBLIC_LOCALHOST}`;
 
 	const { socket, setSocket } = useSocket();
 	const { online, setOnline } = useLogContext();
 
 	useEffect(() => {
+		const UserProfile = User ? User : "";
 		async function fetchData() {
-			// console.log("yo");
-			// console.log("online", online);
-			const data = await GetData({ Api: page, user: "" }) as any;
-			// console.log("yo 2");
+			const data = await GetData({ Api: page, user: UserProfile }) as any;
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {
-				console.log("salam");
+				setOnline("OFF");
 			}
 			else {
-					if (online == "ON"){
-						socket?.disconnect();
-						setSocket(io(host + "/events", {
-							withCredentials: true,
-						}));
-						console.log("socket created");
-					}
+	
+				if (online != "ON"){
 					setOnline("ON");
+				}
+				
+					socket?.disconnect();
+					setSocket(io(host + "/events", {
+					withCredentials: true,
+				}));
+		
+				LogIn.dataHook.setState(data);
 			}
 
 		}
 		fetchData();
-	
-	}, [online]);
+		
+	}, []);
 
 	if (LogIn.waitHook.state == false)
 		return null;
 
 	return (
 		<>
-			{online == "OFF" && LogIn.waitHook.state ? <Form /> : null}
+			{online == "OFF" && LogIn.waitHook.state ? <Form back={back}/> : null}
 		</>
 	)
 

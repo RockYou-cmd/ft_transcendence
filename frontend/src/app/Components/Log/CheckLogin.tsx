@@ -1,16 +1,10 @@
-import Cookies from "js-cookie";
+
 import { APIs } from "../../Props/APIs";
 import { Get } from "../Fetch/Fetch";
-import Form from "../../profile/form";
-import { useLogContext } from "./LogContext";
 
 export async function GetData({ Api, user }: { Api: string, user: string }) {
 
 	let data: any;
-
-	// if ((user != undefined && user != "") && Api == "Profile") {
-	// 	data = await Get(APIs.User + user);
-	// }
 
 	if (Api == "User")
 		data = await Get(APIs.User + user);
@@ -19,19 +13,4 @@ export async function GetData({ Api, user }: { Api: string, user: string }) {
 	else if (Api == "Navbar")
 		data = await Get(APIs.Navbar);
 	return data;
-}
-
-
-
-export default async function CheckLogin(LogIn: any) {
-
-	// const { log, render } = Form();
-	let cookie = Cookies.get("access_token");
-
-	// if (online == "OFF") {
-	// 	return (<>{log == false ? render : null}</>);
-	// }
-	// if (LogIn.logInHook?.state == false)
-	// 	LogIn.logInHook?.setState(true);
-	return (null)
 }

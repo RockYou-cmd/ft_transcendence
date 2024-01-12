@@ -1,0 +1,133 @@
+
+#home{
+
+	padding: 3vh 3%;
+}
+
+#MapSelecter{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width : 45%;
+	position : absolute;
+	top:52%;
+	right:40px;
+	/* height: 40vh; */
+}
+
+#home #container{
+	border-radius: 20px;
+	margin-right:40px;
+}
+
+.friendInProfile .status{
+	left:58px;
+	top:52px;
+}
+
+.maps{
+	margin:30px auto;
+	width:55%;
+	height:250px;
+}
+
+#home .section1{
+	display: flex;
+	justify-content: space-between;
+}
+
+
+.changePassword{
+	color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	padding:10px;
+	& button{
+		font : 600 18px 'Inter', sans-serif;
+		padding: 10px 20px;
+		background-color: black;
+		border-radius: 10px;
+		margin: 0px auto;
+		/* position: relative;
+		right: 77%;	 */
+	}
+	
+	& form{
+		display: flex;
+		flex-direction: column;
+		padding:10px 30px;
+		background-color: rgb(60, 61, 61);
+		border-radius: 10px;
+		animation: show 1s;
+		
+		& label{
+			font : 500 17px 'Inter', sans-serif;
+			margin: 8px;
+		}
+
+		& section{
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			background-color: #ffffff;
+			padding: 10px;
+			position: relative;
+
+			border-radius: 5px;
+			margin-bottom: 18px;
+			color: black;
+			
+			& #icon{
+				position: absolute;
+				right:15px;
+			}
+			& input{
+				color: black;
+				width: 80%;
+				font : 600 14px 'Inter', sans-serif;
+				letter-spacing: 0.3px;
+			}
+		}
+
+
+		& button{
+			font : 600 16px 'Inter', sans-serif;
+			padding: 10px 25px;
+			background-color: #4173c3;
+			border-radius: 10px;
+			margin-top: 10px;
+		
+		}
+	}
+
+}
+
+@keyframes show{
+	0%{
+		opacity: 0;
+		transform: translateY(-20%);
+	}
+	100%{
+		opacity: 1;
+		transform: translateY(0%);
+	}
+}
+
+.animated-border  {
+    border: 2px solid #ffffff;
+    animation: pulsate 4s ease-in-out infinite;
+  }
+  
+  @keyframes pulsate {
+    0% {
+      box-shadow: 0 0 0 0 rgba(237, 56, 56, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+    }
+  }

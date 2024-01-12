@@ -1,11 +1,12 @@
 
 import '../../assest/game.css';
-import Canvas from '../canvas';
 import Image from 'next/image';
 import shark from '../../../../public/Frame_1.png';
 import dragon from '../../../../public/dragon.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleLeft , faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
 interface Map{
 	name : string,
@@ -35,39 +36,41 @@ const maps: Map[] = [
 ]
 
 const reset ={
-	Map : "shark",
+	Map : "black",
 	ballColor : "white",
 	paddleColor : "white",
 }
 
-export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Map : any, Ball : any, Paddle : any, close : any, setMode : any}){
+export default function GameSettings({Options , close, setMode, save} : { Options : any, close : any, setMode : any, save : any}){
 
 	const [Style, setStyle] = useState({
 		map : {},
 		ball : {},
 		Paddle: {},
-		mapName : "",
-		ballColor : "",
-		paddleColor : "",
+		mapName : "black",
+		ballColor : "white",
+		paddleColor : "white",
 	});
 
-	function Chose(style : string, type : string, color : string){
-		console.log("chose", style, type);
+	useEffect(() => {
+		Options(Style.mapName, Style.ballColor, Style.paddleColor);
+	},[Style]);
+
+	function Chose(style : string, type : string){
 		if (type == "map"){
-			Map(color);
 			setStyle((prevState) => ({
-					...prevState,
-					map: {
-						border: "3px solid #fff",
-					},
-					ball: prevState.ball,
-					Paddle: prevState.Paddle,
-					mapName: style,
-					ballColor: prevState.ballColor,
-					paddleColor: prevState.paddleColor,
-				}));
+				...prevState,
+				map: {
+					border: "3px solid #fff",
+				},
+				ball: prevState.ball,
+				Paddle: prevState.Paddle,
+				mapName: style,
+				ballColor: prevState.ballColor,
+				paddleColor: prevState.paddleColor,
+			}));
 		}else if (type == "ball"){
-			Ball(color);
+			
 			setStyle((prevState) => ({
 				...prevState,
 				map: prevState.map,
@@ -80,7 +83,7 @@ export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Ma
 				paddleColor: prevState.paddleColor,
 			}));
 		} else if (type == "paddle"){
-			Paddle(color);
+			
 			setStyle((prevState) => ({
 				...prevState,
 				map: prevState.map,
@@ -93,48 +96,43 @@ export default function GameSettings({ Map, Ball, Paddle, close, setMode} : { Ma
 				paddleColor: style,
 			}));
 		}
-
+		
 	}
 
 
 	function MapPicker({map} : {map : Map}){
 		return(
 			<div style={Style.mapName == map.name ? Style.map : {}} className={"mapPicker hover:scale-110" +  "  map" + map.name}
-			onClick={()=>Chose(map.name, "map", map.name)}
+			onClick={()=>Chose(map.name, "map")}
 			>
 				{map?.img &&  <Image src={map?.img} className="mapImg"  alt="map" width={70} height={70} />}
 			</div>
 		)
 	}
-
+{/* <FontAwesomeIcon icon={faArrowLeft} id="icon"/> */}
 	return(
 		<>
 			<div className='gameSettings'>
+				<button id='backBtn' onClick={()=>{setMode("");close(true);}}><FontAwesomeIcon icon={faCircleLeft} id="icon" /></button>
 				<h1>CHOSE A MAP</h1>	
 				<div className="Maps">
 					{maps.map((map : Map, index : number)=>(<MapPicker map={map} key={index}/>))}
 				</div>
 				<h1>BALL COLOR</h1>
 				<div className="ballcolor">
-					{ball.map((ball : Ball)=>(<div className={"ball"} onClick={()=>Chose(ball.name, "ball", ball.color)} style={{backgroundColor : `${ball.color}`,
+					{ball.map((ball : Ball)=>(<div className={"ball"} onClick={()=>Chose(ball.name, "ball")} style={{backgroundColor : `${ball.color}`,
 					border : Style.ballColor == ball.name ? "3px solid #fff" : ""}} key={ball.name}/>))}
 				</div>
 				<h1>PADDLE COLOR</h1>
 				<div className="paddlecolor">
-					{ball.map((ball : Ball)=>(<div className={"paddle"} onClick={()=>Chose(ball.name, "paddle", ball.color)} style={{backgroundColor : `${ball.color}`
+					{ball.map((ball : Ball)=>(<div className={"paddle"} onClick={()=>Chose(ball.name, "paddle")} style={{backgroundColor : `${ball.color}`
 					, border : Style.paddleColor == ball.name ? "3px solid #fff" : ""}} key={ball.name} />))}
 				</div>
 				<footer>
-					<button onClick={()=>close(false)} >SAVE</button>
-					<button onClick={()=>{
-						Map(reset.Map);
-						Ball(reset.ballColor);
-						Paddle(reset.paddleColor);
-						close(false)}
-					}>NO</button>
+					<button onClick={()=>{close(false);save(true);}} >PLAY</button>
+					<button onClick={()=>{setMode("");close(true);}}>CANCEL</button>
 				</footer>
 			</div>
-			<button className='bg-black text-white p-2 rounded m-5' onClick={()=>setMode("")}> Back</button>
 		</>
 	)
 }

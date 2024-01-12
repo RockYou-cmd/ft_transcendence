@@ -1,4 +1,4 @@
-import Create from "@/app/create/page";
+
 import "../../assest/chat.css";
 import "../../assest/chatComponents.css";
 import { useEffect , useRef , useState } from "react";
@@ -13,7 +13,7 @@ export default function Options({ visible , option, btnRef, setOptions, content}
 
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
-			if (!optionsBar.current.contains(event.target as Node) && !btnRef.current.contains(event.target as Node)) {
+			if (!optionsBar?.current?.contains(event.target as Node) && !btnRef?.current?.contains(event.target as Node)) {
 				visible(!option);
 			}
 		};
@@ -27,7 +27,8 @@ export default function Options({ visible , option, btnRef, setOptions, content}
 	}, []);
 
 
-
+	if (content?.Option && Object?.keys(content?.Option)?.length == 0)
+		return <></>
 	return (
 		<>
 			<div ref={optionsBar} id="optionsBar">

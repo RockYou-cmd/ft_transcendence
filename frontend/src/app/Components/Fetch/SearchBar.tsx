@@ -1,6 +1,5 @@
 import React from 'react';
-import { useState, useRef, useEffect, use } from 'react';
-import { MouseEvent } from 'react';
+import { useState, useRef, useEffect} from 'react';
 import { Get } from './Fetch';
 import { APIs } from '../../Props/APIs';
 import Image from 'next/image';
@@ -13,12 +12,12 @@ import { useRouter } from 'next/navigation';
 export default function SearchBar({ title }: { title: string }) {
 
 	const visible = useRef(null) as any;
-	const {me , setMe} = useMe() as any;
+	const {me} = useMe() as any;
 	const [data, setData] = useState({} as any);
 	const [Style, setStyle] = useState({} as any);
 	const [input, setInput] = useState("");
 	const router = useRouter();
-	const { online, setOnline } = useLogContext();
+	const {setOnline } = useLogContext();
 
 
 	useEffect(() => {
@@ -51,9 +50,7 @@ export default function SearchBar({ title }: { title: string }) {
 			getData();
 			setStyle({
 				"height": "21vh",
-				// "padding-bottom": "15px",
-				// "padding" : "0px 0px 20px",
-				// "width" : "70%",
+
 			})
 		}
 		else
@@ -84,7 +81,6 @@ export default function SearchBar({ title }: { title: string }) {
 								{user.photo == null ? <Image className="g_img" src={avatar} priority={true} alt="img" width={45} height={45} /> :
 									<Image className="g_img" src={user?.photo} priority={true} alt="img" width={45} height={45} />}
 								<span>{user.username}</span>
-								<span>Rank</span>
 							</div>
 						))}
 					</div>

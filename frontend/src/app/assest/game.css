@@ -1,47 +1,67 @@
 
-#container{
-	/* min-width: 1500px; */
-	/* margin-top:100px; */
+
+.PingPong{
 	display: flex;
+	align-items: center;
+	align-self: center;
+	align-content: center;
+	justify-content: center;
+	justify-self: center;
+	justify-items: center;
+
+	width: 100%;
+	height: 92.7vh;
+
+}
+
+#container{
+
+ 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+	position: relative;
 	width: 100%;
-	height:87vh;
+	max-width: 1800px;
+	margin:auto 0px;
 	padding:30px auto;
 	align-items: center;
+	aspect-ratio: 4/3;
 	
-	/* transform: scale(1); */
-	
-	
+	&footer{
+		display:  flex;
+		flex-direction: row;
+	}
 
 	& section {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		width: 50%;
+		width: 60%;
 		
 		& h1 , h2{
-			font : 700 30px "Inter", sans-serif;
+			font : 700 25px "Inter", sans-serif;
 			text-align: center;
 			margin-bottom: 20px;
-			width:33%;
+			width:35%;
 		}
 
 		& h2{
 			letter-spacing: 5px;
 			margin:0px 30px 20px;
-			/* margin-right: 30px; */
 		}
 
 		& h1:first-of-type{margin-right: auto;}
 		& h1:last-of-type{margin-left: auto;}
 		
 		& .g_img , #icon{
+			aspect-ratio: 1/1;
 			width: 60px;
 			height: 60px;
-			border: 3px solid #fff;
+			max-width: 60px;
+			max-height: 60px;
+			border: 3px solid #ffffff;
 			margin: 0px 10px 20px;
 		}
 
@@ -52,13 +72,13 @@
 .shark{
 	background: url("../../../public/Frame_1.png") no-repeat center center;
 	background-color: #20A4F3;
-	background-size: 60vh;
+	background-size: 50%;
 }
 
 .dragon{
 	background: url("../../../public/dragon.png") no-repeat center center;
 	background-color: #e65757 ;
-	background-size: 35vh;
+	background-size: 30%;
 }
 
 .black{
@@ -66,21 +86,23 @@
 }
 
 #canvas{
-	width: 90%;
-	height: 90%;
-
+	width: 85%;
+	height: 85%;
 }
 
-
+#gameRootDir{
+	position: relative;
+}
 
 .GameMain{
-	background-color: #1F295E;
+
 	height: 92.8vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	padding: 1% 3%;
 	position: relative;
+	min-width: 810px;
 }
 
 .Leaderboard{
@@ -97,7 +119,6 @@
 	display: flex;
 	flex-direction: column;
 	padding: 20px 0px 40px 10px;
-
 }
 
 .rankTable{
@@ -150,16 +171,22 @@
 	}
 }
 
-.Leaderboard , .online{
+.Leaderboard , .matchHistory{
 	border-radius: 50px;
 	background: linear-gradient(0deg, #3184BF 0%, rgba(49, 132, 191, 0.00) 100%);
 	box-shadow: 2px 2px 20px 3px rgba(26, 213, 255, 0.25);
+
 }
 
-.Leaderboard{width: 35%;}
+.Leaderboard{width: 32%;}
 
-.online{width: 30%;}
+.matchHistory{width: 36%;
+	padding:2.5% 2%;
+	overflow-y: auto;
+	scrollbar-width: none;
+	&::-webkit-scrollbar{display:none;}
 
+}
 
 .GameMode{
 	width: 27%;
@@ -181,6 +208,7 @@
 		font: 600 20px 'Bebas', 'Neue', sans-serif;
 		&:hover{
 			transform: scale(1.09);
+			transition-duration: 0.4s;
 			box-shadow: 3px 3px 15px 4px #00E0FF, 0px 0px 11px 5px rgba(77, 212, 255, 0.80) inset;
 		}
 	}
@@ -189,11 +217,25 @@
 
 
 .MatchMaking{
-	padding:10px 50px;
-	width: 30vh;
+	padding:15px 50px 30px;
+	width: 450px;
 	background-color: #011627;
 	position: absolute;
+	left:50%;
+	top:35%;
+	border-radius: 30px;
+	transform: translate(-50%,-50%);
 	
+	& #backBtn{
+		left:10px;
+		top:10px;
+	}
+
+	& #icon{
+		width: 20px;
+		height: 20px;
+	}
+
 	& h1{
 		font : 700 24px "Inter", sans-serif;
 		text-align: center;
@@ -210,6 +252,15 @@
 		align-items: center;
 		margin:10px;
 	}
+
+	& h2{
+		display: block;
+		font : 500 18px "Poppins", sans-serif;
+		text-align: center;
+		margin-top:20px;
+		padding-right: 10px;
+		/* margin-bottom:15px; */
+	}
 }
 
 .GamePage { 
@@ -217,16 +268,48 @@
 }
 
 .gameSettings{
-	padding: 40px 30px;
+	padding:50px 35px 40px;
 	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
 	width:600px;
 	height : 760px;
 	/* margin: auto; */
 	position: absolute;
 	left:50%;
-	top:30%;
+	top:40%;
 	transform: translate(-50%,-50%);
 	border-radius: 50px;
+
+}
+
+.FiendlyGame .Add{
+	background: linear-gradient(0deg, #0C0B38 0%, #3184BF 100%);
+
+	& .searchInput{
+		background-color: #ffffff96;
+		color: #000000;
+	}
+}
+
+.Waiting{
+	padding: 40px;
+	color: #000000;
+	position: absolute;
+	left:50%;
+	top:50%;
+	border-radius: 20px;
+	transform: translate(-50%,-50%);
+	background-color: #ffffff96;
+	& button{
+		padding:20px;
+		background-color: #3184BF;
+	}
+}
+
+.FiendlyGame .Add .content .user{
+	background-color: #ffffff76;
+	&:hover{
+		background-color: #ffffff34;
+	}
 }
 
 .gameSettings h1{
@@ -259,12 +342,14 @@
 
 	& .mapImg{
 		margin: auto;
+		aspect-ratio: 1/1;
 	}
 
 	& select {
 		all:initial;
 	}
 }
+
 .mapPicker:hover{
 	cursor: pointer;
 	border: 3px solid #fff;
@@ -299,6 +384,7 @@
 	cursor: pointer;
 	border: 3px solid #fff;
 	transform: scale(1.18);
+	transition : 0.25s;
 }
 
 .gameSettings footer{
@@ -314,6 +400,7 @@
 		font: 600 20px 'Inter', sans-serif;
 		&:hover{
 			transform: scale(1.1);
+			transition-duration: 0.25s;
 		}
 	}
 
@@ -323,8 +410,46 @@
 
 	& button:last-child{
 		background-color: #FA4D4D;
-		padding:8px 45px;
+		padding:8px 20px;
 	}
 }
 
 
+
+
+
+/*****************************************************************************************************/
+
+@media (max-width : 800px){
+	#container{
+		height: auto;
+	}
+
+	#container section{
+		& h1, h2{
+			font : 600 22px "Inter", sans-serif;
+			text-align: center;
+			margin-bottom: 20px;
+			width:33%;
+		}
+	}
+}
+
+@media (max-width : 1100px){
+	#container{
+		& section{
+			& h1 , h2{
+				font : 600 18px "Inter", sans-serif;
+				text-align: center;
+				margin-bottom: 10px;
+				width:33%;
+			}
+			& .g_img, #icon{
+				width: 20%;
+				height: auto;
+	
+				margin: 0px 10px 10px; 
+			}
+		}
+	}
+}

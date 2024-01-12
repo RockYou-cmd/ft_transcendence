@@ -10,7 +10,6 @@ export class TwoFactorAuthenticationController {
 	@Get("generate")
 	@UseGuards(AuthGuard)
 	generateTwoFactorAuthenticationSecret(@Req() req) {
-		console.log("generate");
 		return this.twoFactorAuthenticationService.generateTwoFactorAuthSecret(req.user);
 	}
 

@@ -3,8 +3,6 @@
 import { APIs } from "@/app/Props/APIs";
 import { Post } from "./Fetch";
 import { Put } from "./Fetch";
-import { useMe, useSocket } from "../Log/LogContext";
-
 
 
 
@@ -33,9 +31,7 @@ export  async function  Make({ option, group, person , socket , me}: { option: s
 		put = false;
 	else
 		put = true;
-
 	
-
 	let res: any;
 	if (put == false)
 		res = await Post(data, Api);

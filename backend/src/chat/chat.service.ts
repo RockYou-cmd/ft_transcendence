@@ -12,9 +12,7 @@ export class ChatService {
 
   async sendMessage(payload) {
     try {
-      console.log(payload);
       const chatId = payload.chatId;
-      // console.log("chatId: ",chatId);
       var updatedChat = await prisma.message.create({
         data: {
           content: payload.content,
@@ -33,14 +31,14 @@ export class ChatService {
           },
         },
       });
-      // console.log(updatedChat)
+
       return "message sent!";
     } catch (err) {
       throw err;
     }
   }
 
-  async getChat(account, user) {
+  async   getChat(account, user) {
     try {
         // await prisma.message.deleteMany();
         // await prisma.chat.deleteMany();
@@ -59,7 +57,7 @@ export class ChatService {
               },
             },
             include: {
-              messages: true,
+              messages: true
             },
           },
           friends: {
@@ -72,13 +70,16 @@ export class ChatService {
             },
             select: {
               status: true,
-              blocked: true
+              blocked: {
+                select: {
+                  username: true
+                }
+              }
             }
           },
         },
       });
       return chat;
-
     } catch (err) {
       throw err;
     }

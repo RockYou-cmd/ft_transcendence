@@ -1,7 +1,6 @@
 
-import Add from "./Add"
 import { APIs } from "../../Props/APIs"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Get } from "../../Components/Fetch/Fetch";
 import { Post } from "../../Components/Fetch/Fetch";
 import '../../assest/Components.css';
@@ -10,6 +9,7 @@ import Image from 'next/image';
 import avatar from '../../../../public/avatar.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeLowVision, faEye , faLock , faLockOpen} from "@fortawesome/free-solid-svg-icons";
+import swal from 'sweetalert';
 
 
 
@@ -22,7 +22,6 @@ export default function ExploreRooms({ close }: { close: any }) {
 	const [search, setSearch] = useState(null) as any;
 	const [roomSelected, setRoomSelected] = useState({} as any);
 	const [refresh, setRefresh] = useState(false);
-	const [filtered, setFiltered] = useState({} as any);
 
 	function JoinGroup({ Room }: { Room: any }) {
 
@@ -36,12 +35,12 @@ export default function ExploreRooms({ close }: { close: any }) {
 			e.preventDefault();
 			res = await Post({ id: Room?.id, password: password }, APIs.JoinProtectedRoom);
 			if (res?.status == 201) {
-				alert("Joined");
+				swal("Joined", "", "success");
 				setRoomSelected({});
 				setRefresh(!refresh);
 			}
 			else {
-				alert("Wrong Password");
+				swal("Wrong Password", "", "error");
 			}
 			setPassword("");
 		}
@@ -88,7 +87,6 @@ export default function ExploreRooms({ close }: { close: any }) {
 	useEffect(() => {
 		getRooms();
 	}, [refresh, search]);
-
 
 
 

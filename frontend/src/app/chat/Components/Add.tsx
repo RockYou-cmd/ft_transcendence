@@ -31,14 +31,16 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 		Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
 	else if (join == "Start Chat")
 		Style = {"backgroundColor": "#1A66FF"};
+	else if (join == "INVITE")
+		Style = {"background": "linear-gradient(94deg, #3184BF 3.66%, #1AD5FF 96.9%)"}
 	else
 		Style = {"backgroundColor": "rgba(249, 172, 24, 1)"};
-
+	
 
 	function MakeEvent(e: MouseEvent, user : any){
 		e.preventDefault();
 		Make(user);
-		if (join == "Start Chat")
+		if (join == "Start Chat" || join == "INVITE")
 			close(false);
 	}
 
@@ -55,24 +57,28 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 
 	useEffect(() => {
 		const SearchRes = Users?.filter((user: any)=>{
-			if (join == "Start Chat")
-				return user.users[0].username.toLowerCase().includes(search.toLowerCase())
-			return user.username.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());	
+			if (join == "Start Chat" || join == "INVITE")
+				return user?.users[0]?.username.toLowerCase().includes(search.toLowerCase())
+			return user?.username?.toLowerCase().includes(search.toLowerCase()) || user?.name?.toLowerCase().includes(search.toLowerCase()) || user?.username?.toLowerCase().includes(search.toLowerCase());	
 		})
 		setData(SearchRes);
 	}, [Users, search]);
 
 
+
 	function Print(users : any){
 		let user = users?.users;
-		if (join == "Start Chat"){
+		if (join == "Start Chat" || join == "INVITE"){
 			user = user.users[0];
 		}
+
+		if (join == "INVITE" && user?.status == "OFFLINE")
+			return <></>;
 		const print = <>
 			<Link href={"/users/" + user?.username} passHref={true} ><div className={"user"}>
 				<Image className="g_img" src={user?.photo ? user?.photo : avatar} priority={true} alt="img" width={45} height={45}/>
 				<h3>{user?.name ? user?.name : user?.username}</h3>
-				{join != "Start Chat" && user?.rooms[0]?.status== "BANNED" ? <button className='UseraddBtn' style={{backgroundColor : "#ff2638"}} onClick={(e : MouseEvent)=>BanEvent(e, user)}>UNBAN</button>
+				{join != "Start Chat" && join != "INVITE" && user?.rooms[0]?.status== "BANNED" ? <button className='UseraddBtn' style={{backgroundColor : "#ff2638"}} onClick={(e : MouseEvent)=>BanEvent(e, user)}>UNBAN</button>
 				:  <button className='UseraddBtn' style={Style} onClick={(e: MouseEvent)=>MakeEvent(e, user)}>{join}</button>
 				}
 				{join == "JOIN" && <div className='Join'></div>}
@@ -90,7 +96,6 @@ export default function Add({Users, Make, title, join, close, id, refresh, setRe
 				<div className="content">
 					{data?.map((user : any, index : number)=>(<Print key={index} users={user}/>))}
 				</div>	
-				{/* {option && <Options visible={setOption} option={option} btnRef={null} setOptions={null} content={role == "SimpleUser" ? SimpleUser : role == "Admin" ? Admin : Owner}/>} */}
 			</div>
 		</>
 	)

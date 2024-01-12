@@ -27,7 +27,7 @@ export class RoomService {
       if (data.photo) roomData["photo"] = data.photo;
       if (data.privacy == "PROTECTED") {
         const hash = await argon.hash(data.password);
-        console.log("Hash: ", hash);
+    
         roomData["password"] = hash;
       }
       const room = await prisma.room.create({
@@ -46,10 +46,39 @@ export class RoomService {
           id: roomId,
         },
         select: {
-          messages: true,
+          messages: {
+            where: {
+              sender: {
+                OR: [
+                  {
+                    username: account.username,
+                  },
+                  {
+                    friends: {
+                      none: {
+                        AND: [
+                          {
+                            status: "BLOCKED",
+                          },
+                          {
+                            users: {
+                              some: {
+                                username: account.username,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
           members: true,
         },
       });
+
       return chat;
     } catch (err) {
       throw err;
@@ -187,7 +216,12 @@ export class RoomService {
         select: {
           members: {
             include: {
-              user: true,
+              user: {
+                select: {
+                  username: true,
+                  photo: true
+                }
+              },
             },
             where: {
               status: {
@@ -224,6 +258,13 @@ export class RoomService {
             },
           ],
         },
+        select: {
+          name: true,
+          photo: true,
+          privacy: true,
+          description: true,
+		      id : true,
+        }
       });
       return { rooms: rooms };
     } catch (err) {
@@ -250,6 +291,13 @@ export class RoomService {
             },
           },
         },
+        select: {
+          name: true,
+          photo: true,
+          privacy: true,
+          description: true,
+		      id:true
+        }
       });
       return { rooms: roomsIn };
     } catch (err) {
@@ -281,6 +329,7 @@ export class RoomService {
 
   async joinProtected(account, data) {
     try {
+      
       const room = await prisma.room.findUnique({
         where: {
           id: data.id,
@@ -445,6 +494,9 @@ export class RoomService {
 
   async modifyRoom(data) {
     try {
+      if (data.privacy == "PROTECTED")
+        data.password = await argon.hash(data.password);
+   
       var newData = {
         name: data.name,
         description: data.description,
@@ -471,6 +523,28 @@ export class RoomService {
           userId_roomId: {
             userId: username,
             roomId: roomId,
+          },
+        },
+        include: {
+          user: {
+            select: {
+              friends: {
+                where: { status: "BLOCKED" },
+                select: {
+                  users: {
+                    where: {
+                      username: {
+                        not: username,
+                      },
+                    },
+                    select: {
+                      username: true,
+                      photo:true
+                    }
+                  },
+                },
+              },
+            },
           },
         },
       });

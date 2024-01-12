@@ -7,14 +7,7 @@ import { Get, Post , Put} from '@/app/Components/Fetch/Fetch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 import { fileUploadFunction } from '@/app/Components/Fetch/ImageCloudUpload';
-
-interface Data {
-	name?: string,
-	description?: string,
-	privacy?: string,
-	password?: string,
-
-}
+import swal from 'sweetalert';
 
 export default function CreateGroup({ close , change, info}: { close: any, change : boolean, info? : any}) {
 
@@ -49,36 +42,43 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 			gName.current.value = info?.name;
 			gDesc.current.value = info?.description;
 			setPrivacy(info?.privacy);
-			gPass.current.value = info?.password;
+			// gPass.current.value = info?.password;
 		}
 	},[]);
 
 	async function changeSettings(e: any) {
 		e.preventDefault();
-		const image =  await fileUploadFunction(gPic.current.files[0]);
-		console.log("pic", image);
+		let image : any;
+		if (gPic.current?.files[0]){
+			image = await fileUploadFunction(gPic?.current?.files[0]);
+		}
+		if (privacy == "PROTECTED" && !gPass.current.value){
+			swal("Please enter password", "", "info");
+			return;
+		}
+	
 		const res = await Put({
 			name : gName.current.value,
 			description : gDesc.current.value,
 			privacy : privacy,
 			password : gPass.current.value,
-			photo : image,
+			photo : image ? image : info?.photo,
 			id : info?.id,
 		}, APIs.roomModify);
 		if (res?.ok)
-			alert("Group settings changed");
+			swal("Group settings changed", "", "success");
 		else
-			alert("failed to change settings");
-		console.log(res);
+			swal("failed", "", "error");
+	
 	}
 
 	async function submitForm(e: any) {
 		e.preventDefault();
 		if (gName.current.value && privacy != ""){
 			const image =  await fileUploadFunction(gPic.current.files[0]);
-			console.log("pic", gPic.current.value);
+			
 			if (privacy == "PROTECTED" && !gPass.current.value){
-				alert("Please enter a password");
+				swal("Please enter password", "", "info");
 			}
 			else{
 				const data = { name : gName.current.value,
@@ -89,11 +89,11 @@ export default function CreateGroup({ close , change, info}: { close: any, chang
 				}
 				const res = await Post(data, APIs.CreateRoom);
 				if (res?.status == 201){
-					alert("Group created");
+					swal("Group created", "", "success");
 					close(false);
 				}
 				else{
-					alert("Group name already exists");
+					swal("failed", "", "error");
 				}
 			}
 		}

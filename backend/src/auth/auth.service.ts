@@ -1,7 +1,8 @@
-import { HttpException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException, UseGuards, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ConfigService } from '@nestjs/config';
 import * as argon from "argon2"
 
 
@@ -9,7 +10,7 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private configService: ConfigService) {}
 
   async signUp(user) {
     try {
@@ -19,13 +20,17 @@ export class AuthService {
           username: user.username,
           email: user.email,
           password: hash,
+          gameProfile: {
+            create: {},
+          },
         },
       });
+      delete ret.password;
       return await this.generateJwt(ret);
     } catch (err) {
-      console.log("SignUp error");
+
       if (err instanceof PrismaClientKnownRequestError && err.code == "P2002")
-        throw new ForbiddenException(err.meta.target[0] + " already exist");
+        throw new UnauthorizedException(err.meta.target[0] + " already exist");
       return err.message;
     }
   }
@@ -39,10 +44,11 @@ export class AuthService {
       });
       if (!ret || !ret.password) throw new NotFoundException();
       if (!(await argon.verify(ret.password, user.password)))
-        throw new HttpException("Password incorrect", 404); // unAuthorized exception should be thrown
+        throw new HttpException("Password incorrect", 403); // unAuthorized exception should be thrown
+      delete ret.password;
       return ret;
     } catch (err) {
-      throw err;
+      throw new Error(err.message);
     }
   }
 
@@ -52,8 +58,7 @@ export class AuthService {
       if (ret.is2faEnabled) return 0;
       return await this.generateJwt(ret);
     } catch (err) {
-      console.log("SignIn !!Error!!");
-      throw err;
+      throw new HttpException(err.message, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -72,6 +77,9 @@ export class AuthService {
             username: data.username,
             email: data.email,
             photo: data.photo,
+            gameProfile: {
+              create: {},
+            },
           },
         });
       }
@@ -81,16 +89,19 @@ export class AuthService {
         ret["new"] = 1;
       return ret;
     } catch (err) {
-      console.log(err);
       return err;
     }
   }
 
   async generateJwt(user) {
-    const payload = {
-      userId: user.id,
-      username: user.username,
-    };
-    return await this.jwtService.signAsync(payload, { secret: "doIwannaKnow" });
+    try {
+      const payload = {
+        userId: user.id,
+        username: user.username,
+      };
+      return await this.jwtService.signAsync(payload, { secret: this.configService.get("SECRET") });
+    } catch (err) {
+      throw new Error(err.message);
+    }
   }
 }

@@ -36,12 +36,17 @@ model User {
 
 model GameProfile {
   profileId       String @id @default(uuid())
-  user            User @relation(fields: [userId], references: [id])
+  user            User @relation(fields: [userId], references: [username])
   userId          String @unique
   gamesPlayed     Int @default(0)
   level           Int @default(0)
+  xp              Int @default(0)
+  requiredXp      Int @default(100)
   wins            Int @default(0)
   losses          Int @default(0)
+  goalsScored     Int @default(0)
+  goalsConced     Int @default(0)
+  cs              Int @default(0)
   games           GameParticipation[]
 }
 
