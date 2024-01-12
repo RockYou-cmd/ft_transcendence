@@ -2,7 +2,7 @@
 
 import '../assest/game.css';
 import Canvas from "./canvas";
-import { MouseEvent } from 'react';
+
 import { useState, useEffect, useRef } from 'react';
 import LoG from '../Components/Log/Log';
 import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
@@ -19,7 +19,7 @@ import React from 'react';
 import swal from 'sweetalert';
 import MatchHistory from '../Components/profile/matchHistory';
 import { GetData } from '../Components/Log/CheckLogin';
-import { get } from 'http';
+
 
 interface GameInfo {
 	roomName: string,
@@ -119,8 +119,11 @@ export default function GamePage() {
 			GetOpp(data);
 			// setGameInfo({roomName : param.get("roomName") as string, player1 : param.get("player1") as string, player2 : param.get("player2") as string});
 			setSelectedFriend(param.get("player2") as string);
-			if (param.get("invite") == "true")
-			invite.current = true;
+			if (param.get("invite") == "true"){
+				invite.current = true;
+			}
+			setGameSet(false);
+			setMatchMake(true);
 	}
 	router.replace("/game");
 	},[])
@@ -170,7 +173,7 @@ export default function GamePage() {
 
 
 	const [gameSettings, setGameSettings] = useState({
-		map : "shark",
+		map : "black",
 		ballColor : "white",
 		paddleColor : "white",
 	})

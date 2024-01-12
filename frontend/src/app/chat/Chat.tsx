@@ -15,7 +15,6 @@ import { Post } from '../Components/Fetch/Fetch';
 import { useLogContext, useSocket, useMe } from '../Components/Log/LogContext';
 import { MouseEvent, KeyboardEvent } from 'react';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { fileUploadFunction } from '../Components/Fetch/ImageCloudUpload';
 import { Disconnect } from '../Components/Log/Logout';
 import swal from 'sweetalert';
 import Link from 'next/link';
@@ -48,10 +47,11 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 	const scroll = useRef(null) as any;
 	const [chat, setChat] = useState({} as any);
 	const router = useRouter();
-	const msgImg = useRef(null) as any;
+	// const msgImg = useRef(null) as any;
 	const [input, setInput] = useState("");
 	const [option, setOption] = useState(false);
 	const Muted = useRef({ mute: false, id: "" });
+	const [blocked, setBlocked] = useState(false);
 
 	//hooks for chat settings
 
@@ -89,6 +89,9 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				status.current.status = datas?.friends[0]?.status;
 				if (datas?.friends && datas?.friends[0]?.status == "BLOCKED") {
 					status.current.sender = datas?.friends[0]?.blocked?.username;
+					if (data?.friends[0]?.blocked?.username == me?.username){
+						setBlocked(true);
+					}
 				}
 				ChatID.current = datas?.chats[0]?.id;
 				setChat(datas?.chats[0]);
@@ -102,6 +105,9 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				status.current.status = data?.friends[0]?.status;
 				if (data?.friends && data?.friends[0]?.status == "BLOCKED") {
 					status.current.sender = data?.friends[0]?.blocked?.username;
+					if (data?.friends[0]?.blocked?.username == me?.username){
+						setBlocked(true);
+					}
 				}
 			}
 			else {
@@ -228,12 +234,14 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 			else if (data?.option == "block" && (data?.receiver == me?.username || data?.sender == me?.username)) {
 				status.current.status = "BLOCKED";
 				status.current.sender = data?.receiver;
-
+				if (data?.receiver == me?.username){
+					setBlocked(true);
+				}
 				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : 
 				(status.current.status == "BLOCKED" ? (status.current.sender != me?.username ? blockSettings: noSettings) : chatSettings)));
 			}
 			else if (data?.option == "unblock" && (data?.receiver == me?.username || data?.sender == me?.username)) {
-	
+				setBlocked(false);
 				status.current.status = "";
 				status.current.sender = "";
 				content.current = ((group ? (role == "OWNER" ? SuperSettings : AdminSettings) : chatSettings));
@@ -299,7 +307,7 @@ export default function Cnvs({ User, Role, OptionHandler, refresh }: { User: any
 				{option && <Options visible={setOption} option={option} btnRef={visible} setOptions={OptionHandler} content={content.current} />}
 			</section>
 			<div className="Msg" ref={scroll}>
-				{chat?.messages?.map((msg: any, index: number) => (<PrintMsg key={index} msgs={msg} />))}
+				{!blocked && chat?.messages?.map((msg: any, index: number) => (<PrintMsg key={index} msgs={msg} />))}
 			</div>
 			<div className="Send" >
 				<div className="line"></div>

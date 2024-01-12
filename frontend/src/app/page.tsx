@@ -1,19 +1,16 @@
 "use client"
 import React from 'react';
-import Image from 'next/image';
 import './assest/login.css';
-import { MouseEvent } from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Profile from './profile/profile';
 import Home from './profile/home';
 import LoG from './Components/Log/Log';
 import { useLogContext } from './Components/Log/LogContext';
 import Loading from './loading';
-import Head from 'next/head';
 
 
 export default function App() {
-	const { online, setOnline } = useLogContext();
+	const { online} = useLogContext();
 	const [SignIn, setSignIn] = useState(false);
 	const [data, setData] = useState({} as any);
 	const [wait, checkwait] = useState(false);
@@ -31,9 +28,9 @@ export default function App() {
 	return (
 		<>
 
-			<Head>
+			{/* <Head>
 				<link rel="icon" type="image/x-icon" href="./favicon.ico"></link>
-			</Head>
+			</Head> */}
 
 			<div>
 				{online == "OFF" ? (!SignIn && online == "OFF" ? <Home setSignIn={setSignIn} /> : render) : <Profile User={""} />}

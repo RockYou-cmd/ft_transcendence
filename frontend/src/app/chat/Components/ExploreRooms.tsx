@@ -1,7 +1,6 @@
 
-import Add from "./Add"
 import { APIs } from "../../Props/APIs"
-import { useState, useEffect, useRef, use } from "react"
+import { useState, useEffect } from "react"
 import { Get } from "../../Components/Fetch/Fetch";
 import { Post } from "../../Components/Fetch/Fetch";
 import '../../assest/Components.css';

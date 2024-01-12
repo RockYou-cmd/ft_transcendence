@@ -82,7 +82,6 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 				method: 'POST',
 				body: uploadData,
 			});
-			console.log("response ", response);
 			if (response.ok) {
 				const data = await response.json();
 		
@@ -148,8 +147,8 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 					body: JSON.stringify({ updatedData }),
 					
 				});
-
-				if (response.ok) {
+				console.log("response", response)
+				if (response?.ok) {
 					if (updatedData.username){
 						socket?.emit("nameUpdate", {username:updatedData.username, oldUsername : User?.username});
 					}
@@ -164,7 +163,7 @@ const Setting: FC<Props> = ({ handleClick, User }) => {
 				handleClick(false);
 			}
 		} catch (error) {
-			console.error('Error updating profile:', error);
+			
 		}
 	};
 

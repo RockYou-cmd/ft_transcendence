@@ -20,8 +20,6 @@ import { FaRankingStar } from "react-icons/fa6";
 import { GiGoalKeeper } from "react-icons/gi";
 
 
-
-
 export default function Profile_info() {
 	const { online } = useLogContext();
 	const { me, setMe } = useMe() as any;

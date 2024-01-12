@@ -19,7 +19,7 @@ import OwnerSettings from './Components/Settings';
 import { Post, Put ,Get } from '../Components/Fetch/Fetch';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SocketPrivider, useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
+import { useLogContext, useMe , useSocket} from '../Components/Log/LogContext';
 import { useSearchParams } from 'next/navigation';
 import Loading from '../loading';
 import { SendFriendRequest } from '../Components/Settings/ChatSettings';

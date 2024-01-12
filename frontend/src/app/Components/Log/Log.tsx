@@ -20,7 +20,7 @@ export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: 
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {
 				setOnline("OFF");
-				console.log("OFFline", data);
+
 			}
 			else {
 	
