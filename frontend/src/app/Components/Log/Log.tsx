@@ -19,8 +19,8 @@ export default function LoG({ page, LogIn, User , back}: { page: string, LogIn: 
 			const data = await GetData({ Api: page, user: UserProfile }) as any;
 			LogIn.waitHook.setState(true);
 			if (data == undefined) {
+				console.log("log", data);
 				setOnline("OFF");
-
 			}
 			else {
 	

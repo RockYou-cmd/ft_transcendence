@@ -32,10 +32,12 @@ export async function Get(path: string) {
 		}
 
 		const res = await fetch(path, header);
+		console.log("res", res)
 		if (res?.status == 401){
 			return undefined;
 		}
 		const data = await res?.json();
+		console.log("data", data)
 		return data;
 	}
 	catch(err){
