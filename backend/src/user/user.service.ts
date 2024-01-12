@@ -250,7 +250,7 @@ export class UserService {
       return this.authService.generateJwt(user);
     } catch (err) {
       console.log("invalid data or user not found");
-      return err;
+      throw new HttpException(err.message, HttpStatus.CONFLICT);
     }
   }
 
