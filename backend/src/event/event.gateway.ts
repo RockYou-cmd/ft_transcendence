@@ -78,7 +78,11 @@ export class EventGateway {
               this.endRankGame({ player1, player2, roomName }, match, 1);
           } else {
             var player2 = Array.from(match.keys())[2];
-            this.endRankGame({ player1, player2, roomName }, match, 0);
+            const game: GameService = match.get("game");
+            if (game)
+              this.endRankGame({ player1, player2, roomName }, match, 0);
+            else
+              match.clear();
           }
         }
         const userTabs = await this.server.in(username).fetchSockets();
