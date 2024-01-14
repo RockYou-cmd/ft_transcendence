@@ -15,7 +15,6 @@ Welcome to `ft_transcendence` - a project developed as part of the 1337 curricul
 - **Friends List:** Build and manage your friends list for easy game invites and interactions.
 - **Profiles:** Personalize your gaming experience with user profiles.
 - **Match-Making System:** Enjoy fair and dynamic match-ups with our sophisticated match-making algorithm.
-- **Spectating System:** Watch ongoing games and tournaments as a spectator.
 
 ## Tech Stack
 
