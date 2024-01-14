@@ -1,7 +1,5 @@
 # ft_transcendence
 
-![Project Logo](<path_to_logo_or_screenshot>)
-
 ## Overview
 
 Welcome to `ft_transcendence` - a project developed as part of the 1337 curriculum. This project aims to create an online multiplayer game, blending elements of Pong and the classic arcade game Arkanoid. The twist? It's a real-time, interactive experience, adding an exciting layer to the gaming realm.
