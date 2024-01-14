@@ -27,3 +27,5 @@ Welcome to `ft_transcendence` - a project developed as part of the 1337 curricul
 1. Clone the repository:
    ```bash
    git clone https://github.com/RockYou-cmd/ft_transcendence
+   cd ft_transcendence
+   make
